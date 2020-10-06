@@ -1,0 +1,1172 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2020-10-05 Mon 22:18 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>&lrm;</title>
+<meta name="generator" content="Org mode" />
+<meta name="author" content="xuali2" />
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: visible;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { width: 90%; }
+  /*]]>*/-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://fniessen.github.io/org-html-themes/styles/readtheorg/css/htmlize.css"/>
+<link rel="stylesheet" type="text/css" href="https://fniessen.github.io/org-html-themes/styles/readtheorg/css/readtheorg.css"/>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="https://fniessen.github.io/org-html-themes/styles/lib/js/jquery.stickytableheaders.min.js"></script>
+<script type="text/javascript" src="https://fniessen.github.io/org-html-themes/styles/readtheorg/js/readtheorg.js"></script>
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2019 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+</head>
+<body>
+<div id="content">
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#orge5359b8">1. 第一章 温故而知新</a></li>
+<li><a href="#orgc65567d">2. 第二章 静态链接</a></li>
+<li><a href="#orge87fd7d">3. 第三章 目标文件</a>
+<ul>
+<li><a href="#org44b60b3">3.1. ELF文件结构</a></li>
+</ul>
+</li>
+<li><a href="#org281f14b">4. 第四章 静态链接</a></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-orge5359b8" class="outline-2">
+<h2 id="orge5359b8"><span class="section-number-2">1</span> 第一章 温故而知新</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+PC机:<br />
+</p>
+<ul class="org-ul">
+<li>高速的北桥芯片，用作CPU 内存 显卡通信<br /></li>
+<li>低速的南桥芯片，用作磁盘 USB 键鼠通信，汇总后连接到北桥<br /></li>
+</ul>
+
+<p>
+系统软件<br />
+</p>
+<ul class="org-ul">
+<li>操作系统<br /></li>
+<li>编译器，汇编器，链接器<br /></li>
+</ul>
+
+<p>
+interface<br />
+</p>
+<ul class="org-ul">
+<li>underlayer 定义接口<br /></li>
+<li>upperlayer 使用接口<br /></li>
+</ul>
+
+<p>
+APP -&gt; (API) -&gt; Running Lib -&gt; (System call 0x80 softtware interrupt) -&gt; Kernel -&gt; (Hardware Spec) -&gt; Hardware<br />
+</p>
+
+<p>
+机械磁盘使用LBA来防止磁道密度由内到外变稀疏的问题<br />
+</p>
+
+<p>
+虚拟内存<br />
+</p>
+<ul class="org-ul">
+<li>地址空间不隔离     &lt;- 分段 或 分页<br /></li>
+<li>内存使用效率低     &lt;- 分页<br /></li>
+<li>程序运行的址不确定 &lt;- 分段 或 分页<br /></li>
+</ul>
+
+<p>
+共享内存 - 不同进程的虚拟页映射到同一个物理页<br />
+</p>
+
+<p>
+页权限属性，只有操作系统可能设置，保护进程<br />
+</p>
+
+<p>
+线程LWP:<br />
+</p>
+<ul class="org-ul">
+<li>线程ID<br /></li>
+<li>PC指针<br /></li>
+<li>寄存器集合、堆栈<br /></li>
+<li>共享内存空间和进程级资源(文件和信号)<br /></li>
+</ul>
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">私有</th>
+<th scope="col" class="org-left">共享</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left">局部变量</td>
+<td class="org-left">全局变量</td>
+</tr>
+
+<tr>
+<td class="org-left">函数参数</td>
+<td class="org-left">堆</td>
+</tr>
+
+<tr>
+<td class="org-left">TLS</td>
+<td class="org-left">函数静态变量</td>
+</tr>
+
+<tr>
+<td class="org-left">寄存器数据</td>
+<td class="org-left">代码</td>
+</tr>
+
+<tr>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">文件，信号</td>
+</tr>
+</tbody>
+</table>
+
+<p>
+进程调度<br />
+</p>
+<ul class="org-ul">
+<li>优先级 Priority Schedule<br /></li>
+<li>轮询   Round Robin<br /></li>
+</ul>
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">系统调用</th>
+<th scope="col" class="org-left">作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left">fork</td>
+<td class="org-left">复制当前进程</td>
+</tr>
+
+<tr>
+<td class="org-left">exec</td>
+<td class="org-left">使用新的可执行映像覆盖当前可执行映像</td>
+</tr>
+
+<tr>
+<td class="org-left">clone</td>
+<td class="org-left">创建子进程并从指定位置开始执行</td>
+</tr>
+</tbody>
+</table>
+
+<p>
+二元信号量和互斥锁的区别：互斥锁mutex要求acquire和release是一个线程<br />
+条件变量作用类似栅栏==wait until<br />
+</p>
+
+<p>
+优化<br />
+</p>
+<ul class="org-ul">
+<li>编译器优化<br /></li>
+<li>CPU优化，动态调度, <b>不过我记得X86关掉了这个</b><br /></li>
+</ul>
+<div class="org-src-container">
+<pre class="src src-C++"><span style="color: #F92672;">volatile</span> <span style="color: #66D9EF;">T</span>* <span style="color: #FD971F;">pInst</span> = 0;
+<span style="color: #66D9EF;">T</span>* <span style="color: #A6E22E; font-size: 130%;">GetInst</span>() {
+    <span style="color: #F92672;">if</span>(pInst == <span style="color: #AE81FF;">NULL</span>) {
+        lock();
+        <span style="color: #F92672;">if</span> (pInst == <span style="color: #AE81FF;">NULL</span>)
+            pInst = <span style="color: #F92672;">new</span> <span style="color: #66D9EF;">T</span>;
+        unlock();
+    }
+}
+<span style="color: #75715E;">/*</span><span style="color: #E6DB74;">&#38382;&#39064;&#20986;&#22312;pInst = new T, &#22914;&#26524;&#26159;&#20808;&#36820;&#22238;&#23545;&#35937;&#20877;&#35843;&#29992;&#26500;&#36896;&#20989;&#25968;&#65292;&#37027;&#20040;&#26377;&#21487;&#33021;&#31532;&#20108;&#20010;&#32447;&#31243;&#25343;&#21040;&#30340;&#27809;&#26500;&#36896;&#20989;&#25968;&#21021;&#22987;&#21270;&#36807;&#30340;&#23545;&#35937;*/</span>
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgc65567d" class="outline-2">
+<h2 id="orgc65567d"><span class="section-number-2">2</span> 第二章 静态链接</h2>
+<div class="outline-text-2" id="text-2">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">Name</th>
+<th scope="col" class="org-left">Tool</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left">Propressing</td>
+<td class="org-left">gcc -E (cpp)</td>
+</tr>
+
+<tr>
+<td class="org-left">Compilation</td>
+<td class="org-left">gcc -S (cc1)</td>
+</tr>
+
+<tr>
+<td class="org-left">Assemmbly</td>
+<td class="org-left">gcc -c (as)</td>
+</tr>
+
+<tr>
+<td class="org-left">Linking</td>
+<td class="org-left">gcc (ld)</td>
+</tr>
+</tbody>
+</table>
+
+<p>
+编译器前端：机器无关的中间代码<br />
+编译器后端: 目标机器代码<br />
+</p>
+
+<p>
+符号随着汇编语言的普及被迅速使用<br />
+</p>
+
+<p>
+链接：<br />
+</p>
+<ul class="org-ul">
+<li>地址和空间分配<br /></li>
+<li>符号决议<br /></li>
+<li>重定位<br /></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-orge87fd7d" class="outline-2">
+<h2 id="orge87fd7d"><span class="section-number-2">3</span> 第三章 目标文件</h2>
+<div class="outline-text-2" id="text-3">
+<p>
+设计.text和.data的原因:<br />
+</p>
+<ul class="org-ul">
+<li>指令和数据的权限不一样<br /></li>
+<li>缓存体系,提高程序的局限性<br /></li>
+<li>动态链接多进程共享同一个.text<br /></li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-C"><span style="color: #66D9EF;">int</span> <span style="color: #A6E22E; font-size: 130%;">printf</span><span style="color: #AE81FF;">(</span><span style="color: #F92672;">const</span> <span style="color: #66D9EF;">char</span> *<span style="color: #FD971F;">format</span>, ...<span style="color: #AE81FF;">)</span>;
+
+<span style="color: #66D9EF;">int</span> <span style="color: #FD971F;">global_init_var</span> = 84;
+<span style="color: #66D9EF;">int</span> <span style="color: #FD971F;">global_uninit_var</span>;
+
+<span style="color: #66D9EF;">void</span> <span style="color: #A6E22E; font-size: 130%;">func1</span><span style="color: #AE81FF;">(</span><span style="color: #66D9EF;">int</span> <span style="color: #FD971F;">i</span><span style="color: #AE81FF;">)</span>
+<span style="color: #AE81FF;">{</span>
+    <span style="color: #A6E22E; font-weight: bold;">printf</span><span style="color: #66D9EF;">(</span><span style="color: #E6DB74;">"%d\n"</span>, i<span style="color: #66D9EF;">)</span>;
+<span style="color: #AE81FF;">}</span>
+
+<span style="color: #66D9EF;">int</span> <span style="color: #A6E22E; font-size: 130%;">main</span><span style="color: #AE81FF;">(</span><span style="color: #66D9EF;">int</span> <span style="color: #FD971F;">argc</span>, <span style="color: #66D9EF;">char</span> *<span style="color: #FD971F;">argv</span><span style="color: #66D9EF;">[]</span><span style="color: #AE81FF;">)</span>
+<span style="color: #AE81FF;">{</span>
+    <span style="color: #F92672;">static</span> <span style="color: #66D9EF;">int</span> <span style="color: #FD971F;">static_var</span> = 85;
+    <span style="color: #F92672;">static</span> <span style="color: #66D9EF;">int</span> <span style="color: #FD971F;">static_var2</span>;
+
+    <span style="color: #66D9EF;">int</span> <span style="color: #FD971F;">a</span> = 1;
+    <span style="color: #66D9EF;">int</span> <span style="color: #FD971F;">b</span>;
+
+    <span style="color: #A6E22E; font-weight: bold;">func1</span><span style="color: #66D9EF;">(</span>static_var + static_var2 + a + b<span style="color: #66D9EF;">)</span>;
+    <span style="color: #F92672;">return</span> 0;
+<span style="color: #AE81FF;">}</span>
+</pre>
+</div>
+
+<p>
+目标文件格式<br />
+</p>
+<ul class="org-ul">
+<li>.text 代码段<br /></li>
+<li>.data 初始化了的全局静态变量和局部静态变量, 8个字节<br /></li>
+<li>.rodata const和只读字符串, 640a就是字符\和字符n，最后以0结尾<br /></li>
+<li>global<sub>uninit</sub><sub>var放在了COM段</sub><br /></li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-bash">readelf -h 2.o
+ELF Header:
+  Magic:   7f 45 4c 46 01 01 01 00 00 00 00 00 00 00 00 00 
+  Class:                             ELF32
+  Data:                              2<span style="color: #E6DB74;">'s complement, little endian</span>
+<span style="color: #E6DB74;">  Version:                           1 (current)</span>
+<span style="color: #E6DB74;">  OS/ABI:                            UNIX - System V</span>
+<span style="color: #E6DB74;">  ABI Version:                       0</span>
+<span style="color: #E6DB74;">  Type:                              REL (Relocatable file)</span>
+<span style="color: #E6DB74;">  Machine:                           Intel 80386</span>
+<span style="color: #E6DB74;">  Version:                           0x1</span>
+<span style="color: #E6DB74;">  Entry point address:               0x0</span>
+<span style="color: #E6DB74;">  Start of program headers:          0 (bytes into file)</span>
+<span style="color: #E6DB74;">  Start of section headers:          812 (bytes into file)</span>
+<span style="color: #E6DB74;">  Flags:                             0x0</span>
+<span style="color: #E6DB74;">  Size of this header:               52 (bytes)</span>
+<span style="color: #E6DB74;">  Size of program headers:           0 (bytes)</span>
+<span style="color: #E6DB74;">  Number of program headers:         0</span>
+<span style="color: #E6DB74;">  Size of section headers:           40 (bytes)</span>
+<span style="color: #E6DB74;">  Number of section headers:         13</span>
+<span style="color: #E6DB74;">  Section header string table index: 12</span>
+
+<span style="color: #E6DB74;">readelf -S 2.o</span>
+<span style="color: #E6DB74;">There are 13 section headers, starting at offset 0x32c:</span>
+
+<span style="color: #E6DB74;">Section Headers:</span>
+<span style="color: #E6DB74;">  [Nr] Name              Type            Addr     Off    Size   ES Flg Lk Inf Al</span>
+<span style="color: #E6DB74;">  [ 0]                   NULL            00000000 000000 000000 00      0   0  0</span>
+<span style="color: #E6DB74;">  [ 1] .text             PROGBITS        00000000 000034 000064 00  AX  0   0  1</span>
+<span style="color: #E6DB74;">  [ 2] .rel.text         REL             00000000 000294 000028 08   I 10   1  4</span>
+<span style="color: #E6DB74;">  [ 3] .data             PROGBITS        00000000 000098 000008 00  WA  0   0  4</span>
+<span style="color: #E6DB74;">  [ 4] .bss              NOBITS          00000000 0000a0 000004 00  WA  0   0  4</span>
+<span style="color: #E6DB74;">  [ 5] .rodata           PROGBITS        00000000 0000a0 000004 00   A  0   0  1</span>
+<span style="color: #E6DB74;">  [ 6] .comment          PROGBITS        00000000 0000a4 00002d 01  MS  0   0  1</span>
+<span style="color: #E6DB74;">  [ 7] .note.GNU-stack   PROGBITS        00000000 0000d1 000000 00      0   0  1</span>
+<span style="color: #E6DB74;">  [ 8] .eh_frame         PROGBITS        00000000 0000d4 000064 00   A  0   0  4</span>
+<span style="color: #E6DB74;">  [ 9] .rel.eh_frame     REL             00000000 0002bc 000010 08   I 10   8  4</span>
+<span style="color: #E6DB74;">  [10] .symtab           SYMTAB          00000000 000138 000100 10     11  11  4</span>
+<span style="color: #E6DB74;">  [11] .strtab           STRTAB          00000000 000238 00005a 00      0   0  1</span>
+<span style="color: #E6DB74;">  [12] .shstrtab         STRTAB          00000000 0002cc 00005f 00      0   0  1</span>
+<span style="color: #E6DB74;">Key to Flags:</span>
+<span style="color: #E6DB74;">  W (write), A (alloc), X (execute), M (merge), S (strings), I (info),</span>
+<span style="color: #E6DB74;">  L (link order), O (extra OS processing required), G (group), T (TLS),</span>
+<span style="color: #E6DB74;">  C (compressed), x (unknown), o (OS specific), E (exclude),</span>
+<span style="color: #E6DB74;">  p (processor specific)</span>
+
+<span style="color: #E6DB74;">readelf -s 2.o</span>
+
+<span style="color: #E6DB74;">Symbol table '</span>.symtab<span style="color: #E6DB74;">' contains 16 entries:</span>
+<span style="color: #E6DB74;">   Num:    Value  Size Type    Bind   Vis      Ndx Name</span>
+<span style="color: #E6DB74;">     0: 00000000     0 NOTYPE  LOCAL  DEFAULT  UND </span>
+<span style="color: #E6DB74;">     1: 00000000     0 FILE    LOCAL  DEFAULT  ABS 2.c</span>
+<span style="color: #E6DB74;">     2: 00000000     0 SECTION LOCAL  DEFAULT    1 </span>
+<span style="color: #E6DB74;">     3: 00000000     0 SECTION LOCAL  DEFAULT    3 </span>
+<span style="color: #E6DB74;">     4: 00000000     0 SECTION LOCAL  DEFAULT    4 </span>
+<span style="color: #E6DB74;">     5: 00000000     0 SECTION LOCAL  DEFAULT    5 </span>
+<span style="color: #E6DB74;">     6: 00000004     4 OBJECT  LOCAL  DEFAULT    3 static_var.1907</span>
+<span style="color: #E6DB74;">     7: 00000000     4 OBJECT  LOCAL  DEFAULT    4 static_var2.1908</span>
+<span style="color: #E6DB74;">     8: 00000000     0 SECTION LOCAL  DEFAULT    7 </span>
+<span style="color: #E6DB74;">     9: 00000000     0 SECTION LOCAL  DEFAULT    8 </span>
+<span style="color: #E6DB74;">    10: 00000000     0 SECTION LOCAL  DEFAULT    6 </span>
+<span style="color: #E6DB74;">    11: 00000000     4 OBJECT  GLOBAL DEFAULT    3 global_init_var</span>
+<span style="color: #E6DB74;">    12: 00000004     4 OBJECT  GLOBAL DEFAULT  COM global_uninit_var</span>
+<span style="color: #E6DB74;">    13: 00000000    28 FUNC    GLOBAL DEFAULT    1 func1</span>
+<span style="color: #E6DB74;">    14: 00000000     0 NOTYPE  GLOBAL DEFAULT  UND printf</span>
+<span style="color: #E6DB74;">    15: 0000001c    72 FUNC    GLOBAL DEFAULT    1 main</span>
+
+<span style="color: #E6DB74;">objdump -s -d 2.o</span>
+
+<span style="color: #E6DB74;">2.o:     file format elf32-i386</span>
+
+<span style="color: #E6DB74;">Contents of section .text:</span>
+<span style="color: #E6DB74;"> 0000 5589e583 ec0883ec 08ff7508 68000000  U.........u.h...</span>
+<span style="color: #E6DB74;"> 0010 00e8fcff ffff83c4 1090c9c3 8d4c2404  .............L$.</span>
+<span style="color: #E6DB74;"> 0020 83e4f0ff 71fc5589 e55183ec 14c745f4  ....q.U..Q....E.</span>
+<span style="color: #E6DB74;"> 0030 01000000 8b150400 0000a100 00000001  ................</span>
+<span style="color: #E6DB74;"> 0040 c28b45f4 01c28b45 f001d083 ec0c50e8  ..E....E......P.</span>
+<span style="color: #E6DB74;"> 0050 fcffffff 83c410b8 00000000 8b4dfcc9  .............M..</span>
+<span style="color: #E6DB74;"> 0060 8d61fcc3                             .a..            </span>
+<span style="color: #E6DB74;">Contents of section .data:</span>
+<span style="color: #E6DB74;"> 0000 54000000 55000000                    T...U...        </span>
+<span style="color: #E6DB74;">Contents of section .rodata:</span>
+<span style="color: #E6DB74;"> 0000 25640a00                             %d..            </span>
+<span style="color: #E6DB74;">Contents of section .comment:</span>
+<span style="color: #E6DB74;"> 0000 00474343 3a202847 4e552920 382e332e  .GCC: (GNU) 8.3.</span>
+<span style="color: #E6DB74;"> 0010 31203230 31393035 30372028 52656420  1 20190507 (Red </span>
+<span style="color: #E6DB74;"> 0020 48617420 382e332e 312d3429 00        Hat 8.3.1-4).   </span>
+<span style="color: #E6DB74;">Contents of section .eh_frame:</span>
+<span style="color: #E6DB74;"> 0000 14000000 00000000 017a5200 017c0801  .........zR..|..</span>
+<span style="color: #E6DB74;"> 0010 1b0c0404 88010000 1c000000 1c000000  ................</span>
+<span style="color: #E6DB74;"> 0020 00000000 1c000000 00410e08 8502420d  .........A....B.</span>
+<span style="color: #E6DB74;"> 0030 0558c50c 04040000 28000000 3c000000  .X......(...&lt;...</span>
+<span style="color: #E6DB74;"> 0040 1c000000 48000000 00440c01 00471005  ....H....D...G..</span>
+<span style="color: #E6DB74;"> 0050 02750043 0f03757c 06750c01 0041c543  .u.C..u|.u...A.C</span>
+<span style="color: #E6DB74;"> 0060 0c040400                             ....            </span>
+
+<span style="color: #E6DB74;">Disassembly of section .text:</span>
+
+<span style="color: #E6DB74;">00000000 &lt;func1&gt;:</span>
+<span style="color: #E6DB74;">   0:   55                      push   %ebp</span>
+<span style="color: #E6DB74;">   1:   89 e5                   mov    %esp,%ebp</span>
+<span style="color: #E6DB74;">   3:   83 ec 08                sub    $0x8,%esp</span>
+<span style="color: #E6DB74;">   6:   83 ec 08                sub    $0x8,%esp</span>
+<span style="color: #E6DB74;">   9:   ff 75 08                pushl  0x8(%ebp)</span>
+<span style="color: #E6DB74;">   c:   68 00 00 00 00          push   $0x0</span>
+<span style="color: #E6DB74;">  11:   e8 fc ff ff ff          call   12 &lt;func1+0x12&gt;</span>
+<span style="color: #E6DB74;">  16:   83 c4 10                add    $0x10,%esp</span>
+<span style="color: #E6DB74;">  19:   90                      nop</span>
+<span style="color: #E6DB74;">  1a:   c9                      leave  </span>
+<span style="color: #E6DB74;">  1b:   c3                      ret    </span>
+
+<span style="color: #E6DB74;">0000001c &lt;main&gt;:</span>
+<span style="color: #E6DB74;">  1c:   8d 4c 24 04             lea    0x4(%esp),%ecx</span>
+<span style="color: #E6DB74;">  20:   83 e4 f0                and    $0xfffffff0,%esp</span>
+<span style="color: #E6DB74;">  23:   ff 71 fc                pushl  -0x4(%ecx)</span>
+<span style="color: #E6DB74;">  26:   55                      push   %ebp</span>
+<span style="color: #E6DB74;">  27:   89 e5                   mov    %esp,%ebp</span>
+<span style="color: #E6DB74;">  29:   51                      push   %ecx</span>
+<span style="color: #E6DB74;">  2a:   83 ec 14                sub    $0x14,%esp</span>
+<span style="color: #E6DB74;">  2d:   c7 45 f4 01 00 00 00    movl   $0x1,-0xc(%ebp)</span>
+<span style="color: #E6DB74;">  34:   8b 15 04 00 00 00       mov    0x4,%edx</span>
+<span style="color: #E6DB74;">  3a:   a1 00 00 00 00          mov    0x0,%eax</span>
+<span style="color: #E6DB74;">  3f:   01 c2                   add    %eax,%edx</span>
+<span style="color: #E6DB74;">  41:   8b 45 f4                mov    -0xc(%ebp),%eax</span>
+<span style="color: #E6DB74;">  44:   01 c2                   add    %eax,%edx</span>
+<span style="color: #E6DB74;">  46:   8b 45 f0                mov    -0x10(%ebp),%eax</span>
+<span style="color: #E6DB74;">  49:   01 d0                   add    %edx,%eax</span>
+<span style="color: #E6DB74;">  4b:   83 ec 0c                sub    $0xc,%esp</span>
+<span style="color: #E6DB74;">  4e:   50                      push   %eax</span>
+<span style="color: #E6DB74;">  4f:   e8 fc ff ff ff          call   50 &lt;main+0x34&gt;</span>
+<span style="color: #E6DB74;">  54:   83 c4 10                add    $0x10,%esp</span>
+<span style="color: #E6DB74;">  57:   b8 00 00 00 00          mov    $0x0,%eax</span>
+<span style="color: #E6DB74;">  5c:   8b 4d fc                mov    -0x4(%ebp),%ecx</span>
+<span style="color: #E6DB74;">  5f:   c9                      leave</span>
+<span style="color: #E6DB74;">  60:   8d 61 fc                lea    -0x4(%ecx),%esp</span>
+<span style="color: #E6DB74;">  63:   c3                      ret</span>
+
+</pre>
+</div>
+
+<p>
+更多的段<br />
+</p>
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">Name</th>
+<th scope="col" class="org-left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left">.rodata1</td>
+<td class="org-left">read only data</td>
+</tr>
+
+<tr>
+<td class="org-left">.comment</td>
+<td class="org-left">compiler version</td>
+</tr>
+
+<tr>
+<td class="org-left">.debug</td>
+<td class="org-left">debug info</td>
+</tr>
+
+<tr>
+<td class="org-left">.dynamic</td>
+<td class="org-left">dynamic link info</td>
+</tr>
+
+<tr>
+<td class="org-left">.hash</td>
+<td class="org-left">symbol hash table</td>
+</tr>
+
+<tr>
+<td class="org-left">.line</td>
+<td class="org-left">file line for debug</td>
+</tr>
+
+<tr>
+<td class="org-left">.note</td>
+<td class="org-left">additional compiler info</td>
+</tr>
+
+<tr>
+<td class="org-left">.strtab</td>
+<td class="org-left">string table, symbol name</td>
+</tr>
+
+<tr>
+<td class="org-left">.symtabl</td>
+<td class="org-left">symbol table</td>
+</tr>
+
+<tr>
+<td class="org-left">.shstrtab</td>
+<td class="org-left">section string table, section name</td>
+</tr>
+
+<tr>
+<td class="org-left">.plt .got</td>
+<td class="org-left">dynamic jump table and global entry table</td>
+</tr>
+
+<tr>
+<td class="org-left">.init .fini</td>
+<td class="org-left">init and fini code</td>
+</tr>
+</tbody>
+</table>
+
+<p>
+objcopy可以将任意文件放在elf里<br />
+</p>
+
+
+<div class="org-src-container">
+<pre class="src src-bash">objcopy -I binary -O elf32-i386 -B i386 1.o 11.o
+ojdump -ht 11.o
+
+11.o:     file format elf32-i386
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .data         00000534  00000000  00000000  00000034  2**0
+                  CONTENTS, ALLOC, LOAD, DATA
+SYMBOL TABLE:
+00000000 l    d  .data  00000000 .data
+00000000 g       .data  00000000 _binary_1_o_start
+00000534 g       .data  00000000 _binary_1_o_end
+00000534 g       *ABS*  00000000 _binary_1_o_size
+
+
+readelf -h 11.o
+ELF Header:
+  Magic:   7f 45 4c 46 01 01 01 00 00 00 00 00 00 00 00 00 
+  Class:                             ELF32
+  Data:                              2<span style="color: #E6DB74;">'s complement, little endian</span>
+<span style="color: #E6DB74;">  Version:                           1 (current)</span>
+<span style="color: #E6DB74;">  OS/ABI:                            UNIX - System V</span>
+<span style="color: #E6DB74;">  ABI Version:                       0</span>
+<span style="color: #E6DB74;">  Type:                              REL (Relocatable file)</span>
+<span style="color: #E6DB74;">  Machine:                           Intel 80386</span>
+<span style="color: #E6DB74;">  Version:                           0x1</span>
+<span style="color: #E6DB74;">  Entry point address:               0x0</span>
+<span style="color: #E6DB74;">  Start of program headers:          0 (bytes into file)</span>
+<span style="color: #E6DB74;">  Start of section headers:          1552 (bytes into file)</span>
+<span style="color: #E6DB74;">  Flags:                             0x0</span>
+<span style="color: #E6DB74;">  Size of this header:               52 (bytes)</span>
+<span style="color: #E6DB74;">  Size of program headers:           0 (bytes)</span>
+<span style="color: #E6DB74;">  Number of program headers:         0</span>
+<span style="color: #E6DB74;">  Size of section headers:           40 (bytes)</span>
+<span style="color: #E6DB74;">  Number of section headers:         5</span>
+<span style="color: #E6DB74;">  Section header string table index: 4</span>
+
+<span style="color: #E6DB74;">readelf -S 11.o</span>
+<span style="color: #E6DB74;">There are 5 section headers, starting at offset 0x610:</span>
+
+<span style="color: #E6DB74;">Section Headers:</span>
+<span style="color: #E6DB74;">  [Nr] Name              Type            Addr     Off    Size   ES Flg Lk Inf Al</span>
+<span style="color: #E6DB74;">  [ 0]                   NULL            00000000 000000 000000 00      0   0  0</span>
+<span style="color: #E6DB74;">  [ 1] .data             PROGBITS        00000000 000034 000534 00  WA  0   0  1</span>
+<span style="color: #E6DB74;">  [ 2] .symtab           SYMTAB          00000000 000568 000050 10      3   2  4</span>
+<span style="color: #E6DB74;">  [ 3] .strtab           STRTAB          00000000 0005b8 000034 00      0   0  1</span>
+<span style="color: #E6DB74;">  [ 4] .shstrtab         STRTAB          00000000 0005ec 000021 00      0   0  1</span>
+<span style="color: #E6DB74;">Key to Flags:</span>
+<span style="color: #E6DB74;">  W (write), A (alloc), X (execute), M (merge), S (strings), I (info),</span>
+<span style="color: #E6DB74;">  L (link order), O (extra OS processing required), G (group), T (TLS),</span>
+<span style="color: #E6DB74;">  C (compressed), x (unknown), o (OS specific), E (exclude),</span>
+<span style="color: #E6DB74;">  p (processor specific)</span>
+<span style="color: #E6DB74;">[xuali2@sha-isbu-ed15n xuali2]$readelf -s 11.o</span>
+
+<span style="color: #E6DB74;">Symbol table '</span>.symtab<span style="color: #E6DB74;">' contains 5 entries:</span>
+<span style="color: #E6DB74;">   Num:    Value  Size Type    Bind   Vis      Ndx Name</span>
+<span style="color: #E6DB74;">     0: 00000000     0 NOTYPE  LOCAL  DEFAULT  UND </span>
+<span style="color: #E6DB74;">     1: 00000000     0 SECTION LOCAL  DEFAULT    1 </span>
+<span style="color: #E6DB74;">     2: 00000000     0 NOTYPE  GLOBAL DEFAULT    1 _binary_1_o_start</span>
+<span style="color: #E6DB74;">     3: 00000534     0 NOTYPE  GLOBAL DEFAULT    1 _binary_1_o_end</span>
+<span style="color: #E6DB74;">     4: 00000534     0 NOTYPE  GLOBAL DEFAULT  ABS _binary_1_o_size</span>
+
+</pre>
+</div>
+
+<p>
+_<sub>attribute</sub>_<sub>((section("name")))</sub> 修饰可以指定段<br />
+</p>
+</div>
+
+<div id="outline-container-org44b60b3" class="outline-3">
+<h3 id="org44b60b3"><span class="section-number-3">3.1</span> ELF文件结构</h3>
+<div class="outline-text-3" id="text-3-1">
+<ul class="org-ul">
+<li>段表、字符串表等控制信息段都在文件后面<br /></li>
+<li>REL 重定位文件 EXEC 可执行文件 DYN 共享目标文件<br /></li>
+<li>符号表里的值目标文件是 <b>段内偏移</b> ，可执行文件是 <b>虚拟地址</b><br /></li>
+</ul>
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">ELF Header</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left">.text</td>
+</tr>
+</tbody>
+<tbody>
+<tr>
+<td class="org-left">.data</td>
+</tr>
+</tbody>
+<tbody>
+<tr>
+<td class="org-left">.bss</td>
+</tr>
+</tbody>
+<tbody>
+<tr>
+<td class="org-left">&#x2026;</td>
+</tr>
+</tbody>
+<tbody>
+<tr>
+<td class="org-left">section header table</td>
+</tr>
+</tbody>
+<tbody>
+<tr>
+<td class="org-left">string tables</td>
+</tr>
+</tbody>
+<tbody>
+<tr>
+<td class="org-left">symbol tables</td>
+</tr>
+
+<tr>
+<td class="org-left">&#x2026;</td>
+</tr>
+</tbody>
+</table>
+
+<p>
+特殊符号<br />
+</p>
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">Name</th>
+<th scope="col" class="org-left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left">_<sub>executable</sub><sub>start</sub></td>
+<td class="org-left">程序最开始地址</td>
+</tr>
+
+<tr>
+<td class="org-left">_<sub>etext</sub>&amp;<sub>etext</sub>&amp;etext</td>
+<td class="org-left">程序末尾地址</td>
+</tr>
+
+<tr>
+<td class="org-left">_edata&amp;edata</td>
+<td class="org-left">数据段结束地址</td>
+</tr>
+
+<tr>
+<td class="org-left">_end&amp;end</td>
+<td class="org-left">程序结束地址</td>
+</tr>
+</tbody>
+</table>
+
+<p>
+符号修饰<br />
+</p>
+<ul class="org-ul">
+<li>C++ 关键的概念是函数签名: 函数名+参数类型+所在类+命令空间，基于此生成符号名<br /></li>
+<li>导致不同编译器之间不能相互链接的主要原因是生成符号的规则不一样<br /></li>
+</ul>
+
+<p>
+extern C<br />
+</p>
+<ul class="org-ul">
+<li>C++语法，修饰内的代码当作C语言代码处理，生成符号基于C语言规则<br /></li>
+<li>一个头文件同时支持C,C++<br /></li>
+</ul>
+<div class="org-src-container">
+<pre class="src src-C">
+<span style="color: #F92672;">#ifdef</span> __cplusplus
+<span style="color: #F92672;">extern</span> <span style="color: #E6DB74;">"C"</span> <span style="color: #AE81FF;">{</span>
+<span style="color: #F92672;">#endif</span>
+
+<span style="color: #66D9EF;">void</span> *<span style="color: #A6E22E; font-size: 130%;">memset</span><span style="color: #66D9EF;">(</span><span style="color: #66D9EF;">void</span> *, <span style="color: #66D9EF;">int</span>, <span style="color: #66D9EF;">size_t</span><span style="color: #66D9EF;">)</span>;
+
+<span style="color: #F92672;">#ifdef</span> __cplusplus
+<span style="color: #AE81FF;">}</span>
+<span style="color: #F92672;">#endif</span>
+</pre>
+</div>
+
+<p>
+弱符号<br />
+</p>
+<ul class="org-ul">
+<li>强符号不可重复定义<br /></li>
+<li>强符号覆盖弱符号<br /></li>
+<li>弱符号选占用空间最大的一个，如果有多个同样空间的，随机?<br /></li>
+</ul>
+
+<p>
+弱引用<br />
+</p>
+<ul class="org-ul">
+<li>未定义默认为0<br /></li>
+<li>库中的弱符号可以被用户定义的强符号所覆盖<br /></li>
+<li>例: -lpthread决定glibc是单线程还是多线程版本，可以判断 pthread<sub>create</sub> 是否为0来看是否为多线程版本，也可以直接看link的so库<br /></li>
+</ul>
+
+<p>
+调试信息<br />
+</p>
+<ul class="org-ul">
+<li>ELF使用DWART(debug with arbitrary record format)<br /></li>
+<li>Microsoft使用CodeView<br /></li>
+</ul>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org281f14b" class="outline-2">
+<h2 id="org281f14b"><span class="section-number-2">4</span> 第四章 静态链接</h2>
+<div class="outline-text-2" id="text-4">
+<div class="org-src-container">
+<pre class="src src-C"><span style="color: #75715E;">/* </span><span style="color: #E6DB74;">gcc -m32 -c a.c b.c -Wno-implicit-function-declaration </span><span style="color: #75715E;">*/</span>
+<span style="color: #75715E;">/* </span><span style="color: #E6DB74;">ld a.o b.o -e main -o ab -m elf_i386 </span><span style="color: #75715E;">*/</span>
+<span style="color: #75715E;">/* </span><span style="color: #E6DB74;">a.c </span><span style="color: #75715E;">*/</span>
+<span style="color: #F92672;">extern</span> <span style="color: #66D9EF;">int</span> <span style="color: #FD971F;">shared</span>;
+
+<span style="color: #66D9EF;">int</span> <span style="color: #A6E22E; font-size: 130%;">main</span><span style="color: #AE81FF;">()</span>
+<span style="color: #AE81FF;">{</span>
+    <span style="color: #66D9EF;">int</span> <span style="color: #FD971F;">a</span> = 100;
+    <span style="color: #A6E22E; font-weight: bold;">swap</span><span style="color: #66D9EF;">(</span>&amp;a, &amp;shared<span style="color: #66D9EF;">)</span>;
+<span style="color: #AE81FF;">}</span>
+
+<span style="color: #75715E;">/* </span><span style="color: #E6DB74;">b.c </span><span style="color: #75715E;">*/</span>
+<span style="color: #66D9EF;">int</span> <span style="color: #FD971F;">shared</span> = 1;
+
+<span style="color: #66D9EF;">void</span> <span style="color: #A6E22E; font-size: 130%;">swap</span><span style="color: #AE81FF;">(</span><span style="color: #66D9EF;">int</span> *<span style="color: #FD971F;">a</span>, <span style="color: #66D9EF;">int</span> *<span style="color: #FD971F;">b</span><span style="color: #AE81FF;">)</span>
+<span style="color: #AE81FF;">{</span>
+    *a ^= *b ^= *a ^= *b ;
+<span style="color: #AE81FF;">}</span>
+
+</pre>
+</div>
+
+<p>
+两步链接Two-pass Linking:<br />
+</p>
+<ul class="org-ul">
+<li>空间与地址分配<br /></li>
+</ul>
+<p>
+指的是可执行文件中的空间<br />
+</p>
+<ul class="org-ul">
+<li>符号解析与重定位<br /></li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-bash">gcc -m32 -c a.c -Wno-implicit-function-declaration
+readelf -S a.o
+There are 12 section headers, starting at offset 0x218:
+
+Section Headers:
+  [Nr] Name              Type            Addr     Off    Size   ES Flg Lk Inf Al
+  [ 0]                   NULL            00000000 000000 000000 00      0   0  0
+  [ 1] .text             PROGBITS        00000000 000034 000039 00  AX  0   0  1
+  [ 2] .rel.text         REL             00000000 0001a8 000010 08   I  9   1  4
+  [ 3] .data             PROGBITS        00000000 00006d 000000 00  WA  0   0  1
+  [ 4] .bss              NOBITS          00000000 00006d 000000 00  WA  0   0  1
+  [ 5] .comment          PROGBITS        00000000 00006d 00002d 01  MS  0   0  1
+  [ 6] .note.GNU-stack   PROGBITS        00000000 00009a 000000 00      0   0  1
+  [ 7] .eh_frame         PROGBITS        00000000 00009c 000044 00   A  0   0  4
+  [ 8] .rel.eh_frame     REL             00000000 0001b8 000008 08   I  9   7  4
+  [ 9] .symtab           SYMTAB          00000000 0000e0 0000b0 10     10   8  4
+  [10] .strtab           STRTAB          00000000 000190 000016 00      0   0  1
+  [11] .shstrtab         STRTAB          00000000 0001c0 000057 00      0   0  1
+Key to Flags:
+  W (write), A (alloc), X (execute), M (merge), S (strings), I (info),
+  L (link order), O (extra OS processing required), G (group), T (TLS),
+  C (compressed), x (unknown), o (OS specific), E (exclude),
+  p (processor specific)
+
+gcc -m32 -c b.c -Wno-implicit-function-declaration
+readelf -S b.o
+There are 11 section headers, starting at offset 0x1ec:
+
+Section Headers:
+  [Nr] Name              Type            Addr     Off    Size   ES Flg Lk Inf Al
+  [ 0]                   NULL            00000000 000000 000000 00      0   0  0
+  [ 1] .text             PROGBITS        00000000 000034 000039 00  AX  0   0  1
+  [ 2] .data             PROGBITS        00000000 000070 000004 00  WA  0   0  4
+  [ 3] .bss              NOBITS          00000000 000074 000000 00  WA  0   0  1
+  [ 4] .comment          PROGBITS        00000000 000074 00002d 01  MS  0   0  1
+  [ 5] .note.GNU-stack   PROGBITS        00000000 0000a1 000000 00      0   0  1
+  [ 6] .eh_frame         PROGBITS        00000000 0000a4 000038 00   A  0   0  4
+  [ 7] .rel.eh_frame     REL             00000000 000190 000008 08   I  8   6  4
+  [ 8] .symtab           SYMTAB          00000000 0000dc 0000a0 10      9   8  4
+  [ 9] .strtab           STRTAB          00000000 00017c 000011 00      0   0  1
+  [10] .shstrtab         STRTAB          00000000 000198 000053 00      0   0  1
+Key to Flags:
+  W (write), A (alloc), X (execute), M (merge), S (strings), I (info),
+  L (link order), O (extra OS processing required), G (group), T (TLS),
+  C (compressed), x (unknown), o (OS specific), E (exclude),
+  p (processor specific)
+
+ld  a.o b.o -o ab -m elf_i386   <span style="color: #75715E;"># </span><span style="color: #E6DB74;">*&#27880;&#24847;&#65292;&#36816;&#34892;&#20250;&#20986;&#38169;*</span>
+readelf -S ab
+There are 8 section headers, starting at offset 0x11b4:
+
+Section Headers:
+  [Nr] Name              Type            Addr     Off    Size   ES Flg Lk Inf Al
+  [ 0]                   NULL            00000000 000000 000000 00      0   0  0
+  [ 1] .text             PROGBITS        08048094 000094 000072 00  AX  0   0  1
+  [ 2] .eh_frame         PROGBITS        08048108 000108 000064 00   A  0   0  4
+  [ 3] .data             PROGBITS        0804a000 001000 000004 00  WA  0   0  4
+  [ 4] .comment          PROGBITS        00000000 001004 00002c 01  MS  0   0  1
+  [ 5] .symtab           SYMTAB          00000000 001030 000100 10      6   9  4
+  [ 6] .strtab           STRTAB          00000000 001130 000048 00      0   0  1
+  [ 7] .shstrtab         STRTAB          00000000 001178 00003a 00      0   0  1
+Key to Flags:
+  W (write), A (alloc), X (execute), M (merge), S (strings), I (info),
+  L (link order), O (extra OS processing required), G (group), T (TLS),
+  C (compressed), x (unknown), o (OS specific), E (exclude),
+  p (processor specific)
+
+objdump -h a.o
+
+a.o:     file format elf32-i386
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .text         00000039  00000000  00000000  00000034  2**0
+                  CONTENTS, ALLOC, LOAD, RELOC, READONLY, CODE
+  1 .data         00000000  00000000  00000000  0000006d  2**0
+                  CONTENTS, ALLOC, LOAD, DATA
+  2 .bss          00000000  00000000  00000000  0000006d  2**0
+                  ALLOC
+  3 .comment      0000002d  00000000  00000000  0000006d  2**0
+                  CONTENTS, READONLY
+  4 .note.GNU-stack 00000000  00000000  00000000  0000009a  2**0
+                  CONTENTS, READONLY
+  5 .eh_frame     00000044  00000000  00000000  0000009c  2**2
+                  CONTENTS, ALLOC, LOAD, RELOC, READONLY, DATA
+objdump -h b.o
+
+b.o:     file format elf32-i386
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .text         00000039  00000000  00000000  00000034  2**0
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  1 .data         00000004  00000000  00000000  00000070  2**2
+                  CONTENTS, ALLOC, LOAD, DATA
+  2 .bss          00000000  00000000  00000000  00000074  2**0
+                  ALLOC
+  3 .comment      0000002d  00000000  00000000  00000074  2**0
+                  CONTENTS, READONLY
+  4 .note.GNU-stack 00000000  00000000  00000000  000000a1  2**0
+                  CONTENTS, READONLY
+  5 .eh_frame     00000038  00000000  00000000  000000a4  2**2
+                  CONTENTS, ALLOC, LOAD, RELOC, READONLY, DATA
+
+objdump -h ab
+
+ab:     file format elf32-i386
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .text         00000072  08048094  08048094  00000094  2**0
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  1 .eh_frame     00000064  08048108  08048108  00000108  2**2
+                  CONTENTS, ALLOC, LOAD, READONLY, DATA
+  2 .data         00000004  0804a000  0804a000  00001000  2**2
+                  CONTENTS, ALLOC, LOAD, DATA
+  3 .comment      0000002c  00000000  00000000  00001004  2**0
+                  CONTENTS, READONLY
+</pre>
+</div>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: xuali2</p>
+<p class="date">Created: 2020-10-05 Mon 22:18</p>
+<p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
+</div>
+</body>
+</html>
