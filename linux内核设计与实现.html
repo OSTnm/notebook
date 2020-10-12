@@ -1,0 +1,1151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2020-10-12 Mon 12:39 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>程序员的自我修养 - 基于x86 linux2.6</title>
+<meta name="generator" content="Org mode" />
+<meta name="author" content="xuali2" />
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: visible;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { width: 90%; }
+  /*]]>*/-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://fniessen.github.io/org-html-themes/styles/readtheorg/css/htmlize.css"/>
+<link rel="stylesheet" type="text/css" href="https://fniessen.github.io/org-html-themes/styles/readtheorg/css/readtheorg.css"/>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="https://fniessen.github.io/org-html-themes/styles/lib/js/jquery.stickytableheaders.min.js"></script>
+<script type="text/javascript" src="https://fniessen.github.io/org-html-themes/styles/readtheorg/js/readtheorg.js"></script>
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2019 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+</head>
+<body>
+<div id="content">
+<h1 class="title">程序员的自我修养 - 基于x86 linux2.6</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#orgcff6427">1. 第一章 linux内核简介</a></li>
+<li><a href="#org42f836b">2. 第二章 从内核出发</a></li>
+<li><a href="#org996d3f6">3. 第三章 进程管理</a></li>
+<li><a href="#org978de23">4. 第四章 进程调度</a></li>
+</ul>
+</div>
+</div>
+
+
+<div id="outline-container-orgcff6427" class="outline-2">
+<h2 id="orgcff6427"><span class="section-number-2">1</span> 第一章 linux内核简介</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+内核是一个不可分割的静态可执行文件<br />
+</p>
+
+<ul class="org-ul">
+<li>单内核 - 单独的大过程，功能实现基本是函数调用，linux<br /></li>
+<li>微内核 - 分割为多个独立的过程，少数运行在特权模式，过程间用IPC通信，但实际应用中由于开销比较大，向单内核靠拢<br /></li>
+</ul>
+
+<p>
+linux版本 主版本号.从版本号.修订版本号.稳定版本号，其中 <b>从版本号偶数为稳定版</b><br />
+</p>
+
+<p>
+上下文:<br />
+</p>
+<ul class="org-ul">
+<li>运行于用户态，执行用户进程<br /></li>
+<li>运行于内核空间，处于进程上下文，代表某个特定的进程执行 (int 0x80)<br /></li>
+<li>运行于内核空间，处于中断上下文，与任何进程无关，处理特定中断， <b>实际是用了被中断进程的内核栈</b><br /></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org42f836b" class="outline-2">
+<h2 id="org42f836b"><span class="section-number-2">2</span> 第二章 从内核出发</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+<b>git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux-2.6.git</b><br />
+e40152ee1e1c7a63f4777791863215e3faa37a86<br />
+</p>
+
+<p>
+iso: <a href="http://mirrors.ustc.edu.cn/ubuntu-old-releases/releases/10.04.0/ubuntu-10.04-desktop-i386.iso">http://mirrors.ustc.edu.cn/ubuntu-old-releases/releases/10.04.0/ubuntu-10.04-desktop-i386.iso</a><br />
+</p>
+
+<div class="org-src-container">
+<pre class="src src-txt">###### Ubuntu Main Repos
+######
+
+deb http://old-releases.ubuntu.com/ubuntu/ lucid main restricted
+deb-src http://old-releases.ubuntu.com/ubuntu/ lucid main restricted
+</pre>
+</div>
+
+<p>
+由于linux-2.6内核相对于现在来说很老了，最新的gcc glibc编译老的2.6内核会有各种问题，所以用老的基于linux2.6的系统最为方便<br />
+</p>
+
+<ul class="org-ul">
+<li>软件包推荐<br /></li>
+</ul>
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">Name</th>
+<th scope="col" class="org-left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left">openssh-server</td>
+<td class="org-left">ssh server</td>
+</tr>
+
+<tr>
+<td class="org-left">vion</td>
+<td class="org-left">VNC server，自带</td>
+</tr>
+
+<tr>
+<td class="org-left">ncurses-dev</td>
+<td class="org-left">make menuconfig所需</td>
+</tr>
+</tbody>
+</table>
+
+<ul class="org-ul">
+<li>内核配置<br /></li>
+</ul>
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="org-left">make config</td>
+<td class="org-left">遍历所有配置项</td>
+</tr>
+
+<tr>
+<td class="org-left"><b>make menuconfig</b></td>
+<td class="org-left">图形界面工具</td>
+</tr>
+
+<tr>
+<td class="org-left">make defconfig</td>
+<td class="org-left">缺省配置</td>
+</tr>
+
+<tr>
+<td class="org-left">make oldconfig</td>
+<td class="org-left">验证和更新配置</td>
+</tr>
+</tbody>
+</table>
+
+<ul class="org-ul">
+<li>拷贝本系统配置<br /></li>
+</ul>
+<div class="org-src-container">
+<pre class="src src-bash">zcat /proc/config.gz &gt; .config  <span style="color: #75715E;"># </span><span style="color: #E6DB74;">&#22914;&#26524;&#31995;&#32479;&#24050;&#24320;&#21551;CONFIG_IKCONFIG_PROC</span>
+make oldconfig
+</pre>
+</div>
+
+<ul class="org-ul">
+<li>内核编译<br /></li>
+</ul>
+<p>
+.config配置好以后, 执行make<br />
+</p>
+
+<ul class="org-ul">
+<li>内核安装<br /></li>
+<li>生成的arch/i386/boot/bzImage拷到/boot下<br /></li>
+<li>make modules_install<br /></li>
+</ul>
+
+<p>
+内核开发的特点<br />
+</p>
+<ul class="org-ul">
+<li>无libc库或无标准头文件<br /></li>
+<li>经常使用编译器扩展特性<br /></li>
+</ul>
+<p>
+内联函数<br />
+内联汇编<br />
+链接脚本<br />
+关于时间戳，是64位的，但是经常也用到高32位，为了防止每次都额外做一次位运算，定义两个符号，指向同一个地址，一个是32位的，一个是64位<br />
+likely和unlikely<br />
+</p>
+<ul class="org-ul">
+<li>无内存保护<br /></li>
+<li>浮点<br /></li>
+</ul>
+<p>
+以前的cpu做浮点运算都有个协处理器，这样会使CPU陷入，所以尽量不要用浮点<br />
+</p>
+<ul class="org-ul">
+<li>内核栈大小有限，32位机默认是8KB<br /></li>
+<li><b>同步和并发</b> 开了内核抢占和非抢占时锁的行为和中断发生的时为不一样，要特别注意<br /></li>
+<li>可移植性，尽量做到体系无关<br /></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org996d3f6" class="outline-2">
+<h2 id="org996d3f6"><span class="section-number-2">3</span> 第三章 进程管理</h2>
+<div class="outline-text-2" id="text-3">
+<ul class="org-ul">
+<li>进程列表存放在任务队列的双向循环链表中 - task list<br /></li>
+<li>task_struct指针在thread_info中，thread_info在内核栈栈底，这样获取thread_info地址简单的方法就是esp &amp; (0xFFFFFFFF &lt;&lt; 13)，task_struct就是(esp &amp; (0xFFFFFFFF &lt;&lt; 13))-&gt;task<br /></li>
+</ul>
+
+<p>
+<b>像POWERPC, task_struct指针直接存在r2，相对的说原因之一就是x86的寄存器不够用</b><br />
+</p>
+
+<ul class="org-ul">
+<li>默认最大PID是32768<br /></li>
+<li>进程状态<br /></li>
+</ul>
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="org-left">TASK_RUNNINNG</td>
+<td class="org-left">运行</td>
+</tr>
+
+<tr>
+<td class="org-left">TASK_INNTERRUPTIBLE</td>
+<td class="org-left">可中断，正在睡眠</td>
+</tr>
+
+<tr>
+<td class="org-left">TASK_UNINTERRUPTIBLE</td>
+<td class="org-left">类似可中断，但对信号不做响应</td>
+</tr>
+
+<tr>
+<td class="org-left">__TASK_TRACED</td>
+<td class="org-left">被其他进程跟踪</td>
+</tr>
+
+<tr>
+<td class="org-left">__TASK_STOPPED</td>
+<td class="org-left">进程停止执行</td>
+</tr>
+</tbody>
+</table>
+<ul class="org-ul">
+<li>task-&gt;state是进程状态<br /></li>
+<li>所有进程都是PID为1的init进程的后代， <b>而init进程的相关数据是静态写在kernel代码里的</b>, parent是父进程，childern是子进程链表，sibling是兄弟进程链表，同时所有进程在双向链表tasks中<br /></li>
+</ul>
+<div class="org-src-container">
+<pre class="src src-c"><span style="color: #F92672;">struct</span> <span style="color: #66D9EF;">task_struct</span> <span style="color: #AE81FF;">{</span>
+    <span style="color: #F92672;">volatile</span> <span style="color: #66D9EF;">long</span> <span style="color: #FD971F;">state</span>;    <span style="color: #75715E;">/* </span><span style="color: #E6DB74;">-1 unrunnable, 0 runnable, &gt;0 stopped </span><span style="color: #75715E;">*/</span>
+    <span style="color: #66D9EF;">void</span> *<span style="color: #FD971F;">stack</span>;
+    <span style="color: #66D9EF;">atomic_t</span> <span style="color: #FD971F;">usage</span>;
+    <span style="color: #66D9EF;">unsigned</span> <span style="color: #66D9EF;">int</span> <span style="color: #FD971F;">flags</span>; <span style="color: #75715E;">/* </span><span style="color: #E6DB74;">per process flags, defined below </span><span style="color: #75715E;">*/</span>
+    <span style="color: #66D9EF;">unsigned</span> <span style="color: #66D9EF;">int</span> <span style="color: #FD971F;">ptrace</span>;
+
+    <span style="color: #66D9EF;">int</span> <span style="color: #FD971F;">lock_depth</span>;     <span style="color: #75715E;">/* </span><span style="color: #E6DB74;">BKL lock depth </span><span style="color: #75715E;">*/</span>
+
+<span style="color: #F92672;">#ifdef</span> CONFIG_SMP
+<span style="color: #F92672;">#ifdef</span> __ARCH_WANT_UNLOCKED_CTXSW
+    <span style="color: #66D9EF;">int</span> <span style="color: #FD971F;">oncpu</span>;
+<span style="color: #F92672;">#endif</span>
+<span style="color: #F92672;">#endif</span>
+
+    <span style="color: #66D9EF;">int</span> <span style="color: #FD971F;">prio</span>, <span style="color: #FD971F;">static_prio</span>, <span style="color: #FD971F;">normal_prio</span>;
+    <span style="color: #66D9EF;">unsigned</span> <span style="color: #66D9EF;">int</span> <span style="color: #FD971F;">rt_priority</span>;
+    <span style="color: #F92672;">const</span> <span style="color: #F92672;">struct</span> <span style="color: #66D9EF;">sched_class</span> *<span style="color: #FD971F;">sched_class</span>;
+    <span style="color: #F92672;">struct</span> <span style="color: #66D9EF;">sched_entity</span> <span style="color: #FD971F;">se</span>;
+    <span style="color: #F92672;">struct</span> <span style="color: #66D9EF;">sched_rt_entity</span> <span style="color: #FD971F;">rt</span>;
+
+<span style="color: #F92672;">#ifdef</span> CONFIG_PREEMPT_NOTIFIERS
+    <span style="color: #75715E;">/* </span><span style="color: #E6DB74;">list of struct preempt_notifier: </span><span style="color: #75715E;">*/</span>
+    <span style="color: #F92672;">struct</span> <span style="color: #66D9EF;">hlist_head</span> <span style="color: #FD971F;">preempt_notifiers</span>;
+<span style="color: #F92672;">#endif</span>
+
+    <span style="color: #75715E;">/*</span>
+<span style="color: #E6DB74;">     * fpu_counter contains the number of consecutive context switches</span>
+<span style="color: #E6DB74;">     * that the FPU is used. If this is over a threshold, the lazy fpu</span>
+<span style="color: #E6DB74;">     * saving becomes unlazy to save the trap. This is an unsigned char</span>
+<span style="color: #E6DB74;">     * so that after 256 times the counter wraps and the behavior turns</span>
+<span style="color: #E6DB74;">     * lazy again; this to deal with bursty apps that only use FPU for</span>
+<span style="color: #E6DB74;">     * a short time</span>
+<span style="color: #E6DB74;">     </span><span style="color: #75715E;">*/</span>
+    <span style="color: #66D9EF;">unsigned</span> <span style="color: #66D9EF;">char</span> <span style="color: #FD971F;">fpu_counter</span>;
+<span style="color: #F92672;">#ifdef</span> CONFIG_BLK_DEV_IO_TRACE
+    <span style="color: #66D9EF;">unsigned</span> <span style="color: #66D9EF;">int</span> <span style="color: #FD971F;">btrace_seq</span>;
+<span style="color: #F92672;">#endif</span>
+
+    <span style="color: #66D9EF;">unsigned</span> <span style="color: #66D9EF;">int</span> <span style="color: #FD971F;">policy</span>;
+    <span style="color: #66D9EF;">cpumask_t</span> <span style="color: #FD971F;">cpus_allowed</span>;
+
+<span style="color: #F92672;">#ifdef</span> CONFIG_TREE_PREEMPT_RCU
+    <span style="color: #66D9EF;">int</span> <span style="color: #FD971F;">rcu_read_lock_nesting</span>;
+    <span style="color: #66D9EF;">char</span> <span style="color: #FD971F;">rcu_read_unlock_special</span>;
+    <span style="color: #F92672;">struct</span> <span style="color: #66D9EF;">rcu_node</span> *<span style="color: #FD971F;">rcu_blocked_node</span>;
+    <span style="color: #F92672;">struct</span> <span style="color: #66D9EF;">list_head</span> <span style="color: #FD971F;">rcu_node_entry</span>;
+<span style="color: #F92672;">#endif</span> <span style="color: #75715E;">/* </span><span style="color: #E6DB74;">#ifdef CONFIG_TREE_PREEMPT_RCU </span><span style="color: #75715E;">*/</span>
+
+<span style="color: #F92672;">#if</span> <span style="color: #F92672;">defined</span><span style="color: #66D9EF;">(</span>CONFIG_SCHEDSTATS<span style="color: #66D9EF;">)</span> || <span style="color: #F92672;">defined</span><span style="color: #66D9EF;">(</span>CONFIG_TASK_DELAY_ACCT<span style="color: #66D9EF;">)</span>
+    <span style="color: #F92672;">struct</span> <span style="color: #66D9EF;">sched_info</span> <span style="color: #FD971F;">sched_info</span>;
+<span style="color: #F92672;">#endif</span>
+
+    <span style="color: #F92672;">struct</span> <span style="color: #66D9EF;">list_head</span> <span style="color: #FD971F;">tasks</span>;
+    <span style="color: #F92672;">struct</span> <span style="color: #66D9EF;">plist_node</span> <span style="color: #FD971F;">pushable_tasks</span>;
+
+    <span style="color: #F92672;">struct</span> <span style="color: #66D9EF;">mm_struct</span> *<span style="color: #FD971F;">mm</span>, *<span style="color: #FD971F;">active_mm</span>;
+<span style="color: #F92672;">#if</span> <span style="color: #F92672;">defined</span><span style="color: #66D9EF;">(</span>SPLIT_RSS_COUNTING<span style="color: #66D9EF;">)</span>
+    <span style="color: #F92672;">struct</span> <span style="color: #66D9EF;">task_rss_stat</span>    <span style="color: #FD971F;">rss_stat</span>;
+<span style="color: #F92672;">#endif</span>
+<span style="color: #75715E;">/* </span><span style="color: #E6DB74;">task state </span><span style="color: #75715E;">*/</span>
+    <span style="color: #66D9EF;">int</span> <span style="color: #FD971F;">exit_state</span>;
+    <span style="color: #66D9EF;">int</span> <span style="color: #FD971F;">exit_code</span>, <span style="color: #FD971F;">exit_signal</span>;
+    <span style="color: #66D9EF;">int</span> <span style="color: #FD971F;">pdeath_signal</span>;  <span style="color: #75715E;">/*  </span><span style="color: #E6DB74;">The signal sent when the parent dies  </span><span style="color: #75715E;">*/</span>
+    <span style="color: #75715E;">/* </span><span style="color: #E6DB74;">??? </span><span style="color: #75715E;">*/</span>
+    <span style="color: #66D9EF;">unsigned</span> <span style="color: #66D9EF;">int</span> <span style="color: #FD971F;">personality</span>;
+    <span style="color: #66D9EF;">unsigned</span> <span style="color: #FD971F;">did_exec</span>:1;
+    <span style="color: #66D9EF;">unsigned</span> <span style="color: #FD971F;">in_execve</span>:1;   <span style="color: #75715E;">/* </span><span style="color: #E6DB74;">Tell the LSMs that the process is doing an</span>
+<span style="color: #E6DB74;">                 * execve </span><span style="color: #75715E;">*/</span>
+    <span style="color: #66D9EF;">unsigned</span> <span style="color: #FD971F;">in_iowait</span>:1;
+
+
+    <span style="color: #75715E;">/* </span><span style="color: #E6DB74;">Revert to default priority/policy when forking </span><span style="color: #75715E;">*/</span>
+    <span style="color: #66D9EF;">unsigned</span> <span style="color: #FD971F;">sched_reset_on_fork</span>:1;
+
+    <span style="color: #66D9EF;">pid_t</span> <span style="color: #FD971F;">pid</span>;
+    <span style="color: #66D9EF;">pid_t</span> <span style="color: #FD971F;">tgid</span>;
+
+<span style="color: #F92672;">#ifdef</span> CONFIG_CC_STACKPROTECTOR
+    <span style="color: #75715E;">/* </span><span style="color: #E6DB74;">Canary value for the -fstack-protector gcc feature </span><span style="color: #75715E;">*/</span>
+    <span style="color: #66D9EF;">unsigned</span> <span style="color: #66D9EF;">long</span> <span style="color: #FD971F;">stack_canary</span>;
+<span style="color: #F92672;">#endif</span>
+
+    <span style="color: #75715E;">/* </span>
+<span style="color: #E6DB74;">     * pointers to (original) parent process, youngest child, younger sibling,</span>
+<span style="color: #E6DB74;">     * older sibling, respectively.  (p-&gt;father can be replaced with </span>
+<span style="color: #E6DB74;">     * p-&gt;real_parent-&gt;pid)</span>
+<span style="color: #E6DB74;">     </span><span style="color: #75715E;">*/</span>
+    <span style="color: #F92672;">struct</span> <span style="color: #66D9EF;">task_struct</span> *<span style="color: #FD971F;">real_parent</span>; <span style="color: #75715E;">/* </span><span style="color: #E6DB74;">real parent process </span><span style="color: #75715E;">*/</span>
+    <span style="color: #F92672;">struct</span> <span style="color: #66D9EF;">task_struct</span> *<span style="color: #FD971F;">parent</span>; <span style="color: #75715E;">/* </span><span style="color: #E6DB74;">recipient of SIGCHLD, wait4() reports </span><span style="color: #75715E;">*/</span>
+    <span style="color: #75715E;">/*</span>
+<span style="color: #E6DB74;">     * children/sibling forms the list of my natural children</span>
+<span style="color: #E6DB74;">     </span><span style="color: #75715E;">*/</span>
+    <span style="color: #F92672;">struct</span> <span style="color: #66D9EF;">list_head</span> <span style="color: #FD971F;">children</span>;  <span style="color: #75715E;">/* </span><span style="color: #E6DB74;">list of my children </span><span style="color: #75715E;">*/</span>
+    <span style="color: #F92672;">struct</span> <span style="color: #66D9EF;">list_head</span> <span style="color: #FD971F;">sibling</span>;   <span style="color: #75715E;">/* </span><span style="color: #E6DB74;">linkage in my parent's children list </span><span style="color: #75715E;">*/</span>
+    <span style="color: #F92672;">struct</span> <span style="color: #66D9EF;">task_struct</span> *<span style="color: #FD971F;">group_leader</span>;   <span style="color: #75715E;">/* </span><span style="color: #E6DB74;">threadgroup leader </span><span style="color: #75715E;">*/</span>
+
+    <span style="color: #75715E;">/*</span>
+<span style="color: #E6DB74;">     * ptraced is the list of tasks this task is using ptrace on.</span>
+<span style="color: #E6DB74;">     * This includes both natural children and PTRACE_ATTACH targets.</span>
+<span style="color: #E6DB74;">     * p-&gt;ptrace_entry is p's link on the p-&gt;parent-&gt;ptraced list.</span>
+<span style="color: #E6DB74;">     </span><span style="color: #75715E;">*/</span>
+    <span style="color: #F92672;">struct</span> <span style="color: #66D9EF;">list_head</span> <span style="color: #FD971F;">ptraced</span>;
+    <span style="color: #F92672;">struct</span> <span style="color: #66D9EF;">list_head</span> <span style="color: #FD971F;">ptrace_entry</span>;
+
+    <span style="color: #75715E;">/*</span>
+<span style="color: #E6DB74;">     * This is the tracer handle for the ptrace BTS extension.</span>
+<span style="color: #E6DB74;">     * This field actually belongs to the ptracer task.</span>
+<span style="color: #E6DB74;">     </span><span style="color: #75715E;">*/</span>
+    <span style="color: #F92672;">struct</span> <span style="color: #66D9EF;">bts_context</span> *<span style="color: #FD971F;">bts</span>;
+
+    <span style="color: #75715E;">/* </span><span style="color: #E6DB74;">PID/PID hash table linkage. </span><span style="color: #75715E;">*/</span>
+    <span style="color: #F92672;">struct</span> <span style="color: #66D9EF;">pid_link</span> <span style="color: #FD971F;">pids</span><span style="color: #66D9EF;">[</span>PIDTYPE_MAX<span style="color: #66D9EF;">]</span>;
+    <span style="color: #F92672;">struct</span> <span style="color: #66D9EF;">list_head</span> <span style="color: #FD971F;">thread_group</span>;
+
+    <span style="color: #F92672;">struct</span> <span style="color: #66D9EF;">completion</span> *<span style="color: #FD971F;">vfork_done</span>;      <span style="color: #75715E;">/* </span><span style="color: #E6DB74;">for vfork() </span><span style="color: #75715E;">*/</span>
+    <span style="color: #66D9EF;">int</span> <span style="color: #FD971F;">__user</span> *set_child_tid;      <span style="color: #75715E;">/* </span><span style="color: #E6DB74;">CLONE_CHILD_SETTID </span><span style="color: #75715E;">*/</span>
+    <span style="color: #66D9EF;">int</span> <span style="color: #FD971F;">__user</span> *clear_child_tid;        <span style="color: #75715E;">/* </span><span style="color: #E6DB74;">CLONE_CHILD_CLEARTID </span><span style="color: #75715E;">*/</span>
+
+    <span style="color: #66D9EF;">cputime_t</span> <span style="color: #FD971F;">utime</span>, <span style="color: #FD971F;">stime</span>, <span style="color: #FD971F;">utimescaled</span>, <span style="color: #FD971F;">stimescaled</span>;
+    <span style="color: #66D9EF;">cputime_t</span> <span style="color: #FD971F;">gtime</span>;
+<span style="color: #F92672;">#if</span><span style="color: #F92672; font-weight: bold;">n</span><span style="color: #F92672;">def</span> CONFIG_VIRT_CPU_ACCOUNTING
+    <span style="color: #66D9EF;">cputime_t</span> <span style="color: #FD971F;">prev_utime</span>, <span style="color: #FD971F;">prev_stime</span>;
+<span style="color: #F92672;">#endif</span>
+    <span style="color: #66D9EF;">unsigned</span> <span style="color: #66D9EF;">long</span> <span style="color: #FD971F;">nvcsw</span>, <span style="color: #FD971F;">nivcsw</span>; <span style="color: #75715E;">/* </span><span style="color: #E6DB74;">context switch counts </span><span style="color: #75715E;">*/</span>
+    <span style="color: #F92672;">struct</span> <span style="color: #66D9EF;">timespec</span> <span style="color: #FD971F;">start_time</span>;         <span style="color: #75715E;">/* </span><span style="color: #E6DB74;">monotonic time </span><span style="color: #75715E;">*/</span>
+    <span style="color: #F92672;">struct</span> <span style="color: #66D9EF;">timespec</span> <span style="color: #FD971F;">real_start_time</span>;    <span style="color: #75715E;">/* </span><span style="color: #E6DB74;">boot based time </span><span style="color: #75715E;">*/</span>
+<span style="color: #75715E;">/* </span><span style="color: #E6DB74;">mm fault and swap info: this can arguably be seen as either mm-specific or thread-specific </span><span style="color: #75715E;">*/</span>
+    <span style="color: #66D9EF;">unsigned</span> <span style="color: #66D9EF;">long</span> <span style="color: #FD971F;">min_flt</span>, <span style="color: #FD971F;">maj_flt</span>;
+
+    <span style="color: #F92672;">struct</span> <span style="color: #66D9EF;">task_cputime</span> <span style="color: #FD971F;">cputime_expires</span>;
+    <span style="color: #F92672;">struct</span> <span style="color: #66D9EF;">list_head</span> <span style="color: #FD971F;">cpu_timers</span><span style="color: #66D9EF;">[</span>3<span style="color: #66D9EF;">]</span>;
+
+<span style="color: #75715E;">/* </span><span style="color: #E6DB74;">process credentials </span><span style="color: #75715E;">*/</span>
+    <span style="color: #F92672;">const</span> <span style="color: #F92672;">struct</span> <span style="color: #66D9EF;">cred</span> *<span style="color: #FD971F;">real_cred</span>;   <span style="color: #75715E;">/* </span><span style="color: #E6DB74;">objective and real subjective task</span>
+<span style="color: #E6DB74;">                     * credentials (COW) </span><span style="color: #75715E;">*/</span>
+    <span style="color: #F92672;">const</span> <span style="color: #F92672;">struct</span> <span style="color: #66D9EF;">cred</span> *<span style="color: #FD971F;">cred</span>;    <span style="color: #75715E;">/* </span><span style="color: #E6DB74;">effective (overridable) subjective task</span>
+<span style="color: #E6DB74;">                     * credentials (COW) </span><span style="color: #75715E;">*/</span>
+    <span style="color: #F92672;">struct</span> <span style="color: #66D9EF;">mutex</span> <span style="color: #FD971F;">cred_guard_mutex</span>;  <span style="color: #75715E;">/* </span><span style="color: #E6DB74;">guard against foreign influences on</span>
+<span style="color: #E6DB74;">                     * credential calculations</span>
+<span style="color: #E6DB74;">                     * (notably. ptrace) </span><span style="color: #75715E;">*/</span>
+    <span style="color: #F92672;">struct</span> <span style="color: #66D9EF;">cred</span> *<span style="color: #FD971F;">replacement_session_keyring</span>; <span style="color: #75715E;">/* </span><span style="color: #E6DB74;">for KEYCTL_SESSION_TO_PARENT </span><span style="color: #75715E;">*/</span>
+
+    <span style="color: #66D9EF;">char</span> <span style="color: #FD971F;">comm</span><span style="color: #66D9EF;">[</span>TASK_COMM_LEN<span style="color: #66D9EF;">]</span>; <span style="color: #75715E;">/* </span><span style="color: #E6DB74;">executable name excluding path</span>
+<span style="color: #E6DB74;">                     - access with [gs]et_task_comm (which lock</span>
+<span style="color: #E6DB74;">                       it with task_lock())</span>
+<span style="color: #E6DB74;">                     - initialized normally by setup_new_exec </span><span style="color: #75715E;">*/</span>
+<span style="color: #75715E;">/* </span><span style="color: #E6DB74;">file system info </span><span style="color: #75715E;">*/</span>
+    <span style="color: #66D9EF;">int</span> <span style="color: #FD971F;">link_count</span>, <span style="color: #FD971F;">total_link_count</span>;
+<span style="color: #F92672;">#ifdef</span> CONFIG_SYSVIPC
+<span style="color: #75715E;">/* </span><span style="color: #E6DB74;">ipc stuff </span><span style="color: #75715E;">*/</span>
+    <span style="color: #F92672;">struct</span> <span style="color: #66D9EF;">sysv_sem</span> <span style="color: #FD971F;">sysvsem</span>;
+<span style="color: #F92672;">#endif</span>
+<span style="color: #F92672;">#ifdef</span> CONFIG_DETECT_HUNG_TASK
+<span style="color: #75715E;">/* </span><span style="color: #E6DB74;">hung task detection </span><span style="color: #75715E;">*/</span>
+    <span style="color: #66D9EF;">unsigned</span> <span style="color: #66D9EF;">long</span> <span style="color: #FD971F;">last_switch_count</span>;
+<span style="color: #F92672;">#endif</span>
+<span style="color: #75715E;">/* </span><span style="color: #E6DB74;">CPU-specific state of this task </span><span style="color: #75715E;">*/</span>
+    <span style="color: #F92672;">struct</span> <span style="color: #66D9EF;">thread_struct</span> <span style="color: #FD971F;">thread</span>;
+<span style="color: #75715E;">/* </span><span style="color: #E6DB74;">filesystem information </span><span style="color: #75715E;">*/</span>
+    <span style="color: #F92672;">struct</span> <span style="color: #66D9EF;">fs_struct</span> *<span style="color: #FD971F;">fs</span>;
+<span style="color: #75715E;">/* </span><span style="color: #E6DB74;">open file information </span><span style="color: #75715E;">*/</span>
+    <span style="color: #F92672;">struct</span> <span style="color: #66D9EF;">files_struct</span> *<span style="color: #FD971F;">files</span>;
+<span style="color: #75715E;">/* </span><span style="color: #E6DB74;">namespaces </span><span style="color: #75715E;">*/</span>
+    <span style="color: #F92672;">struct</span> <span style="color: #66D9EF;">nsproxy</span> *<span style="color: #FD971F;">nsproxy</span>;
+<span style="color: #75715E;">/* </span><span style="color: #E6DB74;">signal handlers </span><span style="color: #75715E;">*/</span>
+    <span style="color: #F92672;">struct</span> <span style="color: #66D9EF;">signal_struct</span> *<span style="color: #FD971F;">signal</span>;
+    <span style="color: #F92672;">struct</span> <span style="color: #66D9EF;">sighand_struct</span> *<span style="color: #FD971F;">sighand</span>;
+
+    <span style="color: #66D9EF;">sigset_t</span> <span style="color: #FD971F;">blocked</span>, <span style="color: #FD971F;">real_blocked</span>;
+    <span style="color: #66D9EF;">sigset_t</span> <span style="color: #FD971F;">saved_sigmask</span>; <span style="color: #75715E;">/* </span><span style="color: #E6DB74;">restored if set_restore_sigmask() was used </span><span style="color: #75715E;">*/</span>
+    <span style="color: #F92672;">struct</span> <span style="color: #66D9EF;">sigpending</span> <span style="color: #FD971F;">pending</span>;
+
+    <span style="color: #66D9EF;">unsigned</span> <span style="color: #66D9EF;">long</span> <span style="color: #FD971F;">sas_ss_sp</span>;
+    <span style="color: #66D9EF;">size_t</span> <span style="color: #FD971F;">sas_ss_size</span>;
+    <span style="color: #A6E22E; font-weight: bold;">int</span> <span style="color: #66D9EF;">(</span>*notifier<span style="color: #66D9EF;">)(</span><span style="color: #66D9EF;">void</span> *<span style="color: #FD971F;">priv</span><span style="color: #66D9EF;">)</span>;
+    <span style="color: #66D9EF;">void</span> *<span style="color: #FD971F;">notifier_data</span>;
+    <span style="color: #66D9EF;">sigset_t</span> *<span style="color: #FD971F;">notifier_mask</span>;
+    <span style="color: #F92672;">struct</span> <span style="color: #66D9EF;">audit_context</span> *<span style="color: #FD971F;">audit_context</span>;
+<span style="color: #F92672;">#ifdef</span> CONFIG_AUDITSYSCALL
+    <span style="color: #66D9EF;">uid_t</span> <span style="color: #FD971F;">loginuid</span>;
+    <span style="color: #66D9EF;">unsigned</span> <span style="color: #66D9EF;">int</span> <span style="color: #FD971F;">sessionid</span>;
+<span style="color: #F92672;">#endif</span>
+    <span style="color: #66D9EF;">seccomp_t</span> <span style="color: #FD971F;">seccomp</span>;
+
+<span style="color: #75715E;">/* </span><span style="color: #E6DB74;">Thread group tracking </span><span style="color: #75715E;">*/</span>
+    <span style="color: #66D9EF;">u32</span> <span style="color: #FD971F;">parent_exec_id</span>;
+    <span style="color: #66D9EF;">u32</span> <span style="color: #FD971F;">self_exec_id</span>;
+<span style="color: #75715E;">/* </span><span style="color: #E6DB74;">Protection of (de-)allocation: mm, files, fs, tty, keyrings, mems_allowed,</span>
+<span style="color: #E6DB74;"> * mempolicy </span><span style="color: #75715E;">*/</span>
+    <span style="color: #66D9EF;">spinlock_t</span> <span style="color: #FD971F;">alloc_lock</span>;
+
+<span style="color: #F92672;">#ifdef</span> CONFIG_GENERIC_HARDIRQS
+    <span style="color: #75715E;">/* </span><span style="color: #E6DB74;">IRQ handler threads </span><span style="color: #75715E;">*/</span>
+    <span style="color: #F92672;">struct</span> <span style="color: #66D9EF;">irqaction</span> *<span style="color: #FD971F;">irqaction</span>;
+<span style="color: #F92672;">#endif</span>
+
+    <span style="color: #75715E;">/* </span><span style="color: #E6DB74;">Protection of the PI data structures: </span><span style="color: #75715E;">*/</span>
+    <span style="color: #66D9EF;">raw_spinlock_t</span> <span style="color: #FD971F;">pi_lock</span>;
+
+<span style="color: #F92672;">#ifdef</span> CONFIG_RT_MUTEXES
+    <span style="color: #75715E;">/* </span><span style="color: #E6DB74;">PI waiters blocked on a rt_mutex held by this task </span><span style="color: #75715E;">*/</span>
+    <span style="color: #F92672;">struct</span> <span style="color: #66D9EF;">plist_head</span> <span style="color: #FD971F;">pi_waiters</span>;
+    <span style="color: #75715E;">/* </span><span style="color: #E6DB74;">Deadlock detection and priority inheritance handling </span><span style="color: #75715E;">*/</span>
+    <span style="color: #F92672;">struct</span> <span style="color: #66D9EF;">rt_mutex_waiter</span> *<span style="color: #FD971F;">pi_blocked_on</span>;
+<span style="color: #F92672;">#endif</span>
+
+<span style="color: #F92672;">#ifdef</span> CONFIG_DEBUG_MUTEXES
+    <span style="color: #75715E;">/* </span><span style="color: #E6DB74;">mutex deadlock detection </span><span style="color: #75715E;">*/</span>
+    <span style="color: #F92672;">struct</span> <span style="color: #66D9EF;">mutex_waiter</span> *<span style="color: #FD971F;">blocked_on</span>;
+<span style="color: #F92672;">#endif</span>
+<span style="color: #F92672;">#ifdef</span> CONFIG_TRACE_IRQFLAGS
+    <span style="color: #66D9EF;">unsigned</span> <span style="color: #66D9EF;">int</span> <span style="color: #FD971F;">irq_events</span>;
+    <span style="color: #66D9EF;">unsigned</span> <span style="color: #66D9EF;">long</span> <span style="color: #FD971F;">hardirq_enable_ip</span>;
+    <span style="color: #66D9EF;">unsigned</span> <span style="color: #66D9EF;">long</span> <span style="color: #FD971F;">hardirq_disable_ip</span>;
+    <span style="color: #66D9EF;">unsigned</span> <span style="color: #66D9EF;">int</span> <span style="color: #FD971F;">hardirq_enable_event</span>;
+    <span style="color: #66D9EF;">unsigned</span> <span style="color: #66D9EF;">int</span> <span style="color: #FD971F;">hardirq_disable_event</span>;
+    <span style="color: #66D9EF;">int</span> <span style="color: #FD971F;">hardirqs_enabled</span>;
+    <span style="color: #66D9EF;">int</span> <span style="color: #FD971F;">hardirq_context</span>;
+    <span style="color: #66D9EF;">unsigned</span> <span style="color: #66D9EF;">long</span> <span style="color: #FD971F;">softirq_disable_ip</span>;
+    <span style="color: #66D9EF;">unsigned</span> <span style="color: #66D9EF;">long</span> <span style="color: #FD971F;">softirq_enable_ip</span>;
+    <span style="color: #66D9EF;">unsigned</span> <span style="color: #66D9EF;">int</span> <span style="color: #FD971F;">softirq_disable_event</span>;
+    <span style="color: #66D9EF;">unsigned</span> <span style="color: #66D9EF;">int</span> <span style="color: #FD971F;">softirq_enable_event</span>;
+    <span style="color: #66D9EF;">int</span> <span style="color: #FD971F;">softirqs_enabled</span>;
+    <span style="color: #66D9EF;">int</span> <span style="color: #FD971F;">softirq_context</span>;
+<span style="color: #F92672;">#endif</span>
+<span style="color: #F92672;">#ifdef</span> CONFIG_LOCKDEP
+<span style="color: #F92672;"># define</span> <span style="color: #FD971F;">MAX_LOCK_DEPTH</span> 48UL
+    <span style="color: #66D9EF;">u64</span> <span style="color: #FD971F;">curr_chain_key</span>;
+    <span style="color: #66D9EF;">int</span> <span style="color: #FD971F;">lockdep_depth</span>;
+    <span style="color: #66D9EF;">unsigned</span> <span style="color: #66D9EF;">int</span> <span style="color: #FD971F;">lockdep_recursion</span>;
+    <span style="color: #F92672;">struct</span> <span style="color: #66D9EF;">held_lock</span> <span style="color: #FD971F;">held_locks</span><span style="color: #66D9EF;">[</span>MAX_LOCK_DEPTH<span style="color: #66D9EF;">]</span>;
+    <span style="color: #66D9EF;">gfp_t</span> <span style="color: #FD971F;">lockdep_reclaim_gfp</span>;
+<span style="color: #F92672;">#endif</span>
+
+<span style="color: #75715E;">/* </span><span style="color: #E6DB74;">journalling filesystem info </span><span style="color: #75715E;">*/</span>
+    <span style="color: #66D9EF;">void</span> *<span style="color: #FD971F;">journal_info</span>;
+
+<span style="color: #75715E;">/* </span><span style="color: #E6DB74;">stacked block device info </span><span style="color: #75715E;">*/</span>
+    <span style="color: #F92672;">struct</span> <span style="color: #66D9EF;">bio_list</span> *<span style="color: #FD971F;">bio_list</span>;
+
+<span style="color: #75715E;">/* </span><span style="color: #E6DB74;">VM state </span><span style="color: #75715E;">*/</span>
+    <span style="color: #F92672;">struct</span> <span style="color: #66D9EF;">reclaim_state</span> *<span style="color: #FD971F;">reclaim_state</span>;
+
+    <span style="color: #F92672;">struct</span> <span style="color: #66D9EF;">backing_dev_info</span> *<span style="color: #FD971F;">backing_dev_info</span>;
+
+    <span style="color: #F92672;">struct</span> <span style="color: #66D9EF;">io_context</span> *<span style="color: #FD971F;">io_context</span>;
+
+    <span style="color: #66D9EF;">unsigned</span> <span style="color: #66D9EF;">long</span> <span style="color: #FD971F;">ptrace_message</span>;
+    <span style="color: #66D9EF;">siginfo_t</span> *<span style="color: #FD971F;">last_siginfo</span>; <span style="color: #75715E;">/* </span><span style="color: #E6DB74;">For ptrace use.  </span><span style="color: #75715E;">*/</span>
+    <span style="color: #F92672;">struct</span> <span style="color: #66D9EF;">task_io_accounting</span> <span style="color: #FD971F;">ioac</span>;
+<span style="color: #F92672;">#if</span> <span style="color: #F92672;">defined</span><span style="color: #66D9EF;">(</span>CONFIG_TASK_XACCT<span style="color: #66D9EF;">)</span>
+    <span style="color: #66D9EF;">u64</span> <span style="color: #FD971F;">acct_rss_mem1</span>;  <span style="color: #75715E;">/* </span><span style="color: #E6DB74;">accumulated rss usage </span><span style="color: #75715E;">*/</span>
+    <span style="color: #66D9EF;">u64</span> <span style="color: #FD971F;">acct_vm_mem1</span>;   <span style="color: #75715E;">/* </span><span style="color: #E6DB74;">accumulated virtual memory usage </span><span style="color: #75715E;">*/</span>
+    <span style="color: #66D9EF;">cputime_t</span> <span style="color: #FD971F;">acct_timexpd</span>; <span style="color: #75715E;">/* </span><span style="color: #E6DB74;">stime + utime since last update </span><span style="color: #75715E;">*/</span>
+<span style="color: #F92672;">#endif</span>
+<span style="color: #F92672;">#ifdef</span> CONFIG_CPUSETS
+    <span style="color: #66D9EF;">nodemask_t</span> <span style="color: #FD971F;">mems_allowed</span>;    <span style="color: #75715E;">/* </span><span style="color: #E6DB74;">Protected by alloc_lock </span><span style="color: #75715E;">*/</span>
+    <span style="color: #66D9EF;">int</span> <span style="color: #FD971F;">cpuset_mem_spread_rotor</span>;
+<span style="color: #F92672;">#endif</span>
+<span style="color: #F92672;">#ifdef</span> CONFIG_CGROUPS
+    <span style="color: #75715E;">/* </span><span style="color: #E6DB74;">Control Group info protected by css_set_lock </span><span style="color: #75715E;">*/</span>
+    <span style="color: #F92672;">struct</span> <span style="color: #66D9EF;">css_set</span> *<span style="color: #FD971F;">cgroups</span>;
+    <span style="color: #75715E;">/* </span><span style="color: #E6DB74;">cg_list protected by css_set_lock and tsk-&gt;alloc_lock </span><span style="color: #75715E;">*/</span>
+    <span style="color: #F92672;">struct</span> <span style="color: #66D9EF;">list_head</span> <span style="color: #FD971F;">cg_list</span>;
+<span style="color: #F92672;">#endif</span>
+<span style="color: #F92672;">#ifdef</span> CONFIG_FUTEX
+    <span style="color: #F92672;">struct</span> <span style="color: #66D9EF;">robust_list_head</span> <span style="color: #66D9EF;">__user</span> *<span style="color: #FD971F;">robust_list</span>;
+<span style="color: #F92672;">#ifdef</span> CONFIG_COMPAT
+    <span style="color: #F92672;">struct</span> <span style="color: #66D9EF;">compat_robust_list_head</span> <span style="color: #66D9EF;">__user</span> *<span style="color: #FD971F;">compat_robust_list</span>;
+<span style="color: #F92672;">#endif</span>
+    <span style="color: #F92672;">struct</span> <span style="color: #66D9EF;">list_head</span> <span style="color: #FD971F;">pi_state_list</span>;
+    <span style="color: #F92672;">struct</span> <span style="color: #66D9EF;">futex_pi_state</span> *<span style="color: #FD971F;">pi_state_cache</span>;
+<span style="color: #F92672;">#endif</span>
+<span style="color: #F92672;">#ifdef</span> CONFIG_PERF_EVENTS
+    <span style="color: #F92672;">struct</span> <span style="color: #66D9EF;">perf_event_context</span> *<span style="color: #FD971F;">perf_event_ctxp</span>;
+    <span style="color: #F92672;">struct</span> <span style="color: #66D9EF;">mutex</span> <span style="color: #FD971F;">perf_event_mutex</span>;
+    <span style="color: #F92672;">struct</span> <span style="color: #66D9EF;">list_head</span> <span style="color: #FD971F;">perf_event_list</span>;
+<span style="color: #F92672;">#endif</span>
+<span style="color: #F92672;">#ifdef</span> CONFIG_NUMA
+    <span style="color: #F92672;">struct</span> <span style="color: #66D9EF;">mempolicy</span> *<span style="color: #FD971F;">mempolicy</span>;    <span style="color: #75715E;">/* </span><span style="color: #E6DB74;">Protected by alloc_lock </span><span style="color: #75715E;">*/</span>
+    <span style="color: #66D9EF;">short</span> <span style="color: #FD971F;">il_next</span>;
+<span style="color: #F92672;">#endif</span>
+    <span style="color: #66D9EF;">atomic_t</span> <span style="color: #FD971F;">fs_excl</span>;   <span style="color: #75715E;">/* </span><span style="color: #E6DB74;">holding fs exclusive resources </span><span style="color: #75715E;">*/</span>
+    <span style="color: #F92672;">struct</span> <span style="color: #66D9EF;">rcu_head</span> <span style="color: #FD971F;">rcu</span>;
+
+    <span style="color: #75715E;">/*</span>
+<span style="color: #E6DB74;">     * cache last used pipe for splice</span>
+<span style="color: #E6DB74;">     </span><span style="color: #75715E;">*/</span>
+    <span style="color: #F92672;">struct</span> <span style="color: #66D9EF;">pipe_inode_info</span> *<span style="color: #FD971F;">splice_pipe</span>;
+<span style="color: #F92672;">#ifdef</span>  CONFIG_TASK_DELAY_ACCT
+    <span style="color: #F92672;">struct</span> <span style="color: #66D9EF;">task_delay_info</span> *<span style="color: #FD971F;">delays</span>;
+<span style="color: #F92672;">#endif</span>
+<span style="color: #F92672;">#ifdef</span> CONFIG_FAULT_INJECTION
+    <span style="color: #66D9EF;">int</span> <span style="color: #FD971F;">make_it_fail</span>;
+<span style="color: #F92672;">#endif</span>
+    <span style="color: #F92672;">struct</span> <span style="color: #66D9EF;">prop_local_single</span> <span style="color: #FD971F;">dirties</span>;
+<span style="color: #F92672;">#ifdef</span> CONFIG_LATENCYTOP
+    <span style="color: #66D9EF;">int</span> <span style="color: #FD971F;">latency_record_count</span>;
+    <span style="color: #F92672;">struct</span> <span style="color: #66D9EF;">latency_record</span> <span style="color: #FD971F;">latency_record</span><span style="color: #66D9EF;">[</span>LT_SAVECOUNT<span style="color: #66D9EF;">]</span>;
+<span style="color: #F92672;">#endif</span>
+    <span style="color: #75715E;">/*</span>
+<span style="color: #E6DB74;">     * time slack values; these are used to round up poll() and</span>
+<span style="color: #E6DB74;">     * select() etc timeout values. These are in nanoseconds.</span>
+<span style="color: #E6DB74;">     </span><span style="color: #75715E;">*/</span>
+    <span style="color: #66D9EF;">unsigned</span> <span style="color: #66D9EF;">long</span> <span style="color: #FD971F;">timer_slack_ns</span>;
+    <span style="color: #66D9EF;">unsigned</span> <span style="color: #66D9EF;">long</span> <span style="color: #FD971F;">default_timer_slack_ns</span>;
+
+    <span style="color: #F92672;">struct</span> <span style="color: #66D9EF;">list_head</span>    *<span style="color: #FD971F;">scm_work_list</span>;
+<span style="color: #F92672;">#ifdef</span> CONFIG_FUNCTION_GRAPH_TRACER
+    <span style="color: #75715E;">/* </span><span style="color: #E6DB74;">Index of current stored address in ret_stack </span><span style="color: #75715E;">*/</span>
+    <span style="color: #66D9EF;">int</span> <span style="color: #FD971F;">curr_ret_stack</span>;
+    <span style="color: #75715E;">/* </span><span style="color: #E6DB74;">Stack of return addresses for return function tracing </span><span style="color: #75715E;">*/</span>
+    <span style="color: #F92672;">struct</span> <span style="color: #66D9EF;">ftrace_ret_stack</span> *<span style="color: #FD971F;">ret_stack</span>;
+    <span style="color: #75715E;">/* </span><span style="color: #E6DB74;">time stamp for last schedule </span><span style="color: #75715E;">*/</span>
+    <span style="color: #66D9EF;">unsigned</span> <span style="color: #66D9EF;">long</span> <span style="color: #66D9EF;">long</span> <span style="color: #FD971F;">ftrace_timestamp</span>;
+    <span style="color: #75715E;">/*</span>
+<span style="color: #E6DB74;">     * Number of functions that haven't been traced</span>
+<span style="color: #E6DB74;">     * because of depth overrun.</span>
+<span style="color: #E6DB74;">     </span><span style="color: #75715E;">*/</span>
+    <span style="color: #66D9EF;">atomic_t</span> <span style="color: #FD971F;">trace_overrun</span>;
+    <span style="color: #75715E;">/* </span><span style="color: #E6DB74;">Pause for the tracing </span><span style="color: #75715E;">*/</span>
+    <span style="color: #66D9EF;">atomic_t</span> <span style="color: #FD971F;">tracing_graph_pause</span>;
+<span style="color: #F92672;">#endif</span>
+<span style="color: #F92672;">#ifdef</span> CONFIG_TRACING
+    <span style="color: #75715E;">/* </span><span style="color: #E6DB74;">state flags for use by tracers </span><span style="color: #75715E;">*/</span>
+    <span style="color: #66D9EF;">unsigned</span> <span style="color: #66D9EF;">long</span> <span style="color: #FD971F;">trace</span>;
+    <span style="color: #75715E;">/* </span><span style="color: #E6DB74;">bitmask of trace recursion </span><span style="color: #75715E;">*/</span>
+    <span style="color: #66D9EF;">unsigned</span> <span style="color: #66D9EF;">long</span> <span style="color: #FD971F;">trace_recursion</span>;
+<span style="color: #F92672;">#endif</span> <span style="color: #75715E;">/* </span><span style="color: #E6DB74;">CONFIG_TRACING </span><span style="color: #75715E;">*/</span>
+<span style="color: #F92672;">#ifdef</span> CONFIG_CGROUP_MEM_RES_CTLR <span style="color: #75715E;">/* </span><span style="color: #E6DB74;">memcg uses this to do batch job </span><span style="color: #75715E;">*/</span>
+    <span style="color: #F92672;">struct</span> <span style="color: #66D9EF;">memcg_batch_info</span> <span style="color: #66D9EF;">{</span>
+        <span style="color: #66D9EF;">int</span> <span style="color: #FD971F;">do_batch</span>;   <span style="color: #75715E;">/* </span><span style="color: #E6DB74;">incremented when batch uncharge started </span><span style="color: #75715E;">*/</span>
+        <span style="color: #F92672;">struct</span> <span style="color: #66D9EF;">mem_cgroup</span> *<span style="color: #FD971F;">memcg</span>; <span style="color: #75715E;">/* </span><span style="color: #E6DB74;">target memcg of uncharge </span><span style="color: #75715E;">*/</span>
+        <span style="color: #66D9EF;">unsigned</span> <span style="color: #66D9EF;">long</span> <span style="color: #FD971F;">bytes</span>;        <span style="color: #75715E;">/* </span><span style="color: #E6DB74;">uncharged usage </span><span style="color: #75715E;">*/</span>
+        <span style="color: #66D9EF;">unsigned</span> <span style="color: #66D9EF;">long</span> <span style="color: #FD971F;">memsw_bytes</span>; <span style="color: #75715E;">/* </span><span style="color: #E6DB74;">uncharged mem+swap usage </span><span style="color: #75715E;">*/</span>
+    <span style="color: #66D9EF;">}</span> <span style="color: #FD971F;">memcg_batch</span>;
+<span style="color: #F92672;">#endif</span>
+<span style="color: #AE81FF;">}</span>;
+
+<span style="color: #F92672;">struct</span> <span style="color: #66D9EF;">thread_info</span> <span style="color: #AE81FF;">{</span>
+    <span style="color: #F92672;">struct</span> <span style="color: #66D9EF;">task_struct</span>  *<span style="color: #FD971F;">task</span>;      <span style="color: #75715E;">/* </span><span style="color: #E6DB74;">main task structure </span><span style="color: #75715E;">*/</span>
+    <span style="color: #F92672;">struct</span> <span style="color: #66D9EF;">exec_domain</span>  *<span style="color: #FD971F;">exec_domain</span>;   <span style="color: #75715E;">/* </span><span style="color: #E6DB74;">execution domain </span><span style="color: #75715E;">*/</span>
+    <span style="color: #66D9EF;">__u32</span>           <span style="color: #FD971F;">flags</span>;      <span style="color: #75715E;">/* </span><span style="color: #E6DB74;">low level flags </span><span style="color: #75715E;">*/</span>
+    <span style="color: #66D9EF;">__u32</span>           <span style="color: #FD971F;">status</span>;     <span style="color: #75715E;">/* </span><span style="color: #E6DB74;">thread synchronous flags </span><span style="color: #75715E;">*/</span>
+    <span style="color: #66D9EF;">__u32</span>           <span style="color: #FD971F;">cpu</span>;        <span style="color: #75715E;">/* </span><span style="color: #E6DB74;">current CPU </span><span style="color: #75715E;">*/</span>
+    <span style="color: #66D9EF;">int</span>         <span style="color: #FD971F;">preempt_count</span>;  <span style="color: #75715E;">/* </span><span style="color: #E6DB74;">0 =&gt; preemptable,</span>
+<span style="color: #E6DB74;">                           &lt;0 =&gt; BUG </span><span style="color: #75715E;">*/</span>
+    <span style="color: #66D9EF;">mm_segment_t</span>        <span style="color: #FD971F;">addr_limit</span>;
+    <span style="color: #F92672;">struct</span> <span style="color: #66D9EF;">restart_block</span>    <span style="color: #FD971F;">restart_block</span>;
+    <span style="color: #66D9EF;">void</span> <span style="color: #FD971F;">__user</span>     *sysenter_return;
+<span style="color: #F92672;">#ifdef</span> CONFIG_X86_32
+    <span style="color: #66D9EF;">unsigned</span> <span style="color: #66D9EF;">long</span>           <span style="color: #FD971F;">previous_esp</span>;   <span style="color: #75715E;">/* </span><span style="color: #E6DB74;">ESP of the previous stack in</span>
+<span style="color: #E6DB74;">                           case of nested (IRQ) stacks</span>
+<span style="color: #E6DB74;">                        </span><span style="color: #75715E;">*/</span>
+    <span style="color: #66D9EF;">__u8</span>            <span style="color: #FD971F;">supervisor_stack</span><span style="color: #66D9EF;">[</span>0<span style="color: #66D9EF;">]</span>;
+<span style="color: #F92672;">#endif</span>
+    <span style="color: #66D9EF;">int</span>         <span style="color: #FD971F;">uaccess_err</span>;
+<span style="color: #AE81FF;">}</span>;
+</pre>
+</div>
+<ul class="org-ul">
+<li>写时拷贝,页权限设为只读，真正要写的时候再拷贝新页<br /></li>
+
+<li>用户态fork -&gt; 用户态clone -&gt; 内核态do_fork -&gt; copy_process:<br /></li>
+</ul>
+<p>
+dup_task_struct<br />
+检查进程资源限制<br />
+子进程task_struct某些信息清0<br />
+子进程state = UNINTERRUPTIBLE<br />
+copy_flags<br />
+alloc_pid申请子进程pid<br />
+资源分配<br />
+</p>
+<ul class="org-ul">
+<li>vfork为了那些马上exec的进程使用，不推荐<br /></li>
+<li>linux进程与线程的区别只在与是否共享某些资源<br /></li>
+</ul>
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">CLONE 参数标志</th>
+<th scope="col" class="org-left">含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left">CLONE_FILES</td>
+<td class="org-left">共享打开的文件</td>
+</tr>
+
+<tr>
+<td class="org-left">CLONE_FS</td>
+<td class="org-left">共享文件系统信息</td>
+</tr>
+
+<tr>
+<td class="org-left">CLONE_IDLETASK</td>
+<td class="org-left">PID设为0(dedicated for init process)</td>
+</tr>
+
+<tr>
+<td class="org-left">CLONE_NEWNS</td>
+<td class="org-left">子进程有新的命令空间</td>
+</tr>
+
+<tr>
+<td class="org-left">CLONE_PARENT</td>
+<td class="org-left">子进程与父进程拥有同一个父进程</td>
+</tr>
+
+<tr>
+<td class="org-left">CLONE_PTRACE</td>
+<td class="org-left">调试子进程，gdb会用这个</td>
+</tr>
+
+<tr>
+<td class="org-left">CLONE_SETTID</td>
+<td class="org-left">将TID回写至用户空间</td>
+</tr>
+
+<tr>
+<td class="org-left">CLONE_SETTLS</td>
+<td class="org-left">为子进程创建新的TLS</td>
+</tr>
+
+<tr>
+<td class="org-left">CLONE_SIGHAND</td>
+<td class="org-left">共享信号处理函数及被阻断的信号</td>
+</tr>
+
+<tr>
+<td class="org-left">CLONE_SYSVEM</td>
+<td class="org-left">共享SytemV SEM_UNDO语义</td>
+</tr>
+
+<tr>
+<td class="org-left">CLONE_THREAD</td>
+<td class="org-left">相同的线程组</td>
+</tr>
+
+<tr>
+<td class="org-left">CLONE_VFORK</td>
+<td class="org-left">vfork()使用</td>
+</tr>
+
+<tr>
+<td class="org-left">CLONE_UNTRACED</td>
+<td class="org-left">防止被trace,主要是防止跟踪</td>
+</tr>
+
+<tr>
+<td class="org-left">CLONE_STOP</td>
+<td class="org-left">以TASK_STOPPED状态开始进程</td>
+</tr>
+
+<tr>
+<td class="org-left">CLONE_CHILD_CLEARTID</td>
+<td class="org-left">清除子进程的TID</td>
+</tr>
+
+<tr>
+<td class="org-left">CLONE_CHILD_SETTID</td>
+<td class="org-left">设置子进程的TID</td>
+</tr>
+
+<tr>
+<td class="org-left">CLONE_PARENT_SETTID</td>
+<td class="org-left">设置父进程的TID</td>
+</tr>
+
+<tr>
+<td class="org-left">CLONE_VM</td>
+<td class="org-left"><b>共享地址空间</b></td>
+</tr>
+</tbody>
+</table>
+
+<ul class="org-ul">
+<li>内核线程，没用用户空间的线程， mm为NULL, 相关头文件为kthread.h<br /></li>
+<li>exit -&gt; do_exit，永不返回<br /></li>
+</ul>
+<p>
+task_struct标志PF_EXITING<br />
+del_timer_sync<br />
+exit_sem, exit_mm, exit_files, exit_fs<br />
+设置exit_code<br />
+exit_notify让其父进程为其子进程重新设置父进程，同时设状态为ZOMBIE<br />
+schedule，父进程通过wait帮其清理内核栈, thread_info，task_struct<br />
+</p>
+<ul class="org-ul">
+<li>wait<br /></li>
+</ul>
+<p>
+为退出进程的子进程找新的父进程<br />
+为被退出进程trace的进程找新的父进程<br />
+</p>
+</div>
+</div>
+
+<div id="outline-container-org978de23" class="outline-2">
+<h2 id="org978de23"><span class="section-number-2">4</span> 第四章 进程调度</h2>
+<div class="outline-text-2" id="text-4">
+<ul class="org-ul">
+<li>preemption 内核调度程序决定进程挂起与运行<br /></li>
+<li>yielding   进程本身主动挂起<br /></li>
+<li>进程调度在响应时间和吞吐量之间做平衡<br /></li>
+<li>传统的绝对时间片会引发的固定的切换频率问题，linux使用了公平调度<br /></li>
+</ul>
+<p>
+se 是调度器实体<br />
+vruntime 虚拟实时，系统定时器周期性调用update_curr()更新<br />
+</p>
+
+<div class="org-src-container">
+<pre class="src src-c"><span style="color: #F92672;">struct</span> <span style="color: #66D9EF;">sched_entity</span> <span style="color: #AE81FF;">{</span>
+    <span style="color: #F92672;">struct</span> <span style="color: #66D9EF;">load_weight</span>  <span style="color: #FD971F;">load</span>;       <span style="color: #75715E;">/* </span><span style="color: #E6DB74;">for load-balancing </span><span style="color: #75715E;">*/</span>
+    <span style="color: #F92672;">struct</span> <span style="color: #66D9EF;">rb_node</span>      <span style="color: #FD971F;">run_node</span>;
+    <span style="color: #F92672;">struct</span> <span style="color: #66D9EF;">list_head</span>    <span style="color: #FD971F;">group_node</span>;
+    <span style="color: #66D9EF;">unsigned</span> <span style="color: #66D9EF;">int</span>        <span style="color: #FD971F;">on_rq</span>;
+
+    <span style="color: #66D9EF;">u64</span>         <span style="color: #FD971F;">exec_start</span>;
+    <span style="color: #66D9EF;">u64</span>         <span style="color: #FD971F;">sum_exec_runtime</span>;
+    <span style="color: #66D9EF;">u64</span>         <span style="color: #FD971F;">vruntime</span>;
+    <span style="color: #66D9EF;">u64</span>         <span style="color: #FD971F;">prev_sum_exec_runtime</span>;
+
+    <span style="color: #66D9EF;">u64</span>         <span style="color: #FD971F;">last_wakeup</span>;
+    <span style="color: #66D9EF;">u64</span>         <span style="color: #FD971F;">avg_overlap</span>;
+
+    <span style="color: #66D9EF;">u64</span>         <span style="color: #FD971F;">nr_migrations</span>;
+
+    <span style="color: #66D9EF;">u64</span>         <span style="color: #FD971F;">start_runtime</span>;
+    <span style="color: #66D9EF;">u64</span>         <span style="color: #FD971F;">avg_wakeup</span>;
+<span style="color: #75715E;">//</span><span style="color: #E6DB74;">...</span>
+<span style="color: #AE81FF;">}</span>;
+
+<span style="color: #F92672;">static</span> <span style="color: #66D9EF;">void</span> <span style="color: #A6E22E; font-size: 130%;">update_curr</span><span style="color: #AE81FF;">(</span><span style="color: #F92672;">struct</span> <span style="color: #66D9EF;">cfs_rq</span> *<span style="color: #FD971F;">cfs_rq</span><span style="color: #AE81FF;">)</span>
+<span style="color: #AE81FF;">{</span>
+    <span style="color: #F92672;">struct</span> <span style="color: #66D9EF;">sched_entity</span> *<span style="color: #FD971F;">curr</span> = cfs_rq-&gt;curr;
+    <span style="color: #66D9EF;">u64</span> <span style="color: #FD971F;">now</span> = <span style="color: #A6E22E; font-weight: bold;">rq_of</span><span style="color: #66D9EF;">(</span>cfs_rq<span style="color: #66D9EF;">)</span>-&gt;clock;
+    <span style="color: #66D9EF;">unsigned</span> <span style="color: #66D9EF;">long</span> <span style="color: #FD971F;">delta_exec</span>;
+
+    <span style="color: #A6E22E; font-weight: bold;">if</span> <span style="color: #66D9EF;">(</span><span style="color: #A6E22E; font-weight: bold;">unlikely</span><span style="color: #A6E22E;">(</span><span style="color: #E6DB74; font-weight: bold;">!</span>curr<span style="color: #A6E22E;">)</span><span style="color: #66D9EF;">)</span>
+        <span style="color: #F92672;">return</span>;
+
+    <span style="color: #75715E;">/*</span>
+<span style="color: #E6DB74;">     * Get the amount of time the current task was running</span>
+<span style="color: #E6DB74;">     * since the last time we changed load (this cannot</span>
+<span style="color: #E6DB74;">     * overflow on 32 bits):</span>
+<span style="color: #E6DB74;">     </span><span style="color: #75715E;">*/</span>
+    delta_exec = <span style="color: #66D9EF;">(</span><span style="color: #66D9EF;">unsigned</span> <span style="color: #66D9EF;">long</span><span style="color: #66D9EF;">)(</span>now - curr-&gt;exec_start<span style="color: #66D9EF;">)</span>;
+    <span style="color: #A6E22E; font-weight: bold;">if</span> <span style="color: #66D9EF;">(</span><span style="color: #E6DB74; font-weight: bold;">!</span>delta_exec<span style="color: #66D9EF;">)</span>
+        <span style="color: #F92672;">return</span>;
+
+    <span style="color: #A6E22E; font-weight: bold;">__update_curr</span><span style="color: #66D9EF;">(</span>cfs_rq, curr, delta_exec<span style="color: #66D9EF;">)</span>;
+    curr-&gt;exec_start = now;
+
+    <span style="color: #A6E22E; font-weight: bold;">if</span> <span style="color: #66D9EF;">(</span><span style="color: #A6E22E; font-weight: bold;">entity_is_task</span><span style="color: #A6E22E;">(</span>curr<span style="color: #A6E22E;">)</span><span style="color: #66D9EF;">)</span> <span style="color: #66D9EF;">{</span>
+        <span style="color: #F92672;">struct</span> <span style="color: #66D9EF;">task_struct</span> *<span style="color: #FD971F;">curtask</span> = <span style="color: #A6E22E; font-weight: bold;">task_of</span><span style="color: #A6E22E;">(</span>curr<span style="color: #A6E22E;">)</span>;
+
+        <span style="color: #A6E22E; font-weight: bold;">trace_sched_stat_runtime</span><span style="color: #A6E22E;">(</span>curtask, delta_exec, curr-&gt;vruntime<span style="color: #A6E22E;">)</span>;
+        <span style="color: #A6E22E; font-weight: bold;">cpuacct_charge</span><span style="color: #A6E22E;">(</span>curtask, delta_exec<span style="color: #A6E22E;">)</span>;
+        <span style="color: #A6E22E; font-weight: bold;">account_group_exec_runtime</span><span style="color: #A6E22E;">(</span>curtask, delta_exec<span style="color: #A6E22E;">)</span>;
+    <span style="color: #66D9EF;">}</span>
+<span style="color: #AE81FF;">}</span>
+
+<span style="color: #F92672;">static</span> <span style="color: #F92672;">inline</span> <span style="color: #66D9EF;">void</span>
+<span style="color: #A6E22E; font-size: 130%;">__update_curr</span><span style="color: #AE81FF;">(</span><span style="color: #F92672;">struct</span> <span style="color: #66D9EF;">cfs_rq</span> *<span style="color: #FD971F;">cfs_rq</span>, <span style="color: #F92672;">struct</span> <span style="color: #66D9EF;">sched_entity</span> *<span style="color: #FD971F;">curr</span>,
+          <span style="color: #66D9EF;">unsigned</span> <span style="color: #66D9EF;">long</span> <span style="color: #FD971F;">delta_exec</span><span style="color: #AE81FF;">)</span>
+<span style="color: #AE81FF;">{</span>
+    <span style="color: #66D9EF;">unsigned</span> <span style="color: #66D9EF;">long</span> <span style="color: #FD971F;">delta_exec_weighted</span>;
+
+    <span style="color: #A6E22E; font-weight: bold;">schedstat_set</span><span style="color: #66D9EF;">(</span>curr-&gt;exec_max, <span style="color: #A6E22E; font-weight: bold;">max</span><span style="color: #A6E22E;">(</span><span style="color: #E6DB74;">(</span><span style="color: #66D9EF;">u64</span><span style="color: #E6DB74;">)</span>delta_exec, curr-&gt;exec_max<span style="color: #A6E22E;">)</span><span style="color: #66D9EF;">)</span>;
+
+    curr-&gt;sum_exec_runtime += delta_exec;
+    <span style="color: #A6E22E; font-weight: bold;">schedstat_add</span><span style="color: #66D9EF;">(</span>cfs_rq, exec_clock, delta_exec<span style="color: #66D9EF;">)</span>;
+    delta_exec_weighted = <span style="color: #A6E22E; font-weight: bold;">calc_delta_fair</span><span style="color: #66D9EF;">(</span>delta_exec, curr<span style="color: #66D9EF;">)</span>;
+
+    curr-&gt;vruntime += delta_exec_weighted;
+    <span style="color: #A6E22E; font-weight: bold;">update_min_vruntime</span><span style="color: #66D9EF;">(</span>cfs_rq<span style="color: #66D9EF;">)</span>;
+<span style="color: #AE81FF;">}</span>
+
+</pre>
+</div>
+
+<ul class="org-ul">
+<li>进程选择<br /></li>
+</ul>
+<p>
+红黑树<br />
+enqueue_entity +进程<br />
+dequeue_entity -进程<br />
+</p>
+<div class="org-src-container">
+<pre class="src src-c"><span style="color: #F92672;">static</span> <span style="color: #F92672;">struct</span> <span style="color: #66D9EF;">sched_entity</span> *<span style="color: #A6E22E; font-size: 130%;">__pick_next_entity</span><span style="color: #AE81FF;">(</span><span style="color: #F92672;">struct</span> <span style="color: #66D9EF;">cfs_rq</span> *<span style="color: #FD971F;">cfs_rq</span><span style="color: #AE81FF;">)</span>
+<span style="color: #AE81FF;">{</span>
+    <span style="color: #F92672;">struct</span> <span style="color: #66D9EF;">rb_node</span> *<span style="color: #FD971F;">left</span> = cfs_rq-&gt;rb_leftmost;
+
+    <span style="color: #A6E22E; font-weight: bold;">if</span> <span style="color: #66D9EF;">(</span><span style="color: #E6DB74; font-weight: bold;">!</span>left<span style="color: #66D9EF;">)</span>
+        <span style="color: #F92672;">return</span> <span style="color: #AE81FF;">NULL</span>;
+
+    <span style="color: #F92672;">return</span> <span style="color: #A6E22E; font-weight: bold;">rb_entry</span><span style="color: #66D9EF;">(</span>left, <span style="color: #F92672;">struct</span> <span style="color: #66D9EF;">sched_entity</span>, run_node<span style="color: #66D9EF;">)</span>;
+<span style="color: #AE81FF;">}</span>
+
+
+</pre>
+</div>
+
+<ul class="org-ul">
+<li>调度器函数 schedule-&gt;pick_next_task，会从高优先级到低优先级调度器类中找第一个进程<br /></li>
+<li>休眠<br /></li>
+</ul>
+<p>
+从可执行红黑树中移出，放入等待队列<br />
+</p>
+<div class="org-src-container">
+<pre class="src src-c"><span style="color: #A6E22E; font-size: 130%;">DEFINE_WAIT</span><span style="color: #AE81FF;">(</span>wait<span style="color: #AE81FF;">)</span>; <span style="color: #75715E;">//</span><span style="color: #E6DB74;">&#21019;&#24314;&#38431;&#21015;&#39033;</span>
+<span style="color: #A6E22E; font-size: 130%;">add_wait_queue</span><span style="color: #AE81FF;">(</span>q, &amp;wait<span style="color: #AE81FF;">)</span>; <span style="color: #75715E;">//</span><span style="color: #E6DB74;">&#21152;&#20837;&#31561;&#24453;&#38431;&#21015;</span>
+<span style="color: #A6E22E; font-weight: bold;">while</span><span style="color: #AE81FF;">(</span><span style="color: #E6DB74; font-weight: bold;">!</span>condition<span style="color: #AE81FF;">)</span> <span style="color: #AE81FF;">{</span>
+<span style="color: #75715E;">//</span><span style="color: #E6DB74;">&#26465;&#20214;&#19981;&#28385;&#36275;</span>
+    <span style="color: #A6E22E; font-weight: bold;">prepare_to_wait</span><span style="color: #66D9EF;">(</span>&amp;q, &amp;wait, TASK_INTERRUPTIBLE<span style="color: #66D9EF;">)</span>; <span style="color: #75715E;">//</span><span style="color: #E6DB74;">&#35774;&#32622;&#36827;&#31243;&#29366;&#24577;&#65292;&#22914;&#26524;&#27492;&#26102;&#24050;&#36864;&#20986;&#31561;&#24453;&#38431;&#21015;&#65292;&#37325;&#26032;&#21152;&#20837;</span>
+    <span style="color: #A6E22E; font-weight: bold;">if</span><span style="color: #66D9EF;">(</span><span style="color: #A6E22E; font-weight: bold;">signal_pending</span><span style="color: #A6E22E;">(</span>current<span style="color: #A6E22E;">)</span><span style="color: #66D9EF;">)</span> <span style="color: #75715E;">//</span><span style="color: #E6DB74;">&#22788;&#29702;&#20449;&#21495;</span>
+    <span style="color: #A6E22E; font-weight: bold;">schedule</span><span style="color: #66D9EF;">()</span>;<span style="color: #75715E;">//</span><span style="color: #E6DB74;">&#35843;&#24230;</span>
+<span style="color: #AE81FF;">}</span>
+<span style="color: #A6E22E; font-weight: bold;">finish_wait</span><span style="color: #AE81FF;">(</span>&amp;q, &amp;wait<span style="color: #AE81FF;">)</span>;<span style="color: #75715E;">//</span><span style="color: #E6DB74;">&#32467;&#26463;&#31561;&#24453;</span>
+</pre>
+</div>
+<ul class="org-ul">
+<li>唤醒<br /></li>
+</ul>
+<p>
+从等待队列移到红黑树<br />
+</p>
+<ul class="org-ul">
+<li>抢占和上下文切换<br /></li>
+</ul>
+<p>
+switch_mm 切换虚拟内存映射<br />
+switch_to 切换寄存器组<br />
+</p>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: xuali2</p>
+<p class="date">Created: 2020-10-12 Mon 12:39</p>
+<p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
+</div>
+</body>
+</html>
