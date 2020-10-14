@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2020-10-12 Mon 12:39 -->
+<!-- 2020-10-14 Wed 23:25 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>程序员的自我修养 - 基于x86 linux2.6</title>
@@ -253,17 +253,36 @@ for the JavaScript code in this tag.
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#orgcff6427">1. 第一章 linux内核简介</a></li>
-<li><a href="#org42f836b">2. 第二章 从内核出发</a></li>
-<li><a href="#org996d3f6">3. 第三章 进程管理</a></li>
-<li><a href="#org978de23">4. 第四章 进程调度</a></li>
+<li><a href="#orgec9ebfe">1. 第一章 linux内核简介</a></li>
+<li><a href="#orgfb323a5">2. 第二章 从内核出发</a></li>
+<li><a href="#orgf234043">3. 第三章 进程管理</a></li>
+<li><a href="#org70d57c0">4. 第四章 进程调度</a></li>
+<li><a href="#org492c967">5. 第五章 系统调用</a>
+<ul>
+<li><a href="#org1de932c">5.1. 新增系统调用</a>
+<ul>
+<li><a href="#orgdea6e0c">5.1.1. 环境</a></li>
+<li><a href="#orge412014">5.1.2. sys_foo</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#orgd25d0b7">6. 第六章 内核数据结构</a>
+<ul>
+<li><a href="#org7da6b98">6.1. 链表</a></li>
+<li><a href="#org1b2af30">6.2. 数据队列</a></li>
+<li><a href="#org45a4ddd">6.3. 映射</a></li>
+<li><a href="#org4399c09">6.4. 红黑树</a></li>
+</ul>
+</li>
+<li><a href="#orgd0530be">7. 第七章 中断和中断处理</a></li>
 </ul>
 </div>
 </div>
 
 
-<div id="outline-container-orgcff6427" class="outline-2">
-<h2 id="orgcff6427"><span class="section-number-2">1</span> 第一章 linux内核简介</h2>
+<div id="outline-container-orgec9ebfe" class="outline-2">
+<h2 id="orgec9ebfe"><span class="section-number-2">1</span> 第一章 linux内核简介</h2>
 <div class="outline-text-2" id="text-1">
 <p>
 内核是一个不可分割的静态可执行文件<br />
@@ -289,8 +308,8 @@ linux版本 主版本号.从版本号.修订版本号.稳定版本号，其中 <
 </div>
 </div>
 
-<div id="outline-container-org42f836b" class="outline-2">
-<h2 id="org42f836b"><span class="section-number-2">2</span> 第二章 从内核出发</h2>
+<div id="outline-container-orgfb323a5" class="outline-2">
+<h2 id="orgfb323a5"><span class="section-number-2">2</span> 第二章 从内核出发</h2>
 <div class="outline-text-2" id="text-2">
 <p>
 <b>git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux-2.6.git</b><br />
@@ -434,8 +453,8 @@ likely和unlikely<br />
 </div>
 </div>
 
-<div id="outline-container-org996d3f6" class="outline-2">
-<h2 id="org996d3f6"><span class="section-number-2">3</span> 第三章 进程管理</h2>
+<div id="outline-container-orgf234043" class="outline-2">
+<h2 id="orgf234043"><span class="section-number-2">3</span> 第三章 进程管理</h2>
 <div class="outline-text-2" id="text-3">
 <ul class="org-ul">
 <li>进程列表存放在任务队列的双向循环链表中 - task list<br /></li>
@@ -999,8 +1018,8 @@ schedule，父进程通过wait帮其清理内核栈, thread_info，task_struct<b
 </div>
 </div>
 
-<div id="outline-container-org978de23" class="outline-2">
-<h2 id="org978de23"><span class="section-number-2">4</span> 第四章 进程调度</h2>
+<div id="outline-container-org70d57c0" class="outline-2">
+<h2 id="org70d57c0"><span class="section-number-2">4</span> 第四章 进程调度</h2>
 <div class="outline-text-2" id="text-4">
 <ul class="org-ul">
 <li>preemption 内核调度程序决定进程挂起与运行<br /></li>
@@ -1133,18 +1152,846 @@ dequeue_entity -进程<br />
 从等待队列移到红黑树<br />
 </p>
 <ul class="org-ul">
-<li>抢占和上下文切换<br /></li>
+<li>上下文切换<br /></li>
 </ul>
 <p>
 switch_mm 切换虚拟内存映射<br />
 switch_to 切换寄存器组<br />
 </p>
+<ul class="org-ul">
+<li>用户抢占<br /></li>
+</ul>
+<p>
+发生在系统调用或中断处理程序返回用户空间<br />
+</p>
+<ul class="org-ul">
+<li>内核抢占<br /></li>
+</ul>
+<p>
+<b>非内核抢占的操作系统中，调度程序没有办法在一个内核级的任务正在执行的时候重新调度</b><br />
+thread_info-&gt;preempt_count为0时，可抢占(此时是否重新调度取决于need_resched)<br />
+a. 中断处理程序返回内核空间<br />
+b. 内核代码再一次有抢占性<br />
+c. 显示调用schedule<br />
+d. 内核任务阻塞(一般是加到等待队列，同时调用schedule)<br />
+</p>
+<ul class="org-ul">
+<li>实时调度策略<br /></li>
+</ul>
+<p>
+在sched_rt.c中,之前的CFS在sched_fair.c(SCHED_NORMAL)中<br />
+a. SCHED_FIFO, 一直执行到主动放弃或被更高优先级抢占<br />
+b. SCHED_RR, 带时间片的SCHED_FIFO<br />
+实时优先级为静态优先级，不像普通进程会动态计算优先级<br />
+</p>
+<ul class="org-ul">
+<li>优先级范围<br /></li>
+</ul>
+<p>
+nice -20~+19 相当于 实时优先级 100~139<br />
+</p>
+<div class="org-src-container">
+<pre class="src src-c"><span style="color: #75715E;">/*</span>
+<span style="color: #E6DB74;"> * Priority of a process goes from 0..MAX_PRIO-1, valid RT</span>
+<span style="color: #E6DB74;"> * priority is 0..MAX_RT_PRIO-1, and SCHED_NORMAL/SCHED_BATCH</span>
+<span style="color: #E6DB74;"> * tasks are in the range MAX_RT_PRIO..MAX_PRIO-1. Priority</span>
+<span style="color: #E6DB74;"> * values are inverted: lower p-&gt;prio value means higher priority.</span>
+<span style="color: #E6DB74;"> *</span>
+<span style="color: #E6DB74;"> * The MAX_USER_RT_PRIO value allows the actual maximum</span>
+<span style="color: #E6DB74;"> * RT priority to be separate from the value exported to</span>
+<span style="color: #E6DB74;"> * user-space.  This allows kernel threads to set their</span>
+<span style="color: #E6DB74;"> * priority to a value higher than any user task. Note:</span>
+<span style="color: #E6DB74;"> * MAX_RT_PRIO must not be smaller than MAX_USER_RT_PRIO.</span>
+<span style="color: #E6DB74;"> </span><span style="color: #75715E;">*/</span>
+
+<span style="color: #F92672;">#define</span> <span style="color: #FD971F;">MAX_USER_RT_PRIO</span>    100
+<span style="color: #F92672;">#define</span> <span style="color: #FD971F;">MAX_RT_PRIO</span>     MAX_USER_RT_PRIO
+
+<span style="color: #F92672;">#define</span> <span style="color: #FD971F;">MAX_PRIO</span>        <span style="color: #AE81FF;">(</span>MAX_RT_PRIO + 40<span style="color: #AE81FF;">)</span>
+<span style="color: #F92672;">#define</span> <span style="color: #FD971F;">DEFAULT_PRIO</span>        <span style="color: #AE81FF;">(</span>MAX_RT_PRIO + 20<span style="color: #AE81FF;">)</span>
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org492c967" class="outline-2">
+<h2 id="org492c967"><span class="section-number-2">5</span> 第五章 系统调用</h2>
+<div class="outline-text-2" id="text-5">
+<p>
+除异常和陷入外内核唯一的合法入口<br />
+<b>当进程从用户态切换至内核栈时,X86会进行栈切换(取出tss段中的esp0)</b><br />
+<b>需保证系统调用是可重入的,因为进程上下文中，内核可被抢占，所以同时可能存在多个相同的系统调用</b><br />
+<b>反过来说中断处理程序不能休眠</b><br />
+</p>
+
+<p>
+<b>asmlinkage</b> 限制词表示用栈传数据<br />
+sys_call_table 是内核的系统调用表<br />
+</p>
+
+<div class="org-src-container">
+<pre class="src src-c"><span style="color: #75715E;">//</span><span style="color: #E6DB74;">entry_32.S</span>
+<span style="color: #AE81FF;">syscall_call</span>:
+    <span style="color: #66D9EF;">call</span> *<span style="color: #A6E22E; font-size: 130%;">sys_call_table</span><span style="color: #AE81FF;">(</span>,%eax,4<span style="color: #AE81FF;">)</span>
+    movl %eax,<span style="color: #A6E22E; font-weight: bold;">PT_EAX</span><span style="color: #AE81FF;">(</span>%esp<span style="color: #AE81FF;">)</span>      # store the <span style="color: #F92672;">return</span> value
+
+<span style="color: #75715E;">//</span><span style="color: #E6DB74;">entry_64.S</span>
+<span style="color: #A6E22E; font-weight: bold;">ENTRY</span><span style="color: #AE81FF;">(</span>system_call<span style="color: #AE81FF;">)</span>
+    CFI_STARTPROC   simple
+    CFI_SIGNAL_FRAME
+    <span style="color: #66D9EF;">CFI_DEF_CFA</span> <span style="color: #FD971F;">rsp</span>,<span style="color: #FD971F;">KERNEL_STACK_OFFSET</span>
+    CFI_REGISTER    rip,<span style="color: #FD971F;">rcx</span>
+    <span style="color: #75715E;">/*</span><span style="color: #E6DB74;">CFI_REGISTER  rflags,r11</span><span style="color: #75715E;">*/</span>
+    SWAPGS_UNSAFE_STACK
+</pre>
+</div>
+
+<p>
+内核和用户空间间做数据传输时有可能会引起阻塞（所需页在磁盘上）<br />
+</p>
+<ul class="org-ul">
+<li>copy_from_user 从用户空间拷贝<br /></li>
+<li>copy_to_user   拷贝到用户空间<br /></li>
+</ul>
+
+<p>
+capable可检查是否可操作指定资源<br />
+</p>
+</div>
+
+<div id="outline-container-org1de932c" class="outline-3">
+<h3 id="org1de932c"><span class="section-number-3">5.1</span> 新增系统调用</h3>
+<div class="outline-text-3" id="text-5-1">
+</div>
+<div id="outline-container-orgdea6e0c" class="outline-4">
+<h4 id="orgdea6e0c"><span class="section-number-4">5.1.1</span> 环境</h4>
+<div class="outline-text-4" id="text-5-1-1">
+<ul class="org-ul">
+<li>linux kernel<br /></li>
+</ul>
+<p>
+a. make defconfig<br />
+b. make menuconfig<br />
+</p>
+<div class="org-src-container">
+<pre class="src src-bash"><span style="color: #75715E;"># </span><span style="color: #E6DB74;">make menuconfig</span>
+[ ] Network packet filtering framework (Netfilter)  ---&gt;
+</pre>
+</div>
+<p>
+c. make<br />
+</p>
+<ul class="org-ul">
+<li>busybox<br /></li>
+</ul>
+<p>
+<b>git://git.busybox.net/busybox</b><br />
+e50f74da70da645c25d7daa81b2d9796a738f718 tag: 1_24_2<br />
+</p>
+
+<p>
+a. make menuconfig<br />
+</p>
+<div class="org-src-container">
+<pre class="src src-bash"><span style="color: #75715E;"># </span><span style="color: #E6DB74;">make menuconfig</span>
+[*] Don<span style="color: #E6DB74;">'t use /usr</span>
+<span style="color: #E6DB74;">[*] Build BusyBox as a static binary (no shared libs)</span>
+<span style="color: #E6DB74;">[ ] sync</span>
+</pre>
+</div>
+<p>
+b. make<br />
+c. make install<br />
+</p>
+<ul class="org-ul">
+<li>initramfs<br /></li>
+</ul>
+<p>
+a. 建立目录<br />
+</p>
+<div class="org-src-container">
+<pre class="src src-bash"><span style="color: #75715E;">#</span><span style="color: #E6DB74;">!/bin/</span><span style="color: #F92672;">bash</span>
+mkdir -pv initramfs/x86-busybox
+<span style="color: #F92672;">cd</span> initramfs/x86-busybox
+mkdir -pv {bin,sbin,etc,proc,sys,usr/{bin,sbin}}
+cp -av /mnt/hgfs/linux-2.6-git/busybox/_install/* .
+</pre>
+</div>
+<p>
+b. 在目录下建立init<br />
+</p>
+<div class="org-src-container">
+<pre class="src src-sh"><span style="color: #75715E;">#</span><span style="color: #E6DB74;">!/bin/</span><span style="color: #F92672;">sh</span>
+mount -t proc none /proc
+mount -t sysfs none /sys
+<span style="color: #F92672;">echo</span> -e <span style="color: #E6DB74;">"\nBoot took $(</span><span style="color: #AE81FF; font-weight: bold;">cut</span><span style="color: #E6DB74;"> -d' ' -f1 /proc/uptime) seconds\n"</span>
+<span style="color: #F92672;">exec</span> /bin/sh
+</pre>
+</div>
+<p>
+c. 生成initramfs<br />
+在目录下<br />
+find . -print0 | cpio &#x2013;null -ov &#x2013;format=newc | gzip -9 &gt; x86.cpio.gz<br />
+</p>
+<ul class="org-ul">
+<li>qemu<br /></li>
+</ul>
+<p>
+qemu -kernel bzImage -initrd ./x86.cpio.gz -nographic -append "console=ttyS0"<br />
+</p>
+</div>
+</div>
+
+<div id="outline-container-orge412014" class="outline-4">
+<h4 id="orge412014"><span class="section-number-4">5.1.2</span> sys_foo</h4>
+<div class="outline-text-4" id="text-5-1-2">
+<ul class="org-ul">
+<li>kernel<br /></li>
+</ul>
+<div class="org-src-container">
+<pre class="src src-asm"><span style="color: #75715E;">; </span><span style="color: #E6DB74;">arch/x86/kernel/syscall_table_32.S</span>
+  ...
+      <span style="color: #F92672;">.long</span> sys_rt_tgsigqueueinfo   <span style="color: #75715E;">/* </span><span style="color: #E6DB74;">335 */</span>
+      <span style="color: #F92672;">.long</span> sys_perf_event_open
+      <span style="color: #F92672;">.long</span> sys_recvmmsg
+      <span style="color: #F92672;">.long</span> sys_foo               <span style="color: #75715E;">;</span><span style="color: #E6DB74;">&#26032;&#22686;338</span>
+  ...
+</pre>
+</div>
+<div class="org-src-container">
+<pre class="src src-c"><span style="color: #75715E;">//</span><span style="color: #E6DB74;">kernel/sys.c</span>
+asmlinkage <span style="color: #66D9EF;">long</span> <span style="color: #A6E22E; font-size: 130%;">sys_foo</span><span style="color: #AE81FF;">(</span><span style="color: #66D9EF;">void</span><span style="color: #AE81FF;">)</span>
+<span style="color: #AE81FF;">{</span>
+    <span style="color: #F92672;">return</span> 0xabcd;
+<span style="color: #AE81FF;">}</span>
+</pre>
+</div>
+<ul class="org-ul">
+<li>app<br /></li>
+</ul>
+<div class="org-src-container">
+<pre class="src src-c"><span style="color: #75715E;">/* </span><span style="color: #E6DB74;">foo_app.c : gcc -static foo_app.c -o foo_app</span><span style="color: #75715E;">*/</span>
+<span style="color: #F92672;">#include</span> <span style="color: #AE81FF;">&lt;</span><span style="color: #E6DB74;">stdio.h</span><span style="color: #AE81FF;">&gt;</span>
+<span style="color: #F92672;">#include</span> <span style="color: #AE81FF;">&lt;</span><span style="color: #E6DB74;">syscall.h</span><span style="color: #AE81FF;">&gt;</span>
+
+<span style="color: #F92672;">#define</span> <span style="color: #FD971F;">__NR_foo</span> 338
+<span style="color: #66D9EF;">int</span> <span style="color: #A6E22E; font-size: 130%;">main</span><span style="color: #AE81FF;">(</span><span style="color: #66D9EF;">int</span> <span style="color: #FD971F;">argc</span>, <span style="color: #66D9EF;">char</span> *<span style="color: #FD971F;">argv</span><span style="color: #66D9EF;">[]</span><span style="color: #AE81FF;">)</span>
+<span style="color: #AE81FF;">{</span>
+    <span style="color: #A6E22E; font-weight: bold;">printf</span><span style="color: #66D9EF;">(</span><span style="color: #E6DB74;">"new sys_call return 0x%x\n"</span>, <span style="color: #A6E22E; font-weight: bold;">syscall</span><span style="color: #A6E22E;">(</span>__NR_foo<span style="color: #A6E22E;">)</span><span style="color: #66D9EF;">)</span>;
+    <span style="color: #F92672;">return</span> 0;
+<span style="color: #AE81FF;">}</span>
+</pre>
+</div>
+<div class="org-src-container">
+<pre class="src src-bash"><span style="color: #75715E;">#</span><span style="color: #E6DB74;">&#32769;&#30340;kernel</span>
+new sys_call return 0xffffffff
+
+<span style="color: #75715E;">#</span><span style="color: #E6DB74;">&#20462;&#25913;&#36807;&#30340;kernel</span>
+new sys_call return 0xabcd
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgd25d0b7" class="outline-2">
+<h2 id="orgd25d0b7"><span class="section-number-2">6</span> 第六章 内核数据结构</h2>
+<div class="outline-text-2" id="text-6">
+</div>
+<div id="outline-container-org7da6b98" class="outline-3">
+<h3 id="org7da6b98"><span class="section-number-3">6.1</span> 链表</h3>
+<div class="outline-text-3" id="text-6-1">
+<p>
+linux/list.h<br />
+</p>
+<div class="org-src-container">
+<pre class="src src-c">  <span style="color: #F92672;">struct</span> <span style="color: #66D9EF;">list_head</span> <span style="color: #AE81FF;">{</span>
+      <span style="color: #F92672;">struct</span> <span style="color: #66D9EF;">list_head</span> *<span style="color: #FD971F;">next</span>, *<span style="color: #FD971F;">prev</span>;
+  <span style="color: #AE81FF;">}</span>;
+
+<span style="color: #F92672;">  #define</span> <span style="color: #A6E22E; font-size: 130%;">LIST_HEAD_INIT</span><span style="color: #AE81FF;">(</span><span style="color: #FD971F;">name</span><span style="color: #AE81FF;">)</span> <span style="color: #AE81FF;">{</span> &amp;<span style="color: #66D9EF;">(</span>name<span style="color: #66D9EF;">)</span>, &amp;<span style="color: #66D9EF;">(</span>name<span style="color: #66D9EF;">)</span> <span style="color: #AE81FF;">}</span> <span style="color: #75715E;">//</span><span style="color: #E6DB74;">&#38745;&#24577;&#22768;&#26126;</span>
+<span style="color: #F92672;">  #define</span> <span style="color: #A6E22E; font-size: 130%;">LIST_HEAD</span><span style="color: #AE81FF;">(</span><span style="color: #FD971F;">name</span><span style="color: #AE81FF;">)</span> \
+      <span style="color: #F92672;">struct</span> <span style="color: #66D9EF;">list_head</span> <span style="color: #FD971F;">name</span> = <span style="color: #A6E22E; font-weight: bold;">LIST_HEAD_INIT</span><span style="color: #AE81FF;">(</span>name<span style="color: #AE81FF;">)</span>
+
+  <span style="color: #F92672;">static</span> <span style="color: #F92672;">inline</span> <span style="color: #66D9EF;">void</span> <span style="color: #A6E22E; font-size: 130%;">INIT_LIST_HEAD</span><span style="color: #AE81FF;">(</span><span style="color: #F92672;">struct</span> <span style="color: #66D9EF;">list_head</span> *<span style="color: #FD971F;">list</span><span style="color: #AE81FF;">)</span> <span style="color: #75715E;">//</span><span style="color: #E6DB74;">&#21160;&#24577;</span>
+  <span style="color: #AE81FF;">{</span>
+      list-&gt;next = list;
+      list-&gt;prev = list;
+  <span style="color: #AE81FF;">}</span>
+
+  <span style="color: #F92672;">static</span> <span style="color: #F92672;">inline</span> <span style="color: #66D9EF;">void</span> <span style="color: #A6E22E; font-size: 130%;">__list_add</span><span style="color: #AE81FF;">(</span><span style="color: #F92672;">struct</span> <span style="color: #66D9EF;">list_head</span> *<span style="color: #FD971F;">new</span>,
+                    <span style="color: #F92672;">struct</span> <span style="color: #66D9EF;">list_head</span> *<span style="color: #FD971F;">prev</span>,
+                    <span style="color: #F92672;">struct</span> <span style="color: #66D9EF;">list_head</span> *<span style="color: #FD971F;">next</span><span style="color: #AE81FF;">)</span>
+  <span style="color: #AE81FF;">{</span>
+      next-&gt;prev = new;
+      new-&gt;next = next;
+      new-&gt;prev = prev;
+      prev-&gt;next = new;
+  <span style="color: #AE81FF;">}</span>
+
+  <span style="color: #75715E;">//</span><span style="color: #E6DB74;">&#21152;&#20803;&#32032;&#65292;&#22312;head&#21518;&#38754;</span>
+  <span style="color: #F92672;">static</span> <span style="color: #F92672;">inline</span> <span style="color: #66D9EF;">void</span> <span style="color: #A6E22E; font-size: 130%;">list_add</span><span style="color: #AE81FF;">(</span><span style="color: #F92672;">struct</span> <span style="color: #66D9EF;">list_head</span> *<span style="color: #FD971F;">new</span>, <span style="color: #F92672;">struct</span> <span style="color: #66D9EF;">list_head</span> *<span style="color: #FD971F;">head</span><span style="color: #AE81FF;">)</span>
+  <span style="color: #AE81FF;">{</span>
+      <span style="color: #A6E22E; font-weight: bold;">__list_add</span><span style="color: #66D9EF;">(</span>new, head, head-&gt;next<span style="color: #66D9EF;">)</span>;
+  <span style="color: #AE81FF;">}</span>
+
+  <span style="color: #75715E;">//</span><span style="color: #E6DB74;">&#21152;&#20803;&#32032;&#65292;&#22312;&#38142;&#34920;&#23614;</span>
+  <span style="color: #F92672;">static</span> <span style="color: #F92672;">inline</span> <span style="color: #66D9EF;">void</span> <span style="color: #A6E22E; font-size: 130%;">list_add_tail</span><span style="color: #AE81FF;">(</span><span style="color: #F92672;">struct</span> <span style="color: #66D9EF;">list_head</span> *<span style="color: #FD971F;">new</span>, <span style="color: #F92672;">struct</span> <span style="color: #66D9EF;">list_head</span> *<span style="color: #FD971F;">head</span><span style="color: #AE81FF;">)</span>
+  <span style="color: #AE81FF;">{</span>
+      <span style="color: #A6E22E; font-weight: bold;">__list_add</span><span style="color: #66D9EF;">(</span>new, head-&gt;prev, head<span style="color: #66D9EF;">)</span>;
+  <span style="color: #AE81FF;">}</span>
+
+  <span style="color: #F92672;">static</span> <span style="color: #F92672;">inline</span> <span style="color: #66D9EF;">void</span> <span style="color: #A6E22E; font-size: 130%;">__list_del</span><span style="color: #AE81FF;">(</span><span style="color: #F92672;">struct</span> <span style="color: #66D9EF;">list_head</span> * <span style="color: #FD971F;">prev</span>, <span style="color: #F92672;">struct</span> <span style="color: #66D9EF;">list_head</span> * <span style="color: #FD971F;">next</span><span style="color: #AE81FF;">)</span>
+  <span style="color: #AE81FF;">{</span>
+      next-&gt;prev = prev;
+      prev-&gt;next = next; <span style="color: #75715E;">//</span><span style="color: #E6DB74;">&#20114;&#30456;&#25346;&#25509;</span>
+  <span style="color: #AE81FF;">}</span>
+
+  <span style="color: #75715E;">//</span><span style="color: #E6DB74;">&#21024;&#38500;&#20803;&#32032;</span>
+  <span style="color: #F92672;">static</span> <span style="color: #F92672;">inline</span> <span style="color: #66D9EF;">void</span> <span style="color: #A6E22E; font-size: 130%;">list_del</span><span style="color: #AE81FF;">(</span><span style="color: #F92672;">struct</span> <span style="color: #66D9EF;">list_head</span> *<span style="color: #FD971F;">entry</span><span style="color: #AE81FF;">)</span>
+  <span style="color: #AE81FF;">{</span>
+      <span style="color: #A6E22E; font-weight: bold;">__list_del</span><span style="color: #66D9EF;">(</span>entry-&gt;prev, entry-&gt;next<span style="color: #66D9EF;">)</span>;
+      entry-&gt;next = LIST_POISON1;
+      entry-&gt;prev = LIST_POISON2;
+  <span style="color: #AE81FF;">}</span>
+
+
+  <span style="color: #F92672;">static</span> <span style="color: #F92672;">inline</span> <span style="color: #66D9EF;">void</span> <span style="color: #A6E22E; font-size: 130%;">list_move</span><span style="color: #AE81FF;">(</span><span style="color: #F92672;">struct</span> <span style="color: #66D9EF;">list_head</span> *<span style="color: #FD971F;">list</span>, <span style="color: #F92672;">struct</span> <span style="color: #66D9EF;">list_head</span> *<span style="color: #FD971F;">head</span><span style="color: #AE81FF;">)</span>
+  <span style="color: #AE81FF;">{</span>
+      <span style="color: #A6E22E; font-weight: bold;">__list_del</span><span style="color: #66D9EF;">(</span>list-&gt;prev, list-&gt;next<span style="color: #66D9EF;">)</span>; <span style="color: #75715E;">//</span><span style="color: #E6DB74;">list&#20174;&#24403;&#21069;&#38142;&#34920;&#36864;&#20986;</span>
+      <span style="color: #A6E22E; font-weight: bold;">list_add</span><span style="color: #66D9EF;">(</span>list, head<span style="color: #66D9EF;">)</span>; <span style="color: #75715E;">//</span><span style="color: #E6DB74;">&#21152;&#21040;head&#21518;</span>
+  <span style="color: #AE81FF;">}</span>
+
+  <span style="color: #F92672;">static</span> <span style="color: #F92672;">inline</span> <span style="color: #66D9EF;">void</span> <span style="color: #A6E22E; font-size: 130%;">list_move_tail</span><span style="color: #AE81FF;">(</span><span style="color: #F92672;">struct</span> <span style="color: #66D9EF;">list_head</span> *<span style="color: #FD971F;">list</span>,
+                    <span style="color: #F92672;">struct</span> <span style="color: #66D9EF;">list_head</span> *<span style="color: #FD971F;">head</span><span style="color: #AE81FF;">)</span>
+  <span style="color: #AE81FF;">{</span>
+      <span style="color: #A6E22E; font-weight: bold;">__list_del</span><span style="color: #66D9EF;">(</span>list-&gt;prev, list-&gt;next<span style="color: #66D9EF;">)</span>;
+      <span style="color: #A6E22E; font-weight: bold;">list_add_tail</span><span style="color: #66D9EF;">(</span>list, head<span style="color: #66D9EF;">)</span>; <span style="color: #75715E;">//</span><span style="color: #E6DB74;">&#21152;&#21040;head-&gt;prev&#21518;</span>
+  <span style="color: #AE81FF;">}</span>
+
+
+  <span style="color: #75715E;">/* </span><span style="color: #E6DB74;">&lt;= head &lt;=&gt; head1 &lt;=&gt; head2 &lt;=&gt; .... head_end =&gt; </span><span style="color: #75715E;">*/</span>
+  <span style="color: #75715E;">/* </span><span style="color: #E6DB74;">&lt;= list &lt;=&gt; list1 &lt;=&gt; list2 &lt;=&gt; .... list_end =&gt; </span><span style="color: #75715E;">*/</span>
+
+  <span style="color: #75715E;">/* </span><span style="color: #E6DB74;">&lt;= head &lt;=&gt; list1 &lt;=&gt; list2 &lt;=&gt; .... list_end &lt;=&gt; head1 &lt;=&gt; head2 ... head_end =&gt; </span><span style="color: #75715E;">*/</span>
+  <span style="color: #F92672;">static</span> <span style="color: #F92672;">inline</span> <span style="color: #66D9EF;">void</span> <span style="color: #A6E22E; font-size: 130%;">__list_splice</span><span style="color: #AE81FF;">(</span><span style="color: #F92672;">const</span> <span style="color: #F92672;">struct</span> <span style="color: #66D9EF;">list_head</span> *<span style="color: #FD971F;">list</span>,
+                   <span style="color: #F92672;">struct</span> <span style="color: #66D9EF;">list_head</span> *<span style="color: #FD971F;">prev</span>,
+                   <span style="color: #F92672;">struct</span> <span style="color: #66D9EF;">list_head</span> *<span style="color: #FD971F;">next</span><span style="color: #AE81FF;">)</span>
+  <span style="color: #AE81FF;">{</span>
+      <span style="color: #F92672;">struct</span> <span style="color: #66D9EF;">list_head</span> *<span style="color: #FD971F;">first</span> = list-&gt;next;
+      <span style="color: #F92672;">struct</span> <span style="color: #66D9EF;">list_head</span> *<span style="color: #FD971F;">last</span> = list-&gt;prev;
+
+      first-&gt;prev = prev;
+      prev-&gt;next = first;         <span style="color: #75715E;">/* </span><span style="color: #E6DB74;">head &lt;=&gt; list-&gt;next </span><span style="color: #75715E;">*/</span>
+
+      last-&gt;next = next;          <span style="color: #75715E;">/* </span><span style="color: #E6DB74;">head-&gt;next &lt;=&gt; list-&gt;prev</span><span style="color: #75715E;">*/</span>
+      next-&gt;prev = last;
+  <span style="color: #AE81FF;">}</span>
+
+  <span style="color: #F92672;">static</span> <span style="color: #F92672;">inline</span> <span style="color: #66D9EF;">void</span> <span style="color: #A6E22E; font-size: 130%;">list_splice</span><span style="color: #AE81FF;">(</span><span style="color: #F92672;">const</span> <span style="color: #F92672;">struct</span> <span style="color: #66D9EF;">list_head</span> *<span style="color: #FD971F;">list</span>,
+                  <span style="color: #F92672;">struct</span> <span style="color: #66D9EF;">list_head</span> *<span style="color: #FD971F;">head</span><span style="color: #AE81FF;">)</span>
+  <span style="color: #AE81FF;">{</span>
+      <span style="color: #A6E22E; font-weight: bold;">if</span> <span style="color: #66D9EF;">(</span><span style="color: #E6DB74; font-weight: bold;">!</span><span style="color: #A6E22E; font-weight: bold;">list_empty</span><span style="color: #A6E22E;">(</span>list<span style="color: #A6E22E;">)</span><span style="color: #66D9EF;">)</span>
+          <span style="color: #A6E22E; font-weight: bold;">__list_splice</span><span style="color: #66D9EF;">(</span>list, head, head-&gt;next<span style="color: #66D9EF;">)</span>;
+  <span style="color: #AE81FF;">}</span>
+
+<span style="color: #E6DB74;">/**</span>
+<span style="color: #E6DB74;"> * list_for_each    -   iterate over a list</span>
+<span style="color: #E6DB74;"> * </span><span style="color: #AE81FF;">@pos</span><span style="color: #E6DB74;">:    the &amp;struct list_head to use as a loop cursor.</span>
+<span style="color: #E6DB74;"> * </span><span style="color: #AE81FF;">@head</span><span style="color: #E6DB74;">:   the head for your list.</span>
+<span style="color: #E6DB74;"> */</span>
+<span style="color: #75715E;">//</span><span style="color: #E6DB74;">&#36941;&#21382;</span>
+<span style="color: #F92672;"> #define</span> <span style="color: #A6E22E; font-size: 130%;">list_for_each</span><span style="color: #AE81FF;">(</span><span style="color: #FD971F;">pos</span>, <span style="color: #FD971F;">head</span><span style="color: #AE81FF;">)</span> \
+    <span style="color: #A6E22E; font-weight: bold;">for</span> <span style="color: #AE81FF;">(</span>pos = <span style="color: #66D9EF;">(</span>head<span style="color: #66D9EF;">)</span>-&gt;next; <span style="color: #A6E22E; font-weight: bold;">prefetch</span><span style="color: #66D9EF;">(</span>pos-&gt;next<span style="color: #66D9EF;">)</span>, pos != <span style="color: #66D9EF;">(</span>head<span style="color: #66D9EF;">)</span>; \
+            pos = pos-&gt;next<span style="color: #AE81FF;">)</span>
+
+<span style="color: #E6DB74;">/**</span>
+<span style="color: #E6DB74;"> * list_entry - get the struct for this entry</span>
+<span style="color: #E6DB74;"> * </span><span style="color: #AE81FF;">@ptr</span><span style="color: #E6DB74;">:    the &amp;struct list_head pointer.</span>
+<span style="color: #E6DB74;"> * </span><span style="color: #AE81FF;">@type</span><span style="color: #E6DB74;">:   the type of the struct this is embedded in.</span>
+<span style="color: #E6DB74;"> * </span><span style="color: #AE81FF;">@member</span><span style="color: #E6DB74;">: the name of the list_struct within the struct.</span>
+<span style="color: #E6DB74;"> */</span>
+<span style="color: #F92672;"> #define</span> <span style="color: #A6E22E; font-size: 130%;">list_entry</span><span style="color: #AE81FF;">(</span><span style="color: #FD971F;">ptr</span>, <span style="color: #FD971F;">type</span>, <span style="color: #FD971F;">member</span><span style="color: #AE81FF;">)</span> \
+    <span style="color: #A6E22E; font-weight: bold;">container_of</span><span style="color: #AE81FF;">(</span>ptr, type, member<span style="color: #AE81FF;">)</span>
+
+<span style="color: #E6DB74;">/**</span>
+<span style="color: #E6DB74;"> * list_for_each_entry  -   iterate over list of given type</span>
+<span style="color: #E6DB74;"> * </span><span style="color: #AE81FF;">@pos</span><span style="color: #E6DB74;">:    the type * to use as a loop cursor.</span>
+<span style="color: #E6DB74;"> * </span><span style="color: #AE81FF;">@head</span><span style="color: #E6DB74;">:   the head for your list.</span>
+<span style="color: #E6DB74;"> * </span><span style="color: #AE81FF;">@member</span><span style="color: #E6DB74;">: the name of the list_struct within the struct.</span>
+<span style="color: #E6DB74;"> */</span>
+<span style="color: #F92672;"> #define</span> <span style="color: #A6E22E; font-size: 130%;">list_for_each_entry</span><span style="color: #AE81FF;">(</span><span style="color: #FD971F;">pos</span>, <span style="color: #FD971F;">head</span>, <span style="color: #FD971F;">member</span><span style="color: #AE81FF;">)</span>             \
+    <span style="color: #A6E22E; font-weight: bold;">for</span> <span style="color: #AE81FF;">(</span>pos = <span style="color: #A6E22E; font-weight: bold;">list_entry</span><span style="color: #66D9EF;">(</span><span style="color: #A6E22E;">(</span>head<span style="color: #A6E22E;">)</span>-&gt;next, <span style="color: #A6E22E; font-weight: bold;">typeof</span><span style="color: #A6E22E;">(</span>*pos<span style="color: #A6E22E;">)</span>, member<span style="color: #66D9EF;">)</span>;  \
+         <span style="color: #A6E22E; font-weight: bold;">prefetch</span><span style="color: #66D9EF;">(</span>pos-&gt;member.next<span style="color: #66D9EF;">)</span>, &amp;pos-&gt;member != <span style="color: #66D9EF;">(</span>head<span style="color: #66D9EF;">)</span>;    \
+         pos = <span style="color: #A6E22E; font-weight: bold;">list_entry</span><span style="color: #66D9EF;">(</span>pos-&gt;member.next, <span style="color: #A6E22E; font-weight: bold;">typeof</span><span style="color: #A6E22E;">(</span>*pos<span style="color: #A6E22E;">)</span>, member<span style="color: #66D9EF;">)</span><span style="color: #AE81FF;">)</span>
+
+<span style="color: #E6DB74;">/**</span>
+<span style="color: #E6DB74;"> * list_for_each_safe - iterate over a list safe against removal of list entry</span>
+<span style="color: #E6DB74;"> * </span><span style="color: #AE81FF;">@pos</span><span style="color: #E6DB74;">:    the &amp;struct list_head to use as a loop cursor.</span>
+<span style="color: #E6DB74;"> * </span><span style="color: #AE81FF;">@n</span><span style="color: #E6DB74;">:      another &amp;struct list_head to use as temporary storage</span>
+<span style="color: #E6DB74;"> * </span><span style="color: #AE81FF;">@head</span><span style="color: #E6DB74;">:   the head for your list.</span>
+<span style="color: #E6DB74;"> */</span>
+<span style="color: #75715E;">//</span><span style="color: #E6DB74;">&#23433;&#20840;&#36941;&#21382;&#65292;&#29992;&#20110;&#22312;foreach&#20013;&#21024;&#38500;&#20803;&#32032;</span>
+<span style="color: #F92672;">#define</span> <span style="color: #A6E22E; font-size: 130%;">list_for_each_safe</span><span style="color: #AE81FF;">(</span><span style="color: #FD971F;">pos</span>, <span style="color: #FD971F;">n</span>, <span style="color: #FD971F;">head</span><span style="color: #AE81FF;">)</span> \
+    <span style="color: #A6E22E; font-weight: bold;">for</span> <span style="color: #AE81FF;">(</span>pos = <span style="color: #66D9EF;">(</span>head<span style="color: #66D9EF;">)</span>-&gt;next, n = pos-&gt;next; pos != <span style="color: #66D9EF;">(</span>head<span style="color: #66D9EF;">)</span>; \
+        pos = n, n = pos-&gt;next<span style="color: #AE81FF;">)</span>
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org1b2af30" class="outline-3">
+<h3 id="org1b2af30"><span class="section-number-3">6.2</span> 数据队列</h3>
+<div class="outline-text-3" id="text-6-2">
+<p>
+linux/kfifo.h<br />
+</p>
+<div class="org-src-container">
+<pre class="src src-c"><span style="color: #F92672;">#define</span> <span style="color: #A6E22E; font-size: 130%;">__kfifo_initializer</span><span style="color: #AE81FF;">(</span><span style="color: #FD971F;">s</span>, <span style="color: #FD971F;">b</span><span style="color: #AE81FF;">)</span> \
+    <span style="color: #AE81FF;">(</span><span style="color: #F92672;">struct</span> <span style="color: #66D9EF;">kfifo</span><span style="color: #AE81FF;">)</span> <span style="color: #AE81FF;">{</span> \
+        .size   = s, \
+        .in = 0, \
+        .out    = 0, \
+        .buffer = b \
+    <span style="color: #AE81FF;">}</span>
+
+<span style="color: #75715E;">//</span><span style="color: #E6DB74;">&#32852;&#21512;&#20307;&#65292;&#22836;&#20026;kfifo&#32467;&#26500;&#65292;&#21518;&#38754;&#20026;buffer size</span>
+<span style="color: #F92672;">#define</span> <span style="color: #A6E22E; font-size: 130%;">DECLARE_KFIFO</span><span style="color: #AE81FF;">(</span><span style="color: #FD971F;">name</span>, <span style="color: #FD971F;">size</span><span style="color: #AE81FF;">)</span> \
+<span style="color: #F92672;">union</span> <span style="color: #AE81FF;">{</span> \
+    <span style="color: #F92672;">struct</span> <span style="color: #66D9EF;">kfifo</span> <span style="color: #FD971F;">name</span>; \
+    <span style="color: #66D9EF;">unsigned</span> <span style="color: #66D9EF;">char</span> <span style="color: #FD971F;">name</span>##kfifo_buffer<span style="color: #66D9EF;">[</span>size + <span style="color: #A6E22E; font-weight: bold;">sizeof</span><span style="color: #A6E22E;">(</span><span style="color: #F92672;">struct</span> <span style="color: #66D9EF;">kfifo</span><span style="color: #A6E22E;">)</span><span style="color: #66D9EF;">]</span>; \
+<span style="color: #AE81FF;">}</span>
+<span style="color: #E6DB74;">/**</span>
+<span style="color: #E6DB74;"> * INIT_KFIFO - Initialize a kfifo declared by DECLARE_KFIFO</span>
+<span style="color: #E6DB74;"> * </span><span style="color: #AE81FF;">@name</span><span style="color: #E6DB74;">: name of the declared kfifo datatype</span>
+<span style="color: #E6DB74;"> */</span>
+<span style="color: #F92672;">#define</span> <span style="color: #A6E22E; font-size: 130%;">INIT_KFIFO</span><span style="color: #AE81FF;">(</span><span style="color: #FD971F;">name</span><span style="color: #AE81FF;">)</span> \
+    name = <span style="color: #A6E22E; font-weight: bold;">__kfifo_initializer</span><span style="color: #AE81FF;">(</span><span style="color: #A6E22E; font-weight: bold;">sizeof</span><span style="color: #66D9EF;">(</span>name##kfifo_buffer<span style="color: #66D9EF;">)</span> - \
+                <span style="color: #A6E22E; font-weight: bold;">sizeof</span><span style="color: #66D9EF;">(</span><span style="color: #F92672;">struct</span> <span style="color: #66D9EF;">kfifo</span><span style="color: #66D9EF;">)</span>, \
+                name##kfifo_buffer + <span style="color: #A6E22E; font-weight: bold;">sizeof</span><span style="color: #66D9EF;">(</span><span style="color: #F92672;">struct</span> <span style="color: #66D9EF;">kfifo</span><span style="color: #66D9EF;">)</span><span style="color: #AE81FF;">)</span>
+
+<span style="color: #75715E;">//</span><span style="color: #E6DB74;">&#20998;&#31163;&#30340;&#32467;&#26500;&#65292;&#19968;&#20010;&#26159;kfifo&#65292;&#25346;&#25509;buffer</span>
+<span style="color: #F92672;">#define</span> <span style="color: #A6E22E; font-size: 130%;">DEFINE_KFIFO</span><span style="color: #AE81FF;">(</span><span style="color: #FD971F;">name</span>, <span style="color: #FD971F;">size</span><span style="color: #AE81FF;">)</span> \
+    <span style="color: #66D9EF;">unsigned</span> <span style="color: #66D9EF;">char</span> <span style="color: #FD971F;">name</span>##kfifo_buffer<span style="color: #AE81FF;">[</span>size<span style="color: #AE81FF;">]</span>; \
+    <span style="color: #F92672;">struct</span> <span style="color: #66D9EF;">kfifo</span> <span style="color: #FD971F;">name</span> = <span style="color: #A6E22E; font-weight: bold;">__kfifo_initializer</span><span style="color: #AE81FF;">(</span>size, name##kfifo_buffer<span style="color: #AE81FF;">)</span>
+
+<span style="color: #E6DB74;">/**</span>
+<span style="color: #E6DB74;"> * kfifo_alloc - allocates a new FIFO internal buffer</span>
+<span style="color: #E6DB74;"> * </span><span style="color: #AE81FF;">@fifo</span><span style="color: #E6DB74;">: the fifo to assign then new buffer</span>
+<span style="color: #E6DB74;"> * </span><span style="color: #AE81FF;">@size</span><span style="color: #E6DB74;">: the size of the buffer to be allocated, this have to be a power of 2.</span>
+<span style="color: #E6DB74;"> * </span><span style="color: #AE81FF;">@gfp_mask</span><span style="color: #E6DB74;">: get_free_pages mask, passed to </span><span style="color: #AE81FF;">kmalloc()</span>
+<span style="color: #E6DB74;"> *</span>
+<span style="color: #E6DB74;"> * This function dynamically allocates a new fifo internal buffer</span>
+<span style="color: #E6DB74;"> *</span>
+<span style="color: #E6DB74;"> * The size will be rounded-up to a power of 2.</span>
+<span style="color: #E6DB74;"> * The buffer will be release with </span><span style="color: #AE81FF;">kfifo_free()</span><span style="color: #E6DB74;">.</span>
+<span style="color: #E6DB74;"> * Return 0 if no error, otherwise the an error code</span>
+<span style="color: #E6DB74;"> */</span>
+<span style="color: #75715E;">//</span><span style="color: #E6DB74;">&#30003;&#35831;</span>
+<span style="color: #66D9EF;">int</span> <span style="color: #A6E22E; font-size: 130%;">kfifo_alloc</span><span style="color: #AE81FF;">(</span><span style="color: #F92672;">struct</span> <span style="color: #66D9EF;">kfifo</span> *<span style="color: #FD971F;">fifo</span>, <span style="color: #66D9EF;">unsigned</span> <span style="color: #66D9EF;">int</span> <span style="color: #FD971F;">size</span>, <span style="color: #66D9EF;">gfp_t</span> <span style="color: #FD971F;">gfp_mask</span><span style="color: #AE81FF;">)</span>
+
+<span style="color: #75715E;">//</span><span style="color: #E6DB74;">&#25512;&#20837;</span>
+<span style="color: #E6DB74;">/**</span>
+<span style="color: #E6DB74;"> * kfifo_in - puts some data into the FIFO</span>
+<span style="color: #E6DB74;"> * </span><span style="color: #AE81FF;">@fifo</span><span style="color: #E6DB74;">: the fifo to be used.</span>
+<span style="color: #E6DB74;"> * </span><span style="color: #AE81FF;">@from</span><span style="color: #E6DB74;">: the data to be added.</span>
+<span style="color: #E6DB74;"> * </span><span style="color: #AE81FF;">@len</span><span style="color: #E6DB74;">: the length of the data to be added.</span>
+<span style="color: #E6DB74;"> *</span>
+<span style="color: #E6DB74;"> * This function copies at most </span><span style="color: #AE81FF;">@len</span><span style="color: #E6DB74;"> bytes from the </span><span style="color: #AE81FF;">@from</span><span style="color: #E6DB74;"> buffer into</span>
+<span style="color: #E6DB74;"> * the FIFO depending on the free space, and returns the number of</span>
+<span style="color: #E6DB74;"> * bytes copied.</span>
+<span style="color: #E6DB74;"> *</span>
+<span style="color: #E6DB74;"> * Note that with only one concurrent reader and one concurrent</span>
+<span style="color: #E6DB74;"> * writer, you don't need extra locking to use these functions.</span>
+<span style="color: #E6DB74;"> */</span>
+<span style="color: #66D9EF;">unsigned</span> <span style="color: #66D9EF;">int</span> <span style="color: #A6E22E; font-size: 130%;">kfifo_in</span><span style="color: #AE81FF;">(</span><span style="color: #F92672;">struct</span> <span style="color: #66D9EF;">kfifo</span> *<span style="color: #FD971F;">fifo</span>, <span style="color: #F92672;">const</span> <span style="color: #66D9EF;">void</span> *<span style="color: #FD971F;">from</span>,
+                <span style="color: #66D9EF;">unsigned</span> <span style="color: #66D9EF;">int</span> <span style="color: #FD971F;">len</span><span style="color: #AE81FF;">)</span>
+
+
+<span style="color: #75715E;">//</span><span style="color: #E6DB74;">&#21462;&#20986;</span>
+<span style="color: #E6DB74;">/**</span>
+<span style="color: #E6DB74;"> * kfifo_out - gets some data from the FIFO</span>
+<span style="color: #E6DB74;"> * </span><span style="color: #AE81FF;">@fifo</span><span style="color: #E6DB74;">: the fifo to be used.</span>
+<span style="color: #E6DB74;"> * </span><span style="color: #AE81FF;">@to</span><span style="color: #E6DB74;">: where the data must be copied.</span>
+<span style="color: #E6DB74;"> * </span><span style="color: #AE81FF;">@len</span><span style="color: #E6DB74;">: the size of the destination buffer.</span>
+<span style="color: #E6DB74;"> *</span>
+<span style="color: #E6DB74;"> * This function copies at most </span><span style="color: #AE81FF;">@len</span><span style="color: #E6DB74;"> bytes from the FIFO into the</span>
+<span style="color: #E6DB74;"> * </span><span style="color: #AE81FF;">@to</span><span style="color: #E6DB74;"> buffer and returns the number of copied bytes.</span>
+<span style="color: #E6DB74;"> *</span>
+<span style="color: #E6DB74;"> * Note that with only one concurrent reader and one concurrent</span>
+<span style="color: #E6DB74;"> * writer, you don't need extra locking to use these functions.</span>
+<span style="color: #E6DB74;"> */</span>
+<span style="color: #66D9EF;">unsigned</span> <span style="color: #66D9EF;">int</span> <span style="color: #A6E22E; font-size: 130%;">kfifo_out</span><span style="color: #AE81FF;">(</span><span style="color: #F92672;">struct</span> <span style="color: #66D9EF;">kfifo</span> *<span style="color: #FD971F;">fifo</span>, <span style="color: #66D9EF;">void</span> *<span style="color: #FD971F;">to</span>, <span style="color: #66D9EF;">unsigned</span> <span style="color: #66D9EF;">int</span> <span style="color: #FD971F;">len</span><span style="color: #AE81FF;">)</span>
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org45a4ddd" class="outline-3">
+<h3 id="org45a4ddd"><span class="section-number-3">6.3</span> 映射</h3>
+<div class="outline-text-3" id="text-6-3">
+<p>
+linux/idr.h<br />
+不像python里的dict,key就是UID，是自动生成的<br />
+</p>
+<div class="org-src-container">
+<pre class="src src-c"><span style="color: #75715E;">//</span><span style="color: #E6DB74;">&#21021;&#22987;&#21270;</span>
+<span style="color: #E6DB74;">/**</span>
+<span style="color: #E6DB74;"> * idr_init - initialize idr handle</span>
+<span style="color: #E6DB74;"> * </span><span style="color: #AE81FF;">@idp</span><span style="color: #E6DB74;">:    idr handle</span>
+<span style="color: #E6DB74;"> *</span>
+<span style="color: #E6DB74;"> * This function is use to set up the handle (</span><span style="color: #AE81FF;">@idp</span><span style="color: #E6DB74;">) that you will pass</span>
+<span style="color: #E6DB74;"> * to the rest of the functions.</span>
+<span style="color: #E6DB74;"> */</span>
+<span style="color: #66D9EF;">void</span> <span style="color: #A6E22E; font-size: 130%;">idr_init</span><span style="color: #AE81FF;">(</span><span style="color: #F92672;">struct</span> <span style="color: #66D9EF;">idr</span> *<span style="color: #FD971F;">idp</span><span style="color: #AE81FF;">)</span>
+
+<span style="color: #75715E;">//</span><span style="color: #E6DB74;">&#39044;&#20998;&#37197;UID</span>
+<span style="color: #E6DB74;">/**</span>
+<span style="color: #E6DB74;"> * idr_pre_get - reserver resources for idr allocation</span>
+<span style="color: #E6DB74;"> * </span><span style="color: #AE81FF;">@idp</span><span style="color: #E6DB74;">:    idr handle</span>
+<span style="color: #E6DB74;"> * </span><span style="color: #AE81FF;">@gfp_mask</span><span style="color: #E6DB74;">:   memory allocation flags</span>
+<span style="color: #E6DB74;"> *</span>
+<span style="color: #E6DB74;"> * This function should be called prior to locking and calling the</span>
+<span style="color: #E6DB74;"> * idr_get_new* functions. It preallocates enough memory to satisfy</span>
+<span style="color: #E6DB74;"> * the worst possible allocation.</span>
+<span style="color: #E6DB74;"> *</span>
+<span style="color: #E6DB74;"> * If the system is REALLY out of memory this function returns 0,</span>
+<span style="color: #E6DB74;"> * otherwise 1.</span>
+<span style="color: #E6DB74;"> */</span>
+<span style="color: #66D9EF;">int</span> <span style="color: #A6E22E; font-size: 130%;">idr_pre_get</span><span style="color: #AE81FF;">(</span><span style="color: #F92672;">struct</span> <span style="color: #66D9EF;">idr</span> *<span style="color: #FD971F;">idp</span>, <span style="color: #66D9EF;">gfp_t</span> <span style="color: #FD971F;">gfp_mask</span><span style="color: #AE81FF;">)</span>
+
+<span style="color: #75715E;">//</span><span style="color: #E6DB74;">&#26144;&#23556;</span>
+<span style="color: #E6DB74;">/**</span>
+<span style="color: #E6DB74;"> * idr_get_new - allocate new idr entry</span>
+<span style="color: #E6DB74;"> * </span><span style="color: #AE81FF;">@idp</span><span style="color: #E6DB74;">: idr handle</span>
+<span style="color: #E6DB74;"> * </span><span style="color: #AE81FF;">@ptr</span><span style="color: #E6DB74;">: pointer you want associated with the id</span>
+<span style="color: #E6DB74;"> * </span><span style="color: #AE81FF;">@id</span><span style="color: #E6DB74;">: pointer to the allocated handle</span>
+<span style="color: #E6DB74;"> *</span>
+<span style="color: #E6DB74;"> * This is the allocate id function.  It should be called with any</span>
+<span style="color: #E6DB74;"> * required locks.</span>
+<span style="color: #E6DB74;"> *</span>
+<span style="color: #E6DB74;"> * If memory is required, it will return -EAGAIN, you should unlock</span>
+<span style="color: #E6DB74;"> * and go back to the </span><span style="color: #AE81FF;">idr_pre_get()</span><span style="color: #E6DB74;"> call.  If the idr is full, it will</span>
+<span style="color: #E6DB74;"> * return -ENOSPC.</span>
+<span style="color: #E6DB74;"> *</span>
+<span style="color: #E6DB74;"> * </span><span style="color: #AE81FF;">@id</span><span style="color: #E6DB74;"> returns a value in the range 0 ... 0x7fffffff</span>
+<span style="color: #E6DB74;"> */</span>
+<span style="color: #66D9EF;">int</span> <span style="color: #A6E22E; font-size: 130%;">idr_get_new</span><span style="color: #AE81FF;">(</span><span style="color: #F92672;">struct</span> <span style="color: #66D9EF;">idr</span> *<span style="color: #FD971F;">idp</span>, <span style="color: #66D9EF;">void</span> *<span style="color: #FD971F;">ptr</span>, <span style="color: #66D9EF;">int</span> *<span style="color: #FD971F;">id</span><span style="color: #AE81FF;">)</span>
+
+<span style="color: #75715E;">//</span><span style="color: #E6DB74;">&#26681;&#25454;UID&#21462;ptr</span>
+<span style="color: #E6DB74;">/**</span>
+<span style="color: #E6DB74;"> * idr_find - return pointer for given id</span>
+<span style="color: #E6DB74;"> * </span><span style="color: #AE81FF;">@idp</span><span style="color: #E6DB74;">: idr handle</span>
+<span style="color: #E6DB74;"> * </span><span style="color: #AE81FF;">@id</span><span style="color: #E6DB74;">: lookup key</span>
+<span style="color: #E6DB74;"> *</span>
+<span style="color: #E6DB74;"> * Return the pointer given the id it has been registered with.  A </span><span style="color: #AE81FF;">%NULL</span>
+<span style="color: #E6DB74;"> * return indicates that </span><span style="color: #AE81FF;">@id</span><span style="color: #E6DB74;"> is not valid or you passed </span><span style="color: #AE81FF;">%NULL</span><span style="color: #E6DB74;"> in</span>
+<span style="color: #E6DB74;"> * </span><span style="color: #AE81FF;">idr_get_new()</span><span style="color: #E6DB74;">.</span>
+<span style="color: #E6DB74;"> *</span>
+<span style="color: #E6DB74;"> * This function can be called under </span><span style="color: #AE81FF;">rcu_read_lock()</span><span style="color: #E6DB74;">, given that the leaf</span>
+<span style="color: #E6DB74;"> * pointers lifetimes are correctly managed.</span>
+<span style="color: #E6DB74;"> */</span>
+<span style="color: #66D9EF;">void</span> *<span style="color: #A6E22E; font-size: 130%;">idr_find</span><span style="color: #AE81FF;">(</span><span style="color: #F92672;">struct</span> <span style="color: #66D9EF;">idr</span> *<span style="color: #FD971F;">idp</span>, <span style="color: #66D9EF;">int</span> <span style="color: #FD971F;">id</span><span style="color: #AE81FF;">)</span>
+
+<span style="color: #75715E;">//</span><span style="color: #E6DB74;">&#21024;&#38500;UID</span>
+<span style="color: #E6DB74;">/**</span>
+<span style="color: #E6DB74;"> * idr_remove - remove the given id and free it's slot</span>
+<span style="color: #E6DB74;"> * </span><span style="color: #AE81FF;">@idp</span><span style="color: #E6DB74;">: idr handle</span>
+<span style="color: #E6DB74;"> * </span><span style="color: #AE81FF;">@id</span><span style="color: #E6DB74;">: unique key</span>
+<span style="color: #E6DB74;"> */</span>
+<span style="color: #66D9EF;">void</span> <span style="color: #A6E22E; font-size: 130%;">idr_remove</span><span style="color: #AE81FF;">(</span><span style="color: #F92672;">struct</span> <span style="color: #66D9EF;">idr</span> *<span style="color: #FD971F;">idp</span>, <span style="color: #66D9EF;">int</span> <span style="color: #FD971F;">id</span><span style="color: #AE81FF;">)</span>
+
+<span style="color: #75715E;">//</span><span style="color: #E6DB74;">&#21024;&#38500;idr</span>
+<span style="color: #E6DB74;">/**</span>
+<span style="color: #E6DB74;"> * idr_destroy - release all cached layers within an idr tree</span>
+<span style="color: #E6DB74;"> * idp: idr handle</span>
+<span style="color: #E6DB74;"> */</span>
+<span style="color: #66D9EF;">void</span> <span style="color: #A6E22E; font-size: 130%;">idr_destroy</span><span style="color: #AE81FF;">(</span><span style="color: #F92672;">struct</span> <span style="color: #66D9EF;">idr</span> *<span style="color: #FD971F;">idp</span><span style="color: #AE81FF;">)</span>
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org4399c09" class="outline-3">
+<h3 id="org4399c09"><span class="section-number-3">6.4</span> 红黑树</h3>
+<div class="outline-text-3" id="text-6-4">
+<p>
+linux/rbtree.h<br />
+</p>
+<div class="org-src-container">
+<pre class="src src-c"><span style="color: #75715E;">//</span><span style="color: #E6DB74;">&#21021;&#22987;&#21270;</span>
+<span style="color: #F92672;">struct</span> <span style="color: #66D9EF;">rb_root</span> <span style="color: #FD971F;">root</span> = RB_ROOT;
+
+<span style="color: #75715E;">//</span><span style="color: #E6DB74;">&#32418;&#40657;&#26641;&#27809;&#26377;&#25554;&#20837;&#21644;&#26597;&#25214;&#25509;&#21475;&#65292;&#38656;&#33258;&#24050;&#23454;&#29616;</span>
+<span style="color: #F92672;">static</span> <span style="color: #F92672;">inline</span> <span style="color: #F92672;">struct</span> <span style="color: #66D9EF;">page</span> * <span style="color: #A6E22E; font-size: 130%;">rb_search_page_cache</span><span style="color: #AE81FF;">(</span><span style="color: #F92672;">struct</span> <span style="color: #66D9EF;">inode</span> * <span style="color: #FD971F;">inode</span>,
+                         <span style="color: #66D9EF;">unsigned</span> <span style="color: #66D9EF;">long</span> <span style="color: #FD971F;">offset</span><span style="color: #AE81FF;">)</span>
+<span style="color: #AE81FF;">{</span>
+    <span style="color: #F92672;">struct</span> <span style="color: #66D9EF;">rb_node</span> * <span style="color: #FD971F;">n</span> = inode-&gt;i_rb_page_cache.rb_node;
+    <span style="color: #F92672;">struct</span> <span style="color: #66D9EF;">page</span> * <span style="color: #FD971F;">page</span>;
+
+    <span style="color: #A6E22E; font-weight: bold;">while</span> <span style="color: #66D9EF;">(</span>n<span style="color: #66D9EF;">)</span>
+    <span style="color: #66D9EF;">{</span>
+        page = <span style="color: #A6E22E; font-weight: bold;">rb_entry</span><span style="color: #A6E22E;">(</span>n, <span style="color: #F92672;">struct</span> <span style="color: #66D9EF;">page</span>, rb_page_cache<span style="color: #A6E22E;">)</span>;
+
+        <span style="color: #A6E22E; font-weight: bold;">if</span> <span style="color: #A6E22E;">(</span>offset &lt; page-&gt;offset<span style="color: #A6E22E;">)</span>
+            n = n-&gt;rb_left;
+        <span style="color: #F92672;">else</span> <span style="color: #A6E22E; font-weight: bold;">if</span> <span style="color: #A6E22E;">(</span>offset &gt; page-&gt;offset<span style="color: #A6E22E;">)</span>
+            n = n-&gt;rb_right;
+        <span style="color: #F92672;">else</span>
+            <span style="color: #F92672;">return</span> page;
+    <span style="color: #66D9EF;">}</span>
+    <span style="color: #F92672;">return</span> <span style="color: #AE81FF;">NULL</span>;
+<span style="color: #AE81FF;">}</span>
+
+<span style="color: #F92672;">static</span> <span style="color: #F92672;">inline</span> <span style="color: #F92672;">struct</span> <span style="color: #66D9EF;">page</span> * <span style="color: #A6E22E; font-size: 130%;">rb_insert_page_cache</span><span style="color: #AE81FF;">(</span><span style="color: #F92672;">struct</span> <span style="color: #66D9EF;">inode</span> * <span style="color: #FD971F;">inode</span>,
+                         <span style="color: #66D9EF;">unsigned</span> <span style="color: #66D9EF;">long</span> <span style="color: #FD971F;">offset</span>,
+                         <span style="color: #F92672;">struct</span> <span style="color: #66D9EF;">rb_node</span> * <span style="color: #FD971F;">node</span><span style="color: #AE81FF;">)</span>
+<span style="color: #AE81FF;">{</span>
+    <span style="color: #F92672;">struct</span> <span style="color: #66D9EF;">page</span> * <span style="color: #FD971F;">ret</span>;
+    <span style="color: #A6E22E; font-weight: bold;">if</span> <span style="color: #66D9EF;">(</span><span style="color: #A6E22E;">(</span>ret = <span style="color: #A6E22E; font-weight: bold;">__rb_insert_page_cache</span><span style="color: #E6DB74;">(</span>inode, offset, node<span style="color: #E6DB74;">)</span><span style="color: #A6E22E;">)</span><span style="color: #66D9EF;">)</span>
+        <span style="color: #F92672;">goto</span> <span style="color: #AE81FF;">out</span>;
+    <span style="color: #A6E22E; font-weight: bold;">rb_insert_color</span><span style="color: #66D9EF;">(</span>node, &amp;inode-&gt;i_rb_page_cache<span style="color: #66D9EF;">)</span>;
+ <span style="color: #AE81FF;">out</span>:
+    <span style="color: #F92672;">return</span> ret;
+<span style="color: #AE81FF;">}</span>
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgd0530be" class="outline-2">
+<h2 id="orgd0530be"><span class="section-number-2">7</span> 第七章 中断和中断处理</h2>
+<div class="outline-text-2" id="text-7">
+<p>
+中断可能随时发生，中断上下文不可阻塞<br />
+</p>
+
+<p>
+上半部 - 处理有严格时限的工作<br />
+下半部 - 处理大量逻辑的工作<br />
+</p>
+
+<p>
+request_irq里会调用kmalloc，有时会导致睡眠<br />
+</p>
+<div class="org-src-container">
+<pre class="src src-c"><span style="color: #75715E;">/* </span><span style="color: #E6DB74;">irq     &#20013;&#26029;&#21495; </span><span style="color: #75715E;">*/</span>
+<span style="color: #75715E;">/* </span><span style="color: #E6DB74;">handler &#20013;&#26029;&#22788;&#29702;&#31243;&#24207; </span><span style="color: #75715E;">*/</span>
+<span style="color: #75715E;">/* </span><span style="color: #E6DB74;">flags   &#20013;&#26029;&#22788;&#29702;&#26631;&#24535; </span><span style="color: #75715E;">*/</span>
+<span style="color: #75715E;">/* </span><span style="color: #E6DB74;">- IRQF_DISABLE       &#20013;&#26029;&#22788;&#29702;&#31243;&#24207;&#26102;&#31105;&#27490;&#25152;&#26377;&#20013;&#26029; </span><span style="color: #75715E;">*/</span>
+<span style="color: #75715E;">/* </span><span style="color: #E6DB74;">- IRQF_SAMPLE_RANDOM &#38543;&#26426;&#29109;&#28304; </span><span style="color: #75715E;">*/</span>
+<span style="color: #75715E;">/* </span><span style="color: #E6DB74;">- IRQF_TIMER         &#19987;&#20026;&#31995;&#32479;&#23450;&#26102;&#22120;&#30340;&#20013;&#26029;&#22788;&#29702; </span><span style="color: #75715E;">*/</span>
+<span style="color: #75715E;">/* </span><span style="color: #E6DB74;">- IRQF_SHARED        &#20849;&#20139;&#20013;&#26029;&#32447; </span><span style="color: #75715E;">*/</span>
+<span style="color: #75715E;">/* </span><span style="color: #E6DB74;">name    ASCII&#25991;&#26412; </span><span style="color: #75715E;">*/</span>
+<span style="color: #75715E;">/* </span><span style="color: #E6DB74;">dev     &#20849;&#20139;&#20013;&#26029;&#26102;&#30340;priv&#25351;&#38024; </span><span style="color: #75715E;">*/</span>
+<span style="color: #F92672;">typedef</span> <span style="color: #66D9EF;">irqreturn_t</span> <span style="color: #AE81FF;">(</span>*<span style="color: #66D9EF;">irq_handler_t</span><span style="color: #AE81FF;">)(</span><span style="color: #66D9EF;">int</span>, <span style="color: #66D9EF;">void</span> *<span style="color: #AE81FF;">)</span>;
+<span style="color: #F92672;">static</span> <span style="color: #F92672;">inline</span> <span style="color: #66D9EF;">int</span> <span style="color: #A6E22E; font-size: 130%;">__must_check</span>
+<span style="color: #A6E22E; font-weight: bold;">request_irq</span><span style="color: #AE81FF;">(</span><span style="color: #66D9EF;">unsigned</span> <span style="color: #66D9EF;">int</span> <span style="color: #FD971F;">irq</span>, <span style="color: #66D9EF;">irq_handler_t</span> <span style="color: #FD971F;">handler</span>, <span style="color: #66D9EF;">unsigned</span> <span style="color: #66D9EF;">long</span> <span style="color: #FD971F;">flags</span>,
+        <span style="color: #F92672;">const</span> <span style="color: #66D9EF;">char</span> *<span style="color: #FD971F;">name</span>, <span style="color: #66D9EF;">void</span> *<span style="color: #FD971F;">dev</span><span style="color: #AE81FF;">)</span>
+<span style="color: #AE81FF;">{</span>
+    <span style="color: #F92672;">return</span> <span style="color: #A6E22E; font-weight: bold;">request_threaded_irq</span><span style="color: #66D9EF;">(</span>irq, handler, <span style="color: #AE81FF;">NULL</span>, flags, name, dev<span style="color: #66D9EF;">)</span>;
+<span style="color: #AE81FF;">}</span>
+
+<span style="color: #F92672;">extern</span> <span style="color: #66D9EF;">void</span> <span style="color: #A6E22E; font-size: 130%;">free_irq</span><span style="color: #AE81FF;">(</span><span style="color: #66D9EF;">unsigned</span> <span style="color: #66D9EF;">int</span>, <span style="color: #66D9EF;">void</span> *<span style="color: #AE81FF;">)</span>;
+</pre>
+</div>
+
+<p>
+<b>linux的中断处理程序无须重入，当一个中断执行时，相应的中断号会在所有处理器上被屏蔽，同一个中断处理程充绝不会同时被调用以处理嵌套中断</b><br />
+</p>
+
+<p>
+共享中断要求<br />
+</p>
+<ol class="org-ol">
+<li>IRQF_SHARED<br /></li>
+<li>dev参数唯一<br /></li>
+<li>必须区分是自已的设备产生了中断，而不是共享了这个中断号的其他设备<br /></li>
+</ol>
+
+<p>
+中断上下文和进程无关，所以不可以睡眠，同时有严格的时间限制<br />
+</p>
+
+<p>
+中断流程<br />
+硬件产生一个中断 -&gt; 中断控制器 -&gt; 处理器 -&gt; 处理器中断内核 -&gt; do_IRQ() -&gt; handle_IRQ_event() 可能在此开启其他中断 -&gt; 运行挂接的所有中断处理程序 -&gt; 关中断 -&gt; ret_from_intr()<br />
+</p>
+
+<div class="org-src-container">
+<pre class="src src-c"><span style="color: #75715E;">/*</span>
+<span style="color: #E6DB74;"> * do_IRQ handles all normal device IRQ's (the special</span>
+<span style="color: #E6DB74;"> * SMP cross-CPU interrupts have their own specific</span>
+<span style="color: #E6DB74;"> * handlers).</span>
+<span style="color: #E6DB74;"> </span><span style="color: #75715E;">*/</span>
+<span style="color: #66D9EF;">unsigned</span> <span style="color: #66D9EF;">int</span> <span style="color: #A6E22E; font-size: 130%;">__irq_entry</span> <span style="color: #A6E22E; font-weight: bold;">do_IRQ</span><span style="color: #AE81FF;">(</span><span style="color: #F92672;">struct</span> <span style="color: #66D9EF;">pt_regs</span> *<span style="color: #FD971F;">regs</span><span style="color: #AE81FF;">)</span>
+<span style="color: #AE81FF;">{</span>
+    <span style="color: #F92672;">struct</span> <span style="color: #66D9EF;">pt_regs</span> *<span style="color: #FD971F;">old_regs</span> = <span style="color: #A6E22E; font-weight: bold;">set_irq_regs</span><span style="color: #66D9EF;">(</span>regs<span style="color: #66D9EF;">)</span>;
+
+    <span style="color: #75715E;">/* </span><span style="color: #E6DB74;">high bit used in ret_from_ code  </span><span style="color: #75715E;">*/</span>
+    <span style="color: #66D9EF;">unsigned</span> <span style="color: #FD971F;">vector</span> = ~regs-&gt;orig_ax;
+    <span style="color: #66D9EF;">unsigned</span> <span style="color: #FD971F;">irq</span>;
+
+    <span style="color: #A6E22E; font-weight: bold;">exit_idle</span><span style="color: #66D9EF;">()</span>;
+    <span style="color: #A6E22E; font-weight: bold;">irq_enter</span><span style="color: #66D9EF;">()</span>;
+
+    irq = <span style="color: #A6E22E; font-weight: bold;">__get_cpu_var</span><span style="color: #66D9EF;">(</span>vector_irq<span style="color: #66D9EF;">)[</span>vector<span style="color: #66D9EF;">]</span>;
+
+    <span style="color: #A6E22E; font-weight: bold;">if</span> <span style="color: #66D9EF;">(</span><span style="color: #E6DB74; font-weight: bold;">!</span><span style="color: #A6E22E; font-weight: bold;">handle_irq</span><span style="color: #A6E22E;">(</span>irq, regs<span style="color: #A6E22E;">)</span><span style="color: #66D9EF;">)</span> <span style="color: #66D9EF;">{</span>
+        <span style="color: #A6E22E; font-weight: bold;">ack_APIC_irq</span><span style="color: #A6E22E;">()</span>;
+
+        <span style="color: #A6E22E; font-weight: bold;">if</span> <span style="color: #A6E22E;">(</span><span style="color: #A6E22E; font-weight: bold;">printk_ratelimit</span><span style="color: #E6DB74;">()</span><span style="color: #A6E22E;">)</span>
+            <span style="color: #A6E22E; font-weight: bold;">pr_emerg</span><span style="color: #A6E22E;">(</span><span style="color: #E6DB74;">"%s: %d.%d No irq handler for vector (irq %d)\n"</span>,
+                __func__, <span style="color: #A6E22E; font-weight: bold;">smp_processor_id</span><span style="color: #E6DB74;">()</span>, vector, irq<span style="color: #A6E22E;">)</span>;
+    <span style="color: #66D9EF;">}</span>
+
+    <span style="color: #A6E22E; font-weight: bold;">irq_exit</span><span style="color: #66D9EF;">()</span>;
+
+    <span style="color: #A6E22E; font-weight: bold;">set_irq_regs</span><span style="color: #66D9EF;">(</span>old_regs<span style="color: #66D9EF;">)</span>;
+    <span style="color: #F92672;">return</span> 1;
+<span style="color: #AE81FF;">}</span>
+</pre>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-asm"><span style="color: #A6E22E; font-size: 130%;">ret_from_intr</span>:
+    <span style="color: #F92672;">GET_THREAD_INFO</span>(<span style="color: #FD971F;">%ebp</span>)
+<span style="color: #A6E22E; font-size: 130%;">check_userspace</span>:
+    <span style="color: #F92672;">movl</span> PT_EFLAGS(<span style="color: #FD971F;">%esp</span>), <span style="color: #FD971F;">%eax</span>  # mix EFLAGS and CS
+    <span style="color: #F92672;">movb</span> PT_CS(<span style="color: #FD971F;">%esp</span>), <span style="color: #FD971F;">%al</span> <span style="color: #75715E;">//</span><span style="color: #E6DB74;">&#26816;&#26597;&#26632;&#20013;&#30340;cs&#65292;&#26159;&#21542;&#26159;&#29992;&#25143;&#26435;&#38480;&#26469;&#21028;&#26029;&#26159;&#21542;&#20174;&#29992;&#25143;&#24577;&#20013;&#26029;</span>
+    <span style="color: #F92672;">andl</span> $(X86_EFLAGS_VM | SEGMENT_RPL_MASK), <span style="color: #FD971F;">%eax</span>
+    <span style="color: #F92672;">cmpl</span> $USER_RPL, <span style="color: #FD971F;">%eax</span>
+    <span style="color: #F92672;">jb</span> resume_kernel        # not returning to v8086 or userspace
+
+<span style="color: #A6E22E; font-size: 130%;">ENTRY</span>(resume_userspace)
+    <span style="color: #F92672;">LOCKDEP_SYS_EXIT</span>
+    <span style="color: #F92672;">DISABLE_INTERRUPTS</span>(CLBR_ANY)    # make sure we don't miss an interrupt
+                    # setting need_resched or sigpending
+                    # between sampling and the iret
+    <span style="color: #F92672;">TRACE_IRQS_OFF</span>
+    <span style="color: #F92672;">movl</span> TI_flags(<span style="color: #FD971F;">%ebp</span>), <span style="color: #FD971F;">%ecx</span>
+    <span style="color: #F92672;">andl</span> $_TIF_WORK_MASK, <span style="color: #FD971F;">%ecx</span>  # is there any work to be done on
+                    # int/exception return?
+    <span style="color: #F92672;">jne</span> work_pending
+    <span style="color: #F92672;">jmp</span> restore_all
+</pre>
+</div>
+
+<p>
+如下，第一列中断号，第二列是中断计数，第三列是中断控制器，第四列是中断名<br />
+</p>
+<div class="org-src-container">
+<pre class="src src-bash">        CPU0       
+ 0:        268   IO-APIC-edge      timer
+ 1:       3261   IO-APIC-edge      i8042
+ 4:      31532   IO-APIC-edge    
+ 8:          1   IO-APIC-edge      rtc0
+ 9:          0   IO-APIC-fasteoi   acpi
+12:       6289   IO-APIC-edge      i8042
+14:          0   IO-APIC-edge      ata_piix
+15:          0   IO-APIC-edge      ata_piix
+16:     229317   IO-APIC-fasteoi   eth1
+17:      52749   IO-APIC-fasteoi   ioc0, Ensoniq AudioPCI
+18:        228   IO-APIC-fasteoi   ehci_hcd:usb1, uhci_hcd:usb2
+</pre>
+</div>
+
+<p>
+中断控制<br />
+</p>
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">Name</th>
+<th scope="col" class="org-left">说明</th>
+<th scope="col" class="org-left">可否嵌套</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left">local_irq_disable</td>
+<td class="org-left">禁止本地中断</td>
+<td class="org-left">否</td>
+</tr>
+
+<tr>
+<td class="org-left">local_irq_enable</td>
+<td class="org-left">使能本地中断</td>
+<td class="org-left">否</td>
+</tr>
+
+<tr>
+<td class="org-left">local_irq_save</td>
+<td class="org-left">保存本地中断状态，禁止本地中断</td>
+<td class="org-left">是</td>
+</tr>
+
+<tr>
+<td class="org-left">local_irq_restore</td>
+<td class="org-left">恢复之前的中断状态</td>
+<td class="org-left">是</td>
+</tr>
+
+<tr>
+<td class="org-left">disable_irq</td>
+<td class="org-left">等待所有处理程序完毕，才关指点定中断线</td>
+<td class="org-left">是</td>
+</tr>
+
+<tr>
+<td class="org-left">disable_irq_nosync</td>
+<td class="org-left">不等，直接关</td>
+<td class="org-left">是</td>
+</tr>
+
+<tr>
+<td class="org-left">enable_irq</td>
+<td class="org-left">使能指定中断线</td>
+<td class="org-left">N/A</td>
+</tr>
+
+<tr>
+<td class="org-left">synchronize_irq</td>
+<td class="org-left">等待直到中断处理程序退出</td>
+<td class="org-left">N/A</td>
+</tr>
+
+<tr>
+<td class="org-left">irqs_disabled</td>
+<td class="org-left">本地中断是否关闭</td>
+<td class="org-left">N/A</td>
+</tr>
+
+<tr>
+<td class="org-left">in_interrupt</td>
+<td class="org-left">中断上下文为0(包括下半部，判断软件标记位)，进程上下文为1</td>
+<td class="org-left">N/A</td>
+</tr>
+
+<tr>
+<td class="org-left">in_irq</td>
+<td class="org-left">正在执行中断处理程为1</td>
+<td class="org-left">N/A</td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: xuali2</p>
-<p class="date">Created: 2020-10-12 Mon 12:39</p>
+<p class="date">Created: 2020-10-14 Wed 23:25</p>
 <p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>

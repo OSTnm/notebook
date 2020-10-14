@@ -620,6 +620,622 @@ finish_wait(&q, &wait);//结束等待
 #+end_src
 - 唤醒
 从等待队列移到红黑树
-- 抢占和上下文切换
+- 上下文切换
 switch_mm 切换虚拟内存映射
 switch_to 切换寄存器组
+- 用户抢占
+发生在系统调用或中断处理程序返回用户空间
+- 内核抢占
+*非内核抢占的操作系统中，调度程序没有办法在一个内核级的任务正在执行的时候重新调度*
+thread_info->preempt_count为0时，可抢占(此时是否重新调度取决于need_resched)
+a. 中断处理程序返回内核空间
+b. 内核代码再一次有抢占性
+c. 显示调用schedule
+d. 内核任务阻塞(一般是加到等待队列，同时调用schedule)
+- 实时调度策略
+在sched_rt.c中,之前的CFS在sched_fair.c(SCHED_NORMAL)中
+a. SCHED_FIFO, 一直执行到主动放弃或被更高优先级抢占
+b. SCHED_RR, 带时间片的SCHED_FIFO
+实时优先级为静态优先级，不像普通进程会动态计算优先级
+- 优先级范围
+nice -20~+19 相当于 实时优先级 100~139
+#+begin_src c
+/*
+ * Priority of a process goes from 0..MAX_PRIO-1, valid RT
+ * priority is 0..MAX_RT_PRIO-1, and SCHED_NORMAL/SCHED_BATCH
+ * tasks are in the range MAX_RT_PRIO..MAX_PRIO-1. Priority
+ * values are inverted: lower p->prio value means higher priority.
+ *
+ * The MAX_USER_RT_PRIO value allows the actual maximum
+ * RT priority to be separate from the value exported to
+ * user-space.  This allows kernel threads to set their
+ * priority to a value higher than any user task. Note:
+ * MAX_RT_PRIO must not be smaller than MAX_USER_RT_PRIO.
+ */
+
+#define MAX_USER_RT_PRIO	100
+#define MAX_RT_PRIO		MAX_USER_RT_PRIO
+
+#define MAX_PRIO		(MAX_RT_PRIO + 40)
+#define DEFAULT_PRIO		(MAX_RT_PRIO + 20)
+#+end_src
+
+* 第五章 系统调用
+
+除异常和陷入外内核唯一的合法入口
+*当进程从用户态切换至内核栈时,X86会进行栈切换(取出tss段中的esp0)*
+*需保证系统调用是可重入的,因为进程上下文中，内核可被抢占，所以同时可能存在多个相同的系统调用*
+*反过来说中断处理程序不能休眠*
+
+*asmlinkage* 限制词表示用栈传数据
+sys_call_table 是内核的系统调用表
+
+#+begin_src c
+//entry_32.S
+syscall_call:
+	call *sys_call_table(,%eax,4)
+	movl %eax,PT_EAX(%esp)		# store the return value
+
+//entry_64.S
+ENTRY(system_call)
+	CFI_STARTPROC	simple
+	CFI_SIGNAL_FRAME
+	CFI_DEF_CFA	rsp,KERNEL_STACK_OFFSET
+	CFI_REGISTER	rip,rcx
+	/*CFI_REGISTER	rflags,r11*/
+	SWAPGS_UNSAFE_STACK
+#+end_src
+
+内核和用户空间间做数据传输时有可能会引起阻塞（所需页在磁盘上）
+- copy_from_user 从用户空间拷贝
+- copy_to_user   拷贝到用户空间
+
+capable可检查是否可操作指定资源
+
+** 新增系统调用
+*** 环境
+- linux kernel
+a. make defconfig
+b. make menuconfig
+#+begin_src bash
+# make menuconfig
+[ ] Network packet filtering framework (Netfilter)  --->
+#+end_src
+c. make
+- busybox
+*git://git.busybox.net/busybox*
+e50f74da70da645c25d7daa81b2d9796a738f718 tag: 1_24_2
+
+a. make menuconfig
+#+begin_src bash
+# make menuconfig
+[*] Don't use /usr
+[*] Build BusyBox as a static binary (no shared libs)
+[ ] sync
+#+end_src
+b. make
+c. make install
+- initramfs
+a. 建立目录
+#+begin_src bash
+#!/bin/bash
+mkdir -pv initramfs/x86-busybox
+cd initramfs/x86-busybox
+mkdir -pv {bin,sbin,etc,proc,sys,usr/{bin,sbin}}
+cp -av /mnt/hgfs/linux-2.6-git/busybox/_install/* .
+#+end_src
+b. 在目录下建立init
+#+begin_src sh
+#!/bin/sh
+mount -t proc none /proc
+mount -t sysfs none /sys
+echo -e "\nBoot took $(cut -d' ' -f1 /proc/uptime) seconds\n"
+exec /bin/sh
+#+end_src
+c. 生成initramfs
+在目录下
+find . -print0 | cpio --null -ov --format=newc | gzip -9 > x86.cpio.gz
+- qemu
+qemu -kernel bzImage -initrd ./x86.cpio.gz -nographic -append "console=ttyS0"
+
+*** sys_foo
+- kernel
+#+begin_src asm
+; arch/x86/kernel/syscall_table_32.S
+  ...
+      .long sys_rt_tgsigqueueinfo	/* 335 */
+      .long sys_perf_event_open
+      .long sys_recvmmsg
+      .long sys_foo               ;新增338
+  ...
+#+end_src
+#+begin_src c
+//kernel/sys.c
+asmlinkage long sys_foo(void)
+{
+    return 0xabcd;
+}
+#+end_src
+- app
+#+begin_src c
+  /* foo_app.c : gcc -static foo_app.c -o foo_app*/
+  #include <stdio.h>
+  #include <syscall.h>
+
+  #define __NR_foo 338
+  int main(int argc, char *argv[])
+  {
+      printf("new sys_call return 0x%x\n", syscall(__NR_foo));
+      return 0;
+  }
+#+end_src
+#+begin_src bash
+#老的kernel
+new sys_call return 0xffffffff
+
+#修改过的kernel
+new sys_call return 0xabcd
+#+end_src
+
+* 第六章 内核数据结构
+** 链表
+linux/list.h
+#+begin_src c
+  struct list_head {
+      struct list_head *next, *prev;
+  };
+
+  #define LIST_HEAD_INIT(name) { &(name), &(name) } //静态声明
+  #define LIST_HEAD(name) \
+      struct list_head name = LIST_HEAD_INIT(name)
+
+  static inline void INIT_LIST_HEAD(struct list_head *list) //动态
+  {
+      list->next = list;
+      list->prev = list;
+  }
+
+  static inline void __list_add(struct list_head *new,
+                    struct list_head *prev,
+                    struct list_head *next)
+  {
+      next->prev = new;
+      new->next = next;
+      new->prev = prev;
+      prev->next = new;
+  }
+
+  //加元素，在head后面
+  static inline void list_add(struct list_head *new, struct list_head *head)
+  {
+      __list_add(new, head, head->next);
+  }
+
+  //加元素，在链表尾
+  static inline void list_add_tail(struct list_head *new, struct list_head *head)
+  {
+      __list_add(new, head->prev, head);
+  }
+
+  static inline void __list_del(struct list_head * prev, struct list_head * next)
+  {
+      next->prev = prev;
+      prev->next = next; //互相挂接
+  }
+
+  //删除元素
+  static inline void list_del(struct list_head *entry)
+  {
+      __list_del(entry->prev, entry->next);
+      entry->next = LIST_POISON1;
+      entry->prev = LIST_POISON2;
+  }
+
+
+  static inline void list_move(struct list_head *list, struct list_head *head)
+  {
+      __list_del(list->prev, list->next); //list从当前链表退出
+      list_add(list, head); //加到head后
+  }
+
+  static inline void list_move_tail(struct list_head *list,
+                    struct list_head *head)
+  {
+      __list_del(list->prev, list->next);
+      list_add_tail(list, head); //加到head->prev后
+  }
+
+
+  /* <= head <=> head1 <=> head2 <=> .... head_end => */
+  /* <= list <=> list1 <=> list2 <=> .... list_end => */
+
+  /* <= head <=> list1 <=> list2 <=> .... list_end <=> head1 <=> head2 ... head_end => */
+  static inline void __list_splice(const struct list_head *list,
+                   struct list_head *prev,
+                   struct list_head *next)
+  {
+      struct list_head *first = list->next;
+      struct list_head *last = list->prev;
+
+      first->prev = prev;
+      prev->next = first;         /* head <=> list->next */
+
+      last->next = next;          /* head->next <=> list->prev*/
+      next->prev = last;
+  }
+
+  static inline void list_splice(const struct list_head *list,
+                  struct list_head *head)
+  {
+      if (!list_empty(list))
+          __list_splice(list, head, head->next);
+  }
+
+/**
+ * list_for_each	-	iterate over a list
+ * @pos:	the &struct list_head to use as a loop cursor.
+ * @head:	the head for your list.
+ */
+//遍历
+ #define list_for_each(pos, head) \
+	for (pos = (head)->next; prefetch(pos->next), pos != (head); \
+        	pos = pos->next)
+
+/**
+ * list_entry - get the struct for this entry
+ * @ptr:	the &struct list_head pointer.
+ * @type:	the type of the struct this is embedded in.
+ * @member:	the name of the list_struct within the struct.
+ */
+ #define list_entry(ptr, type, member) \
+	container_of(ptr, type, member)
+
+/**
+ * list_for_each_entry	-	iterate over list of given type
+ * @pos:	the type * to use as a loop cursor.
+ * @head:	the head for your list.
+ * @member:	the name of the list_struct within the struct.
+ */
+ #define list_for_each_entry(pos, head, member)				\
+	for (pos = list_entry((head)->next, typeof(*pos), member);	\
+	     prefetch(pos->member.next), &pos->member != (head); 	\
+	     pos = list_entry(pos->member.next, typeof(*pos), member))
+
+/**
+ * list_for_each_safe - iterate over a list safe against removal of list entry
+ * @pos:	the &struct list_head to use as a loop cursor.
+ * @n:		another &struct list_head to use as temporary storage
+ * @head:	the head for your list.
+ */
+//安全遍历，用于在foreach中删除元素
+#define list_for_each_safe(pos, n, head) \
+	for (pos = (head)->next, n = pos->next; pos != (head); \
+		pos = n, n = pos->next)
+#+end_src
+
+** 数据队列
+linux/kfifo.h
+#+begin_src c
+#define __kfifo_initializer(s, b) \
+	(struct kfifo) { \
+		.size	= s, \
+		.in	= 0, \
+		.out	= 0, \
+		.buffer = b \
+	}
+
+//联合体，头为kfifo结构，后面为buffer size
+#define DECLARE_KFIFO(name, size) \
+union { \
+	struct kfifo name; \
+	unsigned char name##kfifo_buffer[size + sizeof(struct kfifo)]; \
+}
+/**
+ * INIT_KFIFO - Initialize a kfifo declared by DECLARE_KFIFO
+ * @name: name of the declared kfifo datatype
+ */
+#define INIT_KFIFO(name) \
+	name = __kfifo_initializer(sizeof(name##kfifo_buffer) - \
+				sizeof(struct kfifo), \
+				name##kfifo_buffer + sizeof(struct kfifo))
+
+//分离的结构，一个是kfifo，挂接buffer
+#define DEFINE_KFIFO(name, size) \
+	unsigned char name##kfifo_buffer[size]; \
+	struct kfifo name = __kfifo_initializer(size, name##kfifo_buffer)
+
+/**
+ * kfifo_alloc - allocates a new FIFO internal buffer
+ * @fifo: the fifo to assign then new buffer
+ * @size: the size of the buffer to be allocated, this have to be a power of 2.
+ * @gfp_mask: get_free_pages mask, passed to kmalloc()
+ *
+ * This function dynamically allocates a new fifo internal buffer
+ *
+ * The size will be rounded-up to a power of 2.
+ * The buffer will be release with kfifo_free().
+ * Return 0 if no error, otherwise the an error code
+ */
+//申请
+int kfifo_alloc(struct kfifo *fifo, unsigned int size, gfp_t gfp_mask)
+
+//推入
+/**
+ * kfifo_in - puts some data into the FIFO
+ * @fifo: the fifo to be used.
+ * @from: the data to be added.
+ * @len: the length of the data to be added.
+ *
+ * This function copies at most @len bytes from the @from buffer into
+ * the FIFO depending on the free space, and returns the number of
+ * bytes copied.
+ *
+ * Note that with only one concurrent reader and one concurrent
+ * writer, you don't need extra locking to use these functions.
+ */
+unsigned int kfifo_in(struct kfifo *fifo, const void *from,
+				unsigned int len)
+
+
+//取出
+/**
+ * kfifo_out - gets some data from the FIFO
+ * @fifo: the fifo to be used.
+ * @to: where the data must be copied.
+ * @len: the size of the destination buffer.
+ *
+ * This function copies at most @len bytes from the FIFO into the
+ * @to buffer and returns the number of copied bytes.
+ *
+ * Note that with only one concurrent reader and one concurrent
+ * writer, you don't need extra locking to use these functions.
+ */
+unsigned int kfifo_out(struct kfifo *fifo, void *to, unsigned int len)
+#+end_src
+
+** 映射
+linux/idr.h
+不像python里的dict,key就是UID，是自动生成的
+#+begin_src c
+//初始化
+/**
+ * idr_init - initialize idr handle
+ * @idp:	idr handle
+ *
+ * This function is use to set up the handle (@idp) that you will pass
+ * to the rest of the functions.
+ */
+void idr_init(struct idr *idp)
+
+//预分配UID
+/**
+ * idr_pre_get - reserver resources for idr allocation
+ * @idp:	idr handle
+ * @gfp_mask:	memory allocation flags
+ *
+ * This function should be called prior to locking and calling the
+ * idr_get_new* functions. It preallocates enough memory to satisfy
+ * the worst possible allocation.
+ *
+ * If the system is REALLY out of memory this function returns 0,
+ * otherwise 1.
+ */
+int idr_pre_get(struct idr *idp, gfp_t gfp_mask)
+
+//映射
+/**
+ * idr_get_new - allocate new idr entry
+ * @idp: idr handle
+ * @ptr: pointer you want associated with the id
+ * @id: pointer to the allocated handle
+ *
+ * This is the allocate id function.  It should be called with any
+ * required locks.
+ *
+ * If memory is required, it will return -EAGAIN, you should unlock
+ * and go back to the idr_pre_get() call.  If the idr is full, it will
+ * return -ENOSPC.
+ *
+ * @id returns a value in the range 0 ... 0x7fffffff
+ */
+int idr_get_new(struct idr *idp, void *ptr, int *id)
+
+//根据UID取ptr
+/**
+ * idr_find - return pointer for given id
+ * @idp: idr handle
+ * @id: lookup key
+ *
+ * Return the pointer given the id it has been registered with.  A %NULL
+ * return indicates that @id is not valid or you passed %NULL in
+ * idr_get_new().
+ *
+ * This function can be called under rcu_read_lock(), given that the leaf
+ * pointers lifetimes are correctly managed.
+ */
+void *idr_find(struct idr *idp, int id)
+
+//删除UID
+/**
+ * idr_remove - remove the given id and free it's slot
+ * @idp: idr handle
+ * @id: unique key
+ */
+void idr_remove(struct idr *idp, int id)
+
+//删除idr
+/**
+ * idr_destroy - release all cached layers within an idr tree
+ * idp: idr handle
+ */
+void idr_destroy(struct idr *idp)
+#+end_src
+
+** 红黑树
+linux/rbtree.h
+#+begin_src c
+//初始化
+struct rb_root root = RB_ROOT;
+
+//红黑树没有插入和查找接口，需自已实现
+static inline struct page * rb_search_page_cache(struct inode * inode,
+						 unsigned long offset)
+{
+	struct rb_node * n = inode->i_rb_page_cache.rb_node;
+	struct page * page;
+
+	while (n)
+	{
+		page = rb_entry(n, struct page, rb_page_cache);
+
+		if (offset < page->offset)
+			n = n->rb_left;
+		else if (offset > page->offset)
+			n = n->rb_right;
+		else
+			return page;
+	}
+	return NULL;
+}
+
+static inline struct page * rb_insert_page_cache(struct inode * inode,
+						 unsigned long offset,
+						 struct rb_node * node)
+{
+	struct page * ret;
+	if ((ret = __rb_insert_page_cache(inode, offset, node)))
+		goto out;
+	rb_insert_color(node, &inode->i_rb_page_cache);
+ out:
+	return ret;
+}
+#+end_src
+
+* 第七章 中断和中断处理
+
+中断可能随时发生，中断上下文不可阻塞
+
+上半部 - 处理有严格时限的工作
+下半部 - 处理大量逻辑的工作
+
+request_irq里会调用kmalloc，有时会导致睡眠
+#+begin_src c
+/* irq     中断号 */
+/* handler 中断处理程序 */
+/* flags   中断处理标志 */
+/* - IRQF_DISABLE       中断处理程序时禁止所有中断 */
+/* - IRQF_SAMPLE_RANDOM 随机熵源 */
+/* - IRQF_TIMER         专为系统定时器的中断处理 */
+/* - IRQF_SHARED        共享中断线 */
+/* name    ASCII文本 */
+/* dev     共享中断时的priv指针 */
+typedef irqreturn_t (*irq_handler_t)(int, void *);
+static inline int __must_check
+request_irq(unsigned int irq, irq_handler_t handler, unsigned long flags,
+	    const char *name, void *dev)
+{
+	return request_threaded_irq(irq, handler, NULL, flags, name, dev);
+}
+
+extern void free_irq(unsigned int, void *);
+#+end_src
+
+*linux的中断处理程序无须重入，当一个中断执行时，相应的中断号会在所有处理器上被屏蔽，同一个中断处理程充绝不会同时被调用以处理嵌套中断*
+
+共享中断要求
+1. IRQF_SHARED
+2. dev参数唯一
+3. 必须区分是自已的设备产生了中断，而不是共享了这个中断号的其他设备
+
+中断上下文和进程无关，所以不可以睡眠，同时有严格的时间限制
+
+中断流程
+硬件产生一个中断 -> 中断控制器 -> 处理器 -> 处理器中断内核 -> do_IRQ() -> handle_IRQ_event() 可能在此开启其他中断 -> 运行挂接的所有中断处理程序 -> 关中断 -> ret_from_intr()
+
+#+begin_src c
+/*
+ * do_IRQ handles all normal device IRQ's (the special
+ * SMP cross-CPU interrupts have their own specific
+ * handlers).
+ */
+unsigned int __irq_entry do_IRQ(struct pt_regs *regs)
+{
+	struct pt_regs *old_regs = set_irq_regs(regs);
+
+	/* high bit used in ret_from_ code  */
+	unsigned vector = ~regs->orig_ax;
+	unsigned irq;
+
+	exit_idle();
+	irq_enter();
+
+	irq = __get_cpu_var(vector_irq)[vector];
+
+	if (!handle_irq(irq, regs)) {
+		ack_APIC_irq();
+
+		if (printk_ratelimit())
+			pr_emerg("%s: %d.%d No irq handler for vector (irq %d)\n",
+				__func__, smp_processor_id(), vector, irq);
+	}
+
+	irq_exit();
+
+	set_irq_regs(old_regs);
+	return 1;
+}
+#+end_src
+
+#+begin_src asm
+ret_from_intr:
+	GET_THREAD_INFO(%ebp)
+check_userspace:
+	movl PT_EFLAGS(%esp), %eax	# mix EFLAGS and CS
+	movb PT_CS(%esp), %al //检查栈中的cs，是否是用户权限来判断是否从用户态中断
+	andl $(X86_EFLAGS_VM | SEGMENT_RPL_MASK), %eax
+	cmpl $USER_RPL, %eax
+	jb resume_kernel		# not returning to v8086 or userspace
+
+ENTRY(resume_userspace)
+	LOCKDEP_SYS_EXIT
+ 	DISABLE_INTERRUPTS(CLBR_ANY)	# make sure we don't miss an interrupt
+					# setting need_resched or sigpending
+					# between sampling and the iret
+	TRACE_IRQS_OFF
+	movl TI_flags(%ebp), %ecx
+	andl $_TIF_WORK_MASK, %ecx	# is there any work to be done on
+					# int/exception return?
+	jne work_pending
+	jmp restore_all
+#+end_src
+
+如下，第一列中断号，第二列是中断计数，第三列是中断控制器，第四列是中断名
+#+begin_src bash
+         CPU0       
+  0:        268   IO-APIC-edge      timer
+  1:       3261   IO-APIC-edge      i8042
+  4:      31532   IO-APIC-edge    
+  8:          1   IO-APIC-edge      rtc0
+  9:          0   IO-APIC-fasteoi   acpi
+ 12:       6289   IO-APIC-edge      i8042
+ 14:          0   IO-APIC-edge      ata_piix
+ 15:          0   IO-APIC-edge      ata_piix
+ 16:     229317   IO-APIC-fasteoi   eth1
+ 17:      52749   IO-APIC-fasteoi   ioc0, Ensoniq AudioPCI
+ 18:        228   IO-APIC-fasteoi   ehci_hcd:usb1, uhci_hcd:usb2
+#+end_src
+
+中断控制
+| Name               | 说明                                                     | 可否嵌套 |
+|--------------------+----------------------------------------------------------+----------|
+| local_irq_disable  | 禁止本地中断                                             | 否       |
+| local_irq_enable   | 使能本地中断                                             | 否       |
+| local_irq_save     | 保存本地中断状态，禁止本地中断                           | 是       |
+| local_irq_restore  | 恢复之前的中断状态                                       | 是       |
+| disable_irq        | 等待所有处理程序完毕，才关指点定中断线                   | 是       |
+| disable_irq_nosync | 不等，直接关                                             | 是       |
+| enable_irq         | 使能指定中断线                                           | N/A      |
+| synchronize_irq    | 等待直到中断处理程序退出                                 | N/A      |
+| irqs_disabled      | 本地中断是否关闭                                         | N/A      |
+| in_interrupt       | 中断上下文为0(包括下半部，判断软件标记位)，进程上下文为1 | N/A      |
+| in_irq             | 正在执行中断处理程为1                                    | N/A      |
