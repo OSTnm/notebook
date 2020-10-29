@@ -1,0 +1,3521 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2020-10-19 一 23:39 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>程序员的自我修养 - 基于X86的linux</title>
+<meta name="generator" content="Org mode" />
+<meta name="author" content="xuali2" />
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: visible;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { width: 90%; }
+  /*]]>*/-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://fniessen.github.io/org-html-themes/styles/readtheorg/css/htmlize.css"/>
+<link rel="stylesheet" type="text/css" href="https://fniessen.github.io/org-html-themes/styles/readtheorg/css/readtheorg.css"/>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="https://fniessen.github.io/org-html-themes/styles/lib/js/jquery.stickytableheaders.min.js"></script>
+<script type="text/javascript" src="https://fniessen.github.io/org-html-themes/styles/readtheorg/js/readtheorg.js"></script>
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2019 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+</head>
+<body>
+<div id="content">
+<h1 class="title">程序员的自我修养 - 基于X86的linux</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#orgd4bc341">1. 第一章 温故而知新</a></li>
+<li><a href="#org124a6f9">2. 第二章 静态链接</a></li>
+<li><a href="#org46867fc">3. 第三章 目标文件</a>
+<ul>
+<li><a href="#org555d07b">3.1. ELF文件结构</a></li>
+</ul>
+</li>
+<li><a href="#org0f78f46">4. 第四章 静态链接</a>
+<ul>
+<li><a href="#org6a34959">4.1. 重定位</a></li>
+<li><a href="#org8bd3340">4.2. 重定位表</a></li>
+<li><a href="#org69c1ab0">4.3. 链接控制脚本</a></li>
+</ul>
+</li>
+<li><a href="#org661cd46">5. 第五章 WindowPE/COFF</a></li>
+<li><a href="#orgc6b49ce">6. 第六章 可执行方主席件的装载与进程</a>
+<ul>
+<li><a href="#org1da1e70">6.1. 进程虚存空间分布</a></li>
+</ul>
+</li>
+<li><a href="#org2d03b84">7. 第七章 动态链接</a>
+<ul>
+<li><a href="#org26c82c1">7.1. 地址无关代码(fPIC)</a></li>
+<li><a href="#org8a72a29">7.2. 延迟绑定(Procedure Linkage Table)</a></li>
+<li><a href="#org4e3a628">7.3. 动态链接器</a></li>
+</ul>
+</li>
+<li><a href="#org79ee3c9">8. 第八章 共享库的组织</a></li>
+<li><a href="#org73a0099">9. 第九章 Windows下的动态链接</a></li>
+<li><a href="#org17befdf">10. 第十章 内存</a>
+<ul>
+<li><a href="#org1f26e32">10.1. 栈</a></li>
+<li><a href="#org16cd02e">10.2. 堆与内存管理</a></li>
+</ul>
+</li>
+<li><a href="#orgcf66636">11. 第十一章 运行库</a>
+<ul>
+<li><a href="#orgdc1316f">11.1. glibc启动文件</a></li>
+<li><a href="#org1f19bdc">11.2. IO缓冲</a></li>
+</ul>
+</li>
+<li><a href="#orgae8c2df">12. 第十二章 系统调用与API</a></li>
+<li><a href="#org3441e9e">13. 第十三章 运行库实现</a></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-orgd4bc341" class="outline-2">
+<h2 id="orgd4bc341"><span class="section-number-2">1</span> 第一章 温故而知新</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+PC机:<br />
+</p>
+<ul class="org-ul">
+<li>高速的北桥芯片，用作CPU 内存 显卡通信<br /></li>
+<li>低速的南桥芯片，用作磁盘 USB 键鼠通信，汇总后连接到北桥<br /></li>
+</ul>
+
+<p>
+系统软件<br />
+</p>
+<ul class="org-ul">
+<li>操作系统<br /></li>
+<li>编译器，汇编器，链接器<br /></li>
+</ul>
+
+<p>
+interface<br />
+</p>
+<ul class="org-ul">
+<li>underlayer 定义接口<br /></li>
+<li>upperlayer 使用接口<br /></li>
+</ul>
+
+<p>
+APP -&gt; (API) -&gt; Running Lib -&gt; (System call 0x80 softtware interrupt) -&gt; Kernel -&gt; (Hardware Spec) -&gt; Hardware<br />
+</p>
+
+<p>
+机械磁盘使用LBA来防止磁道密度由内到外变稀疏的问题<br />
+</p>
+
+<p>
+虚拟内存<br />
+</p>
+<ul class="org-ul">
+<li>地址空间不隔离     &lt;- 分段 或 分页<br /></li>
+<li>内存使用效率低     &lt;- 分页<br /></li>
+<li>程序运行的址不确定 &lt;- 分段 或 分页<br /></li>
+</ul>
+
+<p>
+共享内存 - 不同进程的虚拟页映射到同一个物理页<br />
+</p>
+
+<p>
+页权限属性，只有操作系统可能设置，保护进程<br />
+</p>
+
+<p>
+线程LWP:<br />
+</p>
+<ul class="org-ul">
+<li>线程ID<br /></li>
+<li>PC指针<br /></li>
+<li>寄存器集合、堆栈<br /></li>
+<li>共享内存空间和进程级资源(文件和信号)<br /></li>
+</ul>
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">私有</th>
+<th scope="col" class="org-left">共享</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left">局部变量</td>
+<td class="org-left">全局变量</td>
+</tr>
+
+<tr>
+<td class="org-left">函数参数</td>
+<td class="org-left">堆</td>
+</tr>
+
+<tr>
+<td class="org-left">TLS</td>
+<td class="org-left">函数静态变量</td>
+</tr>
+
+<tr>
+<td class="org-left">寄存器数据</td>
+<td class="org-left">代码</td>
+</tr>
+
+<tr>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">文件，信号</td>
+</tr>
+</tbody>
+</table>
+
+<p>
+进程调度<br />
+</p>
+<ul class="org-ul">
+<li>优先级 Priority Schedule<br /></li>
+<li>轮询   Round Robin<br /></li>
+</ul>
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">系统调用</th>
+<th scope="col" class="org-left">作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left">fork</td>
+<td class="org-left">复制当前进程</td>
+</tr>
+
+<tr>
+<td class="org-left">exec</td>
+<td class="org-left">使用新的可执行映像覆盖当前可执行映像</td>
+</tr>
+
+<tr>
+<td class="org-left">clone</td>
+<td class="org-left">创建子进程并从指定位置开始执行</td>
+</tr>
+</tbody>
+</table>
+
+<p>
+二元信号量和互斥锁的区别：互斥锁mutex要求acquire和release是一个线程<br />
+条件变量作用类似栅栏==wait until<br />
+</p>
+
+<p>
+优化<br />
+</p>
+<ul class="org-ul">
+<li>编译器优化<br /></li>
+<li>CPU优化，动态调度, <b>不过我记得X86关掉了这个</b><br /></li>
+</ul>
+<div class="org-src-container">
+<pre class="src src-C++"><span style="color: #F92672;">volatile</span> <span style="color: #66D9EF;">T</span>* <span style="color: #FD971F;">pInst</span> = 0;
+<span style="color: #66D9EF;">T</span>* <span style="color: #A6E22E; font-size: 130%;">GetInst</span>() {
+    <span style="color: #F92672;">if</span>(pInst == <span style="color: #AE81FF;">NULL</span>) {
+        lock();
+        <span style="color: #F92672;">if</span> (pInst == <span style="color: #AE81FF;">NULL</span>)
+            pInst = <span style="color: #F92672;">new</span> <span style="color: #66D9EF;">T</span>;
+        unlock();
+    }
+}
+<span style="color: #75715E;">/*</span><span style="color: #E6DB74;">&#38382;&#39064;&#20986;&#22312;pInst = new T, &#22914;&#26524;&#26159;&#20808;&#36820;&#22238;&#23545;&#35937;&#20877;&#35843;&#29992;&#26500;&#36896;&#20989;&#25968;&#65292;&#37027;&#20040;&#26377;&#21487;&#33021;&#31532;&#20108;&#20010;&#32447;&#31243;&#25343;&#21040;&#30340;&#27809;&#26500;&#36896;&#20989;&#25968;&#21021;&#22987;&#21270;&#36807;&#30340;&#23545;&#35937;*/</span>
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org124a6f9" class="outline-2">
+<h2 id="org124a6f9"><span class="section-number-2">2</span> 第二章 静态链接</h2>
+<div class="outline-text-2" id="text-2">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">Name</th>
+<th scope="col" class="org-left">Tool</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left">Propressing</td>
+<td class="org-left">gcc -E (cpp)</td>
+</tr>
+
+<tr>
+<td class="org-left">Compilation</td>
+<td class="org-left">gcc -S (cc1)</td>
+</tr>
+
+<tr>
+<td class="org-left">Assemmbly</td>
+<td class="org-left">gcc -c (as)</td>
+</tr>
+
+<tr>
+<td class="org-left">Linking</td>
+<td class="org-left">gcc (ld)</td>
+</tr>
+</tbody>
+</table>
+
+<p>
+编译器前端：机器无关的中间代码<br />
+编译器后端: 目标机器代码<br />
+</p>
+
+<p>
+符号随着汇编语言的普及被迅速使用<br />
+</p>
+
+<p>
+链接：<br />
+</p>
+<ul class="org-ul">
+<li>地址和空间分配<br /></li>
+<li>符号决议<br /></li>
+<li>重定位<br /></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org46867fc" class="outline-2">
+<h2 id="org46867fc"><span class="section-number-2">3</span> 第三章 目标文件</h2>
+<div class="outline-text-2" id="text-3">
+<p>
+设计.text和.data的原因:<br />
+</p>
+<ul class="org-ul">
+<li>指令和数据的权限不一样<br /></li>
+<li>缓存体系,提高程序的局限性<br /></li>
+<li>动态链接多进程共享同一个.text<br /></li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-C"><span style="color: #66D9EF;">int</span> <span style="color: #A6E22E; font-size: 130%;">printf</span><span style="color: #AE81FF;">(</span><span style="color: #F92672;">const</span> <span style="color: #66D9EF;">char</span> *<span style="color: #FD971F;">format</span>, ...<span style="color: #AE81FF;">)</span>;
+
+<span style="color: #66D9EF;">int</span> <span style="color: #FD971F;">global_init_var</span> = 84;
+<span style="color: #66D9EF;">int</span> <span style="color: #FD971F;">global_uninit_var</span>;
+
+<span style="color: #66D9EF;">void</span> <span style="color: #A6E22E; font-size: 130%;">func1</span><span style="color: #AE81FF;">(</span><span style="color: #66D9EF;">int</span> <span style="color: #FD971F;">i</span><span style="color: #AE81FF;">)</span>
+<span style="color: #AE81FF;">{</span>
+    <span style="color: #A6E22E; font-weight: bold;">printf</span><span style="color: #66D9EF;">(</span><span style="color: #E6DB74;">"%d\n"</span>, i<span style="color: #66D9EF;">)</span>;
+<span style="color: #AE81FF;">}</span>
+
+<span style="color: #66D9EF;">int</span> <span style="color: #A6E22E; font-size: 130%;">main</span><span style="color: #AE81FF;">(</span><span style="color: #66D9EF;">int</span> <span style="color: #FD971F;">argc</span>, <span style="color: #66D9EF;">char</span> *<span style="color: #FD971F;">argv</span><span style="color: #66D9EF;">[]</span><span style="color: #AE81FF;">)</span>
+<span style="color: #AE81FF;">{</span>
+    <span style="color: #F92672;">static</span> <span style="color: #66D9EF;">int</span> <span style="color: #FD971F;">static_var</span> = 85;
+    <span style="color: #F92672;">static</span> <span style="color: #66D9EF;">int</span> <span style="color: #FD971F;">static_var2</span>;
+
+    <span style="color: #66D9EF;">int</span> <span style="color: #FD971F;">a</span> = 1;
+    <span style="color: #66D9EF;">int</span> <span style="color: #FD971F;">b</span>;
+
+    <span style="color: #A6E22E; font-weight: bold;">func1</span><span style="color: #66D9EF;">(</span>static_var + static_var2 + a + b<span style="color: #66D9EF;">)</span>;
+    <span style="color: #F92672;">return</span> 0;
+<span style="color: #AE81FF;">}</span>
+</pre>
+</div>
+
+<p>
+目标文件格式<br />
+</p>
+<ul class="org-ul">
+<li>.text 代码段<br /></li>
+<li>.data 初始化了的全局静态变量和局部静态变量, 8个字节<br /></li>
+<li>.rodata const和只读字符串, 640a就是字符\和字符n，最后以0结尾<br /></li>
+<li>global_uninit_var放在了COM段<br /></li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-bash">readelf -h 2.o
+ELF Header:
+  Magic:   7f 45 4c 46 01 01 01 00 00 00 00 00 00 00 00 00 
+  Class:                             ELF32
+  Data:                              2<span style="color: #E6DB74;">'s complement, little endian</span>
+<span style="color: #E6DB74;">  Version:                           1 (current)</span>
+<span style="color: #E6DB74;">  OS/ABI:                            UNIX - System V</span>
+<span style="color: #E6DB74;">  ABI Version:                       0</span>
+<span style="color: #E6DB74;">  Type:                              REL (Relocatable file)</span>
+<span style="color: #E6DB74;">  Machine:                           Intel 80386</span>
+<span style="color: #E6DB74;">  Version:                           0x1</span>
+<span style="color: #E6DB74;">  Entry point address:               0x0</span>
+<span style="color: #E6DB74;">  Start of program headers:          0 (bytes into file)</span>
+<span style="color: #E6DB74;">  Start of section headers:          812 (bytes into file)</span>
+<span style="color: #E6DB74;">  Flags:                             0x0</span>
+<span style="color: #E6DB74;">  Size of this header:               52 (bytes)</span>
+<span style="color: #E6DB74;">  Size of program headers:           0 (bytes)</span>
+<span style="color: #E6DB74;">  Number of program headers:         0</span>
+<span style="color: #E6DB74;">  Size of section headers:           40 (bytes)</span>
+<span style="color: #E6DB74;">  Number of section headers:         13</span>
+<span style="color: #E6DB74;">  Section header string table index: 12</span>
+
+<span style="color: #E6DB74;">readelf -S 2.o</span>
+<span style="color: #E6DB74;">There are 13 section headers, starting at offset 0x32c:</span>
+
+<span style="color: #E6DB74;">Section Headers:</span>
+<span style="color: #E6DB74;">  [Nr] Name              Type            Addr     Off    Size   ES Flg Lk Inf Al</span>
+<span style="color: #E6DB74;">  [ 0]                   NULL            00000000 000000 000000 00      0   0  0</span>
+<span style="color: #E6DB74;">  [ 1] .text             PROGBITS        00000000 000034 000064 00  AX  0   0  1</span>
+<span style="color: #E6DB74;">  [ 2] .rel.text         REL             00000000 000294 000028 08   I 10   1  4</span>
+<span style="color: #E6DB74;">  [ 3] .data             PROGBITS        00000000 000098 000008 00  WA  0   0  4</span>
+<span style="color: #E6DB74;">  [ 4] .bss              NOBITS          00000000 0000a0 000004 00  WA  0   0  4</span>
+<span style="color: #E6DB74;">  [ 5] .rodata           PROGBITS        00000000 0000a0 000004 00   A  0   0  1</span>
+<span style="color: #E6DB74;">  [ 6] .comment          PROGBITS        00000000 0000a4 00002d 01  MS  0   0  1</span>
+<span style="color: #E6DB74;">  [ 7] .note.GNU-stack   PROGBITS        00000000 0000d1 000000 00      0   0  1</span>
+<span style="color: #E6DB74;">  [ 8] .eh_frame         PROGBITS        00000000 0000d4 000064 00   A  0   0  4</span>
+<span style="color: #E6DB74;">  [ 9] .rel.eh_frame     REL             00000000 0002bc 000010 08   I 10   8  4</span>
+<span style="color: #E6DB74;">  [10] .symtab           SYMTAB          00000000 000138 000100 10     11  11  4</span>
+<span style="color: #E6DB74;">  [11] .strtab           STRTAB          00000000 000238 00005a 00      0   0  1</span>
+<span style="color: #E6DB74;">  [12] .shstrtab         STRTAB          00000000 0002cc 00005f 00      0   0  1</span>
+<span style="color: #E6DB74;">Key to Flags:</span>
+<span style="color: #E6DB74;">  W (write), A (alloc), X (execute), M (merge), S (strings), I (info),</span>
+<span style="color: #E6DB74;">  L (link order), O (extra OS processing required), G (group), T (TLS),</span>
+<span style="color: #E6DB74;">  C (compressed), x (unknown), o (OS specific), E (exclude),</span>
+<span style="color: #E6DB74;">  p (processor specific)</span>
+
+<span style="color: #E6DB74;">readelf -s 2.o</span>
+
+<span style="color: #E6DB74;">Symbol table '</span>.symtab<span style="color: #E6DB74;">' contains 16 entries:</span>
+<span style="color: #E6DB74;">   Num:    Value  Size Type    Bind   Vis      Ndx Name</span>
+<span style="color: #E6DB74;">     0: 00000000     0 NOTYPE  LOCAL  DEFAULT  UND </span>
+<span style="color: #E6DB74;">     1: 00000000     0 FILE    LOCAL  DEFAULT  ABS 2.c</span>
+<span style="color: #E6DB74;">     2: 00000000     0 SECTION LOCAL  DEFAULT    1 </span>
+<span style="color: #E6DB74;">     3: 00000000     0 SECTION LOCAL  DEFAULT    3 </span>
+<span style="color: #E6DB74;">     4: 00000000     0 SECTION LOCAL  DEFAULT    4 </span>
+<span style="color: #E6DB74;">     5: 00000000     0 SECTION LOCAL  DEFAULT    5 </span>
+<span style="color: #E6DB74;">     6: 00000004     4 OBJECT  LOCAL  DEFAULT    3 static_var.1907</span>
+<span style="color: #E6DB74;">     7: 00000000     4 OBJECT  LOCAL  DEFAULT    4 static_var2.1908</span>
+<span style="color: #E6DB74;">     8: 00000000     0 SECTION LOCAL  DEFAULT    7 </span>
+<span style="color: #E6DB74;">     9: 00000000     0 SECTION LOCAL  DEFAULT    8 </span>
+<span style="color: #E6DB74;">    10: 00000000     0 SECTION LOCAL  DEFAULT    6 </span>
+<span style="color: #E6DB74;">    11: 00000000     4 OBJECT  GLOBAL DEFAULT    3 global_init_var</span>
+<span style="color: #E6DB74;">    12: 00000004     4 OBJECT  GLOBAL DEFAULT  COM global_uninit_var</span>
+<span style="color: #E6DB74;">    13: 00000000    28 FUNC    GLOBAL DEFAULT    1 func1</span>
+<span style="color: #E6DB74;">    14: 00000000     0 NOTYPE  GLOBAL DEFAULT  UND printf</span>
+<span style="color: #E6DB74;">    15: 0000001c    72 FUNC    GLOBAL DEFAULT    1 main</span>
+
+<span style="color: #E6DB74;">objdump -s -d 2.o</span>
+
+<span style="color: #E6DB74;">2.o:     file format elf32-i386</span>
+
+<span style="color: #E6DB74;">Contents of section .text:</span>
+<span style="color: #E6DB74;"> 0000 5589e583 ec0883ec 08ff7508 68000000  U.........u.h...</span>
+<span style="color: #E6DB74;"> 0010 00e8fcff ffff83c4 1090c9c3 8d4c2404  .............L$.</span>
+<span style="color: #E6DB74;"> 0020 83e4f0ff 71fc5589 e55183ec 14c745f4  ....q.U..Q....E.</span>
+<span style="color: #E6DB74;"> 0030 01000000 8b150400 0000a100 00000001  ................</span>
+<span style="color: #E6DB74;"> 0040 c28b45f4 01c28b45 f001d083 ec0c50e8  ..E....E......P.</span>
+<span style="color: #E6DB74;"> 0050 fcffffff 83c410b8 00000000 8b4dfcc9  .............M..</span>
+<span style="color: #E6DB74;"> 0060 8d61fcc3                             .a..            </span>
+<span style="color: #E6DB74;">Contents of section .data:</span>
+<span style="color: #E6DB74;"> 0000 54000000 55000000                    T...U...        </span>
+<span style="color: #E6DB74;">Contents of section .rodata:</span>
+<span style="color: #E6DB74;"> 0000 25640a00                             %d..            </span>
+<span style="color: #E6DB74;">Contents of section .comment:</span>
+<span style="color: #E6DB74;"> 0000 00474343 3a202847 4e552920 382e332e  .GCC: (GNU) 8.3.</span>
+<span style="color: #E6DB74;"> 0010 31203230 31393035 30372028 52656420  1 20190507 (Red </span>
+<span style="color: #E6DB74;"> 0020 48617420 382e332e 312d3429 00        Hat 8.3.1-4).   </span>
+<span style="color: #E6DB74;">Contents of section .eh_frame:</span>
+<span style="color: #E6DB74;"> 0000 14000000 00000000 017a5200 017c0801  .........zR..|..</span>
+<span style="color: #E6DB74;"> 0010 1b0c0404 88010000 1c000000 1c000000  ................</span>
+<span style="color: #E6DB74;"> 0020 00000000 1c000000 00410e08 8502420d  .........A....B.</span>
+<span style="color: #E6DB74;"> 0030 0558c50c 04040000 28000000 3c000000  .X......(...&lt;...</span>
+<span style="color: #E6DB74;"> 0040 1c000000 48000000 00440c01 00471005  ....H....D...G..</span>
+<span style="color: #E6DB74;"> 0050 02750043 0f03757c 06750c01 0041c543  .u.C..u|.u...A.C</span>
+<span style="color: #E6DB74;"> 0060 0c040400                             ....            </span>
+
+<span style="color: #E6DB74;">Disassembly of section .text:</span>
+
+<span style="color: #E6DB74;">00000000 &lt;func1&gt;:</span>
+<span style="color: #E6DB74;">   0:   55                      push   %ebp</span>
+<span style="color: #E6DB74;">   1:   89 e5                   mov    %esp,%ebp</span>
+<span style="color: #E6DB74;">   3:   83 ec 08                sub    $0x8,%esp</span>
+<span style="color: #E6DB74;">   6:   83 ec 08                sub    $0x8,%esp</span>
+<span style="color: #E6DB74;">   9:   ff 75 08                pushl  0x8(%ebp)</span>
+<span style="color: #E6DB74;">   c:   68 00 00 00 00          push   $0x0</span>
+<span style="color: #E6DB74;">  11:   e8 fc ff ff ff          call   12 &lt;func1+0x12&gt;</span>
+<span style="color: #E6DB74;">  16:   83 c4 10                add    $0x10,%esp</span>
+<span style="color: #E6DB74;">  19:   90                      nop</span>
+<span style="color: #E6DB74;">  1a:   c9                      leave  </span>
+<span style="color: #E6DB74;">  1b:   c3                      ret    </span>
+
+<span style="color: #E6DB74;">0000001c &lt;main&gt;:</span>
+<span style="color: #E6DB74;">  1c:   8d 4c 24 04             lea    0x4(%esp),%ecx</span>
+<span style="color: #E6DB74;">  20:   83 e4 f0                and    $0xfffffff0,%esp</span>
+<span style="color: #E6DB74;">  23:   ff 71 fc                pushl  -0x4(%ecx)</span>
+<span style="color: #E6DB74;">  26:   55                      push   %ebp</span>
+<span style="color: #E6DB74;">  27:   89 e5                   mov    %esp,%ebp</span>
+<span style="color: #E6DB74;">  29:   51                      push   %ecx</span>
+<span style="color: #E6DB74;">  2a:   83 ec 14                sub    $0x14,%esp</span>
+<span style="color: #E6DB74;">  2d:   c7 45 f4 01 00 00 00    movl   $0x1,-0xc(%ebp)</span>
+<span style="color: #E6DB74;">  34:   8b 15 04 00 00 00       mov    0x4,%edx</span>
+<span style="color: #E6DB74;">  3a:   a1 00 00 00 00          mov    0x0,%eax</span>
+<span style="color: #E6DB74;">  3f:   01 c2                   add    %eax,%edx</span>
+<span style="color: #E6DB74;">  41:   8b 45 f4                mov    -0xc(%ebp),%eax</span>
+<span style="color: #E6DB74;">  44:   01 c2                   add    %eax,%edx</span>
+<span style="color: #E6DB74;">  46:   8b 45 f0                mov    -0x10(%ebp),%eax</span>
+<span style="color: #E6DB74;">  49:   01 d0                   add    %edx,%eax</span>
+<span style="color: #E6DB74;">  4b:   83 ec 0c                sub    $0xc,%esp</span>
+<span style="color: #E6DB74;">  4e:   50                      push   %eax</span>
+<span style="color: #E6DB74;">  4f:   e8 fc ff ff ff          call   50 &lt;main+0x34&gt;</span>
+<span style="color: #E6DB74;">  54:   83 c4 10                add    $0x10,%esp</span>
+<span style="color: #E6DB74;">  57:   b8 00 00 00 00          mov    $0x0,%eax</span>
+<span style="color: #E6DB74;">  5c:   8b 4d fc                mov    -0x4(%ebp),%ecx</span>
+<span style="color: #E6DB74;">  5f:   c9                      leave</span>
+<span style="color: #E6DB74;">  60:   8d 61 fc                lea    -0x4(%ecx),%esp</span>
+<span style="color: #E6DB74;">  63:   c3                      ret</span>
+
+</pre>
+</div>
+
+<p>
+更多的段<br />
+</p>
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">Name</th>
+<th scope="col" class="org-left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left">.rodata1</td>
+<td class="org-left">read only data</td>
+</tr>
+
+<tr>
+<td class="org-left">.comment</td>
+<td class="org-left">compiler version</td>
+</tr>
+
+<tr>
+<td class="org-left">.debug</td>
+<td class="org-left">debug info</td>
+</tr>
+
+<tr>
+<td class="org-left">.dynamic</td>
+<td class="org-left">dynamic link info</td>
+</tr>
+
+<tr>
+<td class="org-left">.hash</td>
+<td class="org-left">symbol hash table</td>
+</tr>
+
+<tr>
+<td class="org-left">.line</td>
+<td class="org-left">file line for debug</td>
+</tr>
+
+<tr>
+<td class="org-left">.note</td>
+<td class="org-left">additional compiler info</td>
+</tr>
+
+<tr>
+<td class="org-left">.strtab</td>
+<td class="org-left">string table, symbol name</td>
+</tr>
+
+<tr>
+<td class="org-left">.symtabl</td>
+<td class="org-left">symbol table</td>
+</tr>
+
+<tr>
+<td class="org-left">.shstrtab</td>
+<td class="org-left">section string table, section name</td>
+</tr>
+
+<tr>
+<td class="org-left">.plt .got</td>
+<td class="org-left">dynamic jump table and global entry table</td>
+</tr>
+
+<tr>
+<td class="org-left">.init .fini</td>
+<td class="org-left">init and fini code</td>
+</tr>
+</tbody>
+</table>
+
+<p>
+objcopy可以将任意文件放在elf里<br />
+</p>
+
+
+<div class="org-src-container">
+<pre class="src src-bash">objcopy -I binary -O elf32-i386 -B i386 1.o 11.o
+ojdump -ht 11.o
+
+11.o:     file format elf32-i386
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .data         00000534  00000000  00000000  00000034  2**0
+                  CONTENTS, ALLOC, LOAD, DATA
+SYMBOL TABLE:
+00000000 l    d  .data  00000000 .data
+00000000 g       .data  00000000 _binary_1_o_start
+00000534 g       .data  00000000 _binary_1_o_end
+00000534 g       *ABS*  00000000 _binary_1_o_size
+
+
+readelf -h 11.o
+ELF Header:
+  Magic:   7f 45 4c 46 01 01 01 00 00 00 00 00 00 00 00 00 
+  Class:                             ELF32
+  Data:                              2<span style="color: #E6DB74;">'s complement, little endian</span>
+<span style="color: #E6DB74;">  Version:                           1 (current)</span>
+<span style="color: #E6DB74;">  OS/ABI:                            UNIX - System V</span>
+<span style="color: #E6DB74;">  ABI Version:                       0</span>
+<span style="color: #E6DB74;">  Type:                              REL (Relocatable file)</span>
+<span style="color: #E6DB74;">  Machine:                           Intel 80386</span>
+<span style="color: #E6DB74;">  Version:                           0x1</span>
+<span style="color: #E6DB74;">  Entry point address:               0x0</span>
+<span style="color: #E6DB74;">  Start of program headers:          0 (bytes into file)</span>
+<span style="color: #E6DB74;">  Start of section headers:          1552 (bytes into file)</span>
+<span style="color: #E6DB74;">  Flags:                             0x0</span>
+<span style="color: #E6DB74;">  Size of this header:               52 (bytes)</span>
+<span style="color: #E6DB74;">  Size of program headers:           0 (bytes)</span>
+<span style="color: #E6DB74;">  Number of program headers:         0</span>
+<span style="color: #E6DB74;">  Size of section headers:           40 (bytes)</span>
+<span style="color: #E6DB74;">  Number of section headers:         5</span>
+<span style="color: #E6DB74;">  Section header string table index: 4</span>
+
+<span style="color: #E6DB74;">readelf -S 11.o</span>
+<span style="color: #E6DB74;">There are 5 section headers, starting at offset 0x610:</span>
+
+<span style="color: #E6DB74;">Section Headers:</span>
+<span style="color: #E6DB74;">  [Nr] Name              Type            Addr     Off    Size   ES Flg Lk Inf Al</span>
+<span style="color: #E6DB74;">  [ 0]                   NULL            00000000 000000 000000 00      0   0  0</span>
+<span style="color: #E6DB74;">  [ 1] .data             PROGBITS        00000000 000034 000534 00  WA  0   0  1</span>
+<span style="color: #E6DB74;">  [ 2] .symtab           SYMTAB          00000000 000568 000050 10      3   2  4</span>
+<span style="color: #E6DB74;">  [ 3] .strtab           STRTAB          00000000 0005b8 000034 00      0   0  1</span>
+<span style="color: #E6DB74;">  [ 4] .shstrtab         STRTAB          00000000 0005ec 000021 00      0   0  1</span>
+<span style="color: #E6DB74;">Key to Flags:</span>
+<span style="color: #E6DB74;">  W (write), A (alloc), X (execute), M (merge), S (strings), I (info),</span>
+<span style="color: #E6DB74;">  L (link order), O (extra OS processing required), G (group), T (TLS),</span>
+<span style="color: #E6DB74;">  C (compressed), x (unknown), o (OS specific), E (exclude),</span>
+<span style="color: #E6DB74;">  p (processor specific)</span>
+<span style="color: #E6DB74;">[xuali2@sha-isbu-ed15n xuali2]$readelf -s 11.o</span>
+
+<span style="color: #E6DB74;">Symbol table '</span>.symtab<span style="color: #E6DB74;">' contains 5 entries:</span>
+<span style="color: #E6DB74;">   Num:    Value  Size Type    Bind   Vis      Ndx Name</span>
+<span style="color: #E6DB74;">     0: 00000000     0 NOTYPE  LOCAL  DEFAULT  UND </span>
+<span style="color: #E6DB74;">     1: 00000000     0 SECTION LOCAL  DEFAULT    1 </span>
+<span style="color: #E6DB74;">     2: 00000000     0 NOTYPE  GLOBAL DEFAULT    1 _binary_1_o_start</span>
+<span style="color: #E6DB74;">     3: 00000534     0 NOTYPE  GLOBAL DEFAULT    1 _binary_1_o_end</span>
+<span style="color: #E6DB74;">     4: 00000534     0 NOTYPE  GLOBAL DEFAULT  ABS _binary_1_o_size</span>
+
+</pre>
+</div>
+
+<p>
+__attribute__((section("name"))) 修饰可以指定段<br />
+</p>
+</div>
+
+<div id="outline-container-org555d07b" class="outline-3">
+<h3 id="org555d07b"><span class="section-number-3">3.1</span> ELF文件结构</h3>
+<div class="outline-text-3" id="text-3-1">
+<ul class="org-ul">
+<li>段表、字符串表等控制信息段都在文件后面<br /></li>
+<li>REL 重定位文件 EXEC 可执行文件 DYN 共享目标文件<br /></li>
+<li>符号表里的值目标文件是 <b>段内偏移</b> ，可执行文件是 <b>虚拟地址</b><br /></li>
+</ul>
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">ELF Header</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left">.text</td>
+</tr>
+</tbody>
+<tbody>
+<tr>
+<td class="org-left">.data</td>
+</tr>
+</tbody>
+<tbody>
+<tr>
+<td class="org-left">.bss</td>
+</tr>
+</tbody>
+<tbody>
+<tr>
+<td class="org-left">&#x2026;</td>
+</tr>
+</tbody>
+<tbody>
+<tr>
+<td class="org-left">section header table</td>
+</tr>
+</tbody>
+<tbody>
+<tr>
+<td class="org-left">string tables</td>
+</tr>
+</tbody>
+<tbody>
+<tr>
+<td class="org-left">symbol tables</td>
+</tr>
+
+<tr>
+<td class="org-left">&#x2026;</td>
+</tr>
+</tbody>
+</table>
+
+<p>
+特殊符号<br />
+</p>
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">Name</th>
+<th scope="col" class="org-left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left">__executable_start</td>
+<td class="org-left">程序最开始地址</td>
+</tr>
+
+<tr>
+<td class="org-left">__etext&amp;_etext&amp;etext</td>
+<td class="org-left">程序末尾地址</td>
+</tr>
+
+<tr>
+<td class="org-left">_edata&amp;edata</td>
+<td class="org-left">数据段结束地址</td>
+</tr>
+
+<tr>
+<td class="org-left">_end&amp;end</td>
+<td class="org-left">程序结束地址</td>
+</tr>
+</tbody>
+</table>
+
+<p>
+符号修饰<br />
+</p>
+<ul class="org-ul">
+<li>C++ 关键的概念是函数签名: 函数名+参数类型+所在类+命令空间，基于此生成符号名<br /></li>
+<li>导致不同编译器之间不能相互链接的主要原因是生成符号的规则不一样<br /></li>
+</ul>
+
+<p>
+extern C<br />
+</p>
+<ul class="org-ul">
+<li>C++语法，修饰内的代码当作C语言代码处理，生成符号基于C语言规则<br /></li>
+<li>一个头文件同时支持C,C++<br /></li>
+</ul>
+<div class="org-src-container">
+<pre class="src src-C">
+<span style="color: #F92672;">#ifdef</span> __cplusplus
+<span style="color: #F92672;">extern</span> <span style="color: #E6DB74;">"C"</span> <span style="color: #AE81FF;">{</span>
+<span style="color: #F92672;">#endif</span>
+
+<span style="color: #66D9EF;">void</span> *<span style="color: #A6E22E; font-size: 130%;">memset</span><span style="color: #66D9EF;">(</span><span style="color: #66D9EF;">void</span> *, <span style="color: #66D9EF;">int</span>, <span style="color: #66D9EF;">size_t</span><span style="color: #66D9EF;">)</span>;
+
+<span style="color: #F92672;">#ifdef</span> __cplusplus
+<span style="color: #AE81FF;">}</span>
+<span style="color: #F92672;">#endif</span>
+</pre>
+</div>
+
+<p>
+弱符号<br />
+</p>
+<ul class="org-ul">
+<li>强符号不可重复定义<br /></li>
+<li>强符号覆盖弱符号<br /></li>
+<li>弱符号选占用空间最大的一个，如果有多个同样空间的，随机?<br /></li>
+</ul>
+
+<p>
+弱引用<br />
+</p>
+<ul class="org-ul">
+<li>未定义默认为0<br /></li>
+<li>库中的弱符号可以被用户定义的强符号所覆盖<br /></li>
+<li>例: -lpthread决定glibc是单线程还是多线程版本，可以判断pthread_create是否为0来看是否为多线程版本，也可以直接看link的so库<br /></li>
+</ul>
+
+<p>
+调试信息<br />
+</p>
+<ul class="org-ul">
+<li>ELF使用DWART(debug with arbitrary record format)<br /></li>
+<li>Microsoft使用CodeView<br /></li>
+</ul>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org0f78f46" class="outline-2">
+<h2 id="org0f78f46"><span class="section-number-2">4</span> 第四章 静态链接</h2>
+<div class="outline-text-2" id="text-4">
+<div class="org-src-container">
+<pre class="src src-C"><span style="color: #75715E;">/* </span><span style="color: #E6DB74;">gcc -m32 -c a.c b.c -Wno-implicit-function-declaration </span><span style="color: #75715E;">*/</span>
+<span style="color: #75715E;">/* </span><span style="color: #E6DB74;">ld a.o b.o -e main -o ab -m elf_i386 </span><span style="color: #75715E;">*/</span>
+<span style="color: #75715E;">/* </span><span style="color: #E6DB74;">a.c </span><span style="color: #75715E;">*/</span>
+<span style="color: #F92672;">extern</span> <span style="color: #66D9EF;">int</span> <span style="color: #FD971F;">shared</span>;
+
+<span style="color: #66D9EF;">int</span> <span style="color: #A6E22E; font-size: 130%;">main</span><span style="color: #AE81FF;">()</span>
+<span style="color: #AE81FF;">{</span>
+    <span style="color: #66D9EF;">int</span> <span style="color: #FD971F;">a</span> = 100;
+    <span style="color: #A6E22E; font-weight: bold;">swap</span><span style="color: #66D9EF;">(</span>&amp;a, &amp;shared<span style="color: #66D9EF;">)</span>;
+<span style="color: #AE81FF;">}</span>
+
+<span style="color: #75715E;">/* </span><span style="color: #E6DB74;">b.c </span><span style="color: #75715E;">*/</span>
+<span style="color: #66D9EF;">int</span> <span style="color: #FD971F;">shared</span> = 1;
+
+<span style="color: #66D9EF;">void</span> <span style="color: #A6E22E; font-size: 130%;">swap</span><span style="color: #AE81FF;">(</span><span style="color: #66D9EF;">int</span> *<span style="color: #FD971F;">a</span>, <span style="color: #66D9EF;">int</span> *<span style="color: #FD971F;">b</span><span style="color: #AE81FF;">)</span>
+<span style="color: #AE81FF;">{</span>
+    *a ^= *b ^= *a ^= *b ;
+<span style="color: #AE81FF;">}</span>
+
+</pre>
+</div>
+
+<p>
+两步链接Two-pass Linking:<br />
+</p>
+<ul class="org-ul">
+<li>空间与地址分配<br /></li>
+</ul>
+<p>
+指的是可执行文件中的空间<br />
+</p>
+<ul class="org-ul">
+<li>符号解析与重定位<br /></li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-bash">gcc -m32 -c a.c -Wno-implicit-function-declaration
+readelf -S a.o
+There are 12 section headers, starting at offset 0x218:
+
+Section Headers:
+  [Nr] Name              Type            Addr     Off    Size   ES Flg Lk Inf Al
+  [ 0]                   NULL            00000000 000000 000000 00      0   0  0
+  [ 1] .text             PROGBITS        00000000 000034 000039 00  AX  0   0  1
+  [ 2] .rel.text         REL             00000000 0001a8 000010 08   I  9   1  4
+  [ 3] .data             PROGBITS        00000000 00006d 000000 00  WA  0   0  1
+  [ 4] .bss              NOBITS          00000000 00006d 000000 00  WA  0   0  1
+  [ 5] .comment          PROGBITS        00000000 00006d 00002d 01  MS  0   0  1
+  [ 6] .note.GNU-stack   PROGBITS        00000000 00009a 000000 00      0   0  1
+  [ 7] .eh_frame         PROGBITS        00000000 00009c 000044 00   A  0   0  4
+  [ 8] .rel.eh_frame     REL             00000000 0001b8 000008 08   I  9   7  4
+  [ 9] .symtab           SYMTAB          00000000 0000e0 0000b0 10     10   8  4
+  [10] .strtab           STRTAB          00000000 000190 000016 00      0   0  1
+  [11] .shstrtab         STRTAB          00000000 0001c0 000057 00      0   0  1
+Key to Flags:
+  W (write), A (alloc), X (execute), M (merge), S (strings), I (info),
+  L (link order), O (extra OS processing required), G (group), T (TLS),
+  C (compressed), x (unknown), o (OS specific), E (exclude),
+  p (processor specific)
+
+gcc -m32 -c b.c -Wno-implicit-function-declaration
+readelf -S b.o
+There are 11 section headers, starting at offset 0x1ec:
+
+Section Headers:
+  [Nr] Name              Type            Addr     Off    Size   ES Flg Lk Inf Al
+  [ 0]                   NULL            00000000 000000 000000 00      0   0  0
+  [ 1] .text             PROGBITS        00000000 000034 000039 00  AX  0   0  1
+  [ 2] .data             PROGBITS        00000000 000070 000004 00  WA  0   0  4
+  [ 3] .bss              NOBITS          00000000 000074 000000 00  WA  0   0  1
+  [ 4] .comment          PROGBITS        00000000 000074 00002d 01  MS  0   0  1
+  [ 5] .note.GNU-stack   PROGBITS        00000000 0000a1 000000 00      0   0  1
+  [ 6] .eh_frame         PROGBITS        00000000 0000a4 000038 00   A  0   0  4
+  [ 7] .rel.eh_frame     REL             00000000 000190 000008 08   I  8   6  4
+  [ 8] .symtab           SYMTAB          00000000 0000dc 0000a0 10      9   8  4
+  [ 9] .strtab           STRTAB          00000000 00017c 000011 00      0   0  1
+  [10] .shstrtab         STRTAB          00000000 000198 000053 00      0   0  1
+Key to Flags:
+  W (write), A (alloc), X (execute), M (merge), S (strings), I (info),
+  L (link order), O (extra OS processing required), G (group), T (TLS),
+  C (compressed), x (unknown), o (OS specific), E (exclude),
+  p (processor specific)
+
+ld  a.o b.o -o ab -m elf_i386   <span style="color: #75715E;"># </span><span style="color: #E6DB74;">*&#27880;&#24847;&#65292;&#36816;&#34892;&#20250;&#20986;&#38169;*</span>
+readelf -S ab
+There are 8 section headers, starting at offset 0x11b4:
+
+Section Headers:
+  [Nr] Name              Type            Addr     Off    Size   ES Flg Lk Inf Al
+  [ 0]                   NULL            00000000 000000 000000 00      0   0  0
+  [ 1] .text             PROGBITS        08048094 000094 000072 00  AX  0   0  1
+  [ 2] .eh_frame         PROGBITS        08048108 000108 000064 00   A  0   0  4
+  [ 3] .data             PROGBITS        0804a000 001000 000004 00  WA  0   0  4
+  [ 4] .comment          PROGBITS        00000000 001004 00002c 01  MS  0   0  1
+  [ 5] .symtab           SYMTAB          00000000 001030 000100 10      6   9  4
+  [ 6] .strtab           STRTAB          00000000 001130 000048 00      0   0  1
+  [ 7] .shstrtab         STRTAB          00000000 001178 00003a 00      0   0  1
+Key to Flags:
+  W (write), A (alloc), X (execute), M (merge), S (strings), I (info),
+  L (link order), O (extra OS processing required), G (group), T (TLS),
+  C (compressed), x (unknown), o (OS specific), E (exclude),
+  p (processor specific)
+
+objdump -h a.o
+
+a.o:     file format elf32-i386
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .text         00000039  00000000  00000000  00000034  2**0
+                  CONTENTS, ALLOC, LOAD, RELOC, READONLY, CODE
+  1 .data         00000000  00000000  00000000  0000006d  2**0
+                  CONTENTS, ALLOC, LOAD, DATA
+  2 .bss          00000000  00000000  00000000  0000006d  2**0
+                  ALLOC
+  3 .comment      0000002d  00000000  00000000  0000006d  2**0
+                  CONTENTS, READONLY
+  4 .note.GNU-stack 00000000  00000000  00000000  0000009a  2**0
+                  CONTENTS, READONLY
+  5 .eh_frame     00000044  00000000  00000000  0000009c  2**2
+                  CONTENTS, ALLOC, LOAD, RELOC, READONLY, DATA
+objdump -h b.o
+
+b.o:     file format elf32-i386
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .text         00000039  00000000  00000000  00000034  2**0
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  1 .data         00000004  00000000  00000000  00000070  2**2
+                  CONTENTS, ALLOC, LOAD, DATA
+  2 .bss          00000000  00000000  00000000  00000074  2**0
+                  ALLOC
+  3 .comment      0000002d  00000000  00000000  00000074  2**0
+                  CONTENTS, READONLY
+  4 .note.GNU-stack 00000000  00000000  00000000  000000a1  2**0
+                  CONTENTS, READONLY
+  5 .eh_frame     00000038  00000000  00000000  000000a4  2**2
+                  CONTENTS, ALLOC, LOAD, RELOC, READONLY, DATA
+
+objdump -h ab
+
+ab:     file format elf32-i386
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .text         00000072  08048094  08048094  00000094  2**0
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  1 .eh_frame     00000064  08048108  08048108  00000108  2**2
+                  CONTENTS, ALLOC, LOAD, READONLY, DATA
+  2 .data         00000004  0804a000  0804a000  00001000  2**2
+                  CONTENTS, ALLOC, LOAD, DATA
+  3 .comment      0000002c  00000000  00000000  00001004  2**0
+                  CONTENTS, READONLY
+</pre>
+</div>
+</div>
+
+<div id="outline-container-org6a34959" class="outline-3">
+<h3 id="org6a34959"><span class="section-number-3">4.1</span> 重定位</h3>
+<div class="outline-text-3" id="text-4-1">
+<div class="org-src-container">
+<pre class="src src-bash">objdump -d a.o
+
+a.o:     file format elf32-i386
+
+
+Disassembly of section .text:
+
+00000000 &lt;main&gt;:
+   0:   8d 4c 24 04             lea    0x4(%esp),%ecx
+   4:   83 e4 f0                and    $<span style="color: #FD971F;">0</span>xfffffff0,%esp
+   7:   ff 71 fc                pushl  -0x4(%ecx)
+   a:   55                      push   %ebp
+   b:   89 e5                   mov    %esp,%ebp
+   d:   51                      push   %ecx
+   e:   83 ec 14                sub    $<span style="color: #FD971F;">0</span>x14,%esp
+  11:   c7 45 f4 64 00 00 00    movl   $<span style="color: #FD971F;">0</span>x64,-0xc(%ebp)
+  18:   83 ec 08                sub    $<span style="color: #FD971F;">0</span>x8,%esp
+  1b:   68 00 00 00 00          push   $<span style="color: #FD971F;">0</span>x0
+  20:   8d 45 f4                lea    -0xc(%ebp),%eax
+  23:   50                      push   %eax
+  24:   e8 fc ff ff ff          call   25 &lt;main+0x25&gt;
+  29:   83 c4 10                add    $<span style="color: #FD971F;">0</span>x10,%esp
+  2c:   b8 00 00 00 00          mov    $<span style="color: #FD971F;">0</span>x0,%eax
+  31:   8b 4d fc                mov    -0x4(%ebp),%ecx
+  34:   c9                      leave  
+  35:   8d 61 fc                lea    -0x4(%ecx),%esp
+  38:   c3                      ret 
+</pre>
+</div>
+
+<ul class="org-ul">
+<li>68 <b>00 00 00 00</b>, 这个是shared的地址，重定位前是0<br /></li>
+<li>e8 <b>fc ff ff ff</b>, 这个是swap的地址，重定位前是-4相对偏移，也就是本身<br /></li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-bash">objdump -d ab
+
+ab:     file format elf32-i386
+
+
+Disassembly of section .text:
+
+08048094 &lt;main&gt;:
+ 8048094:   8d 4c 24 04             lea    0x4(%esp),%ecx
+ 8048098:   83 e4 f0                and    $<span style="color: #FD971F;">0</span>xfffffff0,%esp
+ 804809b:   ff 71 fc                pushl  -0x4(%ecx)
+ 804809e:   55                      push   %ebp
+ 804809f:   89 e5                   mov    %esp,%ebp
+ 80480a1:   51                      push   %ecx
+ 80480a2:   83 ec 14                sub    $<span style="color: #FD971F;">0</span>x14,%esp
+ 80480a5:   c7 45 f4 64 00 00 00    movl   $<span style="color: #FD971F;">0</span>x64,-0xc(%ebp)
+ 80480ac:   83 ec 08                sub    $<span style="color: #FD971F;">0</span>x8,%esp
+ 80480af:   68 00 a0 04 08          push   $<span style="color: #FD971F;">0</span>x804a000
+ 80480b4:   8d 45 f4                lea    -0xc(%ebp),%eax
+ 80480b7:   50                      push   %eax
+ 80480b8:   e8 10 00 00 00          call   80480cd &lt;swap&gt;
+ 80480bd:   83 c4 10                add    $<span style="color: #FD971F;">0</span>x10,%esp
+ 80480c0:   b8 00 00 00 00          mov    $<span style="color: #FD971F;">0</span>x0,%eax
+ 80480c5:   8b 4d fc                mov    -0x4(%ebp),%ecx
+ 80480c8:   c9                      leave  
+ 80480c9:   8d 61 fc                lea    -0x4(%ecx),%esp
+ 80480cc:   c3                      ret   
+
+
+080480cd &lt;swap&gt;:
+ 80480cd:   55                      push   %ebp
+</pre>
+</div>
+
+<ul class="org-ul">
+<li>68 <b>00 a0 04 08</b>, 这个是shared的地址，重定位后是0x0804a000<br /></li>
+<li>e8 <b>10 00 00 00</b>, 这个是swap的地址，重定位前是+0x10相对偏移，也就是swap的开始<br /></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org8bd3340" class="outline-3">
+<h3 id="org8bd3340"><span class="section-number-3">4.2</span> 重定位表</h3>
+<div class="outline-text-3" id="text-4-2">
+<ul class="org-ul">
+<li>".rel." 开头是重定位表<br /></li>
+<li>段表里的info指定要重定位的段<br /></li>
+<li>组成<br /></li>
+</ul>
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="org-left">r_offset</td>
+<td class="org-left">相对偏移</td>
+</tr>
+
+<tr>
+<td class="org-left">r_info</td>
+<td class="org-left">低8位为重定位类型， R_386_32为绝对寻址，R_386_PC32为相对寻址修正, 高24位为符号在符号表里的下标</td>
+</tr>
+</tbody>
+</table>
+<ul class="org-ul">
+<li>重定位项在符号表里的类型为UND<br /></li>
+<li>对于弱符号，由于不知道最终大小是多少，所以不能放在bss段，要放在COMMON段等链接时决议，这说明不在COMMON段的全局变量符号都是强符号<br /></li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-bash">
+readelf -r a.o
+
+Relocation section <span style="color: #E6DB74;">'.rel.text'</span> at offset 0x1a8 contains 2 entries:
+ Offset     Info    Type            Sym.Value  Sym. Name
+0000001c  00000901 R_386_32          00000000   shared
+00000025  00000a02 R_386_PC32        00000000   swap
+
+Relocation section <span style="color: #E6DB74;">'.rel.eh_frame'</span> at offset 0x1b8 contains 1 entry:
+ Offset     Info    Type            Sym.Value  Sym. Name
+00000020  00000202 R_386_PC32        00000000   .text
+
+</pre>
+</div>
+
+<p>
+C++特性编译实现<br />
+</p>
+<ul class="org-ul">
+<li>template，虚函数表，每个实例在单独一个段中，链接时Link Once，实现重复代码消除<br /></li>
+<li>-ffunction-sections和-fdata-sections可能实现函数级链接而非文件级链接<br /></li>
+<li>全局对象构造和析构分别存在.init和.fini段在main前和后执行<br /></li>
+</ul>
+
+<p>
+ABI<br />
+</p>
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">Name</th>
+<th scope="col" class="org-left">Desc</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left">API</td>
+<td class="org-left">源代码级的接口</td>
+</tr>
+
+<tr>
+<td class="org-left">ABI</td>
+<td class="org-left">二进制级的接口</td>
+</tr>
+</tbody>
+</table>
+
+<p>
+objdump -t 查看静态库符号表<br />
+ar -t      查看打包文件<br />
+ar -x      解压<br />
+gcc -static 静态链接库<br />
+gcc &#x2013;verbose 打印详细信息<br />
+</p>
+</div>
+</div>
+
+<div id="outline-container-org69c1ab0" class="outline-3">
+<h3 id="org69c1ab0"><span class="section-number-3">4.3</span> 链接控制脚本</h3>
+<div class="outline-text-3" id="text-4-3">
+<p>
+使用命令控制链接过程<br />
+</p>
+<div class="org-src-container">
+<pre class="src src-c"><span style="color: #F92672;"># gcc</span> -m32 -c -fno-builtin tiny.c
+<span style="color: #F92672;"># ld</span> -<span style="color: #F92672;">static</span> -e nomain -o tiny tiny.o -m elf_i386
+<span style="color: #66D9EF;">char</span> *<span style="color: #FD971F;">str</span> = <span style="color: #E6DB74;">"Hello world!\n"</span>;
+
+<span style="color: #66D9EF;">void</span> <span style="color: #A6E22E; font-size: 130%;">print</span><span style="color: #AE81FF;">()</span>
+<span style="color: #AE81FF;">{</span>
+    <span style="color: #A6E22E; font-weight: bold;">asm</span><span style="color: #66D9EF;">(</span><span style="color: #E6DB74;">"movl $13, %%edx \n\t"</span>
+        <span style="color: #E6DB74;">"movl %0, %%ecx \n\t"</span>
+        <span style="color: #E6DB74;">"movl $0, %%ebx \n\t"</span>
+        <span style="color: #E6DB74;">"movl $4, %%eax \n\t"</span>
+        <span style="color: #E6DB74;">"int $0x80      \n\t"</span>
+        ::<span style="color: #E6DB74;">"r"</span><span style="color: #A6E22E;">(</span>str<span style="color: #A6E22E;">)</span>:<span style="color: #E6DB74;">"edx"</span>,<span style="color: #E6DB74;">"ecx"</span>,<span style="color: #E6DB74;">"ebx"</span><span style="color: #66D9EF;">)</span>;
+<span style="color: #AE81FF;">}</span>
+
+<span style="color: #66D9EF;">void</span> <span style="color: #A6E22E; font-size: 130%;">exit</span><span style="color: #AE81FF;">()</span>
+<span style="color: #AE81FF;">{</span>
+    <span style="color: #A6E22E; font-weight: bold;">asm</span><span style="color: #66D9EF;">(</span><span style="color: #E6DB74;">"movl $42, %ebx \n\t"</span>
+        <span style="color: #E6DB74;">"movl $1, %eax  \n\t"</span>
+        <span style="color: #E6DB74;">"int $0x80      \n\t"</span><span style="color: #66D9EF;">)</span>;
+<span style="color: #AE81FF;">}</span>
+
+<span style="color: #66D9EF;">void</span> <span style="color: #A6E22E; font-size: 130%;">nomain</span><span style="color: #AE81FF;">()</span>
+<span style="color: #AE81FF;">{</span>
+    <span style="color: #A6E22E; font-weight: bold;">print</span><span style="color: #66D9EF;">()</span>;
+    <span style="color: #A6E22E; font-weight: bold;">exit</span><span style="color: #66D9EF;">()</span>;
+<span style="color: #AE81FF;">}</span>
+</pre>
+</div>
+<div class="org-src-container">
+<pre class="src src-bash">readelf -h tiny
+ELF Header:
+  Magic:   7f 45 4c 46 01 01 01 00 00 00 00 00 00 00 00 00 
+  Class:                             ELF32
+  Data:                              2<span style="color: #E6DB74;">'s complement, little endian</span>
+<span style="color: #E6DB74;">  Version:                           1 (current)</span>
+<span style="color: #E6DB74;">  OS/ABI:                            UNIX - System V</span>
+<span style="color: #E6DB74;">  ABI Version:                       0</span>
+<span style="color: #E6DB74;">  Type:                              EXEC (Executable file)</span>
+<span style="color: #E6DB74;">  Machine:                           Intel 80386</span>
+<span style="color: #E6DB74;">  Version:                           0x1</span>
+<span style="color: #E6DB74;">  Entry point address:               0x80480c6</span>
+<span style="color: #E6DB74;">  Start of program headers:          52 (bytes into file)</span>
+<span style="color: #E6DB74;">  Start of section headers:          4544 (bytes into file)</span>
+<span style="color: #E6DB74;">  Flags:                             0x0</span>
+<span style="color: #E6DB74;">  Size of this header:               52 (bytes)</span>
+<span style="color: #E6DB74;">  Size of program headers:           32 (bytes)</span>
+<span style="color: #E6DB74;">  Number of program headers:         3</span>
+<span style="color: #E6DB74;">  Size of section headers:           40 (bytes)</span>
+<span style="color: #E6DB74;">  Number of section headers:         9</span>
+<span style="color: #E6DB74;">  Section header string table index: 8</span>
+
+<span style="color: #E6DB74;">readelf -S tiny</span>
+<span style="color: #E6DB74;">There are 9 section headers, starting at offset 0x11c0:</span>
+
+<span style="color: #E6DB74;">Section Headers:</span>
+<span style="color: #E6DB74;">  [Nr] Name              Type            Addr     Off    Size   ES Flg Lk Inf Al</span>
+<span style="color: #E6DB74;">  [ 0]                   NULL            00000000 000000 000000 00      0   0  0</span>
+<span style="color: #E6DB74;">  [ 1] .text             PROGBITS        08048094 000094 000042 00  AX  0   0  1</span>
+<span style="color: #E6DB74;">  [ 2] .rodata           PROGBITS        080480d6 0000d6 00000e 00   A  0   0  1</span>
+<span style="color: #E6DB74;">  [ 3] .eh_frame         PROGBITS        080480e4 0000e4 00007c 00   A  0   0  4</span>
+<span style="color: #E6DB74;">  [ 4] .data             PROGBITS        0804a000 001000 000004 00  WA  0   0  4</span>
+<span style="color: #E6DB74;">  [ 5] .comment          PROGBITS        00000000 001004 00002c 01  MS  0   0  1</span>
+<span style="color: #E6DB74;">  [ 6] .symtab           SYMTAB          00000000 001030 000100 10      7   9  4</span>
+<span style="color: #E6DB74;">  [ 7] .strtab           STRTAB          00000000 001130 00004c 00      0   0  1</span>
+<span style="color: #E6DB74;">  [ 8] .shstrtab         STRTAB          00000000 00117c 000042 00      0   0  1</span>
+<span style="color: #E6DB74;">Key to Flags:</span>
+<span style="color: #E6DB74;">  W (write), A (alloc), X (execute), M (merge), S (strings), I (info),</span>
+<span style="color: #E6DB74;">  L (link order), O (extra OS processing required), G (group), T (TLS),</span>
+<span style="color: #E6DB74;">  C (compressed), x (unknown), o (OS specific), E (exclude),</span>
+<span style="color: #E6DB74;">  p (processor specific)</span>
+<span style="color: #E6DB74;">objdump -s -d tiny</span>
+
+<span style="color: #E6DB74;">tiny:     file format elf32-i386</span>
+
+<span style="color: #E6DB74;">Contents of section .text:</span>
+<span style="color: #E6DB74;"> 8048094 5589e553 a100a004 08ba0d00 000089c1  U..S............</span>
+<span style="color: #E6DB74;"> 80480a4 bb000000 00b80400 0000cd80 905b5dc3  .............[].</span>
+<span style="color: #E6DB74;"> 80480b4 5589e5bb 2a000000 b8010000 00cd8090  U...*...........</span>
+<span style="color: #E6DB74;"> 80480c4 5dc35589 e5e8c6ff ffffe8e1 ffffff90  ].U.............</span>
+<span style="color: #E6DB74;"> 80480d4 5dc3                                 ].              </span>
+<span style="color: #E6DB74;">Contents of section .rodata:</span>
+<span style="color: #E6DB74;"> 80480d6 48656c6c 6f20776f 726c6421 0a00      Hello world!..  </span>
+<span style="color: #E6DB74;">Contents of section .eh_frame:</span>
+<span style="color: #E6DB74;"> 80480e4 14000000 00000000 017a5200 017c0801  .........zR..|..</span>
+<span style="color: #E6DB74;"> 80480f4 1b0c0404 88010000 20000000 1c000000  ........ .......</span>
+<span style="color: #E6DB74;"> 8048104 90ffffff 20000000 00410e08 8502420d  .... ....A....B.</span>
+<span style="color: #E6DB74;"> 8048114 05418303 5ac341c5 0c040400 1c000000  .A..Z.A.........</span>
+<span style="color: #E6DB74;"> 8048124 40000000 8cffffff 12000000 00410e08  @............A..</span>
+<span style="color: #E6DB74;"> 8048134 8502420d 054ec50c 04040000 1c000000  ..B..N..........</span>
+<span style="color: #E6DB74;"> 8048144 60000000 7effffff 10000000 00410e08  `...~........A..</span>
+<span style="color: #E6DB74;"> 8048154 8502420d 054cc50c 04040000           ..B..L......    </span>
+<span style="color: #E6DB74;">Contents of section .data:</span>
+<span style="color: #E6DB74;"> 804a000 d6800408                             ....            </span>
+<span style="color: #E6DB74;">Contents of section .comment:</span>
+<span style="color: #E6DB74;"> 0000 4743433a 2028474e 55292038 2e332e31  GCC: (GNU) 8.3.1</span>
+<span style="color: #E6DB74;"> 0010 20323031 39303530 37202852 65642048   20190507 (Red H</span>
+<span style="color: #E6DB74;"> 0020 61742038 2e332e31 2d342900           at 8.3.1-4).    </span>
+
+<span style="color: #E6DB74;">Disassembly of section .text:</span>
+
+<span style="color: #E6DB74;">08048094 &lt;print&gt;:</span>
+<span style="color: #E6DB74;"> 8048094:   55                      push   %ebp</span>
+<span style="color: #E6DB74;"> 8048095:   89 e5                   mov    %esp,%ebp</span>
+<span style="color: #E6DB74;"> 8048097:   53                      push   %ebx</span>
+<span style="color: #E6DB74;"> 8048098:   a1 00 a0 04 08          mov    0x804a000,%eax</span>
+<span style="color: #E6DB74;"> 804809d:   ba 0d 00 00 00          mov    $0xd,%edx</span>
+<span style="color: #E6DB74;"> 80480a2:   89 c1                   mov    %eax,%ecx</span>
+<span style="color: #E6DB74;"> 80480a4:   bb 00 00 00 00          mov    $0x0,%ebx</span>
+<span style="color: #E6DB74;"> 80480a9:   b8 04 00 00 00          mov    $0x4,%eax</span>
+<span style="color: #E6DB74;"> 80480ae:   cd 80                   int    $0x80</span>
+<span style="color: #E6DB74;"> 80480b0:   90                      nop</span>
+<span style="color: #E6DB74;"> 80480b1:   5b                      pop    %ebx</span>
+<span style="color: #E6DB74;"> 80480b2:   5d                      pop    %ebp</span>
+<span style="color: #E6DB74;"> 80480b3:   c3                      ret    </span>
+
+<span style="color: #E6DB74;">080480b4 &lt;exit&gt;:</span>
+<span style="color: #E6DB74;"> 80480b4:   55                      push   %ebp</span>
+<span style="color: #E6DB74;"> 80480b5:   89 e5                   mov    %esp,%ebp</span>
+<span style="color: #E6DB74;"> 80480b7:   bb 2a 00 00 00          mov    $0x2a,%ebx</span>
+<span style="color: #E6DB74;"> 80480bc:   b8 01 00 00 00          mov    $0x1,%eax</span>
+<span style="color: #E6DB74;"> 80480c1:   cd 80                   int    $0x80</span>
+<span style="color: #E6DB74;"> 80480c3:   90                      nop</span>
+<span style="color: #E6DB74;"> 80480c4:   5d                      pop    %ebp</span>
+<span style="color: #E6DB74;"> 80480c5:   c3                      ret    </span>
+
+<span style="color: #E6DB74;">080480c6 &lt;nomain&gt;:</span>
+<span style="color: #E6DB74;"> 80480c6:   55                      push   %ebp</span>
+<span style="color: #E6DB74;"> 80480c7:   89 e5                   mov    %esp,%ebp</span>
+<span style="color: #E6DB74;"> 80480c9:   e8 c6 ff ff ff          call   8048094 &lt;print&gt;</span>
+<span style="color: #E6DB74;"> 80480ce:   e8 e1 ff ff ff          call   80480b4 &lt;exit&gt;</span>
+<span style="color: #E6DB74;"> 80480d3:   90                      nop</span>
+<span style="color: #E6DB74;"> 80480d4:   5d                      pop    %ebp</span>
+<span style="color: #E6DB74;"> 80480d5:   c3                      ret   </span>
+</pre>
+</div>
+
+<p>
+使用链接脚本<br />
+</p>
+
+<ul class="org-ul">
+<li>设置当前虚拟地址<br /></li>
+<li>设置tinytext段，包含.text .data .rodata<br /></li>
+<li>丢弃.comment段<br /></li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-bash"><span style="color: #75715E;"># </span><span style="color: #E6DB74;">ld -static -T tiny.lds -o tiny tiny.o -m elf_i386</span>
+<span style="color: #75715E;"># </span><span style="color: #E6DB74;">tinytext&#27573;&#26159;WAX&#23646;&#24615;&#65292;&#22240;&#20026;&#34701;&#21512;&#20102;&#25968;&#25454;&#27573;&#21644;&#20195;&#30721;&#27573;</span>
+<span style="color: #A6E22E; font-size: 130%;">ENTRY</span>(nomain)
+
+SECTIONS
+{
+    <span style="color: #F92672;">.</span> = 0x08048000 + SIZEOF_HEADERS;
+    tinytext  : {*(.text) *(.data) *(.rodata)}
+    /DISCARD/ : {*(.comment)}
+}
+</pre>
+</div>
+
+<p>
+<b>可执行文件中，符号表和字符串表是可选的,可被strip,但是段表字符串表为必须</b><br />
+</p>
+
+<div class="org-src-container">
+<pre class="src src-bash">readelf -h tiny
+ELF Header:
+  Magic:   7f 45 4c 46 01 01 01 00 00 00 00 00 00 00 00 00 
+  Class:                             ELF32
+  Data:                              2<span style="color: #E6DB74;">'s complement, little endian</span>
+<span style="color: #E6DB74;">  Version:                           1 (current)</span>
+<span style="color: #E6DB74;">  OS/ABI:                            UNIX - System V</span>
+<span style="color: #E6DB74;">  ABI Version:                       0</span>
+<span style="color: #E6DB74;">  Type:                              EXEC (Executable file)</span>
+<span style="color: #E6DB74;">  Machine:                           Intel 80386</span>
+<span style="color: #E6DB74;">  Version:                           0x1</span>
+<span style="color: #E6DB74;">  Entry point address:               0x8048122</span>
+<span style="color: #E6DB74;">  Start of program headers:          52 (bytes into file)</span>
+<span style="color: #E6DB74;">  Start of section headers:          588 (bytes into file)</span>
+<span style="color: #E6DB74;">  Flags:                             0x0</span>
+<span style="color: #E6DB74;">  Size of this header:               52 (bytes)</span>
+<span style="color: #E6DB74;">  Size of program headers:           32 (bytes)</span>
+<span style="color: #E6DB74;">  Number of program headers:         2</span>
+<span style="color: #E6DB74;">  Size of section headers:           40 (bytes)</span>
+<span style="color: #E6DB74;">  Number of section headers:         6</span>
+<span style="color: #E6DB74;">  Section header string table index: 5</span>
+<span style="color: #E6DB74;">readelf -S tiny</span>
+<span style="color: #E6DB74;">There are 6 section headers, starting at offset 0x24c:</span>
+
+<span style="color: #E6DB74;">Section Headers:</span>
+<span style="color: #E6DB74;">  [Nr] Name              Type            Addr     Off    Size   ES Flg Lk Inf Al</span>
+<span style="color: #E6DB74;">  [ 0]                   NULL            00000000 000000 000000 00      0   0  0</span>
+<span style="color: #E6DB74;">  [ 1] .eh_frame         PROGBITS        08048074 000074 00007c 00   A  0   0  4</span>
+<span style="color: #E6DB74;">  [ 2] tinytext          PROGBITS        080480f0 0000f0 000056 00 WAX  0   0  4</span>
+<span style="color: #E6DB74;">  [ 3] .symtab           SYMTAB          00000000 000148 0000a0 10      4   6  4</span>
+<span style="color: #E6DB74;">  [ 4] .strtab           STRTAB          00000000 0001e8 000034 00      0   0  1</span>
+<span style="color: #E6DB74;">  [ 5] .shstrtab         STRTAB          00000000 00021c 00002e 00      0   0  1</span>
+<span style="color: #E6DB74;">Key to Flags:</span>
+<span style="color: #E6DB74;">  W (write), A (alloc), X (execute), M (merge), S (strings), I (info),</span>
+<span style="color: #E6DB74;">  L (link order), O (extra OS processing required), G (group), T (TLS),</span>
+<span style="color: #E6DB74;">  C (compressed), x (unknown), o (OS specific), E (exclude),</span>
+<span style="color: #E6DB74;">  p (processor specific)</span>
+
+<span style="color: #E6DB74;">strip tiny</span>
+<span style="color: #E6DB74;">readelf -S tiny</span>
+<span style="color: #E6DB74;">There are 4 section headers, starting at offset 0x164:</span>
+
+<span style="color: #E6DB74;">Section Headers:</span>
+<span style="color: #E6DB74;">  [Nr] Name              Type            Addr     Off    Size   ES Flg Lk Inf Al</span>
+<span style="color: #E6DB74;">  [ 0]                   NULL            00000000 000000 000000 00      0   0  0</span>
+<span style="color: #E6DB74;">  [ 1] .eh_frame         PROGBITS        08048074 000074 00007c 00   A  0   0  4</span>
+<span style="color: #E6DB74;">  [ 2] tinytext          PROGBITS        080480f0 0000f0 000056 00 WAX  0   0  4</span>
+<span style="color: #E6DB74;">  [ 3] .shstrtab         STRTAB          00000000 000146 00001e 00      0   0  1</span>
+<span style="color: #E6DB74;">Key to Flags:</span>
+<span style="color: #E6DB74;">  W (write), A (alloc), X (execute), M (merge), S (strings), I (info),</span>
+<span style="color: #E6DB74;">  L (link order), O (extra OS processing required), G (group), T (TLS),</span>
+<span style="color: #E6DB74;">  C (compressed), x (unknown), o (OS specific), E (exclude),</span>
+<span style="color: #E6DB74;">  p (processor specific)</span>
+
+</pre>
+</div>
+
+<p>
+语法<br />
+</p>
+<ul class="org-ul">
+<li>语句间用";"作分割符<br /></li>
+<li>表达式与运算符和C一样<br /></li>
+<li>- * / += -= *= &amp; | &gt;&gt; &lt;&lt;<br /></li>
+<li>注释和C一样, /**/<br /></li>
+</ul>
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">命令语句</th>
+<th scope="col" class="org-left">说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left">ENTRY(symbol)</td>
+<td class="org-left">指定入口地址</td>
+</tr>
+
+<tr>
+<td class="org-left">STARTUP(filename)</td>
+<td class="org-left">文件filename作为链接过程的第一个输入</td>
+</tr>
+
+<tr>
+<td class="org-left">SEARCH_DIR(path)</td>
+<td class="org-left">ld库查找路径</td>
+</tr>
+
+<tr>
+<td class="org-left">INPUT(file, file, &#x2026;)</td>
+<td class="org-left">链接过程的输入文件</td>
+</tr>
+
+<tr>
+<td class="org-left">INCLUDE filename</td>
+<td class="org-left">包含filename进链接脚本</td>
+</tr>
+
+<tr>
+<td class="org-left">PROVIDE(symbol)</td>
+<td class="org-left">定义某个符号</td>
+</tr>
+</tbody>
+</table>
+
+<p>
+在sections中，重要的是file(sections)<br />
+</p>
+<div class="org-src-container">
+<pre class="src src-bash">SECTIONS
+{
+    ...
+    secname : { file(sections) file(sections) ... }
+}
+</pre>
+</div>
+<ul class="org-ul">
+<li>file1.o(.data) 选中file1.o里的.data段<br /></li>
+<li>file1.o(.data .rodata) 或 file1.o(.data, .rodata) 选中file1.o里的.data和.rodata<br /></li>
+<li>file1.o 选中file1.o的所有段<br /></li>
+<li>*(.data) 所有输入文件(目标文件)里的.data<br /></li>
+<li>[a-z]*(.text*[A-Z]) 类似正则<br /></li>
+</ul>
+
+<p>
+<b>代码中解析可执行文件可用bfd库</b><br />
+</p>
+<div class="org-src-container">
+<pre class="src src-c"><span style="color: #75715E;">/* </span><span style="color: #E6DB74;">gcc t.c -lbfd </span><span style="color: #75715E;">*/</span>
+<span style="color: #F92672;">#include</span> <span style="color: #AE81FF;">&lt;</span><span style="color: #E6DB74;">stdio.h</span><span style="color: #AE81FF;">&gt;</span>
+<span style="color: #F92672;">#include</span> <span style="color: #AE81FF;">&lt;</span><span style="color: #E6DB74;">bfd.h</span><span style="color: #AE81FF;">&gt;</span>
+<span style="color: #66D9EF;">int</span> <span style="color: #A6E22E; font-size: 130%;">main</span><span style="color: #AE81FF;">(</span><span style="color: #66D9EF;">int</span> <span style="color: #FD971F;">argc</span>, <span style="color: #66D9EF;">char</span> *<span style="color: #FD971F;">argv</span><span style="color: #66D9EF;">[]</span><span style="color: #AE81FF;">)</span>
+<span style="color: #AE81FF;">{</span>
+    <span style="color: #F92672;">const</span> <span style="color: #66D9EF;">char</span> **<span style="color: #FD971F;">t</span> = <span style="color: #A6E22E; font-weight: bold;">bfd_target_list</span><span style="color: #66D9EF;">()</span>;
+    <span style="color: #A6E22E; font-weight: bold;">while</span><span style="color: #66D9EF;">(</span>*t<span style="color: #66D9EF;">)</span> <span style="color: #66D9EF;">{</span>
+        <span style="color: #A6E22E; font-weight: bold;">printf</span><span style="color: #A6E22E;">(</span><span style="color: #E6DB74;">"%s\n"</span>, *t<span style="color: #A6E22E;">)</span>;
+        t++;
+    <span style="color: #66D9EF;">}</span>
+    <span style="color: #F92672;">return</span> 0;
+<span style="color: #AE81FF;">}</span>
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org661cd46" class="outline-2">
+<h2 id="org661cd46"><span class="section-number-2">5</span> 第五章 WindowPE/COFF</h2>
+<div class="outline-text-2" id="text-5">
+<p>
+略<br />
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgc6b49ce" class="outline-2">
+<h2 id="orgc6b49ce"><span class="section-number-2">6</span> 第六章 可执行方主席件的装载与进程</h2>
+<div class="outline-text-2" id="text-6">
+<p>
+默认32位CPU linux进程虚拟地址空间<br />
+</p>
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="org-left">0x00000000 - 0xBFFFFFFF</td>
+<td class="org-left">User Process</td>
+</tr>
+
+<tr>
+<td class="org-left">0xC0000000 - 0xFFFFFFFF</td>
+<td class="org-left">Operating System</td>
+</tr>
+</tbody>
+</table>
+
+<p>
+PAE(Physical Address Extension) 虚拟地址空间32位不变,物理地址为36位<br />
+</p>
+<ul class="org-ul">
+<li>使用mmap，不同时间用相同虚拟地址空间映射不同的物理地址<br /></li>
+</ul>
+
+<p>
+装载 - 所需内存大于物理内存时从磁盘换入, 实际使用会降低性能，所以 <b>实时性要求高的都关掉了</b><br />
+</p>
+<ul class="org-ul">
+<li>覆盖装入(Overlay) - 早期解决方案<br /></li>
+<li>手工编写辅助代码管理内存覆盖<br /></li>
+<li>树状结构，任何模块到根为调用路径<br /></li>
+<li>禁止跨树间调用<br /></li>
+<li>页映射(Paging), 为主流操作系统所用<br /></li>
+<li>默认4K一页<br /></li>
+<li>以页为单位分割虚拟和物理内存<br /></li>
+<li>linux下流程为 产生缺页中断，kernel查看页映射，如果存在，则从磁盘换入，被换出的页有算法<br /></li>
+</ul>
+
+<p>
+进程建立<br />
+</p>
+<ul class="org-ul">
+<li>创建虚拟空间<br /></li>
+</ul>
+<p>
+复制父进程的页映射，设为只读，产生页错误再去设置物理内存与虚拟内存的映射(没有exec前)，称为写时复制<br />
+</p>
+<ul class="org-ul">
+<li>读取可执行文件头，建立虚拟空间与可执行文件映射关系<br /></li>
+</ul>
+<p>
+exec时，建立虚拟内存和文件的映射，这样产生缺页时，如果访问的是可执行文件里的段,可以知道程序需要的页在文件中的位置，称之为VMA<br />
+</p>
+<ul class="org-ul">
+<li>CPU指令寄存器设为可执行文件的entry point，运行<br /></li>
+</ul>
+</div>
+
+<div id="outline-container-org1da1e70" class="outline-3">
+<h3 id="org1da1e70"><span class="section-number-3">6.1</span> 进程虚存空间分布</h3>
+<div class="outline-text-3" id="text-6-1">
+<p>
+操作系统装载时只关心页的权限，所以不同段同一个权限可在同一个段，即由Section统一成Segment，操作系统以Segment为单位进行装载<br />
+</p>
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="org-left">基于Section</td>
+<td class="org-left">链接视图</td>
+</tr>
+
+<tr>
+<td class="org-left">基于Segment</td>
+<td class="org-left">装载视图</td>
+</tr>
+</tbody>
+</table>
+
+<div class="org-src-container">
+<pre class="src src-c"><span style="color: #75715E;">/* </span><span style="color: #E6DB74;">gcc -m32 1.c -Wno-implicit-function-declaration </span><span style="color: #75715E;">*/</span>
+<span style="color: #F92672;">#include</span> <span style="color: #AE81FF;">&lt;</span><span style="color: #E6DB74;">stdio.h</span><span style="color: #AE81FF;">&gt;</span>
+<span style="color: #66D9EF;">int</span> <span style="color: #A6E22E; font-size: 130%;">main</span><span style="color: #AE81FF;">(</span><span style="color: #66D9EF;">int</span> <span style="color: #FD971F;">argc</span>, <span style="color: #66D9EF;">char</span> *<span style="color: #FD971F;">argv</span><span style="color: #66D9EF;">[]</span><span style="color: #AE81FF;">)</span>
+<span style="color: #AE81FF;">{</span>
+    <span style="color: #A6E22E; font-weight: bold;">while</span> <span style="color: #66D9EF;">(</span>1<span style="color: #66D9EF;">)</span> <span style="color: #66D9EF;">{</span>
+        <span style="color: #A6E22E; font-weight: bold;">sleep</span><span style="color: #A6E22E;">(</span>1000<span style="color: #A6E22E;">)</span>;
+    <span style="color: #66D9EF;">}</span>
+    <span style="color: #F92672;">return</span> 0;
+<span style="color: #AE81FF;">}</span>
+</pre>
+</div>
+
+<ul class="org-ul">
+<li>LOAD类型会被映射<br /></li>
+<li>一般起码有两个段,一个是可读可执行，一个是可读可写<br /></li>
+<li>memse比filesz大，是因为bss段<br /></li>
+<li>kernel load的实际mapping可能和elf里的VMA不一一对应，但只要保证权限和所有需要装载的地址都对就可以<br /></li>
+<li>ELF里的程序头表结构<br /></li>
+</ul>
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">Name</th>
+<th scope="col" class="org-left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left">p_type</td>
+<td class="org-left">类型, LOAD为1</td>
+</tr>
+
+<tr>
+<td class="org-left">p_offset</td>
+<td class="org-left">文件偏移</td>
+</tr>
+
+<tr>
+<td class="org-left">p_vaddr</td>
+<td class="org-left">Segment虚拟地址</td>
+</tr>
+
+<tr>
+<td class="org-left">p_paddr</td>
+<td class="org-left">一般和vaddr一致</td>
+</tr>
+
+<tr>
+<td class="org-left">p_filesz</td>
+<td class="org-left">文件占用长度</td>
+</tr>
+
+<tr>
+<td class="org-left">p_memse</td>
+<td class="org-left">虚拟地址空间长度，不装载为0</td>
+</tr>
+
+<tr>
+<td class="org-left">p_flags</td>
+<td class="org-left">权限</td>
+</tr>
+
+<tr>
+<td class="org-left">p_align</td>
+<td class="org-left">对齐</td>
+</tr>
+</tbody>
+</table>
+
+<div class="org-src-container">
+<pre class="src src-bash">readelf -h a.out
+ELF Header:
+  Magic:   7f 45 4c 46 01 01 01 00 00 00 00 00 00 00 00 00
+  Class:                             ELF32
+  Data:                              2<span style="color: #E6DB74;">'s complement, little endian</span>
+<span style="color: #E6DB74;">  Version:                           1 (current)</span>
+<span style="color: #E6DB74;">  OS/ABI:                            UNIX - System V</span>
+<span style="color: #E6DB74;">  ABI Version:                       0</span>
+<span style="color: #E6DB74;">  Type:                              EXEC (Executable file)</span>
+<span style="color: #E6DB74;">  Machine:                           Intel 80386</span>
+<span style="color: #E6DB74;">  Version:                           0x1</span>
+<span style="color: #E6DB74;">  Entry point address:               0x8048370</span>
+<span style="color: #E6DB74;">  Start of program headers:          52 (bytes into file)</span>
+<span style="color: #E6DB74;">  Start of section headers:          13692 (bytes into file)</span>
+<span style="color: #E6DB74;">  Flags:                             0x0</span>
+<span style="color: #E6DB74;">  Size of this header:               52 (bytes)</span>
+<span style="color: #E6DB74;">  Size of program headers:           32 (bytes)</span>
+<span style="color: #E6DB74;">  Number of program headers:         9</span>
+<span style="color: #E6DB74;">  Size of section headers:           40 (bytes)</span>
+<span style="color: #E6DB74;">  Number of section headers:         30</span>
+<span style="color: #E6DB74;">  Section header string table index: 29</span>
+
+<span style="color: #E6DB74;">readelf -S a.out</span>
+<span style="color: #E6DB74;">There are 30 section headers, starting at offset 0x357c:</span>
+
+<span style="color: #E6DB74;">Section Headers:</span>
+<span style="color: #E6DB74;">  [Nr] Name              Type            Addr     Off    Size   ES Flg Lk Inf Al</span>
+<span style="color: #E6DB74;">  [ 0]                   NULL            00000000 000000 000000 00      0   0  0</span>
+<span style="color: #E6DB74;">  [ 1] .interp           PROGBITS        08048154 000154 000013 00   A  0   0  1</span>
+<span style="color: #E6DB74;">  [ 2] .note.ABI-tag     NOTE            08048168 000168 000020 00   A  0   0  4</span>
+<span style="color: #E6DB74;">  [ 3] .note.gnu.build-i NOTE            08048188 000188 000024 00   A  0   0  4</span>
+<span style="color: #E6DB74;">  [ 4] .gnu.hash         GNU_HASH        080481ac 0001ac 000020 04   A  5   0  4</span>
+<span style="color: #E6DB74;">  [ 5] .dynsym           DYNSYM          080481cc 0001cc 000070 10   A  6   1  4</span>
+<span style="color: #E6DB74;">  [ 6] .dynstr           STRTAB          0804823c 00023c 000081 00   A  0   0  1</span>
+<span style="color: #E6DB74;">  [ 7] .gnu.version      VERSYM          080482be 0002be 00000e 02   A  5   0  2</span>
+<span style="color: #E6DB74;">  [ 8] .gnu.version_r    VERNEED         080482cc 0002cc 000020 00   A  6   1  4</span>
+<span style="color: #E6DB74;">  [ 9] .rel.dyn          REL             080482ec 0002ec 000018 08   A  5   0  4</span>
+<span style="color: #E6DB74;">  [10] .rel.plt          REL             08048304 000304 000010 08  AI  5  22  4</span>
+<span style="color: #E6DB74;">  [11] .init             PROGBITS        08048314 000314 000024 00  AX  0   0  4</span>
+<span style="color: #E6DB74;">  [12] .plt              PROGBITS        08048340 000340 000030 04  AX  0   0 16</span>
+<span style="color: #E6DB74;">  [13] .text             PROGBITS        08048370 000370 0001c5 00  AX  0   0 16</span>
+<span style="color: #E6DB74;">  [14] .fini             PROGBITS        08048538 000538 000018 00  AX  0   0  4</span>
+<span style="color: #E6DB74;">  [15] .rodata           PROGBITS        08048550 000550 00000c 00   A  0   0  4</span>
+<span style="color: #E6DB74;">  [16] .eh_frame_hdr     PROGBITS        0804855c 00055c 00003c 00   A  0   0  4</span>
+<span style="color: #E6DB74;">  [17] .eh_frame         PROGBITS        08048598 000598 0000ec 00   A  0   0  4</span>
+<span style="color: #E6DB74;">  [18] .init_array       INIT_ARRAY      08049f04 000f04 000004 04  WA  0   0  4</span>
+<span style="color: #E6DB74;">  [19] .fini_array       FINI_ARRAY      08049f08 000f08 000004 04  WA  0   0  4</span>
+<span style="color: #E6DB74;">  [20] .dynamic          DYNAMIC         08049f0c 000f0c 0000e8 08  WA  6   0  4</span>
+<span style="color: #E6DB74;">  [21] .got              PROGBITS        08049ff4 000ff4 00000c 04  WA  0   0  4</span>
+<span style="color: #E6DB74;">  [22] .got.plt          PROGBITS        0804a000 001000 000014 04  WA  0   0  4</span>
+<span style="color: #E6DB74;">  [23] .data             PROGBITS        0804a014 001014 000004 00  WA  0   0  1</span>
+<span style="color: #E6DB74;">  [24] .bss              NOBITS          0804a018 001018 000004 00  WA  0   0  1</span>
+<span style="color: #E6DB74;">  [25] .comment          PROGBITS        00000000 001018 00002c 01  MS  0   0  1</span>
+<span style="color: #E6DB74;">  [26] .gnu.build.attrib NOTE            0804a01c 001044 00172c 00      0   0  4</span>
+<span style="color: #E6DB74;">  [27] .symtab           SYMTAB          00000000 002770 000690 10     28  82  4</span>
+<span style="color: #E6DB74;">  [28] .strtab           STRTAB          00000000 002e00 000665 00      0   0  1</span>
+<span style="color: #E6DB74;">  [29] .shstrtab         STRTAB          00000000 003465 000117 00      0   0  1</span>
+<span style="color: #E6DB74;">Key to Flags:</span>
+<span style="color: #E6DB74;">  W (write), A (alloc), X (execute), M (merge), S (strings), I (info),</span>
+<span style="color: #E6DB74;">  L (link order), O (extra OS processing required), G (group), T (TLS),</span>
+<span style="color: #E6DB74;">  C (compressed), x (unknown), o (OS specific), E (exclude),</span>
+<span style="color: #E6DB74;">  p (processor specific)</span>
+
+<span style="color: #E6DB74;">readelf -l a.out</span>
+
+<span style="color: #E6DB74;">Elf file type is EXEC (Executable file)</span>
+<span style="color: #E6DB74;">Entry point 0x8048370</span>
+<span style="color: #E6DB74;">There are 9 program headers, starting at offset 52</span>
+
+<span style="color: #E6DB74;">Program Headers:</span>
+<span style="color: #E6DB74;">  Type           Offset   VirtAddr   PhysAddr   FileSiz MemSiz  Flg Align</span>
+<span style="color: #E6DB74;">  PHDR           0x000034 0x08048034 0x08048034 0x00120 0x00120 R   0x4</span>
+<span style="color: #E6DB74;">  INTERP         0x000154 0x08048154 0x08048154 0x00013 0x00013 R   0x1</span>
+<span style="color: #E6DB74;">      [Requesting program interpreter: /lib/ld-linux.so.2]</span>
+<span style="color: #E6DB74;">  LOAD           0x000000 0x08048000 0x08048000 0x00684 0x00684 R E 0x1000</span>
+<span style="color: #E6DB74;">  LOAD           0x000f04 0x08049f04 0x08049f04 0x00114 0x00118 RW  0x1000</span>
+<span style="color: #E6DB74;">  DYNAMIC        0x000f0c 0x08049f0c 0x08049f0c 0x000e8 0x000e8 RW  0x4</span>
+<span style="color: #E6DB74;">  NOTE           0x000168 0x08048168 0x08048168 0x00044 0x00044 R   0x4</span>
+<span style="color: #E6DB74;">  GNU_EH_FRAME   0x00055c 0x0804855c 0x0804855c 0x0003c 0x0003c R   0x4</span>
+<span style="color: #E6DB74;">  GNU_STACK      0x000000 0x00000000 0x00000000 0x00000 0x00000 RW  0x10</span>
+<span style="color: #E6DB74;">  GNU_RELRO      0x000f04 0x08049f04 0x08049f04 0x000fc 0x000fc R   0x1</span>
+
+<span style="color: #E6DB74;"> Section to Segment mapping:</span>
+<span style="color: #E6DB74;">  Segment Sections...</span>
+<span style="color: #E6DB74;">   00     </span>
+<span style="color: #E6DB74;">   01     .interp </span>
+<span style="color: #E6DB74;">   02     .interp .note.ABI-tag .note.gnu.build-id .gnu.hash .dynsym .dynstr .gnu.version .gnu.version_r .rel.dyn .rel.plt .init .plt .text .fini .rodata .eh_frame_hdr .eh_frame </span>
+<span style="color: #E6DB74;">   03     .init_array .fini_array .dynamic .got .got.plt .data .bss </span>
+<span style="color: #E6DB74;">   04     .dynamic </span>
+<span style="color: #E6DB74;">   05     .note.ABI-tag .note.gnu.build-id </span>
+<span style="color: #E6DB74;">   06     .eh_frame_hdr </span>
+<span style="color: #E6DB74;">   07     </span>
+<span style="color: #E6DB74;">   08     .init_array .fini_array .dynamic .got</span>
+
+<span style="color: #E6DB74;">./a.out &amp;</span>
+<span style="color: #E6DB74;">[1] 22024</span>
+<span style="color: #E6DB74;">cat /proc/22024/map</span>
+<span style="color: #E6DB74;">map_files/ maps       </span>
+<span style="color: #E6DB74;">[xuali2@sha-isbu-ed15n xuali2]$cat /proc/22024/maps</span>
+<span style="color: #E6DB74;">08048000-08049000 r-xp 00000000 00:41 94267115                           /auto/isbu_crdc_sw1/offlinediag/users/xuali2/a.out</span>
+<span style="color: #E6DB74;">08049000-0804a000 r--p 00000000 00:41 94267115                           /auto/isbu_crdc_sw1/offlinediag/users/xuali2/a.out</span>
+<span style="color: #E6DB74;">0804a000-0804b000 rw-p 00001000 00:41 94267115                           /auto/isbu_crdc_sw1/offlinediag/users/xuali2/a.out</span>
+<span style="color: #E6DB74;">f7d75000-f7f16000 r-xp 00000000 fd:00 8820257                            /usr/lib/libc-2.28.so</span>
+<span style="color: #E6DB74;">f7f16000-f7f17000 ---p 001a1000 fd:00 8820257                            /usr/lib/libc-2.28.so</span>
+<span style="color: #E6DB74;">f7f17000-f7f19000 r--p 001a1000 fd:00 8820257                            /usr/lib/libc-2.28.so</span>
+<span style="color: #E6DB74;">f7f19000-f7f1a000 rw-p 001a3000 fd:00 8820257                            /usr/lib/libc-2.28.so</span>
+<span style="color: #E6DB74;">f7f1a000-f7f1f000 rw-p 00000000 00:00 0 </span>
+<span style="color: #E6DB74;">f7f39000-f7f3c000 r--p 00000000 00:00 0                                  [vvar]</span>
+<span style="color: #E6DB74;">f7f3c000-f7f3e000 r-xp 00000000 00:00 0                                  [vdso]</span>
+<span style="color: #E6DB74;">f7f3e000-f7f66000 r-xp 00000000 fd:00 8820250                            /usr/lib/ld-2.28.so</span>
+<span style="color: #E6DB74;">f7f66000-f7f67000 r--p 00027000 fd:00 8820250                            /usr/lib/ld-2.28.so</span>
+<span style="color: #E6DB74;">f7f67000-f7f68000 rw-p 00028000 fd:00 8820250                             /usr/lib/ld-2.28.so</span>
+<span style="color: #E6DB74;">ffd33000-ffd54000 rw-p 00000000 00:00 0                                  [stack]</span>
+</pre>
+</div>
+
+<p>
+<b>可将同一个物理页面映射多次，每次权限不一致，这样防止大量的内部碎片</b><br />
+例子:<br />
+</p>
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-right" />
+
+<col  class="org-right" />
+
+<col  class="org-right" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">Name</th>
+<th scope="col" class="org-left">Size</th>
+<th scope="col" class="org-right">Physical Addr</th>
+<th scope="col" class="org-right">File Offset</th>
+<th scope="col" class="org-right">Virtual addr offset</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left">Segment0</td>
+<td class="org-left">2K</td>
+<td class="org-right">0x0000</td>
+<td class="org-right">0</td>
+<td class="org-right">0</td>
+</tr>
+
+<tr>
+<td class="org-left">Segment1</td>
+<td class="org-left">2K</td>
+<td class="org-right">0x1000</td>
+<td class="org-right">0x800</td>
+<td class="org-right">0</td>
+</tr>
+</tbody>
+</table>
+<p>
+变为<br />
+</p>
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-right" />
+
+<col  class="org-right" />
+
+<col  class="org-right" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">Name</th>
+<th scope="col" class="org-left">Size</th>
+<th scope="col" class="org-right">Physical Addr</th>
+<th scope="col" class="org-right">File Offset</th>
+<th scope="col" class="org-right">Virtual addr offset</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left">Segment0</td>
+<td class="org-left">2K</td>
+<td class="org-right">0x0000</td>
+<td class="org-right">0</td>
+<td class="org-right">0</td>
+</tr>
+
+<tr>
+<td class="org-left">Segment1</td>
+<td class="org-left">2K</td>
+<td class="org-right">0x0000</td>
+<td class="org-right">0x800</td>
+<td class="org-right">0x800</td>
+</tr>
+</tbody>
+</table>
+<p>
+这样，节约了一个页<br />
+</p>
+
+<p>
+<b>p_vaddr % align == p_offset % align</b>, 这样可能尽可能的在相邻segment间共享一个物理页<br />
+</p>
+
+<p>
+<b>对于多次映射大段物理内存，不能一个用4K分页，一个以16K分页，这种会报错</b><br />
+</p>
+
+<p>
+内核加载ELF的过程load_elf_binary()<br />
+</p>
+<ul class="org-ul">
+<li>检测ELF文件有效性<br /></li>
+<li>寻找".interp"动态链接段，设置动态链接器的路径<br /></li>
+<li>根据ELF头，建立映射代码、数据、只读的数据结构<br /></li>
+<li>初始化ELF进程环境<br /></li>
+<li>将系统调用的返回地址修改成ELF可执行文件入口点，这样回到用户态时新程序开始执行<br /></li>
+</ul>
+<p>
+动态链接的ELF入口是动态链接器<br />
+静态链接的ELF入口是文件头里的entry<br />
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org2d03b84" class="outline-2">
+<h2 id="org2d03b84"><span class="section-number-2">7</span> 第七章 动态链接</h2>
+<div class="outline-text-2" id="text-7">
+<p>
+区别于静态链接，将链接这个过程推迟到装载时<br />
+</p>
+
+<p>
+foobar为so中的函数，则编译时会将符号引用标记为一个动态链接的符号，不进行地址重定位，改为装载时进行<br />
+</p>
+<div class="org-src-container">
+<pre class="src src-c">
+<span style="color: #75715E;">//</span><span style="color: #E6DB74;">lib.h</span>
+<span style="color: #F92672;">#if</span><span style="color: #F92672; font-weight: bold;">n</span><span style="color: #F92672;">def</span> LIB_H
+<span style="color: #F92672;">#define</span> <span style="color: #FD971F;">LIB_H</span>
+
+<span style="color: #66D9EF;">void</span> <span style="color: #A6E22E; font-size: 130%;">foobar</span><span style="color: #AE81FF;">(</span><span style="color: #66D9EF;">int</span> <span style="color: #FD971F;">i</span><span style="color: #AE81FF;">)</span>;
+
+<span style="color: #F92672;">#endif</span> <span style="color: #75715E;">/* </span><span style="color: #E6DB74;">LIB_H </span><span style="color: #75715E;">*/</span>
+
+<span style="color: #75715E;">//</span><span style="color: #E6DB74;">lib.c</span>
+<span style="color: #75715E;">//</span><span style="color: #E6DB74;">gcc -fPIC -shared -o lib.so -m32 lib.c</span>
+<span style="color: #F92672;">#include</span> <span style="color: #AE81FF;">&lt;</span><span style="color: #E6DB74;">stdio.h</span><span style="color: #AE81FF;">&gt;</span>
+
+<span style="color: #66D9EF;">void</span> <span style="color: #A6E22E; font-size: 130%;">foobar</span><span style="color: #AE81FF;">(</span><span style="color: #66D9EF;">int</span> <span style="color: #FD971F;">i</span><span style="color: #AE81FF;">)</span>
+<span style="color: #AE81FF;">{</span>
+    <span style="color: #A6E22E; font-weight: bold;">printf</span><span style="color: #66D9EF;">(</span><span style="color: #E6DB74;">"dump from lib.so %d\n"</span>, i<span style="color: #66D9EF;">)</span>;
+<span style="color: #AE81FF;">}</span>
+
+<span style="color: #75715E;">//</span><span style="color: #E6DB74;">p1.c</span>
+<span style="color: #75715E;">//</span><span style="color: #E6DB74;">gcc -o p1 p1.c ./lib.so -m32</span>
+<span style="color: #F92672;">#include</span> <span style="color: #E6DB74;">"lib.h"</span>
+
+<span style="color: #66D9EF;">int</span> <span style="color: #A6E22E; font-size: 130%;">main</span><span style="color: #AE81FF;">(</span><span style="color: #66D9EF;">int</span> <span style="color: #FD971F;">argc</span>, <span style="color: #66D9EF;">char</span> *<span style="color: #FD971F;">argv</span><span style="color: #66D9EF;">[]</span><span style="color: #AE81FF;">)</span>
+<span style="color: #AE81FF;">{</span>
+    <span style="color: #A6E22E; font-weight: bold;">foobar</span><span style="color: #66D9EF;">(</span>1<span style="color: #66D9EF;">)</span>;
+    <span style="color: #F92672;">return</span> 0;
+<span style="color: #AE81FF;">}</span>
+
+<span style="color: #75715E;">//</span><span style="color: #E6DB74;">p2.c</span>
+<span style="color: #75715E;">//</span><span style="color: #E6DB74;">gcc -o p2 p2.c ./lib.so -m32</span>
+<span style="color: #F92672;">#include</span> <span style="color: #E6DB74;">"lib.h"</span>
+
+<span style="color: #66D9EF;">int</span> <span style="color: #A6E22E; font-size: 130%;">main</span><span style="color: #AE81FF;">(</span><span style="color: #66D9EF;">int</span> <span style="color: #FD971F;">argc</span>, <span style="color: #66D9EF;">char</span> *<span style="color: #FD971F;">argv</span><span style="color: #66D9EF;">[]</span><span style="color: #AE81FF;">)</span>
+<span style="color: #AE81FF;">{</span>
+    <span style="color: #A6E22E; font-weight: bold;">foobar</span><span style="color: #66D9EF;">(</span>2<span style="color: #66D9EF;">)</span>;
+    <span style="color: #F92672;">return</span> 0;
+<span style="color: #AE81FF;">}</span>
+</pre>
+</div>
+
+<p>
+so的最终装载地址在编译时不确定<br />
+</p>
+<div class="org-src-container">
+<pre class="src src-bash">readelf -l lib.so 
+
+Elf file type is DYN (Shared object file)
+Entry point 0x390
+There are 7 program headers, starting at offset 52
+
+Program Headers:
+  Type           Offset   VirtAddr   PhysAddr   FileSiz MemSiz  Flg Align
+  LOAD           0x000000 0x00000000 0x00000000 0x0058c 0x0058c R E 0x1000
+  LOAD           0x000f04 0x00001f04 0x00001f04 0x00110 0x00114 RW  0x1000
+  DYNAMIC        0x000f10 0x00001f10 0x00001f10 0x000e0 0x000e0 RW  0x4
+  NOTE           0x000114 0x00000114 0x00000114 0x00024 0x00024 R   0x4
+  GNU_EH_FRAME   0x0004f0 0x000004f0 0x000004f0 0x00024 0x00024 R   0x4
+  GNU_STACK      0x000000 0x00000000 0x00000000 0x00000 0x00000 RW  0x10
+  GNU_RELRO      0x000f04 0x00001f04 0x00001f04 0x000fc 0x000fc R   0x1
+
+ Section to Segment mapping:
+  Segment Sections...
+   00     .note.gnu.build-id .gnu.hash .dynsym .dynstr .gnu.version .gnu.version_r .rel.dyn .rel.plt .init .plt .text .fini .rodata .eh_frame_hdr .eh_frame 
+   01     .init_array .fini_array .data.rel.ro .dynamic .got .got.plt .bss 
+   02     .dynamic 
+   03     .note.gnu.build-id 
+   04     .eh_frame_hdr 
+   05     
+   06     .init_array .fini_array .data.rel.ro .dynamic .got
+</pre>
+</div>
+
+<p>
+<b>so在编译时不能假设自已在进程虚拟空间中的位置</b>, 早期有静态共享库，即地址由操作系统分配(固定装载地址)，但很难保证地址不冲突<br />
+</p>
+
+<p>
+<b>so代码段是多个进程共享的，但是数据段是多个副本</b><br />
+</p>
+
+<p>
+装载时重定位(-shared 而不-fPIC)说的是在装载时确定符号的绝对地址，并遍历所有对此符号引用并重定位，问题是代码段如果共享，不能保证所有进程用同一个绝对地址，这样无法做到代码段共享，所以将对绝对地址的一次引用变成二次引用，将可变的绝对地址放在数据段中，即为延迟绑定<br />
+</p>
+</div>
+
+<div id="outline-container-org26c82c1" class="outline-3">
+<h3 id="org26c82c1"><span class="section-number-3">7.1</span> 地址无关代码(fPIC)</h3>
+<div class="outline-text-3" id="text-7-1">
+<div class="org-src-container">
+<pre class="src src-c"><span style="color: #75715E;">/* </span><span style="color: #E6DB74;">gcc -fPIC -shared -o lib.so -m32 lib.c -Wno-implicit-function-declaration </span><span style="color: #75715E;">*/</span>
+<span style="color: #F92672;">static</span> <span style="color: #66D9EF;">int</span> <span style="color: #FD971F;">a</span>;
+<span style="color: #F92672;">extern</span> <span style="color: #66D9EF;">int</span> <span style="color: #FD971F;">b</span>;
+<span style="color: #F92672;">extern</span> <span style="color: #66D9EF;">void</span> <span style="color: #A6E22E; font-size: 130%;">ext</span><span style="color: #AE81FF;">()</span>;
+
+<span style="color: #F92672;">static</span> <span style="color: #66D9EF;">void</span> <span style="color: #A6E22E; font-size: 130%;">bar</span><span style="color: #AE81FF;">()</span> <span style="color: #75715E;">//</span><span style="color: #E6DB74;">&#20070;&#37324;&#38754;&#27809;&#21152;static&#65292;&#20889;&#30340;&#26377;&#38382;&#39064;</span>
+<span style="color: #AE81FF;">{</span>
+    a = 1; <span style="color: #75715E;">//</span><span style="color: #E6DB74;">&#27169;&#22359;&#20869;&#25968;&#25454;&#35775;&#38382;</span>
+    b = 2; <span style="color: #75715E;">//</span><span style="color: #E6DB74;">&#27169;&#22359;&#38388;&#25968;&#25454;&#35775;&#38382;</span>
+<span style="color: #AE81FF;">}</span>
+
+<span style="color: #66D9EF;">void</span> <span style="color: #A6E22E; font-size: 130%;">foo</span><span style="color: #AE81FF;">()</span>
+<span style="color: #AE81FF;">{</span>
+    <span style="color: #A6E22E; font-weight: bold;">bar</span><span style="color: #66D9EF;">()</span>; <span style="color: #75715E;">//</span><span style="color: #E6DB74;">&#27169;&#22359;&#20869;&#35843;&#29992;</span>
+    <span style="color: #A6E22E; font-weight: bold;">ext</span><span style="color: #66D9EF;">()</span>; <span style="color: #75715E;">//</span><span style="color: #E6DB74;">&#27169;&#22359;&#38388;&#35843;&#29992;</span>
+<span style="color: #AE81FF;">}</span>
+</pre>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-asm">
+<span style="color: #A6E22E; font-size: 130%;">0000047d</span> &lt;bar&gt;:
+ <span style="color: #F92672;">47d</span>:   55                      push   <span style="color: #FD971F;">%ebp</span>
+ <span style="color: #F92672;">47e</span>:   89 e5                   mov    <span style="color: #FD971F;">%esp</span>,<span style="color: #FD971F;">%ebp</span>
+ <span style="color: #F92672;">480</span>:   e8 41 00 00 00          call   4c6 &lt;__x86.get_pc_thunk.ax&gt;
+ <span style="color: #F92672;">485</span>:   05 7b 1b 00 00          add    $0x1b7b,<span style="color: #FD971F;">%eax</span>
+ <span style="color: #F92672;">48a</span>:   c7 80 18 00 00 00 01    movl   $0x1,0x18(<span style="color: #FD971F;">%eax</span>) <span style="color: #75715E;">;;</span><span style="color: #E6DB74;">&#27169;&#22359;&#20869;&#25968;&#25454;&#35775;&#38382;</span>
+ <span style="color: #F92672;">491</span>:   00 00 00 
+ <span style="color: #F92672;">494</span>:   8b 80 f0 ff ff ff       mov    -0x10(<span style="color: #FD971F;">%eax</span>),<span style="color: #FD971F;">%eax</span>
+ <span style="color: #F92672;">49a</span>:   c7 00 02 00 00 00       movl   $0x2,(<span style="color: #FD971F;">%eax</span>)  <span style="color: #75715E;">;;</span><span style="color: #E6DB74;">&#27169;&#22359;&#38388;&#25968;&#25454;&#35775;&#38382;</span>
+ <span style="color: #F92672;">4a0</span>:   90                      nop
+ <span style="color: #F92672;">4a1</span>:   5d                      pop    <span style="color: #FD971F;">%ebp</span>
+ <span style="color: #F92672;">4a2</span>:   c3                      ret    
+
+<span style="color: #A6E22E; font-size: 130%;">000004a3</span> &lt;foo&gt;:
+ <span style="color: #F92672;">4a3</span>:   55                      push   <span style="color: #FD971F;">%ebp</span>
+ <span style="color: #F92672;">4a4</span>:   89 e5                   mov    <span style="color: #FD971F;">%esp</span>,<span style="color: #FD971F;">%ebp</span>
+ <span style="color: #F92672;">4a6</span>:   53                      push   <span style="color: #FD971F;">%ebx</span>
+ <span style="color: #F92672;">4a7</span>:   83 ec 04                sub    $0x4,<span style="color: #FD971F;">%esp</span>
+ <span style="color: #F92672;">4aa</span>:   e8 d1 fe ff ff          call   380 &lt;__x86.get_pc_thunk.bx&gt;
+ <span style="color: #F92672;">4af</span>:   81 c3 51 1b 00 00       add    $0x1b51,<span style="color: #FD971F;">%ebx</span>
+ <span style="color: #F92672;">4b5</span>:   e8 c3 ff ff ff          call   47d &lt;bar&gt; <span style="color: #75715E;">;;</span><span style="color: #E6DB74;">&#27169;&#22359;&#20869;&#35843;&#29992;</span>
+ <span style="color: #F92672;">4ba</span>:   e8 b1 fe ff ff          call   370 <a href="mailto:ext%40plt">&lt;ext@plt&gt;</a> <span style="color: #75715E;">;;</span><span style="color: #E6DB74;">&#27169;&#22359;&#38388;&#35843;&#29992;</span>
+ <span style="color: #F92672;">4bf</span>:   90                      nop
+ <span style="color: #F92672;">4c0</span>:   83 c4 04                add    $0x4,<span style="color: #FD971F;">%esp</span>
+ <span style="color: #F92672;">4c3</span>:   5b                      pop    <span style="color: #FD971F;">%ebx</span>
+ <span style="color: #F92672;">4c4</span>:   5d                      pop    <span style="color: #FD971F;">%ebp</span>
+ <span style="color: #F92672;">4c5</span>:   c3                      ret
+</pre>
+</div>
+
+<ul class="org-ul">
+<li>模块内调用或跳转<br /></li>
+</ul>
+<p>
+call   47d &lt;bar&gt; 相对寻址，不用做重定位<br />
+</p>
+
+<ul class="org-ul">
+<li>模块内数据访问<br /></li>
+</ul>
+<p>
+<b>__x86.get_pc_thunk.ax</b> 这个函数将PC值存入了eax，则a的地址是0x485 + 0x1b7b + 0x18 = 0x2018，用这种相对寻址也不用重定位<br />
+</p>
+<div class="org-src-container">
+<pre class="src src-bash">readelf -s lib.so  |grep a
+...
+    33: 00002018     4 OBJECT  LOCAL  DEFAULT   21 a
+...
+</pre>
+</div>
+
+<ul class="org-ul">
+<li>模块间数据访问<br /></li>
+</ul>
+<p>
+在数据段中建立全局偏移表(Global Offset Table),即.got<br />
+如上图, 0x485 + 0x1b7b - 0x10 = 0x1ff0，即为.got段b地址的存储<br />
+</p>
+<div class="org-src-container">
+<pre class="src src-bash">readelf -S lib.so
+  [19] .got              PROGBITS        00001fec 000fec 000014 04  WA  0   0  4
+
+readelf -r lib.so
+...
+00001ff0  00000206 R_386_GLOB_DAT    00000000   b
+...
+</pre>
+</div>
+
+<ul class="org-ul">
+<li>模块间函数调用<br /></li>
+</ul>
+<p>
+和模块间数据访问一样，可用call .got里的函数地址，但上面用了延时绑定，下面详述<br />
+</p>
+
+<p>
+readelf -d lib.so 查看.dynamic段里的信息，如果有TEXTREL段则不是PIC<br />
+</p>
+
+<p>
+全局变量(没有static修饰)当作模块间访问，即通过.got间接索引<br />
+</p>
+
+<ul class="org-ul">
+<li>其他情况<br /></li>
+</ul>
+<div class="org-src-container">
+<pre class="src src-c"><span style="color: #F92672;">static</span> <span style="color: #66D9EF;">int</span> <span style="color: #FD971F;">a</span>;
+<span style="color: #F92672;">static</span> <span style="color: #66D9EF;">int</span> *<span style="color: #FD971F;">p</span> = &amp;a;
+</pre>
+</div>
+<p>
+这样的话p的值为变成装载时重定位，如图0x2018偏移生成一个重定位项<br />
+</p>
+<div class="org-src-container">
+<pre class="src src-bash">readelf -r lib.so
+
+Relocation section <span style="color: #E6DB74;">'.rel.dyn'</span> at offset 0x2f8 contains 9 entries:
+ Offset     Info    Type            Sym.Value  Sym. Name
+00001f00  00000008 R_386_RELATIVE   
+00001f04  00000008 R_386_RELATIVE   
+00001f08  00000008 R_386_RELATIVE   
+00002018  00000008 R_386_RELATIVE   
+
+[xuali2@sha-isbu-ed15n xuali2]$<span style="color: #FD971F;">readelf</span> -s lib.so |grep p
+   Num:    Value  Size Type    Bind   Vis      Ndx Name
+   Num:    Value  Size Type    Bind   Vis      Ndx Name
+    29: 0000201c     1 OBJECT  LOCAL  DEFAULT   22 completed.7199
+    35: 00002018     4 OBJECT  LOCAL  DEFAULT   21 p
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org8a72a29" class="outline-3">
+<h3 id="org8a72a29"><span class="section-number-3">7.2</span> 延迟绑定(Procedure Linkage Table)</h3>
+<div class="outline-text-3" id="text-7-2">
+<p>
+lazy binding 是指 <b>函数第一次被用到时才进行绑定</b><br />
+原因是为了加块程序启动速度，很多函数并不会用到，全部重定位没有必要<br />
+<b>当年程序调优第一步就是全部静态链接</b><br />
+</p>
+
+<div class="org-src-container">
+<pre class="src src-asm"><span style="color: #A6E22E; font-size: 130%;">objdump</span> -d lib.so
+<span style="color: #A6E22E; font-size: 130%;">Disassembly</span> <span style="color: #F92672;">of</span> section .plt:
+
+<span style="color: #A6E22E; font-size: 130%;">00000350</span> &lt;.plt&gt;:
+ <span style="color: #F92672;">350</span>:   ff b3 04 00 00 00       pushl  0x4(<span style="color: #FD971F;">%ebx</span>)
+ <span style="color: #F92672;">356</span>:   ff a3 08 00 00 00       jmp    *0x8(<span style="color: #FD971F;">%ebx</span>)
+ <span style="color: #F92672;">35c</span>:   00 00                   add    <span style="color: #FD971F;">%al</span>,(<span style="color: #FD971F;">%eax</span>)
+    ...
+
+<span style="color: #A6E22E; font-size: 130%;">00000370</span> <a href="mailto:ext%40plt">&lt;ext@plt&gt;</a>:
+ <span style="color: #F92672;">370</span>:   ff a3 10 00 00 00       jmp    *0x10(<span style="color: #FD971F;">%ebx</span>)
+ <span style="color: #F92672;">376</span>:   68 08 00 00 00          push   $0x8
+ <span style="color: #F92672;">37b</span>:   e9 d0 ff ff ff          jmp    350 &lt;.plt&gt;
+
+<span style="color: #A6E22E; font-size: 130%;">000004a3</span> &lt;foo&gt;:
+ <span style="color: #F92672;">4a3</span>:   55                      push   <span style="color: #FD971F;">%ebp</span>
+ <span style="color: #F92672;">4a4</span>:   89 e5                   mov    <span style="color: #FD971F;">%esp</span>,<span style="color: #FD971F;">%ebp</span>
+ <span style="color: #F92672;">4a6</span>:   53                      push   <span style="color: #FD971F;">%ebx</span>
+ <span style="color: #F92672;">4a7</span>:   83 ec 04                sub    $0x4,<span style="color: #FD971F;">%esp</span>
+ <span style="color: #F92672;">4aa</span>:   e8 d1 fe ff ff          call   380 &lt;__x86.get_pc_thunk.bx&gt;
+ <span style="color: #F92672;">4af</span>:   81 c3 51 1b 00 00       add    $0x1b51,<span style="color: #FD971F;">%ebx</span>
+ <span style="color: #F92672;">4b5</span>:   e8 c3 ff ff ff          call   47d &lt;bar&gt;
+ <span style="color: #F92672;">4ba</span>:   e8 b1 fe ff ff          call   370 <a href="mailto:ext%40plt">&lt;ext@plt&gt;</a>
+</pre>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-bash">    46: 00002000     0 OBJECT  LOCAL  DEFAULT   20 _GLOBAL_OFFSET_TABLE_
+
+ [10] .plt              PROGBITS        00000350 000350 000030 04  AX  0   0 16
+
+ [20] .got.plt          PROGBITS        00002000 001000 000014 04  WA  0   0  4
+
+Contents of section .got.plt:
+ 2000 0c1f0000 00000000 00000000 66030000  ............f...
+ 2010 76030000                             v... 
+
+Relocation section <span style="color: #E6DB74;">'.rel.plt'</span> at offset 0x31c contains 2 entries:
+ Offset     Info    Type            Sym.Value  Sym. Name
+0000200c  00000307 R_386_JUMP_SLOT   00000000   __cxa_finalize@GLIBC_2.1.3
+00002010  00000507 R_386_JUMP_SLOT   00000000   ext
+
+  [18] .dynamic          DYNAMIC         00001f0c 000f0c 0000e0 08  WA  4   0  4
+</pre>
+</div>
+<p>
+如上:<br />
+</p>
+<ol class="org-ol">
+<li>ext@plt时ebx = 0x4af + 0x1b51 = 0x2000,为全局偏移表的首地址，在.got.plt中, *@plt的代码是.plt里<br /></li>
+<li>jmp    *0x10(%ebx), 默认值是0x376，即下一跳地址，绑定后其值为重定位的地址，注意这个是小端76030000即为0x376<br /></li>
+<li>push   $0x8, 为.rel.plt里的偏移，一个重定位项是8个字节<br /></li>
+<li>GLOBAL_OFFSET_TABLE表中第一项0x1f0c是.dymanic的地址,第二项0是本模块ID,第三项是_dl_runtime_resolve()的地址，用来解析bar的实际地址,其中第二项和第三项是运行时由动态链接器初始化<br /></li>
+<li>所以0x350开头的两行，第一个是push moduleID,第二个是调用_dl_runtime_resolve<br /></li>
+<li>如下为运行时状态<br /></li>
+</ol>
+<p>
+0xf7f564af + 0x1b51 = 0xf7f58000为_GLOBAL_OFFSET_TABLE_的首地址<br />
+第一项.dynamic不load到内存，所以不管<br />
+第二项0xf7f59000为moduleID<br />
+第三项0xf7f75d10为_dl_runtime_resolve的地址<br />
+第五项为ext的地址<br />
+</p>
+<div class="org-src-container">
+<pre class="src src-bash">(gdb) disassemble foo
+Dump of assembler code for <span style="color: #F92672;">function</span> <span style="color: #A6E22E; font-size: 130%;">foo</span>:
+   0xf7f564a3 &lt;+0&gt;: push   %ebp
+   0xf7f564a4 &lt;+1&gt;: mov    %esp,%ebp
+   0xf7f564a6 &lt;+3&gt;: push   %ebx
+   0xf7f564a7 &lt;+4&gt;: sub    $<span style="color: #FD971F;">0</span>x4,%esp
+   0xf7f564aa &lt;+7&gt;: call   0xf7f56380 &lt;__x86.get_pc_thunk.bx&gt;
+   0xf7f564af &lt;+12&gt;:    add    $<span style="color: #FD971F;">0</span>x1b51,%ebx
+   0xf7f564b5 &lt;+18&gt;:    call   0xf7f5647d &lt;bar&gt;
+   0xf7f564ba &lt;+23&gt;:    call   0xf7f56370 <a href="mailto:ext%40plt">&lt;ext@plt&gt;</a>
+   0xf7f564bf &lt;+28&gt;:    nop
+   0xf7f564c0 &lt;+29&gt;:    add    $<span style="color: #FD971F;">0</span>x4,%esp
+   0xf7f564c3 &lt;+32&gt;:    pop    %ebx
+   0xf7f564c4 &lt;+33&gt;:    pop    %ebp
+   0xf7f564c5 &lt;+34&gt;:    ret    
+End of assembler dump.
+(gdb) p/x ((unsigned int *)0xf7f58000)[0]
+$<span style="color: #FD971F;">12</span> = 0x1f0c
+(gdb) p/x ((unsigned int *)0xf7f58000)[1]
+$<span style="color: #FD971F;">13</span> = 0xf7f59000
+(gdb) p/x ((unsigned int *)0xf7f58000)[2]
+$<span style="color: #FD971F;">14</span> = 0xf7f75d10
+(gdb) p/x ((unsigned int *)0xf7f58000)[3]
+$<span style="color: #FD971F;">15</span> = 0xf7f56366
+
+(gdb) disassemble 0xf7f56370
+Dump of assembler code for <span style="color: #F92672;">function</span> <span style="color: #A6E22E; font-size: 130%;">ext</span>@plt:
+   0xf7f56370 &lt;+0&gt;: jmp    *0x10(%ebx)
+   0xf7f56376 &lt;+6&gt;: push   $<span style="color: #FD971F;">0</span>x8
+   0xf7f5637b &lt;+11&gt;:    jmp    0xf7f56350
+End of assembler dump.
+(gdb) disassemble 0xf7f75d10
+
+Dump of assembler code for <span style="color: #F92672;">function</span> <span style="color: #A6E22E; font-size: 130%;">_dl_runtime_resolve</span>:
+   0xf7f75d10 &lt;+0&gt;: repz nop %ebx
+   0xf7f75d14 &lt;+4&gt;: push   %eax
+   0xf7f75d15 &lt;+5&gt;: push   %ecx
+   0xf7f75d16 &lt;+6&gt;: push   %edx
+   0xf7f75d17 &lt;+7&gt;: mov    0x10(%esp),%edx
+   0xf7f75d1b &lt;+11&gt;:    mov    0xc(%esp),%eax
+   0xf7f75d1f &lt;+15&gt;:    call   0xf7f6fe90 &lt;_dl_fixup&gt;
+   0xf7f75d24 &lt;+20&gt;:    pop    %edx
+   0xf7f75d25 &lt;+21&gt;:    mov    (%esp),%ecx
+   0xf7f75d28 &lt;+24&gt;:    mov    %eax,(%esp)
+   0xf7f75d2b &lt;+27&gt;:    mov    0x4(%esp),%eax
+   0xf7f75d2f &lt;+31&gt;:    ret    $<span style="color: #FD971F;">0</span>xc
+End of assembler dump.
+
+(gdb) p/x ((unsigned int *)0xf7f58000)[4]
+$<span style="color: #FD971F;">16</span> = 0x804857d
+(gdb) disassemble 0x804857d
+Dump of assembler code for <span style="color: #F92672;">function</span> <span style="color: #A6E22E; font-size: 130%;">ext</span>:
+   0x0804857d &lt;+0&gt;: push   %ebp
+   0x0804857e &lt;+1&gt;: mov    %esp,%ebp
+   0x08048580 &lt;+3&gt;: mov    $<span style="color: #FD971F;">0</span>x0,%eax
+   0x08048585 &lt;+8&gt;: pop    %ebp
+   0x08048586 &lt;+9&gt;: ret    
+End of assembler dump.
+
+(gdb) x/64xb 0xf7f56350
+0xf7f56350: 0xff    0xb3    0x04    0x00    0x00    0x00    0xff    0xa3
+0xf7f56358: 0x08    0x00    0x00    0x00    0x00    0x00    0x00    0x00
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org4e3a628" class="outline-3">
+<h3 id="org4e3a628"><span class="section-number-3">7.3</span> 动态链接器</h3>
+<div class="outline-text-3" id="text-7-3">
+<p>
+.interp段存放动态链接器的路径<br />
+</p>
+<div class="org-src-container">
+<pre class="src src-bash">objdump -s a.out 
+
+a.out:     file format elf32-i386
+
+Contents of section .interp:
+ 8048154 2f6c6962 2f6c642d 6c696e75 782e736f  /lib/ld-linux.so
+ 8048164 2e3200                               .2. 
+
+readelf -l a.out  |grep interpreter
+      [Requesting program interpreter: /lib/ld-linux.so.2]
+</pre>
+</div>
+
+<p>
+.dynamic段存放动态链接基本信息<br />
+</p>
+<div class="org-src-container">
+<pre class="src src-bash">readelf -d a.out
+
+Dynamic section at offset 0xf04 contains 25 entries:
+  Tag        Type                         Name/Value
+ 0x00000001 (NEEDED)                     Shared library: [./lib.so]
+ 0x00000001 (NEEDED)                     Shared library: [libc.so.6]
+ 0x0000000c (INIT)                       0x80483d0
+ 0x0000000d (FINI)                       0x8048628
+ 0x00000019 (INIT_ARRAY)                 0x8049efc
+ 0x0000001b (INIT_ARRAYSZ)               4 (bytes)
+ 0x0000001a (FINI_ARRAY)                 0x8049f00
+ 0x0000001c (FINI_ARRAYSZ)               4 (bytes)
+ 0x6ffffef5 (GNU_HASH)                   0x80481ac
+ 0x00000005 (STRTAB)                     0x80482b8
+ 0x00000006 (SYMTAB)                     0x80481e8
+ 0x0000000a (STRSZ)                      172 (bytes)
+ 0x0000000b (SYMENT)                     16 (bytes)
+ 0x00000015 (DEBUG)                      0x0
+ 0x00000003 (PLTGOT)                     0x804a000
+ 0x00000002 (PLTRELSZ)                   24 (bytes)
+ 0x00000014 (PLTREL)                     REL
+ 0x00000017 (JMPREL)                     0x80483b8
+ 0x00000011 (REL)                        0x80483a0
+ 0x00000012 (RELSZ)                      24 (bytes)
+ 0x00000013 (RELENT)                     8 (bytes)
+ 0x6ffffffe (VERNEED)                    0x8048380
+ 0x6fffffff (VERNEEDNUM)                 1
+ 0x6ffffff0 (VERSYM)                     0x8048364
+ 0x00000000 (NULL)                       0x0
+</pre>
+</div>
+
+<p>
+ldd 查看依赖关系<br />
+</p>
+<div class="org-src-container">
+<pre class="src src-bash">ldd a.out
+    linux-gate.so.1 (0xf7f87000)
+    ./lib.so (0xf7f7f000)
+    libc.so.6 =&gt; /lib/libc.so.6 (0xf7dbd000)
+    /lib/ld-linux.so.2 (0xf7f89000)
+</pre>
+</div>
+
+<p>
+.dynsym - 动态链接相关的符号<br />
+.dynstr - 动态链接符号字符串表<br />
+</p>
+
+<div class="org-src-container">
+<pre class="src src-bash">readelf -sD lib.so 
+
+Symbol table of <span style="color: #AE81FF; font-weight: bold;">`.gnu.hash' for image:</span>
+<span style="color: #AE81FF; font-weight: bold;">  Num Buc:    Value  Size   Type   Bind Vis      Ndx Name</span>
+<span style="color: #AE81FF; font-weight: bold;">    7   0: 00002014     0 NOTYPE  GLOBAL DEFAULT  20 _edata</span>
+<span style="color: #AE81FF; font-weight: bold;">    8   0: 000004a3    35 FUNC    GLOBAL DEFAULT  11 foo</span>
+<span style="color: #AE81FF; font-weight: bold;">    9   0: 0000201c     0 NOTYPE  GLOBAL DEFAULT  21 _end</span>
+<span style="color: #AE81FF; font-weight: bold;">   10   1: 00002014     0 NOTYPE  GLOBAL DEFAULT  21 __bss_start</span>
+</pre>
+</div>
+
+<p>
+.rel.dyn - .got重定位表<br />
+.rel.plt - .got.plt重定位表<br />
+</p>
+
+<p>
+R_386_GLOB_DAT,R_386_JUMP_SLOT  - 直接填入符号地址<br />
+R_386_RELATIVE                  - 基址重置<br />
+</p>
+
+<div class="org-src-container">
+<pre class="src src-bash">readelf -r lib.so 
+
+Relocation section <span style="color: #E6DB74;">'.rel.dyn'</span> at offset 0x2dc contains 8 entries:
+ Offset     Info    Type            Sym.Value  Sym. Name
+00001f00  00000008 R_386_RELATIVE   
+00001f04  00000008 R_386_RELATIVE   
+00001f08  00000008 R_386_RELATIVE   
+00001fec  00000106 R_386_GLOB_DAT    00000000   _ITM_deregisterTMClone
+00001ff0  00000206 R_386_GLOB_DAT    00000000   b
+00001ff4  00000306 R_386_GLOB_DAT    00000000   __cxa_finalize@GLIBC_2.1.3
+00001ff8  00000406 R_386_GLOB_DAT    00000000   __gmon_start__
+00001ffc  00000606 R_386_GLOB_DAT    00000000   _ITM_registerTMCloneTa
+
+Relocation section <span style="color: #E6DB74;">'.rel.plt'</span> at offset 0x31c contains 2 entries:
+ Offset     Info    Type            Sym.Value  Sym. Name
+0000200c  00000307 R_386_JUMP_SLOT   00000000   __cxa_finalize@GLIBC_2.1.3
+00002010  00000507 R_386_JUMP_SLOT   00000000   ext
+
+  [19] .got              PROGBITS        00001fec 000fec 000014 04  WA  0   0  4
+  [20] .got.plt          PROGBITS        00002000 001000 000014 04  WA  0   0  4
+</pre>
+</div>
+
+<p>
+如果不用PIC编译，重定位表不在.got.plt，而在.text中(绝对地址寻址)<br />
+</p>
+
+<div class="org-src-container">
+<pre class="src src-bash">gcc -shared -o lib2.so -m32 lib.c -Wno-implicit-function-declaration
+readelf -r lib2.so
+
+Relocation section <span style="color: #E6DB74;">'.rel.dyn'</span> at offset 0x2dc contains 10 entries:
+ Offset     Info    Type            Sym.Value  Sym. Name
+00000482  00000008 R_386_RELATIVE   
+00001efc  00000008 R_386_RELATIVE   
+00001f00  00000008 R_386_RELATIVE   
+00001f04  00000008 R_386_RELATIVE   
+0000048c  00000201 R_386_32          00000000   b
+000004a3  00000502 R_386_PC32        00000000   ext
+00001ff0  00000106 R_386_GLOB_DAT    00000000   _ITM_deregisterTMClone
+00001ff4  00000306 R_386_GLOB_DAT    00000000   __cxa_finalize@GLIBC_2.1.3
+00001ff8  00000406 R_386_GLOB_DAT    00000000   __gmon_start__
+00001ffc  00000606 R_386_GLOB_DAT    00000000   _ITM_registerTMCloneTa
+
+Relocation section <span style="color: #E6DB74;">'.rel.plt'</span> at offset 0x32c contains 1 entry:
+ Offset     Info    Type            Sym.Value  Sym. Name
+0000200c  00000307 R_386_JUMP_SLOT   00000000   __cxa_finalize@GLIBC_2.1.3
+
+[11] .text             PROGBITS        00000380 000380 00012a 00  AX  0   0 16
+</pre>
+</div>
+
+<p>
+动态链接器的工作流程<br />
+</p>
+<ul class="org-ul">
+<li>自举<br /></li>
+</ul>
+<p>
+自举代码为了防止套娃，不能依赖别的so，不能使用全局和静态变量，不能使用函数调用<br />
+</p>
+<ul class="org-ul">
+<li>装载共享对象<br /></li>
+</ul>
+<p>
+全局符号介入(Global Symbol Interpose) - 多个so里有同名的全局符号<br />
+<b>第一个符号载入后，后面相同的符号被忽略</b><br />
+</p>
+<ul class="org-ul">
+<li>重定位和初始化<br /></li>
+</ul>
+<p>
+so里的.init和.finit由动态链接器执行<br />
+</p>
+
+<p>
+ld-linux.so.2也可单独执行<br />
+kernel并不关心是EXEC还是DYN<br />
+</p>
+<div class="org-src-container">
+<pre class="src src-bash">/lib/ld-linux.so.2
+Usage: ld.so [OPTION]... EXECUTABLE-FILE [ARGS-FOR-PROGRAM...]
+You have invoked <span style="color: #AE81FF; font-weight: bold;">`ld.so', the helper program for shared library executables.</span>
+<span style="color: #AE81FF; font-weight: bold;">This program usually lives in the file `</span>/lib/ld.so<span style="color: #E6DB74;">', and special directives</span>
+<span style="color: #E6DB74;">in executable files using ELF shared libraries tell the system'</span>s program
+loader to load the helper program from this file.  This helper program loads
+the shared libraries needed by the program executable, prepares the program
+to run, and runs it.  You may invoke this helper program directly from the
+<span style="color: #F92672;">command</span> line to load and run an ELF executable file; this is like executing
+that file itself, but always uses this helper program from the file you
+specified, instead of the helper program file specified<span style="color: #F92672;"> in</span> the executable
+file you run.  This is mostly of use for maintainers to test new versions
+of this helper program; chances are you did not intend to run this program.
+
+  --list                list all dependencies and how they are resolved
+  --verify              verify that given object really is a dynamically linked
+            object we can handle
+  --inhibit-cache       Do not use /etc/ld.so.cache
+  --library-path PATH   use given PATH instead of content of the environment
+            variable LD_LIBRARY_PATH
+  --inhibit-rpath LIST  ignore RUNPATH and RPATH information<span style="color: #F92672;"> in</span> object names
+            <span style="color: #F92672;">in</span> LIST
+  --audit LIST          use objects named<span style="color: #F92672;"> in</span> LIST as auditors
+</pre>
+</div>
+
+
+<p>
+动态装载库<br />
+</p>
+<ul class="org-ul">
+<li>dlopen  打开一个动态库<br /></li>
+<li>dlsym   查找符号,以打开动态库句柄为根节点进行查找<br /></li>
+<li>dlerror 查看是否有错<br /></li>
+<li>dlclose 卸载动态库，引用计数为0才取消映射关系，之前会运行".finit"的代码<br /></li>
+</ul>
+
+<p>
+<b>有些gcc编译的默认参数是&#x2013;enable-default-pie 需要额外加上-no-pie，使其生成EXEC而不是DYN</b><br />
+</p>
+<div class="org-src-container">
+<pre class="src src-c"><span style="color: #F92672;">#include</span> <span style="color: #AE81FF;">&lt;</span><span style="color: #E6DB74;">stdio.h</span><span style="color: #AE81FF;">&gt;</span>
+<span style="color: #F92672;">#include</span> <span style="color: #AE81FF;">&lt;</span><span style="color: #E6DB74;">dlfcn.h</span><span style="color: #AE81FF;">&gt;</span>
+
+<span style="color: #75715E;">/* </span><span style="color: #E6DB74;">gcc t.c -m32 -ldl -no-pie </span><span style="color: #75715E;">*/</span>
+<span style="color: #75715E;">/* </span><span style="color: #E6DB74;">./a.out /lib32/libm-2.28.so  </span><span style="color: #75715E;">*/</span>
+<span style="color: #75715E;">/* </span><span style="color: #E6DB74;">1.000000 </span><span style="color: #75715E;">*/</span>
+
+<span style="color: #66D9EF;">int</span> <span style="color: #A6E22E; font-size: 130%;">main</span><span style="color: #AE81FF;">(</span><span style="color: #66D9EF;">int</span> <span style="color: #FD971F;">argc</span>, <span style="color: #66D9EF;">char</span> *<span style="color: #FD971F;">argv</span><span style="color: #66D9EF;">[]</span><span style="color: #AE81FF;">)</span>
+<span style="color: #AE81FF;">{</span>
+    <span style="color: #66D9EF;">void</span> *<span style="color: #FD971F;">handle</span>;
+    <span style="color: #66D9EF;">double</span> <span style="color: #66D9EF;">(</span>*<span style="color: #A6E22E; font-size: 130%;">func</span><span style="color: #66D9EF;">)(</span><span style="color: #66D9EF;">double</span><span style="color: #66D9EF;">)</span>;
+    <span style="color: #66D9EF;">char</span> *<span style="color: #FD971F;">error</span>;
+
+    handle = <span style="color: #A6E22E; font-weight: bold;">dlopen</span><span style="color: #66D9EF;">(</span>argv<span style="color: #A6E22E;">[</span>1<span style="color: #A6E22E;">]</span>, RTLD_NOW<span style="color: #66D9EF;">)</span>;
+    <span style="color: #A6E22E; font-weight: bold;">if</span> <span style="color: #66D9EF;">(</span><span style="color: #E6DB74; font-weight: bold;">!</span>handle<span style="color: #66D9EF;">)</span> <span style="color: #66D9EF;">{</span>
+        <span style="color: #A6E22E; font-weight: bold;">printf</span><span style="color: #A6E22E;">(</span><span style="color: #E6DB74;">"failed to open lib\n"</span><span style="color: #A6E22E;">)</span>;
+        <span style="color: #F92672;">return</span> -1;
+    <span style="color: #66D9EF;">}</span>
+
+    func = <span style="color: #A6E22E; font-weight: bold;">dlsym</span><span style="color: #66D9EF;">(</span>handle, <span style="color: #E6DB74;">"sin"</span><span style="color: #66D9EF;">)</span>;
+    <span style="color: #A6E22E; font-weight: bold;">if</span> <span style="color: #66D9EF;">(</span><span style="color: #A6E22E;">(</span>error = <span style="color: #A6E22E; font-weight: bold;">dlerror</span><span style="color: #E6DB74;">()</span><span style="color: #A6E22E;">)</span> != <span style="color: #AE81FF;">NULL</span><span style="color: #66D9EF;">)</span> <span style="color: #66D9EF;">{</span>
+        <span style="color: #A6E22E; font-weight: bold;">printf</span><span style="color: #A6E22E;">(</span><span style="color: #E6DB74;">"error %s\n"</span>, error<span style="color: #A6E22E;">)</span>;
+        <span style="color: #A6E22E; font-weight: bold;">dlclose</span><span style="color: #A6E22E;">(</span>handle<span style="color: #A6E22E;">)</span>;
+    <span style="color: #66D9EF;">}</span>
+
+    <span style="color: #A6E22E; font-weight: bold;">printf</span><span style="color: #66D9EF;">(</span><span style="color: #E6DB74;">"%f\n"</span>, <span style="color: #A6E22E; font-weight: bold;">func</span><span style="color: #A6E22E;">(</span>3.1415926 / 2<span style="color: #A6E22E;">)</span><span style="color: #66D9EF;">)</span>;
+    <span style="color: #A6E22E; font-weight: bold;">dlclose</span><span style="color: #66D9EF;">(</span>handle<span style="color: #66D9EF;">)</span>;
+    <span style="color: #F92672;">return</span> 0;
+<span style="color: #AE81FF;">}</span>
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org79ee3c9" class="outline-2">
+<h2 id="org79ee3c9"><span class="section-number-2">8</span> 第八章 共享库的组织</h2>
+<div class="outline-text-2" id="text-8">
+<p>
+so兼容性以ABI为准<br />
+版本号 libname.so.x.y.z<br />
+</p>
+<ul class="org-ul">
+<li>x 主版本,重大升级<br /></li>
+<li>y 次版本,增量升级<br /></li>
+<li>z 发布版本号,修正<br /></li>
+</ul>
+<p>
+去掉.y.z，即为SONAME,用作.dynamic段里依赖关系,ldconfig可以建立相关的软链接<br />
+</p>
+<div class="org-src-container">
+<pre class="src src-bash">gcc -fPIC -shared -o lib.so -m32 lib.c -Wno-implicit-function-declaration -Xlinker --version-script lib.ver -Wl,-soname,my_soname
+readelf -d lib.so
+
+Dynamic section at offset 0xef4 contains 27 entries:
+  Tag        Type                         Name/Value
+ 0x00000001 (NEEDED)                     Shared library: [libc.so.6]
+ 0x0000000e (SONAME)                     Library soname: [my_soname]
+</pre>
+</div>
+<p>
+链接名则更为简单，gcc -lXXX 相当于gcc libXXX.so.x<br />
+</p>
+<div class="org-src-container">
+<pre class="src src-bash">ls -ll /lib/libc.so.6 
+lrwxrwxrwx. 1 root root 12 Jul 23  2019 /lib/libc.so.6 -&gt; libc-2.28.so
+</pre>
+</div>
+<p>
+基于符号的版本机制，用于解决SONAME次版本号交会问题<br />
+</p>
+<div class="org-src-container">
+<pre class="src src-bash"><span style="color: #75715E;">#</span><span style="color: #E6DB74;">file - lib.ver</span>
+<span style="color: #75715E;">#</span><span style="color: #E6DB74;">gcc -fPIC -shared -o lib.so -m32 lib.c -Wno-implicit-function-declaration -Xlinker --version-script lib.ver</span>
+VERS_1.2 {
+    global:
+        foo;
+    <span style="color: #F92672;">local</span>:
+        *;
+};
+
+<span style="color: #75715E;">#</span><span style="color: #E6DB74;">gcc -fPIC -shared -o lib.so -m32 lib.c -Wno-implicit-function-declaration -Xlinker --version-script lib.ver</span>
+VERS_1.1 {
+    global:
+        foo;
+    <span style="color: #F92672;">local</span>:
+        *;
+};
+./a.out
+./a.out: ./lib.so: version <span style="color: #AE81FF; font-weight: bold;">`VERS_1.2' not found (required by ./a.out)</span>
+</pre>
+</div>
+<p>
+如上图，如果用VERS_1.1编译出的so再执行依赖它的可执行文件，会出错<br />
+</p>
+
+<p>
+<b>FHS</b>, linux目录组织标准<br />
+</p>
+
+<p>
+.so根据DT_NEED里的路径查找<br />
+</p>
+<ul class="org-ul">
+<li>绝对路径<br /></li>
+<li>相对路径<br /></li>
+<li>环境变量 LD_LIBRARY_PATH<br /></li>
+<li>/etc/ld.so.cache &lt;- 由ldconfig生成<br /></li>
+<li>/usr/lib /lib<br /></li>
+</ul>
+<p>
+此外，也可ld -rpath链接时指定路径，这样会在.dynamic里生成RPATH这个变量<br />
+</p>
+<div class="org-src-container">
+<pre class="src src-bash">ld -rpath /auto/isbu_crdc/offlinediag/users/xuali2 1.o ./lib.so -m32 -m elf_i386
+readelf -d a.out 
+
+Dynamic section at offset 0xf50 contains 17 entries:
+  Tag        Type                         Name/Value
+ 0x00000001 (NEEDED)                     Shared library: [my_soname]
+ 0x0000000f (RPATH)                      Library rpath: [/auto/isbu_crdc/offlinediag/users/xuali2]
+</pre>
+</div>
+
+<p>
+环境变量LD_PRELOAD可以预加载共享库，无论是否有依赖<br />
+环境变量LD_DEBUG用来debug<br />
+</p>
+<div class="org-src-container">
+<pre class="src src-bash"><span style="color: #FD971F;">LD_DEBUG</span>=files ./a.out 
+     11762: 
+     11762: <span style="color: #FD971F;">file</span>=./lib.so [0];  needed by ./a.out [0]
+     11762: <span style="color: #FD971F;">file</span>=./lib.so [0];  generating link map
+     11762:   dynamic: 0xf7f51efc  base: 0xf7f50000   size: 0x0000201c
+     11762:     entry: 0xf7f50380  phdr: 0xf7f50034  phnum:          7
+     11762: 
+     11762: 
+     11762: <span style="color: #FD971F;">file</span>=libc.so.6 [0];  needed by ./a.out [0]
+     11762: <span style="color: #FD971F;">file</span>=libc.so.6 [0];  generating link map
+     11762:   dynamic: 0xf7f31d6c  base: 0xf7d8e000   size: 0x001a7780
+     11762:     entry: 0xf7da8650  phdr: 0xf7d8e034  phnum:         10
+     11762: 
+     11762: ./lib.so: error: version lookup error: version <span style="color: #AE81FF; font-weight: bold;">`VERS_1.2' not found (required by ./a.out) (continued)</span>
+<span style="color: #AE81FF; font-weight: bold;">./a.out: ./lib.so: version `</span>VERS_1.2<span style="color: #E6DB74;">' not found (required by ./a.out)</span>
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org73a0099" class="outline-2">
+<h2 id="org73a0099"><span class="section-number-2">9</span> 第九章 Windows下的动态链接</h2>
+<div class="outline-text-2" id="text-9">
+<p>
+略<br />
+</p>
+</div>
+</div>
+
+<div id="outline-container-org17befdf" class="outline-2">
+<h2 id="org17befdf"><span class="section-number-2">10</span> 第十章 内存</h2>
+<div class="outline-text-2" id="text-10">
+<p>
+<b>以下都基于x86 CPU</b><br />
+</p>
+</div>
+<div id="outline-container-org1f26e32" class="outline-3">
+<h3 id="org1f26e32"><span class="section-number-3">10.1</span> 栈</h3>
+<div class="outline-text-3" id="text-10-1">
+<ul class="org-ul">
+<li>函数的返回地址和参数(现在很多体系结构，如powerpc, mips64, x64都是寄存器直接传参，参数多了才放入栈)<br /></li>
+<li>临时变量(编译优化也会直接用寄存器)<br /></li>
+<li>保存的上下文，函数调用前后不变的寄存器<br /></li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-c"><span style="color: #66D9EF;">int</span> <span style="color: #A6E22E; font-size: 130%;">foo</span><span style="color: #AE81FF;">(</span><span style="color: #66D9EF;">int</span> <span style="color: #FD971F;">a</span><span style="color: #AE81FF;">)</span>
+<span style="color: #AE81FF;">{</span>
+    <span style="color: #66D9EF;">int</span> <span style="color: #FD971F;">b</span> = a - 1;
+    <span style="color: #F92672;">return</span> b;
+<span style="color: #AE81FF;">}</span>
+</pre>
+</div>
+
+<ul class="org-ul">
+<li>esp指向栈顶<br /></li>
+<li>ebp索引变量<br /></li>
+</ul>
+<div class="org-src-container">
+<pre class="src src-asm"><span style="color: #A6E22E; font-size: 130%;">00000000</span> &lt;foo&gt;:
+   <span style="color: #F92672;">0</span>:   55                      push   <span style="color: #FD971F;">%ebp</span> <span style="color: #75715E;">; </span><span style="color: #E6DB74;">&#23558;ebp&#20837;&#26632;, esp = esp - 2, [esp] = %ebp</span>
+   <span style="color: #F92672;">1</span>:   89 e5                   mov    <span style="color: #FD971F;">%esp</span>,<span style="color: #FD971F;">%ebp</span> <span style="color: #75715E;">; </span><span style="color: #E6DB74;">epb = esp, *epb = *esp = old ebp</span>
+   <span style="color: #F92672;">3</span>:   83 ec 10                sub    $0x10,<span style="color: #FD971F;">%esp</span> <span style="color: #75715E;">; </span><span style="color: #E6DB74;">&#24320;&#26632;</span>
+   <span style="color: #F92672;">6</span>:   8b 45 08                mov    0x8(<span style="color: #FD971F;">%ebp</span>),<span style="color: #FD971F;">%eax</span> <span style="color: #75715E;">; </span><span style="color: #E6DB74;">&#21462;&#23454;&#21442;a 0(%ebp) = old ebp 4(%ebp) = old pc</span>
+   <span style="color: #F92672;">9</span>:   83 e8 01                sub    $0x1,<span style="color: #FD971F;">%eax</span>      <span style="color: #75715E;">; </span><span style="color: #E6DB74;">&#33258;&#22686;</span>
+   <span style="color: #F92672;">c</span>:   89 45 fc                mov    <span style="color: #FD971F;">%eax</span>,-0x4(<span style="color: #FD971F;">%ebp</span>) <span style="color: #75715E;">; </span><span style="color: #E6DB74;">b = a - 1;</span>
+   <span style="color: #F92672;">f</span>:   8b 45 fc                mov    -0x4(<span style="color: #FD971F;">%ebp</span>),<span style="color: #FD971F;">%eax</span> <span style="color: #75715E;">; </span><span style="color: #E6DB74;">&#36820;&#22238;&#20540;eax</span>
+  <span style="color: #F92672;">12</span>:   c9                      leave                  <span style="color: #75715E;">; </span><span style="color: #E6DB74;">&#30456;&#24403;&#20110;mov ebp esp, pop ebp, &#30456;&#23545;&#30340;&#26377;&#20010;&#25351;&#20196;&#26159;ENTER == push ebp, mov esp ebp</span>
+  <span style="color: #F92672;">13</span>:   c3                      ret                    <span style="color: #75715E;">; </span><span style="color: #E6DB74;">&#36864;&#20986; &#24674;&#22797; cs ip</span>
+</pre>
+</div>
+
+<p>
+调用惯例<br />
+默认用cdecl，以下call_foo为cdecl方式<br />
+</p>
+<div class="org-src-container">
+<pre class="src src-c"><span style="color: #66D9EF;">void</span> <span style="color: #A6E22E; font-size: 130%;">call_foo</span><span style="color: #AE81FF;">(</span><span style="color: #66D9EF;">void</span><span style="color: #AE81FF;">)</span>
+<span style="color: #AE81FF;">{</span>
+    <span style="color: #66D9EF;">int</span> <span style="color: #FD971F;">c</span> = 5;
+    <span style="color: #A6E22E; font-weight: bold;">foo</span><span style="color: #66D9EF;">(</span>c<span style="color: #66D9EF;">)</span>;
+<span style="color: #AE81FF;">}</span>
+</pre>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-asm"><span style="color: #A6E22E; font-size: 130%;">00000014</span> &lt;call_foo&gt;:
+  <span style="color: #F92672;">14</span>:   55                      push   <span style="color: #FD971F;">%ebp</span>
+  <span style="color: #F92672;">15</span>:   89 e5                   mov    <span style="color: #FD971F;">%esp</span>,<span style="color: #FD971F;">%ebp</span>
+  <span style="color: #F92672;">17</span>:   83 ec 10                sub    $0x10,<span style="color: #FD971F;">%esp</span>
+  <span style="color: #F92672;">1a</span>:   c7 45 fc 05 00 00 00    movl   $0x5,-0x4(<span style="color: #FD971F;">%ebp</span>)
+  <span style="color: #F92672;">21</span>:   ff 75 fc                pushl  -0x4(<span style="color: #FD971F;">%ebp</span>) <span style="color: #75715E;">;</span><span style="color: #E6DB74;">&#20256;&#21442;</span>
+  <span style="color: #F92672;">24</span>:   e8 fc ff ff ff          call   25 &lt;call_foo+0x11&gt; <span style="color: #75715E;">;</span><span style="color: #E6DB74;">&#35843;&#29992;foo &#30456;&#24403;&#20110; push eip, jmp foo</span>
+  <span style="color: #F92672;">29</span>:   83 c4 04                add    $0x4,<span style="color: #FD971F;">%esp</span>          <span style="color: #75715E;">;</span><span style="color: #E6DB74;">&#23558;&#21442;&#25968;&#20986;&#26632;</span>
+  <span style="color: #F92672;">2c</span>:   90                      nop
+  <span style="color: #F92672;">2d</span>:   c9                      leave  
+  <span style="color: #F92672;">2e</span>:   c3                      ret 
+</pre>
+</div>
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">调用惯例</th>
+<th scope="col" class="org-left">实参出栈方</th>
+<th scope="col" class="org-left">参数传递</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left">cdecl</td>
+<td class="org-left">函数调用方</td>
+<td class="org-left">从右至左</td>
+</tr>
+
+<tr>
+<td class="org-left">stdcall</td>
+<td class="org-left">函数本身</td>
+<td class="org-left">从右至左</td>
+</tr>
+
+<tr>
+<td class="org-left">fastcall</td>
+<td class="org-left">函数本身</td>
+<td class="org-left">寄存器，更多的参数从右至左入栈</td>
+</tr>
+
+<tr>
+<td class="org-left">pascal</td>
+<td class="org-left">函数本身</td>
+<td class="org-left">从左至右</td>
+</tr>
+</tbody>
+</table>
+
+<p>
+返回长节字类型会使用栈而不是寄存器，所以应避免<br />
+</p>
+<div class="org-src-container">
+<pre class="src src-c"><span style="color: #F92672;">struct</span> <span style="color: #66D9EF;">big</span> <span style="color: #AE81FF;">{</span>
+    <span style="color: #66D9EF;">char</span> <span style="color: #FD971F;">buf</span><span style="color: #66D9EF;">[</span>128<span style="color: #66D9EF;">]</span>;
+<span style="color: #AE81FF;">}</span>;
+
+<span style="color: #F92672;">struct</span> <span style="color: #66D9EF;">big</span> <span style="color: #A6E22E; font-size: 130%;">foo</span><span style="color: #AE81FF;">(</span><span style="color: #66D9EF;">void</span><span style="color: #AE81FF;">)</span>
+<span style="color: #AE81FF;">{</span>
+    <span style="color: #F92672;">struct</span> <span style="color: #66D9EF;">big</span> <span style="color: #FD971F;">b</span>;
+    b.buf<span style="color: #66D9EF;">[</span>0<span style="color: #66D9EF;">]</span> = 0;
+    <span style="color: #F92672;">return</span> b;
+<span style="color: #AE81FF;">}</span>
+
+
+</pre>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-asm">  <span style="color: #F92672;">00000000</span> &lt;foo&gt;:
+     <span style="color: #F92672;">0</span>: 55                      push   <span style="color: #FD971F;">%ebp</span>
+     <span style="color: #F92672;">1</span>: 89 e5                   mov    <span style="color: #FD971F;">%esp</span>,<span style="color: #FD971F;">%ebp</span>
+     <span style="color: #F92672;">3</span>: 57                      push   <span style="color: #FD971F;">%edi</span>
+     <span style="color: #F92672;">4</span>: 56                      push   <span style="color: #FD971F;">%esi</span>
+     <span style="color: #F92672;">5</span>: 53                      push   <span style="color: #FD971F;">%ebx</span>
+     <span style="color: #F92672;">6</span>: 83 c4 80                add    $0xffffff80,<span style="color: #FD971F;">%esp</span> <span style="color: #75715E;">; </span><span style="color: #E6DB74;">esp = esp - 128</span>
+     <span style="color: #F92672;">9</span>: c6 85 74 ff ff ff 00    movb   $0x0,-0x8c(<span style="color: #FD971F;">%ebp</span>) <span style="color: #75715E;">;</span><span style="color: #E6DB74;">b.buf[0] = 0;</span>
+    <span style="color: #F92672;">10</span>: 8b 45 08                mov    0x8(<span style="color: #FD971F;">%ebp</span>),<span style="color: #FD971F;">%eax</span>   <span style="color: #75715E;">;</span><span style="color: #E6DB74;">return b;</span>
+    <span style="color: #F92672;">13</span>: 89 c2                   mov    <span style="color: #FD971F;">%eax</span>,<span style="color: #FD971F;">%edx</span>
+    <span style="color: #F92672;">15</span>: 8d 85 74 ff ff ff       lea    -0x8c(<span style="color: #FD971F;">%ebp</span>),<span style="color: #FD971F;">%eax</span>
+    <span style="color: #F92672;">1b</span>: b9 80 00 00 00          mov    $0x80,<span style="color: #FD971F;">%ecx</span>
+    <span style="color: #F92672;">20</span>: 8b 18                   mov    (<span style="color: #FD971F;">%eax</span>),<span style="color: #FD971F;">%ebx</span>
+    <span style="color: #F92672;">22</span>: 89 1a                   mov    <span style="color: #FD971F;">%ebx</span>,(<span style="color: #FD971F;">%edx</span>)
+    <span style="color: #F92672;">24</span>: 8b 5c 08 fc             mov    -0x4(<span style="color: #FD971F;">%eax</span>,<span style="color: #FD971F;">%ecx</span>,1),<span style="color: #FD971F;">%ebx</span>
+    <span style="color: #F92672;">28</span>: 89 5c 0a fc             mov    <span style="color: #FD971F;">%ebx</span>,-0x4(<span style="color: #FD971F;">%edx</span>,<span style="color: #FD971F;">%ecx</span>,1)
+    <span style="color: #F92672;">2c</span>: 8d 5a 04                lea    0x4(<span style="color: #FD971F;">%edx</span>),<span style="color: #FD971F;">%ebx</span>
+    <span style="color: #F92672;">2f</span>: 83 e3 fc                and    $0xfffffffc,<span style="color: #FD971F;">%ebx</span>
+    <span style="color: #F92672;">32</span>: 29 da                   sub    <span style="color: #FD971F;">%ebx</span>,<span style="color: #FD971F;">%edx</span>
+    <span style="color: #F92672;">34</span>: 29 d0                   sub    <span style="color: #FD971F;">%edx</span>,<span style="color: #FD971F;">%eax</span>
+    <span style="color: #F92672;">36</span>: 01 d1                   add    <span style="color: #FD971F;">%edx</span>,<span style="color: #FD971F;">%ecx</span>
+    <span style="color: #F92672;">38</span>: 83 e1 fc                and    $0xfffffffc,<span style="color: #FD971F;">%ecx</span>
+    <span style="color: #F92672;">3b</span>: c1 e9 02                shr    $0x2,<span style="color: #FD971F;">%ecx</span>
+    <span style="color: #F92672;">3e</span>: 89 ca                   mov    <span style="color: #FD971F;">%ecx</span>,<span style="color: #FD971F;">%edx</span>
+    <span style="color: #F92672;">40</span>: 89 df                   mov    <span style="color: #FD971F;">%ebx</span>,<span style="color: #FD971F;">%edi</span>
+    <span style="color: #F92672;">42</span>: 89 c6                   mov    <span style="color: #FD971F;">%eax</span>,<span style="color: #FD971F;">%esi</span>
+    <span style="color: #F92672;">44</span>: 89 d1                   mov    <span style="color: #FD971F;">%edx</span>,<span style="color: #FD971F;">%ecx</span>
+    <span style="color: #F92672;">46</span>: f3 a5                   rep movsl <span style="color: #FD971F;">%ds</span>:(<span style="color: #FD971F;">%esi</span>),<span style="color: #FD971F;">%es</span>:(<span style="color: #FD971F;">%edi</span>) <span style="color: #75715E;">;</span>
+    <span style="color: #F92672;">48</span>: 8b 45 08                mov    0x8(<span style="color: #FD971F;">%ebp</span>),<span style="color: #FD971F;">%eax</span>
+    <span style="color: #F92672;">4b</span>: 83 ec 80                sub    $0xffffff80,<span style="color: #FD971F;">%esp</span>
+    <span style="color: #F92672;">4e</span>: 5b                      pop    <span style="color: #FD971F;">%ebx</span>
+    <span style="color: #F92672;">4f</span>: 5e                      pop    <span style="color: #FD971F;">%esi</span>
+    <span style="color: #F92672;">50</span>: 5f                      pop    <span style="color: #FD971F;">%edi</span>
+    <span style="color: #F92672;">51</span>: 5d                      pop    <span style="color: #FD971F;">%ebp</span>
+    <span style="color: #F92672;">52</span>: c2 04 00                ret    $0x4 <span style="color: #75715E;">;</span><span style="color: #E6DB74;">pop 4&#20010;&#23383;&#33410;&#65292;&#30475;&#26469;&#22823;&#21442;&#25968;&#29992;&#20102;stdcall</span>
+
+<span style="color: #A6E22E; font-size: 130%;">00000055</span> &lt;call_foo&gt;:
+  <span style="color: #F92672;">55</span>:   55                      push   <span style="color: #FD971F;">%ebp</span>
+  <span style="color: #F92672;">56</span>:   89 e5                   mov    <span style="color: #FD971F;">%esp</span>,<span style="color: #FD971F;">%ebp</span>
+  <span style="color: #F92672;">58</span>:   83 c4 80                add    $0xffffff80,<span style="color: #FD971F;">%esp</span>
+  <span style="color: #F92672;">5b</span>:   8d 45 80                lea    -0x80(<span style="color: #FD971F;">%ebp</span>),<span style="color: #FD971F;">%eax</span> <span style="color: #75715E;">;</span><span style="color: #E6DB74;">&#20256;&#20837;&#19968;&#20010;&#22320;&#22336;&#32473;foo&#21435;&#23384;b</span>
+  <span style="color: #F92672;">5e</span>:   50                      push   <span style="color: #FD971F;">%eax</span>
+  <span style="color: #F92672;">5f</span>:   e8 fc ff ff ff          call   60 &lt;call_foo+0xb&gt;
+  <span style="color: #F92672;">64</span>:   90                      nop
+  <span style="color: #F92672;">65</span>:   c9                      leave  
+  <span style="color: #F92672;">66</span>:   c3                      ret  
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org16cd02e" class="outline-3">
+<h3 id="org16cd02e"><span class="section-number-3">10.2</span> 堆与内存管理</h3>
+<div class="outline-text-3" id="text-10-2">
+<p>
+通用做法是向系统申请页为单位的大块内存，然后在用户态设计数据结构管理及响应业务申请内存<br />
+</p>
+
+<p>
+系统调用<br />
+</p>
+<ul class="org-ul">
+<li>brk<br /></li>
+<li>mmap<br /></li>
+</ul>
+
+<p>
+堆分配算法<br />
+</p>
+<ul class="org-ul">
+<li>空闲链表<br /></li>
+</ul>
+<p>
+空闲块的开头有链表指针，指向下一个或上一个空闲块，产生 <b>外部碎片</b><br />
+</p>
+<ul class="org-ul">
+<li>位图<br /></li>
+</ul>
+<p>
+每大块内存按固定大小切片，内部划分一片区域(常为内存头)存放位图表示空闲和已申请块，产生 <b>内部碎片</b><br />
+这种在现有系统里被广泛使用并有各种变种，经常按 <b>固定大小</b> 分为 8 16 32 64 128 256 等内存池<br />
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgcf66636" class="outline-2">
+<h2 id="orgcf66636"><span class="section-number-2">11</span> 第十一章 运行库</h2>
+<div class="outline-text-2" id="text-11">
+<p>
+glibc <b>git://sourceware.org/git/glibc.git</b><br />
+<b>以最简单的静态链接为例,同时不能-nostdlib或-nonstartfiles选项编译</b><br />
+</p>
+
+<p>
+入口函数<br />
+</p>
+<ul class="org-ul">
+<li>不是main，一般为_start<br /></li>
+<li>初始化进程环境，包括堆、I/O、线程、全局变量构造<br /></li>
+<li>调用main<br /></li>
+<li>main返回后，清理环境，包括析构，关闭I/O等(就算不做操作系统也会帮忙)<br /></li>
+</ul>
+
+
+<p>
+流程为 _start -&gt; __libc_start_main -&gt; main -&gt; exit -&gt; _exit<br />
+</p>
+<div class="org-src-container">
+<pre class="src src-asm"><span style="color: #A6E22E; font-size: 130%;">_start</span>:
+    <span style="color: #75715E;">/* </span><span style="color: #E6DB74;">Clear the frame pointer.  The ABI suggests this be done, to mark</span>
+<span style="color: #E6DB74;">       the outermost frame obviously.  */</span>
+    <span style="color: #F92672;">xorl</span> <span style="color: #FD971F;">%ebp</span>, <span style="color: #FD971F;">%ebp</span>
+
+    <span style="color: #75715E;">/* </span><span style="color: #E6DB74;">Extract the arguments as encoded on the stack and set up</span>
+<span style="color: #E6DB74;">       the arguments for `main': argc, argv.  envp will be determined</span>
+<span style="color: #E6DB74;">       later in __libc_start_main.  */</span>
+    <span style="color: #F92672;">popl</span> <span style="color: #FD971F;">%esi</span>       <span style="color: #75715E;">/* </span><span style="color: #E6DB74;">Pop the argument count.  */</span>
+    <span style="color: #F92672;">movl</span> <span style="color: #FD971F;">%esp</span>, <span style="color: #FD971F;">%ecx</span>     <span style="color: #75715E;">/* </span><span style="color: #E6DB74;">argv starts just at the current stack top.*/</span>
+
+    <span style="color: #75715E;">/* </span><span style="color: #E6DB74;">Before pushing the arguments align the stack to a 16-byte</span>
+<span style="color: #E6DB74;">    (SSE needs 16-byte alignment) boundary to avoid penalties from</span>
+<span style="color: #E6DB74;">    misaligned accesses.  Thanks to Edward Seidl <a href="mailto:seidl%40janed.com">&lt;seidl@janed.com&gt;</a></span>
+<span style="color: #E6DB74;">    for pointing this out.  */</span>
+    <span style="color: #F92672;">andl</span> $0xfffffff0, <span style="color: #FD971F;">%esp</span>
+    <span style="color: #F92672;">pushl</span> <span style="color: #FD971F;">%eax</span>      <span style="color: #75715E;">/* </span><span style="color: #E6DB74;">Push garbage because we allocate</span>
+<span style="color: #E6DB74;">                   28 more bytes.  */</span>
+
+    <span style="color: #75715E;">/* </span><span style="color: #E6DB74;">Provide the highest stack address to the user code (for stacks</span>
+<span style="color: #E6DB74;">       which grow downwards).  */</span>
+    <span style="color: #F92672;">pushl</span> <span style="color: #FD971F;">%esp</span>
+
+    <span style="color: #F92672;">pushl</span> <span style="color: #FD971F;">%edx</span>      <span style="color: #75715E;">/* </span><span style="color: #E6DB74;">Push address of the shared library</span>
+<span style="color: #E6DB74;">                   termination function.  */</span>
+
+<span style="color: #F92672;">#ifdef</span> <span style="color: #FD971F;">SHARED</span>
+    <span style="color: #75715E;">/* </span><span style="color: #E6DB74;">Load PIC register.  */</span>
+    <span style="color: #F92672;">call</span> 1f
+    <span style="color: #F92672;">addl</span> $_GLOBAL_OFFSET_TABLE_, <span style="color: #FD971F;">%ebx</span>
+
+    <span style="color: #75715E;">/* </span><span style="color: #E6DB74;">Push address of our own entry points to .fini and .init.  */</span>
+    <span style="color: #F92672;">leal</span> __libc_csu_fini@GOTOFF(<span style="color: #FD971F;">%ebx</span>), <span style="color: #FD971F;">%eax</span>
+    <span style="color: #F92672;">pushl</span> <span style="color: #FD971F;">%eax</span>
+    <span style="color: #F92672;">leal</span> __libc_csu_init@GOTOFF(<span style="color: #FD971F;">%ebx</span>), <span style="color: #FD971F;">%eax</span>
+    <span style="color: #F92672;">pushl</span> <span style="color: #FD971F;">%eax</span>
+
+    <span style="color: #F92672;">pushl</span> <span style="color: #FD971F;">%ecx</span>      <span style="color: #75715E;">/* </span><span style="color: #E6DB74;">Push second argument: argv.  */</span>
+    <span style="color: #F92672;">pushl</span> <span style="color: #FD971F;">%esi</span>      <span style="color: #75715E;">/* </span><span style="color: #E6DB74;">Push first argument: argc.  */</span>
+
+    <span style="color: #F92672;">pushl</span> main@GOT(<span style="color: #FD971F;">%ebx</span>)
+
+    <span style="color: #75715E;">/* </span><span style="color: #E6DB74;">Call the user's main function, and exit with its value.</span>
+<span style="color: #E6DB74;">       But let the libc call main.    */</span>
+    <span style="color: #F92672;">call</span> __libc_start_main@PLT
+<span style="color: #F92672;">#else</span>
+    <span style="color: #75715E;">/* </span><span style="color: #E6DB74;">Push address of our own entry points to .fini and .init.  */</span>
+    <span style="color: #F92672;">pushl</span> $__libc_csu_fini
+    <span style="color: #F92672;">pushl</span> $__libc_csu_init
+
+    <span style="color: #F92672;">pushl</span> <span style="color: #FD971F;">%ecx</span>      <span style="color: #75715E;">/* </span><span style="color: #E6DB74;">Push second argument: argv.  */</span>
+    <span style="color: #F92672;">pushl</span> <span style="color: #FD971F;">%esi</span>      <span style="color: #75715E;">/* </span><span style="color: #E6DB74;">Push first argument: argc.  */</span>
+
+    <span style="color: #F92672;">pushl</span> $main
+
+    <span style="color: #75715E;">/* </span><span style="color: #E6DB74;">Call the user's main function, and exit with its value.</span>
+<span style="color: #E6DB74;">       But let the libc call main.    */</span>
+    <span style="color: #F92672;">call</span> __libc_start_main
+<span style="color: #F92672;">#endif</span>
+
+    <span style="color: #F92672;">hlt</span>         <span style="color: #75715E;">/* </span><span style="color: #E6DB74;">Crash if somehow `exit' does return.  */</span>
+
+<span style="color: #A6E22E; font-size: 130%;">_exit</span>:
+    <span style="color: #F92672;">movl</span>    4(<span style="color: #FD971F;">%esp</span>), <span style="color: #FD971F;">%ebx</span>
+
+    <span style="color: #75715E;">/* </span><span style="color: #E6DB74;">Try the new syscall first.  */</span>
+<span style="color: #F92672;">#ifdef</span> <span style="color: #FD971F;">__NR_exit_group</span>
+    <span style="color: #F92672;">movl</span>    $__NR_exit_group, <span style="color: #FD971F;">%eax</span>
+    <span style="color: #F92672;">ENTER_KERNEL</span>
+<span style="color: #F92672;">#endif</span>
+
+    <span style="color: #75715E;">/* </span><span style="color: #E6DB74;">Not available.  Now the old one.  */</span>
+    <span style="color: #F92672;">movl</span>    $__NR_exit, <span style="color: #FD971F;">%eax</span>
+    <span style="color: #75715E;">/* </span><span style="color: #E6DB74;">Don't bother using ENTER_KERNEL here.  If the exit_group</span>
+<span style="color: #E6DB74;">       syscall is not available AT_SYSINFO isn't either.  */</span>
+    <span style="color: #F92672;">int</span> $0x80                   <span style="color: #75715E;">;</span><span style="color: #E6DB74;">&#31995;&#32479;&#35843;&#29992;&#65292;&#36827;&#31243;&#36864;&#20986;</span>
+</pre>
+</div>
+
+<p>
+上述_start代码相当于<br />
+</p>
+<div class="org-src-container">
+<pre class="src src-c"><span style="color: #66D9EF;">void</span> <span style="color: #A6E22E; font-size: 130%;">_start</span><span style="color: #AE81FF;">()</span>
+<span style="color: #AE81FF;">{</span>
+    %ebp = 0;
+    <span style="color: #66D9EF;">int</span> <span style="color: #FD971F;">argc</span> = pop from stack
+    <span style="color: #66D9EF;">char</span> **argv = top of stack
+    <span style="color: #A6E22E; font-weight: bold;">__libc_start_main</span><span style="color: #66D9EF;">(</span>main, argc, argv, __libc_csu_init, <span style="color: #66D9EF;">)</span>
+<span style="color: #AE81FF;">}</span>
+</pre>
+</div>
+
+<p>
+在linux中，任何I/O都被抽象成对象<br />
+fd -&gt; 内核文件表 -&gt; 内核对象<br />
+</p>
+
+<p>
+C标准库ANSI C，最新的好像是C11<br />
+</p>
+</div>
+<div id="outline-container-orgdc1316f" class="outline-3">
+<h3 id="orgdc1316f"><span class="section-number-3">11.1</span> glibc启动文件</h3>
+<div class="outline-text-3" id="text-11-1">
+<div class="org-src-container">
+<pre class="src src-bash"> /usr/lib/gcc/x86_64-linux-gnu/6/collect2 -plugin /usr/lib/gcc/x86_64-linux-gnu/6/liblto_plugin.so -plugin-opt=/usr/lib/gcc/x86_64-linux-gnu/6/lto-wrapper -plugin-opt=-fresolution=/tmp/cchtzGwz.res -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_eh -plugin-opt=-pass-through=-lc --sysroot=/ --build-id -m elf_i386 --hash-style=gnu -static /usr/lib/gcc/x86_64-linux-gnu/6/../../../../lib32/crt1.o /usr/lib/gcc/x86_64-linux-gnu/6/../../../../lib32/crti.o /usr/lib/gcc/x86_64-linux-gnu/6/32/crtbeginT.o -L/usr/lib/gcc/x86_64-linux-gnu/6/32 -L/usr/lib/gcc/x86_64-linux-gnu/6/../../../../lib32 -L/lib/../lib32 -L/usr/lib/../lib32 -L/usr/lib/gcc/x86_64-linux-gnu/6 -L/usr/lib/gcc/x86_64-linux-gnu/6/../../.. /tmp/ccA5Dm0B.o --start-group -lgcc -lgcc_eh -lc --end-group /usr/lib/gcc/x86_64-linux-gnu/6/32/crtend.o /usr/lib/gcc/x86_64-linux-gnu/6/../../../../lib32/crtn.o
+<span style="color: #FD971F;">COLLECT_GCC_OPTIONS</span>=<span style="color: #E6DB74;">'-m32'</span> <span style="color: #E6DB74;">'-static'</span> <span style="color: #E6DB74;">'-v'</span> <span style="color: #E6DB74;">'-mtune=generic'</span> <span style="color: #E6DB74;">'-march=i686'</span>
+</pre>
+</div>
+
+<p>
+<b>ld crt1.o crti.o [user_objects] [system_libraries] crtn.o</b>, 对比以下汇编，init和.fini段完美构成_init()和_fini()<br />
+</p>
+
+<p>
+<b>注意[user_objects] [system_libraries].init .fini里的代码不能有ret，不然会退出_init函数，这个不像.ctor和.dtor段是存的函数指针</b><br />
+</p>
+
+<ul class="org-ul">
+<li>crt1.o<br /></li>
+</ul>
+<div class="org-src-container">
+<pre class="src src-asm">/usr/lib/gcc/x86_64-linux-gnu/6/../../../../lib32/crt1.o:     file format elf32-i386
+
+
+<span style="color: #A6E22E; font-size: 130%;">Disassembly</span> <span style="color: #F92672;">of</span> section .text:
+
+<span style="color: #A6E22E; font-size: 130%;">00000000</span> &lt;_start&gt;:
+   <span style="color: #F92672;">0</span>:   31 ed                   xor    <span style="color: #FD971F;">%ebp</span>,<span style="color: #FD971F;">%ebp</span>
+   <span style="color: #F92672;">2</span>:   5e                      pop    <span style="color: #FD971F;">%esi</span>
+   <span style="color: #F92672;">3</span>:   89 e1                   mov    <span style="color: #FD971F;">%esp</span>,<span style="color: #FD971F;">%ecx</span>
+   <span style="color: #F92672;">5</span>:   83 e4 f0                and    $0xfffffff0,<span style="color: #FD971F;">%esp</span>
+   <span style="color: #F92672;">8</span>:   50                      push   <span style="color: #FD971F;">%eax</span>
+   <span style="color: #F92672;">9</span>:   54                      push   <span style="color: #FD971F;">%esp</span>
+   <span style="color: #F92672;">a</span>:   52                      push   <span style="color: #FD971F;">%edx</span>
+   <span style="color: #F92672;">b</span>:   e8 23 00 00 00          call   33 &lt;_start+0x33&gt;
+  <span style="color: #F92672;">10</span>:   81 c3 02 00 00 00       add    $0x2,<span style="color: #FD971F;">%ebx</span>
+            <span style="color: #F92672;">12</span>: R_386_GOTPC _GLOBAL_OFFSET_TABLE_
+  <span style="color: #F92672;">16</span>:   8d 83 00 00 00 00       lea    0x0(<span style="color: #FD971F;">%ebx</span>),<span style="color: #FD971F;">%eax</span>
+            <span style="color: #F92672;">18</span>: R_386_GOTOFF    __libc_csu_fini
+  <span style="color: #F92672;">1c</span>:   50                      push   <span style="color: #FD971F;">%eax</span>
+  <span style="color: #F92672;">1d</span>:   8d 83 00 00 00 00       lea    0x0(<span style="color: #FD971F;">%ebx</span>),<span style="color: #FD971F;">%eax</span>
+            <span style="color: #F92672;">1f</span>: R_386_GOTOFF    __libc_csu_init
+  <span style="color: #F92672;">23</span>:   50                      push   <span style="color: #FD971F;">%eax</span>
+  <span style="color: #F92672;">24</span>:   51                      push   <span style="color: #FD971F;">%ecx</span>
+  <span style="color: #F92672;">25</span>:   56                      push   <span style="color: #FD971F;">%esi</span>
+  <span style="color: #F92672;">26</span>:   8b 83 00 00 00 00       mov    0x0(<span style="color: #FD971F;">%ebx</span>),<span style="color: #FD971F;">%eax</span>
+            <span style="color: #F92672;">28</span>: R_386_GOT32X    main
+  <span style="color: #F92672;">2c</span>:   50                      push   <span style="color: #FD971F;">%eax</span>
+  <span style="color: #F92672;">2d</span>:   e8 fc ff ff ff          call   2e &lt;_start+0x2e&gt;
+            <span style="color: #F92672;">2e</span>: R_386_PLT32 __libc_start_main
+  <span style="color: #F92672;">32</span>:   f4                      hlt    
+  <span style="color: #F92672;">33</span>:   8b 1c 24                mov    (<span style="color: #FD971F;">%esp</span>),<span style="color: #FD971F;">%ebx</span>
+  <span style="color: #F92672;">36</span>:   c3                      ret    
+  <span style="color: #F92672;">37</span>:   66 90                   xchg   <span style="color: #FD971F;">%ax</span>,<span style="color: #FD971F;">%ax</span>
+  <span style="color: #F92672;">39</span>:   66 90                   xchg   <span style="color: #FD971F;">%ax</span>,<span style="color: #FD971F;">%ax</span>
+  <span style="color: #F92672;">3b</span>:   66 90                   xchg   <span style="color: #FD971F;">%ax</span>,<span style="color: #FD971F;">%ax</span>
+  <span style="color: #F92672;">3d</span>:   66 90                   xchg   <span style="color: #FD971F;">%ax</span>,<span style="color: #FD971F;">%ax</span>
+  <span style="color: #F92672;">3f</span>:   90                      nop
+
+<span style="color: #A6E22E; font-size: 130%;">00000040</span> &lt;_dl_relocate_static_pie&gt;:
+  <span style="color: #F92672;">40</span>:   c3                      ret 
+</pre>
+</div>
+
+<ul class="org-ul">
+<li>crti.o<br /></li>
+</ul>
+<div class="org-src-container">
+<pre class="src src-asm"><span style="color: #A6E22E; font-size: 130%;">objdump</span> -dr /usr/lib/gcc/x86_64-linux-gnu/6/../../../../lib32/crti.o
+
+/usr/lib/gcc/x86_64-linux-gnu/6/../../../../lib32/crti.o:     file format elf32-i386
+
+
+<span style="color: #A6E22E; font-size: 130%;">Disassembly</span> <span style="color: #F92672;">of</span> section .init:
+
+<span style="color: #A6E22E; font-size: 130%;">00000000</span> &lt;_init&gt;:
+   <span style="color: #F92672;">0</span>:   53                      push   <span style="color: #FD971F;">%ebx</span>
+   <span style="color: #F92672;">1</span>:   83 ec 08                sub    $0x8,<span style="color: #FD971F;">%esp</span>
+   <span style="color: #F92672;">4</span>:   e8 fc ff ff ff          call   5 &lt;_init+0x5&gt;
+            <span style="color: #F92672;">5</span>: R_386_PC32   __x86.get_pc_thunk.bx
+   <span style="color: #F92672;">9</span>:   81 c3 02 00 00 00       add    $0x2,<span style="color: #FD971F;">%ebx</span>
+            <span style="color: #F92672;">b</span>: R_386_GOTPC  _GLOBAL_OFFSET_TABLE_
+   <span style="color: #F92672;">f</span>:   8b 83 00 00 00 00       mov    0x0(<span style="color: #FD971F;">%ebx</span>),<span style="color: #FD971F;">%eax</span>
+            <span style="color: #F92672;">11</span>: R_386_GOT32X    __gmon_start__
+  <span style="color: #F92672;">15</span>:   85 c0                   test   <span style="color: #FD971F;">%eax</span>,<span style="color: #FD971F;">%eax</span>
+  <span style="color: #F92672;">17</span>:   74 02                   je     1b &lt;_init+0x1b&gt;
+  <span style="color: #F92672;">19</span>:   ff d0                   call   *<span style="color: #FD971F;">%eax</span>
+
+<span style="color: #A6E22E; font-size: 130%;">Disassembly</span> <span style="color: #F92672;">of</span> section .gnu.linkonce.t.__x86.get_pc_thunk.bx:
+
+<span style="color: #A6E22E; font-size: 130%;">00000000</span> &lt;__x86.get_pc_thunk.bx&gt;:
+   <span style="color: #F92672;">0</span>:   8b 1c 24                mov    (<span style="color: #FD971F;">%esp</span>),<span style="color: #FD971F;">%ebx</span>
+   <span style="color: #F92672;">3</span>:   c3                      ret    
+
+<span style="color: #A6E22E; font-size: 130%;">Disassembly</span> <span style="color: #F92672;">of</span> section .fini:
+
+<span style="color: #A6E22E; font-size: 130%;">00000000</span> &lt;_fini&gt;:
+   <span style="color: #F92672;">0</span>:   53                      push   <span style="color: #FD971F;">%ebx</span>
+   <span style="color: #F92672;">1</span>:   83 ec 08                sub    $0x8,<span style="color: #FD971F;">%esp</span>
+   <span style="color: #F92672;">4</span>:   e8 fc ff ff ff          call   5 &lt;_fini+0x5&gt;
+            <span style="color: #F92672;">5</span>: R_386_PC32   __x86.get_pc_thunk.bx
+   <span style="color: #F92672;">9</span>:   81 c3 02 00 00 00       add    $0x2,<span style="color: #FD971F;">%ebx</span>
+            <span style="color: #F92672;">b</span>: R_386_GOTPC  _GLOBAL_OFFSET_TABLE_
+</pre>
+</div>
+
+<ul class="org-ul">
+<li>crtn.o<br /></li>
+</ul>
+<div class="org-src-container">
+<pre class="src src-asm"><span style="color: #A6E22E; font-size: 130%;">objdump</span> -dr /usr/lib/gcc/x86_64-linux-gnu/6/../../../../lib32/crtn.o
+
+/usr/lib/gcc/x86_64-linux-gnu/6/../../../../lib32/crtn.o:     file format elf32-i386
+
+
+<span style="color: #A6E22E; font-size: 130%;">Disassembly</span> <span style="color: #F92672;">of</span> section .init:
+
+<span style="color: #A6E22E; font-size: 130%;">00000000</span> &lt;.init&gt;:
+   <span style="color: #F92672;">0</span>:   83 c4 08                add    $0x8,<span style="color: #FD971F;">%esp</span>
+   <span style="color: #F92672;">3</span>:   5b                      pop    <span style="color: #FD971F;">%ebx</span>
+   <span style="color: #F92672;">4</span>:   c3                      ret    
+
+<span style="color: #A6E22E; font-size: 130%;">Disassembly</span> <span style="color: #F92672;">of</span> section .fini:
+
+<span style="color: #A6E22E; font-size: 130%;">00000000</span> &lt;.fini&gt;:
+   <span style="color: #F92672;">0</span>:   83 c4 08                add    $0x8,<span style="color: #FD971F;">%esp</span>
+   <span style="color: #F92672;">3</span>:   5b                      pop    <span style="color: #FD971F;">%ebx</span>
+   <span style="color: #F92672;">4</span>:   c3                      ret  
+</pre>
+</div>
+
+<ul class="org-ul">
+<li>crtbeginT.o 和 crtend.o，C++全局构造和析构<br /></li>
+</ul>
+
+<p>
+多线程库里对很多不可重入函数加锁或者用了TLS<br />
+TLS接口: pthread_key_create(), pthread_getspecific(), pthread_setspecific(), pthread_key_delete()<br />
+</p>
+
+<p>
+glibc在处理C++全局构造和析构时, __libc_start_main -&gt; __libc_csu_init -&gt; _init -&gt; crtbeginT.o里的__do_global_ctors_aux -&gt; 初始化.ctors段里函数指针，里面存放的构造函数,并用__cxa_exit注册了析构<br />
+<b>.dtor原来是做析构的，但是有了__cxa_exit就不用了</b><br />
+</p>
+</div>
+</div>
+
+<div id="outline-container-org1f19bdc" class="outline-3">
+<h3 id="org1f19bdc"><span class="section-number-3">11.2</span> IO缓冲</h3>
+<div class="outline-text-3" id="text-11-2">
+<p>
+glibc的文件读写默认有缓冲模式,可以通过setbuf配置某文件的缓冲<br />
+</p>
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">缓冲模式</th>
+<th scope="col" class="org-left">常量</th>
+<th scope="col" class="org-left">备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left">无缓冲</td>
+<td class="org-left">_IONBF</td>
+<td class="org-left">不使用缓冲</td>
+</tr>
+
+<tr>
+<td class="org-left">行缓冲</td>
+<td class="org-left">_IOLBF</td>
+<td class="org-left">每收到或时会flush</td>
+</tr>
+
+<tr>
+<td class="org-left">全缓冲</td>
+<td class="org-left">_IOFBF</td>
+<td class="org-left">缓冲满才flush</td>
+</tr>
+</tbody>
+</table>
+<p>
+<b>在内核态，其实也有缓存的概念，例如write写，默认为回写而不是通写，也就是不立即写到硬盘，直到换页检测dirty位才写回</b><br />
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgae8c2df" class="outline-2">
+<h2 id="orgae8c2df"><span class="section-number-2">12</span> 第十二章 系统调用与API</h2>
+<div class="outline-text-2" id="text-12">
+<p>
+linux使用0x80为系统调用的入口,各个通用寄存器用于传递参数<br />
+</p>
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-right" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-right">EAX</th>
+<th scope="col" class="org-left">Name</th>
+<th scope="col" class="org-left">Desc</th>
+<th scope="col" class="org-left">参数</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-right">1</td>
+<td class="org-left">exit</td>
+<td class="org-left">退出进程</td>
+<td class="org-left">EBX为退出码</td>
+</tr>
+
+<tr>
+<td class="org-right">2</td>
+<td class="org-left">fork</td>
+<td class="org-left">复制进程</td>
+<td class="org-left">EBX为复制参数</td>
+</tr>
+</tbody>
+</table>
+
+<p>
+linux用了CPU两种模式，用户模式和特权模式， <b>从boot开始的特权到进程0转为用户态后，后面要再次进入特权都需通过中断</b><br />
+</p>
+
+<p>
+中断,一个硬件或软件发出的请求，区别于CPU轮询(<b>但实际是CPU每次运行指令后都会去查看是否有中断产生，可认为是中断是硬件的轮询</b>)<br />
+</p>
+
+<p>
+中断分硬中断(来自于外设的异常)和软中断(int指令)<br />
+</p>
+
+<ul class="org-ul">
+<li>解发中断 int 0x80，不同的系统调用用不同的eax值表示，带参数可以用ebx等<br /></li>
+<li>中断时，用户态切至内核态，找到当前进程的内核栈，将用户态寄存器存入内核栈(SS、ESP、EFLAGS、CS、EIP)<br /></li>
+<li>从系统调用中返回时用iret<br /></li>
+</ul>
+
+<p>
+软中断流程，以fork为例: fork-&gt; int 0x80 -&gt; system_call -&gt; sys_fork<br />
+</p>
+
+<p>
+<span class="underline">可以用__attribute__((regparm(0)))保证参数用寄存器传递</span><br />
+</p>
+
+<p>
+此外,intel也有个vdso库(ldd出来的linux-gate.so.1)，里面是系统调用的代码，可以通过访问vdso来使用系统调用<br />
+</p>
+<div class="org-src-container">
+<pre class="src src-bash">./a.out &amp;
+[1] 5030
+ldd a.out
+    linux-gate.so.1 (0xf779d000)
+    libc.so.6 =&gt; /lib32/libc.so.6 (0xf7595000)
+    /lib/ld-linux.so.2 (0xf779f000)
+cat /proc/5030/maps
+...
+f77d1000-f77d3000 r-xp 00000000 00:00 0                                  [vdso]
+...
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org3441e9e" class="outline-2">
+<h2 id="org3441e9e"><span class="section-number-2">13</span> 第十三章 运行库实现</h2>
+<div class="outline-text-2" id="text-13">
+<p>
+MiniCRT,略<br />
+</p>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: xuali2</p>
+<p class="date">Created: 2020-10-19 一 23:39</p>
+<p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
+</div>
+</body>
+</html>

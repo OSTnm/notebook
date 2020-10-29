@@ -1,0 +1,812 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2018-12-23 Sun 23:30 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>&lrm;</title>
+<meta name="generator" content="Org mode" />
+<meta name="author" content="xuali2" />
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: visible;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { width: 90%; }
+  /*]]>*/-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://fniessen.github.io/org-html-themes/styles/readtheorg/css/htmlize.css"/>
+<link rel="stylesheet" type="text/css" href="https://fniessen.github.io/org-html-themes/styles/readtheorg/css/readtheorg.css"/>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="https://fniessen.github.io/org-html-themes/styles/lib/js/jquery.stickytableheaders.min.js"></script>
+<script type="text/javascript" src="https://fniessen.github.io/org-html-themes/styles/readtheorg/js/readtheorg.js"></script>
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2018 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+</head>
+<body>
+<div id="content">
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#orgfdfc4ea">1. 理解系统</a>
+<ul>
+<li><a href="#org03231dd">1.1. 阅读手册</a></li>
+<li><a href="#orgeb7ae68">1.2. 知道什么是正常的</a></li>
+<li><a href="#orge2db66e">1.3. 工作流程</a></li>
+<li><a href="#org87672b9">1.4. 工具</a></li>
+</ul>
+</li>
+<li><a href="#orgbee71e1">2. 制造失败</a>
+<ul>
+<li><a href="#orgb63150b">2.1. 从已知的一个状态开始</a></li>
+<li><a href="#org36e308d">2.2. 使用自动化工具引发失败</a></li>
+<li><a href="#orge9e1a63">2.3. 不要模拟失败</a></li>
+<li><a href="#orgefc1310">2.4. 间歇性bug</a>
+<ul>
+<li><a href="#org600c8ee">2.4.1. 仔细观察失败</a></li>
+<li><a href="#orga164c6e">2.4.2. 足够多的信息</a></li>
+<li><a href="#orgbad8904">2.4.3. 找到总是与失败有关的事件序列.</a></li>
+</ul>
+</li>
+<li><a href="#org0c836db">2.5. “那不可能发生”</a></li>
+<li><a href="#org76c76dc">2.6. 永远不要丢掉调试工具</a></li>
+</ul>
+</li>
+<li><a href="#org9d650f6">3. 不要想，而要看</a>
+<ul>
+<li><a href="#org6ad3d3d">3.1. 观察失败</a></li>
+<li><a href="#orgdab981a">3.2. 查看细节</a></li>
+</ul>
+</li>
+<li><a href="#org391ea0e">4. 调试系统</a>
+<ul>
+<li><a href="#orgf002997">4.1. 设计内嵌调试工具</a></li>
+<li><a href="#org278dd52">4.2. 外部调试工具</a></li>
+<li><a href="#org37e9458">4.3. 猜测只是为了确定搜索的重点目标</a></li>
+</ul>
+</li>
+<li><a href="#org497c21e">5. 分而治之</a>
+<ul>
+<li><a href="#org1bc26da">5.1. 缩小搜索范围</a>
+<ul>
+<li><a href="#org62525a1">5.1.1. 插入易于识别的模式</a></li>
+<li><a href="#orgeeb7c2b">5.1.2. 从有问题的支路开始查找问题</a></li>
+</ul>
+</li>
+<li><a href="#orgf56dfe0">5.2. 修复已知bug</a></li>
+<li><a href="#org217b830">5.3. 消除噪声干扰</a></li>
+</ul>
+</li>
+<li><a href="#orgf972e38">6. 一次只改一个地方</a>
+<ul>
+<li><a href="#orge8dbaaa">6.1. 使用步枪，而不要用散弹枪</a></li>
+<li><a href="#orgbf01a56">6.2. 一次只改变一个测试</a></li>
+<li><a href="#org5219b36">6.3. 与正常系统进行比较</a></li>
+<li><a href="#orge52de25">6.4. 自从上一次能够正常工作以来你更改了什么</a></li>
+</ul>
+</li>
+<li><a href="#org099ee9b">7. 保持审计跟踪</a>
+<ul>
+<li><a href="#org803e56f">7.1. 记下你的每步操作、顺序和结果</a></li>
+<li><a href="#orgfe4fff1">7.2. 注意细节</a></li>
+<li><a href="#orgdf7395d">7.3. 关联</a></li>
+<li><a href="#org3d4c00a">7.4. 好记性不如烂笔头</a></li>
+</ul>
+</li>
+<li><a href="#org0fe92d0">8. 检查插头 - 保证正确的运行环境</a>
+<ul>
+<li><a href="#orgc20cb68">8.1. 怀疑自己的假设</a></li>
+<li><a href="#org5b657b1">8.2. 从头开始检查</a></li>
+<li><a href="#org2d8c2d7">8.3. 对工具进行测试</a></li>
+</ul>
+</li>
+<li><a href="#orgfd289de">9. 获得全新观点</a>
+<ul>
+<li><a href="#org0152d47">9.1. 寻求帮助</a></li>
+<li><a href="#orgfc4404c">9.2. 到哪里寻求帮助</a></li>
+<li><a href="#org6180fee">9.3. 放下面子</a></li>
+<li><a href="#org6eae231">9.4. 报告症状，而不是理论</a></li>
+<li><a href="#orgc1b889b">9.5. 即使不是十分肯定，也可以提出来</a></li>
+</ul>
+</li>
+<li><a href="#org9cc86b8">10. 如果你不修复bug，它将依然存在</a>
+<ul>
+<li><a href="#orgf088f63">10.1. 检查问题确实已被修复</a></li>
+<li><a href="#org222fe35">10.2. 检查确实是修复措施解决了问题</a></li>
+<li><a href="#org80be24d">10.3. bug从来不会自己消失</a></li>
+<li><a href="#org397d8e8">10.4. 从根本上解决问题</a></li>
+<li><a href="#org5574e99">10.5. 对过程进行修复</a></li>
+</ul>
+</li>
+<li><a href="#orgad6519b">11. 远程调试</a>
+<ul>
+<li><a href="#orgc88b1c9">11.1. 限制</a></li>
+<li><a href="#org40f2823">11.2. 规则</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-orgfdfc4ea" class="outline-2">
+<h2 id="orgfdfc4ea"><span class="section-number-2">1</span> 理解系统</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+你必须掌握系统的工作原理以及它是如何设计的.在某些情况下，还要知道为什么这样设计.<br />
+</p>
+</div>
+<div id="outline-container-org03231dd" class="outline-3">
+<h3 id="org03231dd"><span class="section-number-3">1.1</span> 阅读手册</h3>
+<div class="outline-text-3" id="text-1-1">
+<p>
+应用说明和实现指南提供了丰富的信息，它们不仅描述了系统是如何工作的，而且专门给出了先前已发生过的问题.常见错误的警告具有难以置信的价值.<br />
+</p>
+</div>
+</div>
+<div id="outline-container-orgeb7ae68" class="outline-3">
+<h3 id="orgeb7ae68"><span class="section-number-3">1.2</span> 知道什么是正常的</h3>
+<div class="outline-text-3" id="text-1-2">
+<p>
+你必须掌握一些你所工作的技术领域的基础知识.<br />
+</p>
+</div>
+</div>
+<div id="outline-container-orge2db66e" class="outline-3">
+<h3 id="orge2db66e"><span class="section-number-3">1.3</span> 工作流程</h3>
+<div class="outline-text-3" id="text-1-3">
+<p>
+了解所有的模块和接口都是做什么的.<br />
+<b>当系统有一些部分是“黑盒子”时，这意味着你不知道它内部有什么，但应该知道它们如何与其他部分交互，这至少可以帮助判断问题是在内部还是外部.如果问题发生在黑盒子内部，你必须更换盒子，但如果问题出在外部，就可以修复它了.</b><br />
+</p>
+</div>
+</div>
+<div id="outline-container-org87672b9" class="outline-3">
+<h3 id="org87672b9"><span class="section-number-3">1.4</span> 工具</h3>
+<div class="outline-text-3" id="text-1-4">
+<p>
+你越是精通工具，就越容易查明系统中发生了什么事情.要花时间学习与工具有关的一切，<br />
+模拟示波器（analogscope）可以看到噪声，但无法存储太多数据；数字逻辑分析器可以捕获大量的数据，但看不到噪声.<br />
+</p>
+</div>
+</div>
+</div>
+<div id="outline-container-orgbee71e1" class="outline-2">
+<h2 id="orgbee71e1"><span class="section-number-2">2</span> 制造失败</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+仔细观察你做了什么，然后再做一次，并且记下你做的每个步骤.然后，按照你自己所写的步骤去做，确定这样做确实导致了错误.实际上，在有些情况下，令设备发生错误具有一定的破坏性，或者代价很大，这时每次都使设备发生同样的错误就不是一种好办法.为了控制损失，必须改变一些地方，但我们应该尽量少改动原来的系统和顺序.<br />
+</p>
+</div>
+<div id="outline-container-orgb63150b" class="outline-3">
+<h3 id="orgb63150b"><span class="section-number-3">2.1</span> 从已知的一个状态开始</h3>
+</div>
+<div id="outline-container-org36e308d" class="outline-3">
+<h3 id="org36e308d"><span class="section-number-3">2.2</span> 使用自动化工具引发失败</h3>
+</div>
+<div id="outline-container-orge9e1a63" class="outline-3">
+<h3 id="orge9e1a63"><span class="section-number-3">2.3</span> 不要模拟失败</h3>
+<div class="outline-text-3" id="text-2-3">
+<p>
+引发失败（正确）和模拟失败（错误）这二者之间存在着非常大的差别.不要试图模拟失败机理本身.<br />
+模拟失败有时结果更糟，发生新的错误，分散了你对正在查找的问题的注意力.<br />
+所做的改变应该是一些高层次的改变，只影响错误发生的频率，而不影响错误的发生方式.<br />
+</p>
+</div>
+</div>
+<div id="outline-container-orgefc1310" class="outline-3">
+<h3 id="orgefc1310"><span class="section-number-3">2.4</span> 间歇性bug</h3>
+<div class="outline-text-3" id="text-2-4">
+<p>
+查找并控制各种条件，而后<br />
+</p>
+</div>
+<div id="outline-container-org600c8ee" class="outline-4">
+<h4 id="org600c8ee"><span class="section-number-4">2.4.1</span> 仔细观察失败</h4>
+<div class="outline-text-4" id="text-2-4-1">
+<p>
+忽略掉不发生的时候，而在失败每次发生时观察它.关键是在每次运行的时候捕捉相关信息，以便在发生失败之后查看这些数据.<br />
+</p>
+</div>
+</div>
+<div id="outline-container-orga164c6e" class="outline-4">
+<h4 id="orga164c6e"><span class="section-number-4">2.4.2</span> 足够多的信息</h4>
+<div class="outline-text-4" id="text-2-4-2">
+<p>
+当你捕获到足够多的信息时（像前一节所描述的那样），就可以确定哪些因素总是与bug有关，或者哪些因素从来都与bug无关.在查找问题根源的时候，这些因素是需要重点关注的.<br />
+</p>
+</div>
+</div>
+<div id="outline-container-orgbad8904" class="outline-4">
+<h4 id="orgbad8904"><span class="section-number-4">2.4.3</span> 找到总是与失败有关的事件序列.</h4>
+</div>
+</div>
+<div id="outline-container-org0c836db" class="outline-3">
+<h3 id="org0c836db"><span class="section-number-3">2.5</span> “那不可能发生”</h3>
+<div class="outline-text-3" id="text-2-5">
+<p>
+这里的关键是“那”这个词.“那”是指什么？它是测试人员或工程师所认为的问题背后的失败机理.或者说“那”是指一个事件序列，这个序列看起来是再现问题的关键.而且，事实上，“那”可能确实不会发生.但是，失败的的确确发生了.我们并不清楚是什么测试序列触发了它，也不知道它是由什么bug引起的.那么，下一步就是 <b>忘掉所有假设</b> ，让它在工程师面前再次发生.<br />
+</p>
+</div>
+</div>
+<div id="outline-container-org76c76dc" class="outline-3">
+<h3 id="org76c76dc"><span class="section-number-3">2.6</span> 永远不要丢掉调试工具</h3>
+<div class="outline-text-3" id="text-2-6">
+<p>
+一种测试工具可以在其他的调试场合重复使用.当你设计它的时候，应该考虑到这一点，并且使它易于维护和升级.这意味着要采用好的工程技术，并实现文档化，等等.<br />
+</p>
+</div>
+</div>
+</div>
+<div id="outline-container-org9d650f6" class="outline-2">
+<h2 id="org9d650f6"><span class="section-number-2">3</span> 不要想，而要看</h2>
+<div class="outline-text-2" id="text-3">
+<p>
+亲眼看到底层的失败是非常重要的.如果你猜测失败是如何发生的，那常常会修复一些根本不是bug的问题.这样的修复不仅不会解决问题，而且还会浪费时间和金钱，甚至会破坏其他地方.<br />
+</p>
+</div>
+<div id="outline-container-org6ad3d3d" class="outline-3">
+<h3 id="org6ad3d3d"><span class="section-number-3">3.1</span> 观察失败</h3>
+<div class="outline-text-3" id="text-3-1">
+<p>
+一定要亲眼看到实际错误是如何发生的.观察往往比猜测能够更快地找到问题.因为猜测虽然看起来是捷径，但这条捷径并不会带你找到问题的根源.<br />
+</p>
+</div>
+</div>
+<div id="outline-container-orgdab981a" class="outline-3">
+<h3 id="orgdab981a"><span class="section-number-3">3.2</span> 查看细节</h3>
+<div class="outline-text-3" id="text-3-2">
+<p>
+在停下来思考问题之前，对细节的观察应该到什么程度才合适呢？简单的答案是：“一直观察，直到把问题的原因锁定在几种可能性之内.”<br />
+</p>
+</div>
+</div>
+</div>
+<div id="outline-container-org391ea0e" class="outline-2">
+<h2 id="org391ea0e"><span class="section-number-2">4</span> 调试系统</h2>
+<div class="outline-text-2" id="text-4">
+</div>
+<div id="outline-container-orgf002997" class="outline-3">
+<h3 id="orgf002997"><span class="section-number-3">4.1</span> 设计内嵌调试工具</h3>
+<div class="outline-text-3" id="text-4-1">
+<p>
+状态消息的开启和关闭有3种不同级别选择：编译时、启动时和运行时.<br />
+消息类型的通用代码，如“info（信息）”、“error（错误）”或“reallynastyerror（严重错误）”；输出消息最初是由哪位工程师写的（为了跟踪谁做了什么工作，以及他为什么要输出这些消息）；运行时数据，例如命令、状态码和预计值与实际值的比较，这些能够为你提供后面的调试工作所需的详细信息.输出内容应该能够证实你的判断，或者显示出你未意料到的行为.<br />
+植入插装工具后，要使失败再次发生，以便证实环境确实相同，而且插装工具没有对问题造成影响.<br />
+</p>
+</div>
+</div>
+<div id="outline-container-org278dd52" class="outline-3">
+<h3 id="org278dd52"><span class="section-number-3">4.2</span> 外部调试工具</h3>
+<div class="outline-text-3" id="text-4-2">
+<p>
+<b>低频示波器无法找到高频问题，数字逻辑分析器无法发现噪声和短时脉冲波形干扰.</b><br />
+即使微小的改变也可能对系统造成足够大的影响，导致bug被完全隐藏起来.插装就是这些改变之一，因此在为有故障的系统添加插装工具之后，要使系统再次失败.<br />
+</p>
+</div>
+</div>
+<div id="outline-container-org37e9458" class="outline-3">
+<h3 id="org37e9458"><span class="section-number-3">4.3</span> 猜测只是为了确定搜索的重点目标</h3>
+<div class="outline-text-3" id="text-4-3">
+<p>
+不要过分相信你的猜测，它们往往偏离了方向，并且把你引入歧途.<br />
+如果事实表明，经过仔细的插装仍然无法确定你的猜测是否正确，那么就到了退回并再次猜测的时候了.<br />
+</p>
+</div>
+</div>
+</div>
+<div id="outline-container-org497c21e" class="outline-2">
+<h2 id="org497c21e"><span class="section-number-2">5</span> 分而治之</h2>
+<div class="outline-text-2" id="text-5">
+<p>
+通过反复地把问题分成好的一半和坏的一半，来缩小搜索范围，然后进一步研究有问题的那一半.<br />
+</p>
+</div>
+<div id="outline-container-org1bc26da" class="outline-3">
+<h3 id="org1bc26da"><span class="section-number-3">5.1</span> 缩小搜索范围</h3>
+<div class="outline-text-3" id="text-5-1">
+<p>
+先确定范围,然后使用二分法，确定问题发生在上游或下游，而后不断递归<br />
+</p>
+</div>
+<div id="outline-container-org62525a1" class="outline-4">
+<h4 id="org62525a1"><span class="section-number-4">5.1.1</span> 插入易于识别的模式</h4>
+<div class="outline-text-4" id="text-5-1-1">
+<p>
+使问题更容易被识别<br />
+</p>
+</div>
+</div>
+<div id="outline-container-orgeeb7c2b" class="outline-4">
+<h4 id="orgeeb7c2b"><span class="section-number-4">5.1.2</span> 从有问题的支路开始查找问题</h4>
+<div class="outline-text-4" id="text-5-1-2">
+<p>
+不要从好的一端开始去确认一些正确的事情，正确的事情太多了（这也是你所希望的）.从错误的一端开始（也就是从发出臭味的粉红色排放物开始），然后向上游追查.<br />
+</p>
+</div>
+</div>
+</div>
+<div id="outline-container-orgf56dfe0" class="outline-3">
+<h3 id="orgf56dfe0"><span class="section-number-3">5.2</span> 修复已知bug</h3>
+<div class="outline-text-3" id="text-5-2">
+<p>
+如果同时出现了多个问题，当你确实查明了其中的一个问题时，应该立即修复它，然后再查找其他问题.<br />
+</p>
+</div>
+</div>
+<div id="outline-container-org217b830" class="outline-3">
+<h3 id="org217b830"><span class="section-number-3">5.3</span> 消除噪声干扰</h3>
+<div class="outline-text-3" id="text-5-3">
+<p>
+有些特定类型的bug可能会引起其他bug，因此应该首先查找并修复它们.比如在硬件中，噪声信号可能会引起各种难以查找的间歇性问题.<br />
+</p>
+</div>
+</div>
+</div>
+<div id="outline-container-orgf972e38" class="outline-2">
+<h2 id="orgf972e38"><span class="section-number-2">6</span> 一次只改一个地方</h2>
+<div class="outline-text-2" id="text-6">
+<p>
+<b>为了修复问题而更改了一个地方，但这个修改并没有解决问题，如果认为这不会产生什么影响.这是一个非常错误的假设.</b><br />
+</p>
+</div>
+<div id="outline-container-orge8dbaaa" class="outline-3">
+<h3 id="orge8dbaaa"><span class="section-number-3">6.1</span> 使用步枪，而不要用散弹枪</h3>
+<div class="outline-text-3" id="text-6-1">
+<p>
+如果你认为你需要一支散弹枪来击中靶子，而问题却在于你无法看清靶子.<br />
+在很多情况下，你可能想改变系统的不同部分，以便看看它们是否对问题有影响.这往往是一个危险的信号，说明你正在猜测，而不是使用调试工具观察正在发生什么.<br />
+</p>
+</div>
+</div>
+<div id="outline-container-orgbf01a56" class="outline-3">
+<h3 id="orgbf01a56"><span class="section-number-3">6.2</span> 一次只改变一个测试</h3>
+<div class="outline-text-3" id="text-6-2">
+<p>
+改变测试序列或一些操作参数可以使问题更加有规律地出现，这有助于观察错误，而且可能会帮助我们找到问题的线索.但我们仍然应该一次只改变一个地方，以便判断哪个参数有影响.<br />
+</p>
+</div>
+</div>
+<div id="outline-container-org5219b36" class="outline-3">
+<h3 id="org5219b36"><span class="section-number-3">6.3</span> 与正常系统进行比较</h3>
+<div class="outline-text-3" id="text-6-3">
+<p>
+同时运行系统的一个正常的例子和有问题的例子，然后并排观察两个调试记录，注意它们之间的区别.如果你在两个测试之间更改了很多代码，或者为两个测试设置了不同的环境，那么这两个测试将很难对比.试着从相同机器的连续测试中获取调试记录，不要使用不同的机器、软件、参数、用户输入，也不要在不同的时间和不同的环境下进行测试.但如果你没有线索，就准备好查看整个日志吧，因为你并不知道区别在哪里.<br />
+</p>
+</div>
+</div>
+<div id="outline-container-orge52de25" class="outline-3">
+<h3 id="orge52de25"><span class="section-number-3">6.4</span> 自从上一次能够正常工作以来你更改了什么</h3>
+<div class="outline-text-3" id="text-6-4">
+<p>
+正常的系统和错误的系统之间的区别是由于一项更改造成的.做了更改之后，正常的系统开始出现故障.一种非常有效的办法是找出第一个导致系统出错的版本.通常，新的设计会出问题，这也是我们为什么总是在发布新产品之前对新设计进行测试的原因.有时一个部分的新设计与另一个正常工作的部分不兼容.<br />
+</p>
+</div>
+</div>
+</div>
+<div id="outline-container-org099ee9b" class="outline-2">
+<h2 id="org099ee9b"><span class="section-number-2">7</span> 保持审计跟踪</h2>
+<div class="outline-text-2" id="text-7">
+<p>
+必须记录下每一件事情，不起眼的事情可能会很重要.<br />
+</p>
+</div>
+<div id="outline-container-org803e56f" class="outline-3">
+<h3 id="org803e56f"><span class="section-number-3">7.1</span> 记下你的每步操作、顺序和结果</h3>
+<div class="outline-text-3" id="text-7-1">
+<p>
+在检查某问题时，要记下你 <b>所做的事</b> 、 <b>做事的顺序</b> ，以及 <b>发生的结果</b> .<br />
+</p>
+</div>
+</div>
+<div id="outline-container-orgfe4fff1" class="outline-3">
+<h3 id="orgfe4fff1"><span class="section-number-3">7.2</span> 注意细节</h3>
+<div class="outline-text-3" id="text-7-2">
+<p>
+审计跟踪的价值已经被普遍认可，但所需的详细程度却没有被接受，因为很多信息都被忽略了.<br />
+</p>
+</div>
+</div>
+<div id="outline-container-orgdf7395d" class="outline-3">
+<h3 id="orgdf7395d"><span class="section-number-3">7.3</span> 关联</h3>
+<div class="outline-text-3" id="text-7-3">
+<p>
+某些症状与其他症状或调试信息关联起来是非常有用的.“线路刚刚接通时它会发出很大的噪声”比“它发出很大的噪声”要好.但最好的描述是“它发出很大的噪声，从14:05:23开始，持续4秒”.<br />
+</p>
+</div>
+</div>
+<div id="outline-container-org3d4c00a" class="outline-3">
+<h3 id="org3d4c00a"><span class="section-number-3">7.4</span> 好记性不如烂笔头</h3>
+<div class="outline-text-3" id="text-7-4">
+<p>
+在细节方面，永远都不要相信你的记忆，而要把它写下来.如果你相信你的记忆，将会制造很多麻烦.<br />
+</p>
+</div>
+</div>
+</div>
+<div id="outline-container-org0fe92d0" class="outline-2">
+<h2 id="org0fe92d0"><span class="section-number-2">8</span> 检查插头 - 保证正确的运行环境</h2>
+<div class="outline-text-2" id="text-8">
+</div>
+<div id="outline-container-orgc20cb68" class="outline-3">
+<h3 id="orgc20cb68"><span class="section-number-3">8.1</span> 怀疑自己的假设</h3>
+<div class="outline-text-3" id="text-8-1">
+<p>
+永远不要相信自己的假设，特别是当这些假设在一些无法解释的问题中是核心因素的时候.你可能奇怪为什么一个复杂的数字芯片无法正确工作，而你却没有查看一下是否为它提供了电源.人们经常会说：“这段新代码运行起来与原来的代码一模一样.”随后却发现实际上根本就没有载入新代码.你只是载入了旧代码，或者是载入了新代码，但系统仍然执行了旧代码，<br />
+当我们看到一个问题时，通常在某个特定位置看到了问题，但导致这个问题的原因却在上游或者是一个基础性的问题.<br />
+</p>
+</div>
+</div>
+<div id="outline-container-org5b657b1" class="outline-3">
+<h3 id="org5b657b1"><span class="section-number-3">8.2</span> 从头开始检查</h3>
+<div class="outline-text-3" id="text-8-2">
+<p>
+保证正确的启动环境<br />
+</p>
+</div>
+</div>
+<div id="outline-container-org2d8c2d7" class="outline-3">
+<h3 id="org2d8c2d7"><span class="section-number-3">8.3</span> 对工具进行测试</h3>
+<div class="outline-text-3" id="text-8-3">
+<p>
+不仅仅是工具的默认环境配置可能有错误，而且工具本身也可能有bug.<br />
+</p>
+</div>
+</div>
+</div>
+<div id="outline-container-orgfd289de" class="outline-2">
+<h2 id="orgfd289de"><span class="section-number-2">9</span> 获得全新观点</h2>
+<div class="outline-text-2" id="text-9">
+</div>
+<div id="outline-container-org0152d47" class="outline-3">
+<h3 id="org0152d47"><span class="section-number-3">9.1</span> 寻求帮助</h3>
+<div class="outline-text-3" id="text-9-1">
+<ul class="org-ul">
+<li>获得全新观点<br />
+有时向别人解释问题也会使你有全新的认识，之后你自己就解决了问题.对事实进行组织的过程迫使你跳出你原来的思维模式.<br /></li>
+<li>询问专家<br /></li>
+<li>借鉴别人的经验<br />
+你周围可能有人以前见过你遇到的情况，当你向他们快速描述事情的经过后，他们会准确地告诉你出了什么问题.<br /></li>
+</ul>
+</div>
+</div>
+<div id="outline-container-orgfc4404c" class="outline-3">
+<h3 id="orgfc4404c"><span class="section-number-3">9.2</span> 到哪里寻求帮助</h3>
+<div class="outline-text-3" id="text-9-2">
+<ul class="org-ul">
+<li>公司的知识管理系统.<br /></li>
+<li>第三方的支持.<br /></li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org6180fee" class="outline-3">
+<h3 id="org6180fee"><span class="section-number-3">9.3</span> 放下面子</h3>
+<div class="outline-text-3" id="text-9-3">
+<p>
+你可能害怕寻求帮助，你认为这是无能的表现.但事实恰恰相反，这只是表明你急于修复bug.<br />
+</p>
+</div>
+</div>
+<div id="outline-container-org6eae231" class="outline-3">
+<h3 id="org6eae231"><span class="section-number-3">9.4</span> 报告症状，而不是理论</h3>
+<div class="outline-text-3" id="text-9-4">
+<p>
+无论你想要获得什么样的帮助，在向别人描述问题的时候，一定要记住一件事：报告症状，而不要讲你的理论.当寻求帮助时，描述发生的事情，描述你看到的一切.如果有可能，还要把条件描述清楚.告诉别人什么事情是间歇发生的，什么事情不是.<br />
+</p>
+</div>
+</div>
+<div id="outline-container-orgc1b889b" class="outline-3">
+<h3 id="orgc1b889b"><span class="section-number-3">9.5</span> 即使不是十分肯定，也可以提出来</h3>
+<div class="outline-text-3" id="text-9-5">
+<p>
+有时你可能注意到一些数据看起来很别扭，像是错误的，或者与问题有某种关系，但你不确定为什么会这样.这些地方是值得提出来的，事实是你发现了一些出乎意料或不理解的事情.<br />
+</p>
+</div>
+</div>
+</div>
+<div id="outline-container-org9cc86b8" class="outline-2">
+<h2 id="org9cc86b8"><span class="section-number-2">10</span> 如果你不修复bug，它将依然存在</h2>
+<div class="outline-text-2" id="text-10">
+</div>
+<div id="outline-container-orgf088f63" class="outline-3">
+<h3 id="orgf088f63"><span class="section-number-3">10.1</span> 检查问题确实已被修复</h3>
+<div class="outline-text-3" id="text-10-1">
+<p>
+不要假设问题已被修复<br />
+</p>
+</div>
+</div>
+<div id="outline-container-org222fe35" class="outline-3">
+<h3 id="org222fe35"><span class="section-number-3">10.2</span> 检查确实是修复措施解决了问题</h3>
+<div class="outline-text-3" id="text-10-2">
+<p>
+当你认为你已经修复了一个设计问题时，取消这个修复，确定系统再次失败.然后再应用这个修复，再次验证问题已修复.直到你经过从修复到失败，再从失败到修复这个过程之后.如果只把修复撤销，系统将仍像过去那样发生失败，那么你就可以非常肯定测试序列并没有被改变，你的修复确实解决了问题.当然，在有些情况下，如果你只是修理一个设备（而不是工程设计问题），那么重新制造失败可能是不必要的，也是不便的.<br />
+</p>
+</div>
+</div>
+<div id="outline-container-org80be24d" class="outline-3">
+<h3 id="org80be24d"><span class="section-number-3">10.3</span> bug从来不会自己消失</h3>
+<div class="outline-text-3" id="text-10-3">
+<p>
+这样做还有一个额外的好处，那就是即使你无法利用这些信息来修复问题，至少客户会知道你认真地跟踪了问题.<br />
+</p>
+</div>
+</div>
+<div id="outline-container-org397d8e8" class="outline-3">
+<h3 id="org397d8e8"><span class="section-number-3">10.4</span> 从根本上解决问题</h3>
+<div class="outline-text-3" id="text-10-4">
+<p>
+必须找到真正的失败之处,而不是猜测的换几个零件.<br />
+</p>
+</div>
+</div>
+<div id="outline-container-org5574e99" class="outline-3">
+<h3 id="org5574e99"><span class="section-number-3">10.5</span> 对过程进行修复</h3>
+<div class="outline-text-3" id="text-10-5">
+<p>
+修复系统和修复过程（正是这个过程导致了bug）之间的界限很难分清楚,如果设计质量不行，那就更正它.<br />
+</p>
+</div>
+</div>
+</div>
+<div id="outline-container-orgad6519b" class="outline-2">
+<h2 id="orgad6519b"><span class="section-number-2">11</span> 远程调试</h2>
+<div class="outline-text-2" id="text-11">
+</div>
+<div id="outline-container-orgc88b1c9" class="outline-3">
+<h3 id="orgc88b1c9"><span class="section-number-3">11.1</span> 限制</h3>
+<div class="outline-text-3" id="text-11-1">
+<ul class="org-ul">
+<li>故障无法亲眼所见<br /></li>
+<li>联系人不一定专业<br /></li>
+<li>尽力找到应急之策，而不是调试<br /></li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org40f2823" class="outline-3">
+<h3 id="org40f2823"><span class="section-number-3">11.2</span> 规则</h3>
+<div class="outline-text-3" id="text-11-2">
+<ul class="org-ul">
+<li>理解系统<br />
+连接到本产品的其他产品、运行在本产品中或基于本产品运行的部件、占用本产品所有内存的部件，或者其他不利于本产品使用的方面.<br />
+询问用户时获得的观点不能全信，需要准确的配置工具, 当你选择的区域被证明与问题无关时，应该准备改变重点，转而钻研另一区域.<br />
+<b>当对方出问题的地方是硬件时，必须尽早获得系统图.</b><br /></li>
+<li>制造失败<br />
+必须清楚地了解导致故障症状出现的事件序列.从头开始，如果有必要，重新启动系统.<br /></li>
+<li>不要想，而要看<br />
+a. 屏幕共享<br />
+b. 日志文件<br /></li>
+<li>分而治之<br />
+尽量抵制只更换硬件或软件模块的诱惑<br /></li>
+<li>一次只改一个地方<br />
+是阻止用户胡乱更换零部件<br /></li>
+<li>保持审计跟踪<br />
+要让他们告诉你他们做了什么，而不是仅仅询问他们是否按照你的要求去做了，这样才能验证他们的操作是否无误,日志与系统生成的其他审计跟踪比用户要可靠得多,最后，要一直发掘与客户现场环境有关的信息.<br /></li>
+<li>检查插头<br />
+最基本的一个注意事项是不要假设用户如何使用你的产品.对所有事情都要进行确认.不要让他们听到你的笑声.<br /></li>
+<li>获得全新观点<br />
+bug历史数据库很重要.<br /></li>
+<li>如果你不修复bug，它将依然存在<br />
+解决问题很容易就让用户满意了.但优秀的调试人员应该想得更多，请他们关注问题的残留影响或修复的副作用.<br /></li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: xuali2</p>
+<p class="date">Created: 2018-12-23 Sun 23:30</p>
+<p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
+</div>
+</body>
+</html>

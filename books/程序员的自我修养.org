@@ -1,0 +1,2174 @@
+#+SETUPFILE: ~/.emacs.d/themes/org-html-themes/setup/theme-readtheorg.setup
+#+OPTIONS: \n:t
+#+OPTIONS: ^:nil
+#+OPTIONS: tex:t
+#+STARTUP: latexpreview
+#+OPTIONS: tex:dvipng
+#+HTML_MATHJAX: align: left indent: 5em tagside: left font: Neo-Euler
+#+attr_html: :width 300px
+#+attr_latex: :width 300px
+#+ATTR_ORG: :width 300
+
+#+TITLE: 程序员的自我修养 - 基于X86的linux
+
+* 第一章 温故而知新
+PC机:
+- 高速的北桥芯片，用作CPU 内存 显卡通信
+- 低速的南桥芯片，用作磁盘 USB 键鼠通信，汇总后连接到北桥
+
+系统软件
+- 操作系统
+- 编译器，汇编器，链接器
+
+interface
+- underlayer 定义接口
+- upperlayer 使用接口
+
+APP -> (API) -> Running Lib -> (System call 0x80 softtware interrupt) -> Kernel -> (Hardware Spec) -> Hardware
+
+机械磁盘使用LBA来防止磁道密度由内到外变稀疏的问题
+
+虚拟内存
+- 地址空间不隔离     <- 分段 或 分页
+- 内存使用效率低     <- 分页
+- 程序运行的址不确定 <- 分段 或 分页
+
+共享内存 - 不同进程的虚拟页映射到同一个物理页
+
+页权限属性，只有操作系统可能设置，保护进程
+
+线程LWP:
+- 线程ID
+- PC指针
+- 寄存器集合、堆栈
+- 共享内存空间和进程级资源(文件和信号)
+
+| 私有       | 共享         |
+|------------+--------------|
+| 局部变量   | 全局变量     |
+| 函数参数   | 堆           |
+| TLS        | 函数静态变量 |
+| 寄存器数据 | 代码         |
+|            | 文件，信号   |
+
+进程调度
+- 优先级 Priority Schedule
+- 轮询   Round Robin
+
+| 系统调用 | 作用                                 |
+|----------+--------------------------------------|
+| fork     | 复制当前进程                         |
+| exec     | 使用新的可执行映像覆盖当前可执行映像 |
+| clone    | 创建子进程并从指定位置开始执行       |
+
+二元信号量和互斥锁的区别：互斥锁mutex要求acquire和release是一个线程
+条件变量作用类似栅栏==wait until
+
+优化
+- 编译器优化
+- CPU优化，动态调度, *不过我记得X86关掉了这个*
+#+begin_src C++
+volatile T* pInst = 0;
+T* GetInst() {
+    if(pInst == NULL) {
+        lock();
+        if (pInst == NULL)
+            pInst = new T;
+        unlock();
+    }
+}
+/*问题出在pInst = new T, 如果是先返回对象再调用构造函数，那么有可能第二个线程拿到的没构造函数初始化过的对象*/
+#+end_src
+
+* 第二章 静态链接
+
+| Name        | Tool         |
+|-------------+--------------|
+| Propressing | gcc -E (cpp) |
+| Compilation | gcc -S (cc1) |
+| Assemmbly   | gcc -c (as)  |
+| Linking     | gcc (ld)     |
+
+编译器前端：机器无关的中间代码
+编译器后端: 目标机器代码
+
+符号随着汇编语言的普及被迅速使用
+
+链接：
+- 地址和空间分配
+- 符号决议
+- 重定位
+
+* 第三章 目标文件
+
+设计.text和.data的原因:
+- 指令和数据的权限不一样
+- 缓存体系,提高程序的局限性
+- 动态链接多进程共享同一个.text
+
+#+begin_src C
+int printf(const char *format, ...);
+
+int global_init_var = 84;
+int global_uninit_var;
+
+void func1(int i)
+{
+    printf("%d\n", i);
+}
+
+int main(int argc, char *argv[])
+{
+    static int static_var = 85;
+    static int static_var2;
+
+    int a = 1;
+    int b;
+
+    func1(static_var + static_var2 + a + b);
+    return 0;
+}
+#+end_src
+
+目标文件格式
+- .text 代码段
+- .data 初始化了的全局静态变量和局部静态变量, 8个字节
+- .rodata const和只读字符串, 640a就是字符\和字符n，最后以0结尾
+- global_uninit_var放在了COM段
+
+#+begin_src bash
+readelf -h 2.o
+ELF Header:
+  Magic:   7f 45 4c 46 01 01 01 00 00 00 00 00 00 00 00 00 
+  Class:                             ELF32
+  Data:                              2's complement, little endian
+  Version:                           1 (current)
+  OS/ABI:                            UNIX - System V
+  ABI Version:                       0
+  Type:                              REL (Relocatable file)
+  Machine:                           Intel 80386
+  Version:                           0x1
+  Entry point address:               0x0
+  Start of program headers:          0 (bytes into file)
+  Start of section headers:          812 (bytes into file)
+  Flags:                             0x0
+  Size of this header:               52 (bytes)
+  Size of program headers:           0 (bytes)
+  Number of program headers:         0
+  Size of section headers:           40 (bytes)
+  Number of section headers:         13
+  Section header string table index: 12
+
+readelf -S 2.o
+There are 13 section headers, starting at offset 0x32c:
+
+Section Headers:
+  [Nr] Name              Type            Addr     Off    Size   ES Flg Lk Inf Al
+  [ 0]                   NULL            00000000 000000 000000 00      0   0  0
+  [ 1] .text             PROGBITS        00000000 000034 000064 00  AX  0   0  1
+  [ 2] .rel.text         REL             00000000 000294 000028 08   I 10   1  4
+  [ 3] .data             PROGBITS        00000000 000098 000008 00  WA  0   0  4
+  [ 4] .bss              NOBITS          00000000 0000a0 000004 00  WA  0   0  4
+  [ 5] .rodata           PROGBITS        00000000 0000a0 000004 00   A  0   0  1
+  [ 6] .comment          PROGBITS        00000000 0000a4 00002d 01  MS  0   0  1
+  [ 7] .note.GNU-stack   PROGBITS        00000000 0000d1 000000 00      0   0  1
+  [ 8] .eh_frame         PROGBITS        00000000 0000d4 000064 00   A  0   0  4
+  [ 9] .rel.eh_frame     REL             00000000 0002bc 000010 08   I 10   8  4
+  [10] .symtab           SYMTAB          00000000 000138 000100 10     11  11  4
+  [11] .strtab           STRTAB          00000000 000238 00005a 00      0   0  1
+  [12] .shstrtab         STRTAB          00000000 0002cc 00005f 00      0   0  1
+Key to Flags:
+  W (write), A (alloc), X (execute), M (merge), S (strings), I (info),
+  L (link order), O (extra OS processing required), G (group), T (TLS),
+  C (compressed), x (unknown), o (OS specific), E (exclude),
+  p (processor specific)
+
+readelf -s 2.o
+
+Symbol table '.symtab' contains 16 entries:
+   Num:    Value  Size Type    Bind   Vis      Ndx Name
+     0: 00000000     0 NOTYPE  LOCAL  DEFAULT  UND 
+     1: 00000000     0 FILE    LOCAL  DEFAULT  ABS 2.c
+     2: 00000000     0 SECTION LOCAL  DEFAULT    1 
+     3: 00000000     0 SECTION LOCAL  DEFAULT    3 
+     4: 00000000     0 SECTION LOCAL  DEFAULT    4 
+     5: 00000000     0 SECTION LOCAL  DEFAULT    5 
+     6: 00000004     4 OBJECT  LOCAL  DEFAULT    3 static_var.1907
+     7: 00000000     4 OBJECT  LOCAL  DEFAULT    4 static_var2.1908
+     8: 00000000     0 SECTION LOCAL  DEFAULT    7 
+     9: 00000000     0 SECTION LOCAL  DEFAULT    8 
+    10: 00000000     0 SECTION LOCAL  DEFAULT    6 
+    11: 00000000     4 OBJECT  GLOBAL DEFAULT    3 global_init_var
+    12: 00000004     4 OBJECT  GLOBAL DEFAULT  COM global_uninit_var
+    13: 00000000    28 FUNC    GLOBAL DEFAULT    1 func1
+    14: 00000000     0 NOTYPE  GLOBAL DEFAULT  UND printf
+    15: 0000001c    72 FUNC    GLOBAL DEFAULT    1 main
+
+objdump -s -d 2.o
+
+2.o:     file format elf32-i386
+
+Contents of section .text:
+ 0000 5589e583 ec0883ec 08ff7508 68000000  U.........u.h...
+ 0010 00e8fcff ffff83c4 1090c9c3 8d4c2404  .............L$.
+ 0020 83e4f0ff 71fc5589 e55183ec 14c745f4  ....q.U..Q....E.
+ 0030 01000000 8b150400 0000a100 00000001  ................
+ 0040 c28b45f4 01c28b45 f001d083 ec0c50e8  ..E....E......P.
+ 0050 fcffffff 83c410b8 00000000 8b4dfcc9  .............M..
+ 0060 8d61fcc3                             .a..            
+Contents of section .data:
+ 0000 54000000 55000000                    T...U...        
+Contents of section .rodata:
+ 0000 25640a00                             %d..            
+Contents of section .comment:
+ 0000 00474343 3a202847 4e552920 382e332e  .GCC: (GNU) 8.3.
+ 0010 31203230 31393035 30372028 52656420  1 20190507 (Red 
+ 0020 48617420 382e332e 312d3429 00        Hat 8.3.1-4).   
+Contents of section .eh_frame:
+ 0000 14000000 00000000 017a5200 017c0801  .........zR..|..
+ 0010 1b0c0404 88010000 1c000000 1c000000  ................
+ 0020 00000000 1c000000 00410e08 8502420d  .........A....B.
+ 0030 0558c50c 04040000 28000000 3c000000  .X......(...<...
+ 0040 1c000000 48000000 00440c01 00471005  ....H....D...G..
+ 0050 02750043 0f03757c 06750c01 0041c543  .u.C..u|.u...A.C
+ 0060 0c040400                             ....            
+
+Disassembly of section .text:
+
+00000000 <func1>:
+   0:	55                   	push   %ebp
+   1:	89 e5                	mov    %esp,%ebp
+   3:	83 ec 08             	sub    $0x8,%esp
+   6:	83 ec 08             	sub    $0x8,%esp
+   9:	ff 75 08             	pushl  0x8(%ebp)
+   c:	68 00 00 00 00       	push   $0x0
+  11:	e8 fc ff ff ff       	call   12 <func1+0x12>
+  16:	83 c4 10             	add    $0x10,%esp
+  19:	90                   	nop
+  1a:	c9                   	leave  
+  1b:	c3                   	ret    
+
+0000001c <main>:
+  1c:	8d 4c 24 04          	lea    0x4(%esp),%ecx
+  20:	83 e4 f0             	and    $0xfffffff0,%esp
+  23:	ff 71 fc             	pushl  -0x4(%ecx)
+  26:	55                   	push   %ebp
+  27:	89 e5                	mov    %esp,%ebp
+  29:	51                   	push   %ecx
+  2a:	83 ec 14             	sub    $0x14,%esp
+  2d:	c7 45 f4 01 00 00 00 	movl   $0x1,-0xc(%ebp)
+  34:	8b 15 04 00 00 00    	mov    0x4,%edx
+  3a:	a1 00 00 00 00       	mov    0x0,%eax
+  3f:	01 c2                	add    %eax,%edx
+  41:	8b 45 f4             	mov    -0xc(%ebp),%eax
+  44:	01 c2                	add    %eax,%edx
+  46:	8b 45 f0             	mov    -0x10(%ebp),%eax
+  49:	01 d0                	add    %edx,%eax
+  4b:	83 ec 0c             	sub    $0xc,%esp
+  4e:	50                   	push   %eax
+  4f:	e8 fc ff ff ff       	call   50 <main+0x34>
+  54:	83 c4 10             	add    $0x10,%esp
+  57:	b8 00 00 00 00       	mov    $0x0,%eax
+  5c:	8b 4d fc             	mov    -0x4(%ebp),%ecx
+  5f:	c9                   	leave
+  60:	8d 61 fc             	lea    -0x4(%ecx),%esp
+  63:	c3                   	ret
+
+#+end_src
+
+更多的段
+| Name        | Description                               |
+|-------------+-------------------------------------------|
+| .rodata1    | read only data                            |
+| .comment    | compiler version                          |
+| .debug      | debug info                                |
+| .dynamic    | dynamic link info                         |
+| .hash       | symbol hash table                         |
+| .line       | file line for debug                       |
+| .note       | additional compiler info                  |
+| .strtab     | string table, symbol name                 |
+| .symtabl    | symbol table                              |
+| .shstrtab   | section string table, section name        |
+| .plt .got   | dynamic jump table and global entry table |
+| .init .fini | init and fini code                        |
+
+objcopy可以将任意文件放在elf里
+
+
+#+begin_src bash
+objcopy -I binary -O elf32-i386 -B i386 1.o 11.o
+ojdump -ht 11.o
+
+11.o:     file format elf32-i386
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .data         00000534  00000000  00000000  00000034  2**0
+                  CONTENTS, ALLOC, LOAD, DATA
+SYMBOL TABLE:
+00000000 l    d  .data	00000000 .data
+00000000 g       .data	00000000 _binary_1_o_start
+00000534 g       .data	00000000 _binary_1_o_end
+00000534 g       *ABS*	00000000 _binary_1_o_size
+
+
+readelf -h 11.o
+ELF Header:
+  Magic:   7f 45 4c 46 01 01 01 00 00 00 00 00 00 00 00 00 
+  Class:                             ELF32
+  Data:                              2's complement, little endian
+  Version:                           1 (current)
+  OS/ABI:                            UNIX - System V
+  ABI Version:                       0
+  Type:                              REL (Relocatable file)
+  Machine:                           Intel 80386
+  Version:                           0x1
+  Entry point address:               0x0
+  Start of program headers:          0 (bytes into file)
+  Start of section headers:          1552 (bytes into file)
+  Flags:                             0x0
+  Size of this header:               52 (bytes)
+  Size of program headers:           0 (bytes)
+  Number of program headers:         0
+  Size of section headers:           40 (bytes)
+  Number of section headers:         5
+  Section header string table index: 4
+
+readelf -S 11.o
+There are 5 section headers, starting at offset 0x610:
+
+Section Headers:
+  [Nr] Name              Type            Addr     Off    Size   ES Flg Lk Inf Al
+  [ 0]                   NULL            00000000 000000 000000 00      0   0  0
+  [ 1] .data             PROGBITS        00000000 000034 000534 00  WA  0   0  1
+  [ 2] .symtab           SYMTAB          00000000 000568 000050 10      3   2  4
+  [ 3] .strtab           STRTAB          00000000 0005b8 000034 00      0   0  1
+  [ 4] .shstrtab         STRTAB          00000000 0005ec 000021 00      0   0  1
+Key to Flags:
+  W (write), A (alloc), X (execute), M (merge), S (strings), I (info),
+  L (link order), O (extra OS processing required), G (group), T (TLS),
+  C (compressed), x (unknown), o (OS specific), E (exclude),
+  p (processor specific)
+[xuali2@sha-isbu-ed15n xuali2]$readelf -s 11.o
+
+Symbol table '.symtab' contains 5 entries:
+   Num:    Value  Size Type    Bind   Vis      Ndx Name
+     0: 00000000     0 NOTYPE  LOCAL  DEFAULT  UND 
+     1: 00000000     0 SECTION LOCAL  DEFAULT    1 
+     2: 00000000     0 NOTYPE  GLOBAL DEFAULT    1 _binary_1_o_start
+     3: 00000534     0 NOTYPE  GLOBAL DEFAULT    1 _binary_1_o_end
+     4: 00000534     0 NOTYPE  GLOBAL DEFAULT  ABS _binary_1_o_size
+
+#+end_src
+
+__attribute__((section("name"))) 修饰可以指定段
+
+** ELF文件结构
+
+- 段表、字符串表等控制信息段都在文件后面
+- REL 重定位文件 EXEC 可执行文件 DYN 共享目标文件
+- 符号表里的值目标文件是 *段内偏移* ，可执行文件是 *虚拟地址*
+
+| ELF Header           |
+|----------------------|
+| .text                |
+|----------------------|
+| .data                |
+|----------------------|
+| .bss                 |
+|----------------------|
+| ...                  |
+|----------------------|
+| section header table |
+|----------------------|
+| string tables        |
+|----------------------|
+| symbol tables        |
+| ...                  |
+
+特殊符号
+| Name                                      | Description    |
+|-------------------------------------------+----------------|
+| __executable_start   | 程序最开始地址 |
+| __etext&_etext&etext | 程序末尾地址   |
+| _edata&edata                       | 数据段结束地址 |
+| _end&end                           | 程序结束地址   |
+
+符号修饰
+- C++ 关键的概念是函数签名: 函数名+参数类型+所在类+命令空间，基于此生成符号名
+- 导致不同编译器之间不能相互链接的主要原因是生成符号的规则不一样
+
+extern C
+- C++语法，修饰内的代码当作C语言代码处理，生成符号基于C语言规则
+- 一个头文件同时支持C,C++
+#+begin_src C
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+void *memset(void *, int, size_t);
+
+#ifdef __cplusplus
+}
+#endif
+#+end_src
+
+弱符号
+- 强符号不可重复定义
+- 强符号覆盖弱符号
+- 弱符号选占用空间最大的一个，如果有多个同样空间的，随机?
+
+弱引用
+- 未定义默认为0
+- 库中的弱符号可以被用户定义的强符号所覆盖
+- 例: -lpthread决定glibc是单线程还是多线程版本，可以判断pthread_create是否为0来看是否为多线程版本，也可以直接看link的so库
+
+调试信息
+- ELF使用DWART(debug with arbitrary record format)
+- Microsoft使用CodeView
+
+* 第四章 静态链接
+
+#+begin_src C
+  /* gcc -m32 -c a.c b.c -Wno-implicit-function-declaration */
+  /* ld a.o b.o -e main -o ab -m elf_i386 */
+  /* a.c */
+  extern int shared;
+
+  int main()
+  {
+      int a = 100;
+      swap(&a, &shared);
+  }
+
+  /* b.c */
+  int shared = 1;
+
+  void swap(int *a, int *b)
+  {
+      ,*a ^= *b ^= *a ^= *b ;
+  }
+
+#+end_src
+
+两步链接Two-pass Linking:
+- 空间与地址分配
+指的是可执行文件中的空间
+- 符号解析与重定位
+
+#+begin_src bash
+  gcc -m32 -c a.c -Wno-implicit-function-declaration
+  readelf -S a.o
+  There are 12 section headers, starting at offset 0x218:
+
+  Section Headers:
+    [Nr] Name              Type            Addr     Off    Size   ES Flg Lk Inf Al
+    [ 0]                   NULL            00000000 000000 000000 00      0   0  0
+    [ 1] .text             PROGBITS        00000000 000034 000039 00  AX  0   0  1
+    [ 2] .rel.text         REL             00000000 0001a8 000010 08   I  9   1  4
+    [ 3] .data             PROGBITS        00000000 00006d 000000 00  WA  0   0  1
+    [ 4] .bss              NOBITS          00000000 00006d 000000 00  WA  0   0  1
+    [ 5] .comment          PROGBITS        00000000 00006d 00002d 01  MS  0   0  1
+    [ 6] .note.GNU-stack   PROGBITS        00000000 00009a 000000 00      0   0  1
+    [ 7] .eh_frame         PROGBITS        00000000 00009c 000044 00   A  0   0  4
+    [ 8] .rel.eh_frame     REL             00000000 0001b8 000008 08   I  9   7  4
+    [ 9] .symtab           SYMTAB          00000000 0000e0 0000b0 10     10   8  4
+    [10] .strtab           STRTAB          00000000 000190 000016 00      0   0  1
+    [11] .shstrtab         STRTAB          00000000 0001c0 000057 00      0   0  1
+  Key to Flags:
+    W (write), A (alloc), X (execute), M (merge), S (strings), I (info),
+    L (link order), O (extra OS processing required), G (group), T (TLS),
+    C (compressed), x (unknown), o (OS specific), E (exclude),
+    p (processor specific)
+
+  gcc -m32 -c b.c -Wno-implicit-function-declaration
+  readelf -S b.o
+  There are 11 section headers, starting at offset 0x1ec:
+
+  Section Headers:
+    [Nr] Name              Type            Addr     Off    Size   ES Flg Lk Inf Al
+    [ 0]                   NULL            00000000 000000 000000 00      0   0  0
+    [ 1] .text             PROGBITS        00000000 000034 000039 00  AX  0   0  1
+    [ 2] .data             PROGBITS        00000000 000070 000004 00  WA  0   0  4
+    [ 3] .bss              NOBITS          00000000 000074 000000 00  WA  0   0  1
+    [ 4] .comment          PROGBITS        00000000 000074 00002d 01  MS  0   0  1
+    [ 5] .note.GNU-stack   PROGBITS        00000000 0000a1 000000 00      0   0  1
+    [ 6] .eh_frame         PROGBITS        00000000 0000a4 000038 00   A  0   0  4
+    [ 7] .rel.eh_frame     REL             00000000 000190 000008 08   I  8   6  4
+    [ 8] .symtab           SYMTAB          00000000 0000dc 0000a0 10      9   8  4
+    [ 9] .strtab           STRTAB          00000000 00017c 000011 00      0   0  1
+    [10] .shstrtab         STRTAB          00000000 000198 000053 00      0   0  1
+  Key to Flags:
+    W (write), A (alloc), X (execute), M (merge), S (strings), I (info),
+    L (link order), O (extra OS processing required), G (group), T (TLS),
+    C (compressed), x (unknown), o (OS specific), E (exclude),
+    p (processor specific)
+
+  ld  a.o b.o -o ab -m elf_i386   # *注意，运行会出错*
+  readelf -S ab
+  There are 8 section headers, starting at offset 0x11b4:
+
+  Section Headers:
+    [Nr] Name              Type            Addr     Off    Size   ES Flg Lk Inf Al
+    [ 0]                   NULL            00000000 000000 000000 00      0   0  0
+    [ 1] .text             PROGBITS        08048094 000094 000072 00  AX  0   0  1
+    [ 2] .eh_frame         PROGBITS        08048108 000108 000064 00   A  0   0  4
+    [ 3] .data             PROGBITS        0804a000 001000 000004 00  WA  0   0  4
+    [ 4] .comment          PROGBITS        00000000 001004 00002c 01  MS  0   0  1
+    [ 5] .symtab           SYMTAB          00000000 001030 000100 10      6   9  4
+    [ 6] .strtab           STRTAB          00000000 001130 000048 00      0   0  1
+    [ 7] .shstrtab         STRTAB          00000000 001178 00003a 00      0   0  1
+  Key to Flags:
+    W (write), A (alloc), X (execute), M (merge), S (strings), I (info),
+    L (link order), O (extra OS processing required), G (group), T (TLS),
+    C (compressed), x (unknown), o (OS specific), E (exclude),
+    p (processor specific)
+
+  objdump -h a.o
+
+  a.o:     file format elf32-i386
+
+  Sections:
+  Idx Name          Size      VMA       LMA       File off  Algn
+    0 .text         00000039  00000000  00000000  00000034  2**0
+                    CONTENTS, ALLOC, LOAD, RELOC, READONLY, CODE
+    1 .data         00000000  00000000  00000000  0000006d  2**0
+                    CONTENTS, ALLOC, LOAD, DATA
+    2 .bss          00000000  00000000  00000000  0000006d  2**0
+                    ALLOC
+    3 .comment      0000002d  00000000  00000000  0000006d  2**0
+                    CONTENTS, READONLY
+    4 .note.GNU-stack 00000000  00000000  00000000  0000009a  2**0
+                    CONTENTS, READONLY
+    5 .eh_frame     00000044  00000000  00000000  0000009c  2**2
+                    CONTENTS, ALLOC, LOAD, RELOC, READONLY, DATA
+  objdump -h b.o
+
+  b.o:     file format elf32-i386
+
+  Sections:
+  Idx Name          Size      VMA       LMA       File off  Algn
+    0 .text         00000039  00000000  00000000  00000034  2**0
+                    CONTENTS, ALLOC, LOAD, READONLY, CODE
+    1 .data         00000004  00000000  00000000  00000070  2**2
+                    CONTENTS, ALLOC, LOAD, DATA
+    2 .bss          00000000  00000000  00000000  00000074  2**0
+                    ALLOC
+    3 .comment      0000002d  00000000  00000000  00000074  2**0
+                    CONTENTS, READONLY
+    4 .note.GNU-stack 00000000  00000000  00000000  000000a1  2**0
+                    CONTENTS, READONLY
+    5 .eh_frame     00000038  00000000  00000000  000000a4  2**2
+                    CONTENTS, ALLOC, LOAD, RELOC, READONLY, DATA
+
+  objdump -h ab
+
+  ab:     file format elf32-i386
+
+  Sections:
+  Idx Name          Size      VMA       LMA       File off  Algn
+    0 .text         00000072  08048094  08048094  00000094  2**0
+                    CONTENTS, ALLOC, LOAD, READONLY, CODE
+    1 .eh_frame     00000064  08048108  08048108  00000108  2**2
+                    CONTENTS, ALLOC, LOAD, READONLY, DATA
+    2 .data         00000004  0804a000  0804a000  00001000  2**2
+                    CONTENTS, ALLOC, LOAD, DATA
+    3 .comment      0000002c  00000000  00000000  00001004  2**0
+                    CONTENTS, READONLY
+#+end_src
+
+** 重定位
+
+#+begin_src bash
+objdump -d a.o
+
+a.o:     file format elf32-i386
+
+
+Disassembly of section .text:
+
+00000000 <main>:
+   0:	8d 4c 24 04          	lea    0x4(%esp),%ecx
+   4:	83 e4 f0             	and    $0xfffffff0,%esp
+   7:	ff 71 fc             	pushl  -0x4(%ecx)
+   a:	55                   	push   %ebp
+   b:	89 e5                	mov    %esp,%ebp
+   d:	51                   	push   %ecx
+   e:	83 ec 14             	sub    $0x14,%esp
+  11:	c7 45 f4 64 00 00 00 	movl   $0x64,-0xc(%ebp)
+  18:	83 ec 08             	sub    $0x8,%esp
+  1b:	68 00 00 00 00       	push   $0x0
+  20:	8d 45 f4             	lea    -0xc(%ebp),%eax
+  23:	50                   	push   %eax
+  24:	e8 fc ff ff ff       	call   25 <main+0x25>
+  29:	83 c4 10             	add    $0x10,%esp
+  2c:	b8 00 00 00 00       	mov    $0x0,%eax
+  31:	8b 4d fc             	mov    -0x4(%ebp),%ecx
+  34:	c9                   	leave  
+  35:	8d 61 fc             	lea    -0x4(%ecx),%esp
+  38:	c3                   	ret 
+#+end_src
+
+- 68 *00 00 00 00*, 这个是shared的地址，重定位前是0
+- e8 *fc ff ff ff*, 这个是swap的地址，重定位前是-4相对偏移，也就是本身
+
+#+begin_src bash
+objdump -d ab
+
+ab:     file format elf32-i386
+
+
+Disassembly of section .text:
+
+08048094 <main>:
+ 8048094:	8d 4c 24 04          	lea    0x4(%esp),%ecx
+ 8048098:	83 e4 f0             	and    $0xfffffff0,%esp
+ 804809b:	ff 71 fc             	pushl  -0x4(%ecx)
+ 804809e:	55                   	push   %ebp
+ 804809f:	89 e5                	mov    %esp,%ebp
+ 80480a1:	51                   	push   %ecx
+ 80480a2:	83 ec 14             	sub    $0x14,%esp
+ 80480a5:	c7 45 f4 64 00 00 00 	movl   $0x64,-0xc(%ebp)
+ 80480ac:	83 ec 08             	sub    $0x8,%esp
+ 80480af:	68 00 a0 04 08       	push   $0x804a000
+ 80480b4:	8d 45 f4             	lea    -0xc(%ebp),%eax
+ 80480b7:	50                   	push   %eax
+ 80480b8:	e8 10 00 00 00       	call   80480cd <swap>
+ 80480bd:	83 c4 10             	add    $0x10,%esp
+ 80480c0:	b8 00 00 00 00       	mov    $0x0,%eax
+ 80480c5:	8b 4d fc             	mov    -0x4(%ebp),%ecx
+ 80480c8:	c9                   	leave  
+ 80480c9:	8d 61 fc             	lea    -0x4(%ecx),%esp
+ 80480cc:	c3                   	ret   
+
+
+080480cd <swap>:
+ 80480cd:	55                   	push   %ebp
+#+end_src
+
+- 68 *00 a0 04 08*, 这个是shared的地址，重定位后是0x0804a000
+- e8 *10 00 00 00*, 这个是swap的地址，重定位前是+0x10相对偏移，也就是swap的开始
+
+** 重定位表
+
+- ".rel." 开头是重定位表
+- 段表里的info指定要重定位的段
+- 组成
+| r_offset | 相对偏移                                                                                       |
+| r_info   | 低8位为重定位类型， R_386_32为绝对寻址，R_386_PC32为相对寻址修正, 高24位为符号在符号表里的下标 |
+- 重定位项在符号表里的类型为UND
+- 对于弱符号，由于不知道最终大小是多少，所以不能放在bss段，要放在COMMON段等链接时决议，这说明不在COMMON段的全局变量符号都是强符号
+
+#+begin_src bash
+
+readelf -r a.o
+
+Relocation section '.rel.text' at offset 0x1a8 contains 2 entries:
+ Offset     Info    Type            Sym.Value  Sym. Name
+0000001c  00000901 R_386_32          00000000   shared
+00000025  00000a02 R_386_PC32        00000000   swap
+
+Relocation section '.rel.eh_frame' at offset 0x1b8 contains 1 entry:
+ Offset     Info    Type            Sym.Value  Sym. Name
+00000020  00000202 R_386_PC32        00000000   .text
+
+#+end_src
+
+C++特性编译实现
+- template，虚函数表，每个实例在单独一个段中，链接时Link Once，实现重复代码消除
+- -ffunction-sections和-fdata-sections可能实现函数级链接而非文件级链接
+- 全局对象构造和析构分别存在.init和.fini段在main前和后执行
+
+ABI
+| Name | Desc           |
+|------+----------------|
+| API  | 源代码级的接口 |
+| ABI  | 二进制级的接口 |
+
+objdump -t 查看静态库符号表
+ar -t      查看打包文件
+ar -x      解压
+gcc -static 静态链接库
+gcc --verbose 打印详细信息
+
+** 链接控制脚本
+使用命令控制链接过程
+#+begin_src c
+  # gcc -m32 -c -fno-builtin tiny.c
+  # ld -static -e nomain -o tiny tiny.o -m elf_i386
+  char *str = "Hello world!\n";
+
+  void print()
+  {
+      asm("movl $13, %%edx \n\t"
+          "movl %0, %%ecx \n\t"
+          "movl $0, %%ebx \n\t"
+          "movl $4, %%eax \n\t"
+          "int $0x80      \n\t"
+          ::"r"(str):"edx","ecx","ebx");
+  }
+
+  void exit()
+  {
+      asm("movl $42, %ebx \n\t"
+          "movl $1, %eax  \n\t"
+          "int $0x80      \n\t");
+  }
+
+  void nomain()
+  {
+      print();
+      exit();
+  }
+#+end_src
+#+begin_src bash
+readelf -h tiny
+ELF Header:
+  Magic:   7f 45 4c 46 01 01 01 00 00 00 00 00 00 00 00 00 
+  Class:                             ELF32
+  Data:                              2's complement, little endian
+  Version:                           1 (current)
+  OS/ABI:                            UNIX - System V
+  ABI Version:                       0
+  Type:                              EXEC (Executable file)
+  Machine:                           Intel 80386
+  Version:                           0x1
+  Entry point address:               0x80480c6
+  Start of program headers:          52 (bytes into file)
+  Start of section headers:          4544 (bytes into file)
+  Flags:                             0x0
+  Size of this header:               52 (bytes)
+  Size of program headers:           32 (bytes)
+  Number of program headers:         3
+  Size of section headers:           40 (bytes)
+  Number of section headers:         9
+  Section header string table index: 8
+
+readelf -S tiny
+There are 9 section headers, starting at offset 0x11c0:
+
+Section Headers:
+  [Nr] Name              Type            Addr     Off    Size   ES Flg Lk Inf Al
+  [ 0]                   NULL            00000000 000000 000000 00      0   0  0
+  [ 1] .text             PROGBITS        08048094 000094 000042 00  AX  0   0  1
+  [ 2] .rodata           PROGBITS        080480d6 0000d6 00000e 00   A  0   0  1
+  [ 3] .eh_frame         PROGBITS        080480e4 0000e4 00007c 00   A  0   0  4
+  [ 4] .data             PROGBITS        0804a000 001000 000004 00  WA  0   0  4
+  [ 5] .comment          PROGBITS        00000000 001004 00002c 01  MS  0   0  1
+  [ 6] .symtab           SYMTAB          00000000 001030 000100 10      7   9  4
+  [ 7] .strtab           STRTAB          00000000 001130 00004c 00      0   0  1
+  [ 8] .shstrtab         STRTAB          00000000 00117c 000042 00      0   0  1
+Key to Flags:
+  W (write), A (alloc), X (execute), M (merge), S (strings), I (info),
+  L (link order), O (extra OS processing required), G (group), T (TLS),
+  C (compressed), x (unknown), o (OS specific), E (exclude),
+  p (processor specific)
+objdump -s -d tiny
+
+tiny:     file format elf32-i386
+
+Contents of section .text:
+ 8048094 5589e553 a100a004 08ba0d00 000089c1  U..S............
+ 80480a4 bb000000 00b80400 0000cd80 905b5dc3  .............[].
+ 80480b4 5589e5bb 2a000000 b8010000 00cd8090  U...*...........
+ 80480c4 5dc35589 e5e8c6ff ffffe8e1 ffffff90  ].U.............
+ 80480d4 5dc3                                 ].              
+Contents of section .rodata:
+ 80480d6 48656c6c 6f20776f 726c6421 0a00      Hello world!..  
+Contents of section .eh_frame:
+ 80480e4 14000000 00000000 017a5200 017c0801  .........zR..|..
+ 80480f4 1b0c0404 88010000 20000000 1c000000  ........ .......
+ 8048104 90ffffff 20000000 00410e08 8502420d  .... ....A....B.
+ 8048114 05418303 5ac341c5 0c040400 1c000000  .A..Z.A.........
+ 8048124 40000000 8cffffff 12000000 00410e08  @............A..
+ 8048134 8502420d 054ec50c 04040000 1c000000  ..B..N..........
+ 8048144 60000000 7effffff 10000000 00410e08  `...~........A..
+ 8048154 8502420d 054cc50c 04040000           ..B..L......    
+Contents of section .data:
+ 804a000 d6800408                             ....            
+Contents of section .comment:
+ 0000 4743433a 2028474e 55292038 2e332e31  GCC: (GNU) 8.3.1
+ 0010 20323031 39303530 37202852 65642048   20190507 (Red H
+ 0020 61742038 2e332e31 2d342900           at 8.3.1-4).    
+
+Disassembly of section .text:
+
+08048094 <print>:
+ 8048094:	55                   	push   %ebp
+ 8048095:	89 e5                	mov    %esp,%ebp
+ 8048097:	53                   	push   %ebx
+ 8048098:	a1 00 a0 04 08       	mov    0x804a000,%eax
+ 804809d:	ba 0d 00 00 00       	mov    $0xd,%edx
+ 80480a2:	89 c1                	mov    %eax,%ecx
+ 80480a4:	bb 00 00 00 00       	mov    $0x0,%ebx
+ 80480a9:	b8 04 00 00 00       	mov    $0x4,%eax
+ 80480ae:	cd 80                	int    $0x80
+ 80480b0:	90                   	nop
+ 80480b1:	5b                   	pop    %ebx
+ 80480b2:	5d                   	pop    %ebp
+ 80480b3:	c3                   	ret    
+
+080480b4 <exit>:
+ 80480b4:	55                   	push   %ebp
+ 80480b5:	89 e5                	mov    %esp,%ebp
+ 80480b7:	bb 2a 00 00 00       	mov    $0x2a,%ebx
+ 80480bc:	b8 01 00 00 00       	mov    $0x1,%eax
+ 80480c1:	cd 80                	int    $0x80
+ 80480c3:	90                   	nop
+ 80480c4:	5d                   	pop    %ebp
+ 80480c5:	c3                   	ret    
+
+080480c6 <nomain>:
+ 80480c6:	55                   	push   %ebp
+ 80480c7:	89 e5                	mov    %esp,%ebp
+ 80480c9:	e8 c6 ff ff ff       	call   8048094 <print>
+ 80480ce:	e8 e1 ff ff ff       	call   80480b4 <exit>
+ 80480d3:	90                   	nop
+ 80480d4:	5d                   	pop    %ebp
+ 80480d5:	c3                   	ret   
+#+end_src
+
+使用链接脚本
+
+- 设置当前虚拟地址
+- 设置tinytext段，包含.text .data .rodata
+- 丢弃.comment段
+
+#+begin_src bash
+  # ld -static -T tiny.lds -o tiny tiny.o -m elf_i386
+  # tinytext段是WAX属性，因为融合了数据段和代码段
+  ENTRY(nomain)
+
+  SECTIONS
+  {
+      . = 0x08048000 + SIZEOF_HEADERS;
+      tinytext  : {*(.text) *(.data) *(.rodata)}
+      /DISCARD/ : {*(.comment)}
+  }
+#+end_src
+
+*可执行文件中，符号表和字符串表是可选的,可被strip,但是段表字符串表为必须*
+
+#+begin_src bash
+readelf -h tiny
+ELF Header:
+  Magic:   7f 45 4c 46 01 01 01 00 00 00 00 00 00 00 00 00 
+  Class:                             ELF32
+  Data:                              2's complement, little endian
+  Version:                           1 (current)
+  OS/ABI:                            UNIX - System V
+  ABI Version:                       0
+  Type:                              EXEC (Executable file)
+  Machine:                           Intel 80386
+  Version:                           0x1
+  Entry point address:               0x8048122
+  Start of program headers:          52 (bytes into file)
+  Start of section headers:          588 (bytes into file)
+  Flags:                             0x0
+  Size of this header:               52 (bytes)
+  Size of program headers:           32 (bytes)
+  Number of program headers:         2
+  Size of section headers:           40 (bytes)
+  Number of section headers:         6
+  Section header string table index: 5
+readelf -S tiny
+There are 6 section headers, starting at offset 0x24c:
+
+Section Headers:
+  [Nr] Name              Type            Addr     Off    Size   ES Flg Lk Inf Al
+  [ 0]                   NULL            00000000 000000 000000 00      0   0  0
+  [ 1] .eh_frame         PROGBITS        08048074 000074 00007c 00   A  0   0  4
+  [ 2] tinytext          PROGBITS        080480f0 0000f0 000056 00 WAX  0   0  4
+  [ 3] .symtab           SYMTAB          00000000 000148 0000a0 10      4   6  4
+  [ 4] .strtab           STRTAB          00000000 0001e8 000034 00      0   0  1
+  [ 5] .shstrtab         STRTAB          00000000 00021c 00002e 00      0   0  1
+Key to Flags:
+  W (write), A (alloc), X (execute), M (merge), S (strings), I (info),
+  L (link order), O (extra OS processing required), G (group), T (TLS),
+  C (compressed), x (unknown), o (OS specific), E (exclude),
+  p (processor specific)
+
+strip tiny
+readelf -S tiny
+There are 4 section headers, starting at offset 0x164:
+
+Section Headers:
+  [Nr] Name              Type            Addr     Off    Size   ES Flg Lk Inf Al
+  [ 0]                   NULL            00000000 000000 000000 00      0   0  0
+  [ 1] .eh_frame         PROGBITS        08048074 000074 00007c 00   A  0   0  4
+  [ 2] tinytext          PROGBITS        080480f0 0000f0 000056 00 WAX  0   0  4
+  [ 3] .shstrtab         STRTAB          00000000 000146 00001e 00      0   0  1
+Key to Flags:
+  W (write), A (alloc), X (execute), M (merge), S (strings), I (info),
+  L (link order), O (extra OS processing required), G (group), T (TLS),
+  C (compressed), x (unknown), o (OS specific), E (exclude),
+  p (processor specific)
+
+#+end_src
+
+语法
+- 语句间用";"作分割符
+- 表达式与运算符和C一样
++ - * / += -= *= & | >> <<
+- 注释和C一样, \slash**\slash
+| 命令语句               | 说明                                 |
+|------------------------+--------------------------------------|
+| ENTRY(symbol)          | 指定入口地址                         |
+| STARTUP(filename)      | 文件filename作为链接过程的第一个输入 |
+| SEARCH_DIR(path)       | ld库查找路径                         |
+| INPUT(file, file, ...) | 链接过程的输入文件                   |
+| INCLUDE filename       | 包含filename进链接脚本               |
+| PROVIDE(symbol)        | 定义某个符号                         |
+
+在sections中，重要的是file(sections)
+#+begin_src bash
+SECTIONS
+{
+    ...
+    secname : { file(sections) file(sections) ... }
+}
+#+end_src
+- file1.o(.data) 选中file1.o里的.data段
+- file1.o(.data .rodata) 或 file1.o(.data, .rodata) 选中file1.o里的.data和.rodata
+- file1.o 选中file1.o的所有段
+- *(.data) 所有输入文件(目标文件)里的.data
+- [a-z]*(.text*[A-Z]) 类似正则
+
+*代码中解析可执行文件可用bfd库*
+#+begin_src c
+  /* gcc t.c -lbfd */
+  #include <stdio.h>
+  #include <bfd.h>
+  int main(int argc, char *argv[])
+  {
+      const char **t = bfd_target_list();
+      while(*t) {
+          printf("%s\n", *t);
+          t++;
+      }
+      return 0;
+  }
+#+end_src
+
+* 第五章 WindowPE/COFF
+略
+
+* 第六章 可执行方主席件的装载与进程
+默认32位CPU linux进程虚拟地址空间
+| 0x00000000 - 0xBFFFFFFF | User Process     |
+| 0xC0000000 - 0xFFFFFFFF | Operating System |
+
+PAE(Physical Address Extension) 虚拟地址空间32位不变,物理地址为36位
+- 使用mmap，不同时间用相同虚拟地址空间映射不同的物理地址
+
+装载 - 所需内存大于物理内存时从磁盘换入, 实际使用会降低性能，所以 *实时性要求高的都关掉了*
+- 覆盖装入(Overlay) - 早期解决方案
+1. 手工编写辅助代码管理内存覆盖
+2. 树状结构，任何模块到根为调用路径
+3. 禁止跨树间调用
+- 页映射(Paging), 为主流操作系统所用
+1. 默认4K一页
+2. 以页为单位分割虚拟和物理内存
+3. linux下流程为 产生缺页中断，kernel查看页映射，如果存在，则从磁盘换入，被换出的页有算法
+
+进程建立
+- 创建虚拟空间
+复制父进程的页映射，设为只读，产生页错误再去设置物理内存与虚拟内存的映射(没有exec前)，称为写时复制
+- 读取可执行文件头，建立虚拟空间与可执行文件映射关系
+exec时，建立虚拟内存和文件的映射，这样产生缺页时，如果访问的是可执行文件里的段,可以知道程序需要的页在文件中的位置，称之为VMA
+- CPU指令寄存器设为可执行文件的entry point，运行
+
+** 进程虚存空间分布
+操作系统装载时只关心页的权限，所以不同段同一个权限可在同一个段，即由Section统一成Segment，操作系统以Segment为单位进行装载
+| 基于Section | 链接视图 |
+| 基于Segment | 装载视图 |
+
+#+begin_src c
+  /* gcc -m32 1.c -Wno-implicit-function-declaration */
+  #include <stdio.h>
+  int main(int argc, char *argv[])
+  {
+      while (1) {
+          sleep(1000);
+      }
+      return 0;
+  }
+#+end_src
+
+- LOAD类型会被映射
+- 一般起码有两个段,一个是可读可执行，一个是可读可写
+- memse比filesz大，是因为bss段
+- kernel load的实际mapping可能和elf里的VMA不一一对应，但只要保证权限和所有需要装载的地址都对就可以
+- ELF里的程序头表结构
+| Name     | Description                 |
+|----------+-----------------------------|
+| p_type   | 类型, LOAD为1               |
+| p_offset | 文件偏移                    |
+| p_vaddr  | Segment虚拟地址             |
+| p_paddr  | 一般和vaddr一致             |
+| p_filesz | 文件占用长度                |
+| p_memse  | 虚拟地址空间长度，不装载为0 |
+| p_flags  | 权限                        |
+| p_align  | 对齐                        |
+
+#+begin_src bash
+readelf -h a.out
+ELF Header:
+  Magic:   7f 45 4c 46 01 01 01 00 00 00 00 00 00 00 00 00
+  Class:                             ELF32
+  Data:                              2's complement, little endian
+  Version:                           1 (current)
+  OS/ABI:                            UNIX - System V
+  ABI Version:                       0
+  Type:                              EXEC (Executable file)
+  Machine:                           Intel 80386
+  Version:                           0x1
+  Entry point address:               0x8048370
+  Start of program headers:          52 (bytes into file)
+  Start of section headers:          13692 (bytes into file)
+  Flags:                             0x0
+  Size of this header:               52 (bytes)
+  Size of program headers:           32 (bytes)
+  Number of program headers:         9
+  Size of section headers:           40 (bytes)
+  Number of section headers:         30
+  Section header string table index: 29
+
+readelf -S a.out
+There are 30 section headers, starting at offset 0x357c:
+
+Section Headers:
+  [Nr] Name              Type            Addr     Off    Size   ES Flg Lk Inf Al
+  [ 0]                   NULL            00000000 000000 000000 00      0   0  0
+  [ 1] .interp           PROGBITS        08048154 000154 000013 00   A  0   0  1
+  [ 2] .note.ABI-tag     NOTE            08048168 000168 000020 00   A  0   0  4
+  [ 3] .note.gnu.build-i NOTE            08048188 000188 000024 00   A  0   0  4
+  [ 4] .gnu.hash         GNU_HASH        080481ac 0001ac 000020 04   A  5   0  4
+  [ 5] .dynsym           DYNSYM          080481cc 0001cc 000070 10   A  6   1  4
+  [ 6] .dynstr           STRTAB          0804823c 00023c 000081 00   A  0   0  1
+  [ 7] .gnu.version      VERSYM          080482be 0002be 00000e 02   A  5   0  2
+  [ 8] .gnu.version_r    VERNEED         080482cc 0002cc 000020 00   A  6   1  4
+  [ 9] .rel.dyn          REL             080482ec 0002ec 000018 08   A  5   0  4
+  [10] .rel.plt          REL             08048304 000304 000010 08  AI  5  22  4
+  [11] .init             PROGBITS        08048314 000314 000024 00  AX  0   0  4
+  [12] .plt              PROGBITS        08048340 000340 000030 04  AX  0   0 16
+  [13] .text             PROGBITS        08048370 000370 0001c5 00  AX  0   0 16
+  [14] .fini             PROGBITS        08048538 000538 000018 00  AX  0   0  4
+  [15] .rodata           PROGBITS        08048550 000550 00000c 00   A  0   0  4
+  [16] .eh_frame_hdr     PROGBITS        0804855c 00055c 00003c 00   A  0   0  4
+  [17] .eh_frame         PROGBITS        08048598 000598 0000ec 00   A  0   0  4
+  [18] .init_array       INIT_ARRAY      08049f04 000f04 000004 04  WA  0   0  4
+  [19] .fini_array       FINI_ARRAY      08049f08 000f08 000004 04  WA  0   0  4
+  [20] .dynamic          DYNAMIC         08049f0c 000f0c 0000e8 08  WA  6   0  4
+  [21] .got              PROGBITS        08049ff4 000ff4 00000c 04  WA  0   0  4
+  [22] .got.plt          PROGBITS        0804a000 001000 000014 04  WA  0   0  4
+  [23] .data             PROGBITS        0804a014 001014 000004 00  WA  0   0  1
+  [24] .bss              NOBITS          0804a018 001018 000004 00  WA  0   0  1
+  [25] .comment          PROGBITS        00000000 001018 00002c 01  MS  0   0  1
+  [26] .gnu.build.attrib NOTE            0804a01c 001044 00172c 00      0   0  4
+  [27] .symtab           SYMTAB          00000000 002770 000690 10     28  82  4
+  [28] .strtab           STRTAB          00000000 002e00 000665 00      0   0  1
+  [29] .shstrtab         STRTAB          00000000 003465 000117 00      0   0  1
+Key to Flags:
+  W (write), A (alloc), X (execute), M (merge), S (strings), I (info),
+  L (link order), O (extra OS processing required), G (group), T (TLS),
+  C (compressed), x (unknown), o (OS specific), E (exclude),
+  p (processor specific)
+
+readelf -l a.out
+
+Elf file type is EXEC (Executable file)
+Entry point 0x8048370
+There are 9 program headers, starting at offset 52
+
+Program Headers:
+  Type           Offset   VirtAddr   PhysAddr   FileSiz MemSiz  Flg Align
+  PHDR           0x000034 0x08048034 0x08048034 0x00120 0x00120 R   0x4
+  INTERP         0x000154 0x08048154 0x08048154 0x00013 0x00013 R   0x1
+      [Requesting program interpreter: /lib/ld-linux.so.2]
+  LOAD           0x000000 0x08048000 0x08048000 0x00684 0x00684 R E 0x1000
+  LOAD           0x000f04 0x08049f04 0x08049f04 0x00114 0x00118 RW  0x1000
+  DYNAMIC        0x000f0c 0x08049f0c 0x08049f0c 0x000e8 0x000e8 RW  0x4
+  NOTE           0x000168 0x08048168 0x08048168 0x00044 0x00044 R   0x4
+  GNU_EH_FRAME   0x00055c 0x0804855c 0x0804855c 0x0003c 0x0003c R   0x4
+  GNU_STACK      0x000000 0x00000000 0x00000000 0x00000 0x00000 RW  0x10
+  GNU_RELRO      0x000f04 0x08049f04 0x08049f04 0x000fc 0x000fc R   0x1
+
+ Section to Segment mapping:
+  Segment Sections...
+   00     
+   01     .interp 
+   02     .interp .note.ABI-tag .note.gnu.build-id .gnu.hash .dynsym .dynstr .gnu.version .gnu.version_r .rel.dyn .rel.plt .init .plt .text .fini .rodata .eh_frame_hdr .eh_frame 
+   03     .init_array .fini_array .dynamic .got .got.plt .data .bss 
+   04     .dynamic 
+   05     .note.ABI-tag .note.gnu.build-id 
+   06     .eh_frame_hdr 
+   07     
+   08     .init_array .fini_array .dynamic .got
+
+./a.out &
+[1] 22024
+cat /proc/22024/map
+map_files/ maps       
+[xuali2@sha-isbu-ed15n xuali2]$cat /proc/22024/maps
+08048000-08049000 r-xp 00000000 00:41 94267115                           /auto/isbu_crdc_sw1/offlinediag/users/xuali2/a.out
+08049000-0804a000 r--p 00000000 00:41 94267115                           /auto/isbu_crdc_sw1/offlinediag/users/xuali2/a.out
+0804a000-0804b000 rw-p 00001000 00:41 94267115                           /auto/isbu_crdc_sw1/offlinediag/users/xuali2/a.out
+f7d75000-f7f16000 r-xp 00000000 fd:00 8820257                            /usr/lib/libc-2.28.so
+f7f16000-f7f17000 ---p 001a1000 fd:00 8820257                            /usr/lib/libc-2.28.so
+f7f17000-f7f19000 r--p 001a1000 fd:00 8820257                            /usr/lib/libc-2.28.so
+f7f19000-f7f1a000 rw-p 001a3000 fd:00 8820257                            /usr/lib/libc-2.28.so
+f7f1a000-f7f1f000 rw-p 00000000 00:00 0 
+f7f39000-f7f3c000 r--p 00000000 00:00 0                                  [vvar]
+f7f3c000-f7f3e000 r-xp 00000000 00:00 0                                  [vdso]
+f7f3e000-f7f66000 r-xp 00000000 fd:00 8820250                            /usr/lib/ld-2.28.so
+f7f66000-f7f67000 r--p 00027000 fd:00 8820250                            /usr/lib/ld-2.28.so
+f7f67000-f7f68000 rw-p 00028000 fd:00 8820250                             /usr/lib/ld-2.28.so
+ffd33000-ffd54000 rw-p 00000000 00:00 0                                  [stack]
+#+end_src
+
+*可将同一个物理页面映射多次，每次权限不一致，这样防止大量的内部碎片*
+例子:
+| Name     | Size | Physical Addr | File Offset | Virtual addr offset |
+|----------+------+---------------+-------------+---------------------|
+| Segment0 | 2K   |        0x0000 |           0 |                   0 |
+| Segment1 | 2K   |        0x1000 |       0x800 |                   0 |
+变为
+| Name     | Size | Physical Addr | File Offset | Virtual addr offset |
+|----------+------+---------------+-------------+---------------------|
+| Segment0 | 2K   |        0x0000 |           0 |                   0 |
+| Segment1 | 2K   |        0x0000 |       0x800 |               0x800 |
+这样，节约了一个页
+
+*p_vaddr % align == p_offset % align*, 这样可能尽可能的在相邻segment间共享一个物理页
+
+*对于多次映射大段物理内存，不能一个用4K分页，一个以16K分页，这种会报错*
+
+内核加载ELF的过程load_elf_binary()
+- 检测ELF文件有效性
+- 寻找".interp"动态链接段，设置动态链接器的路径
+- 根据ELF头，建立映射代码、数据、只读的数据结构
+- 初始化ELF进程环境
+- 将系统调用的返回地址修改成ELF可执行文件入口点，这样回到用户态时新程序开始执行
+动态链接的ELF入口是动态链接器
+静态链接的ELF入口是文件头里的entry
+
+* 第七章 动态链接
+
+区别于静态链接，将链接这个过程推迟到装载时
+
+foobar为so中的函数，则编译时会将符号引用标记为一个动态链接的符号，不进行地址重定位，改为装载时进行
+#+begin_src c
+
+//lib.h
+#ifndef LIB_H
+#define LIB_H
+
+void foobar(int i);
+
+#endif /* LIB_H */
+
+//lib.c
+//gcc -fPIC -shared -o lib.so -m32 lib.c
+#include <stdio.h>
+
+void foobar(int i)
+{
+    printf("dump from lib.so %d\n", i);
+}
+
+//p1.c
+//gcc -o p1 p1.c ./lib.so -m32
+#include "lib.h"
+
+int main(int argc, char *argv[])
+{
+    foobar(1);
+    return 0;
+}
+
+//p2.c
+//gcc -o p2 p2.c ./lib.so -m32
+#include "lib.h"
+
+int main(int argc, char *argv[])
+{
+    foobar(2);
+    return 0;
+}
+#+end_src
+
+so的最终装载地址在编译时不确定
+#+begin_src bash
+readelf -l lib.so 
+
+Elf file type is DYN (Shared object file)
+Entry point 0x390
+There are 7 program headers, starting at offset 52
+
+Program Headers:
+  Type           Offset   VirtAddr   PhysAddr   FileSiz MemSiz  Flg Align
+  LOAD           0x000000 0x00000000 0x00000000 0x0058c 0x0058c R E 0x1000
+  LOAD           0x000f04 0x00001f04 0x00001f04 0x00110 0x00114 RW  0x1000
+  DYNAMIC        0x000f10 0x00001f10 0x00001f10 0x000e0 0x000e0 RW  0x4
+  NOTE           0x000114 0x00000114 0x00000114 0x00024 0x00024 R   0x4
+  GNU_EH_FRAME   0x0004f0 0x000004f0 0x000004f0 0x00024 0x00024 R   0x4
+  GNU_STACK      0x000000 0x00000000 0x00000000 0x00000 0x00000 RW  0x10
+  GNU_RELRO      0x000f04 0x00001f04 0x00001f04 0x000fc 0x000fc R   0x1
+
+ Section to Segment mapping:
+  Segment Sections...
+   00     .note.gnu.build-id .gnu.hash .dynsym .dynstr .gnu.version .gnu.version_r .rel.dyn .rel.plt .init .plt .text .fini .rodata .eh_frame_hdr .eh_frame 
+   01     .init_array .fini_array .data.rel.ro .dynamic .got .got.plt .bss 
+   02     .dynamic 
+   03     .note.gnu.build-id 
+   04     .eh_frame_hdr 
+   05     
+   06     .init_array .fini_array .data.rel.ro .dynamic .got
+#+end_src
+
+*so在编译时不能假设自已在进程虚拟空间中的位置*, 早期有静态共享库，即地址由操作系统分配(固定装载地址)，但很难保证地址不冲突
+
+*so代码段是多个进程共享的，但是数据段是多个副本*
+
+装载时重定位(-shared 而不-fPIC)说的是在装载时确定符号的绝对地址，并遍历所有对此符号引用并重定位，问题是代码段如果共享，不能保证所有进程用同一个绝对地址，这样无法做到代码段共享，所以将对绝对地址的一次引用变成二次引用，将可变的绝对地址放在数据段中，即为延迟绑定
+
+** 地址无关代码(fPIC)
+#+begin_src c
+  /* gcc -fPIC -shared -o lib.so -m32 lib.c -Wno-implicit-function-declaration */
+  static int a;
+  extern int b;
+  extern void ext();
+
+  static void bar() //书里面没加static，写的有问题
+  {
+      a = 1; //模块内数据访问
+      b = 2; //模块间数据访问
+  }
+
+  void foo()
+  {
+      bar(); //模块内调用
+      ext(); //模块间调用
+  }
+#+end_src
+
+#+begin_src asm
+
+0000047d <bar>:
+ 47d:	55                   	push   %ebp
+ 47e:	89 e5                	mov    %esp,%ebp
+ 480:	e8 41 00 00 00       	call   4c6 <__x86.get_pc_thunk.ax>
+ 485:	05 7b 1b 00 00       	add    $0x1b7b,%eax
+ 48a:	c7 80 18 00 00 00 01 	movl   $0x1,0x18(%eax) ;;模块内数据访问
+ 491:	00 00 00 
+ 494:	8b 80 f0 ff ff ff    	mov    -0x10(%eax),%eax
+ 49a:	c7 00 02 00 00 00    	movl   $0x2,(%eax)  ;;模块间数据访问
+ 4a0:	90                   	nop
+ 4a1:	5d                   	pop    %ebp
+ 4a2:	c3                   	ret    
+
+000004a3 <foo>:
+ 4a3:	55                   	push   %ebp
+ 4a4:	89 e5                	mov    %esp,%ebp
+ 4a6:	53                   	push   %ebx
+ 4a7:	83 ec 04             	sub    $0x4,%esp
+ 4aa:	e8 d1 fe ff ff       	call   380 <__x86.get_pc_thunk.bx>
+ 4af:	81 c3 51 1b 00 00    	add    $0x1b51,%ebx
+ 4b5:	e8 c3 ff ff ff       	call   47d <bar> ;;模块内调用
+ 4ba:	e8 b1 fe ff ff       	call   370 <ext@plt> ;;模块间调用
+ 4bf:	90                   	nop
+ 4c0:	83 c4 04             	add    $0x4,%esp
+ 4c3:	5b                   	pop    %ebx
+ 4c4:	5d                   	pop    %ebp
+ 4c5:	c3                   	ret
+#+end_src
+
+- 模块内调用或跳转
+call   47d <bar> 相对寻址，不用做重定位
+
+- 模块内数据访问
+*__x86.get_pc_thunk.ax* 这个函数将PC值存入了eax，则a的地址是0x485 + 0x1b7b + 0x18 = 0x2018，用这种相对寻址也不用重定位
+#+begin_src bash
+readelf -s lib.so  |grep a
+...
+    33: 00002018     4 OBJECT  LOCAL  DEFAULT   21 a
+...
+#+end_src
+
+- 模块间数据访问
+在数据段中建立全局偏移表(Global Offset Table),即.got
+如上图, 0x485 + 0x1b7b - 0x10 = 0x1ff0，即为.got段b地址的存储
+#+begin_src bash
+readelf -S lib.so
+  [19] .got              PROGBITS        00001fec 000fec 000014 04  WA  0   0  4
+
+readelf -r lib.so
+...
+00001ff0  00000206 R_386_GLOB_DAT    00000000   b
+...
+#+end_src
+
+- 模块间函数调用
+和模块间数据访问一样，可用call .got里的函数地址，但上面用了延时绑定，下面详述
+
+readelf -d lib.so 查看.dynamic段里的信息，如果有TEXTREL段则不是PIC
+
+全局变量(没有static修饰)当作模块间访问，即通过.got间接索引
+
+- 其他情况
+#+begin_src c
+static int a;
+static int *p = &a;
+#+end_src
+这样的话p的值为变成装载时重定位，如图0x2018偏移生成一个重定位项
+#+begin_src bash
+readelf -r lib.so
+
+Relocation section '.rel.dyn' at offset 0x2f8 contains 9 entries:
+ Offset     Info    Type            Sym.Value  Sym. Name
+00001f00  00000008 R_386_RELATIVE   
+00001f04  00000008 R_386_RELATIVE   
+00001f08  00000008 R_386_RELATIVE   
+00002018  00000008 R_386_RELATIVE   
+
+[xuali2@sha-isbu-ed15n xuali2]$readelf -s lib.so |grep p
+   Num:    Value  Size Type    Bind   Vis      Ndx Name
+   Num:    Value  Size Type    Bind   Vis      Ndx Name
+    29: 0000201c     1 OBJECT  LOCAL  DEFAULT   22 completed.7199
+    35: 00002018     4 OBJECT  LOCAL  DEFAULT   21 p
+#+end_src
+
+** 延迟绑定(Procedure Linkage Table)
+lazy binding 是指 *函数第一次被用到时才进行绑定*
+原因是为了加块程序启动速度，很多函数并不会用到，全部重定位没有必要
+*当年程序调优第一步就是全部静态链接*
+
+#+begin_src asm
+objdump -d lib.so
+Disassembly of section .plt:
+
+00000350 <.plt>:
+ 350:	ff b3 04 00 00 00    	pushl  0x4(%ebx)
+ 356:	ff a3 08 00 00 00    	jmp    *0x8(%ebx)
+ 35c:	00 00                	add    %al,(%eax)
+	...
+
+00000370 <ext@plt>:
+ 370:	ff a3 10 00 00 00    	jmp    *0x10(%ebx)
+ 376:	68 08 00 00 00       	push   $0x8
+ 37b:	e9 d0 ff ff ff       	jmp    350 <.plt>
+
+000004a3 <foo>:
+ 4a3:	55                   	push   %ebp
+ 4a4:	89 e5                	mov    %esp,%ebp
+ 4a6:	53                   	push   %ebx
+ 4a7:	83 ec 04             	sub    $0x4,%esp
+ 4aa:	e8 d1 fe ff ff       	call   380 <__x86.get_pc_thunk.bx>
+ 4af:	81 c3 51 1b 00 00    	add    $0x1b51,%ebx
+ 4b5:	e8 c3 ff ff ff       	call   47d <bar>
+ 4ba:	e8 b1 fe ff ff       	call   370 <ext@plt>
+#+end_src
+
+#+begin_src bash
+    46: 00002000     0 OBJECT  LOCAL  DEFAULT   20 _GLOBAL_OFFSET_TABLE_
+
+ [10] .plt              PROGBITS        00000350 000350 000030 04  AX  0   0 16
+
+ [20] .got.plt          PROGBITS        00002000 001000 000014 04  WA  0   0  4
+
+Contents of section .got.plt:
+ 2000 0c1f0000 00000000 00000000 66030000  ............f...
+ 2010 76030000                             v... 
+
+Relocation section '.rel.plt' at offset 0x31c contains 2 entries:
+ Offset     Info    Type            Sym.Value  Sym. Name
+0000200c  00000307 R_386_JUMP_SLOT   00000000   __cxa_finalize@GLIBC_2.1.3
+00002010  00000507 R_386_JUMP_SLOT   00000000   ext
+
+  [18] .dynamic          DYNAMIC         00001f0c 000f0c 0000e0 08  WA  4   0  4
+#+end_src
+如上:
+1. ext@plt时ebx = 0x4af + 0x1b51 = 0x2000,为全局偏移表的首地址，在.got.plt中, *@plt的代码是.plt里
+2. jmp    *0x10(%ebx), 默认值是0x376，即下一跳地址，绑定后其值为重定位的地址，注意这个是小端76030000即为0x376
+3. push   $0x8, 为.rel.plt里的偏移，一个重定位项是8个字节
+4. GLOBAL\under{}OFFSET\under{}TABLE表中第一项0x1f0c是.dymanic的地址,第二项0是本模块ID,第三项是\under{}dl\under{}runtime\under{}resolve()的地址，用来解析bar的实际地址,其中第二项和第三项是运行时由动态链接器初始化
+5. 所以0x350开头的两行，第一个是push moduleID,第二个是调用\under{}dl\under{}runtime\under{}resolve
+6. 如下为运行时状态
+0xf7f564af + 0x1b51 = 0xf7f58000为_GLOBAL_OFFSET_TABLE_的首地址
+第一项.dynamic不load到内存，所以不管
+第二项0xf7f59000为moduleID
+第三项0xf7f75d10为_dl_runtime_resolve的地址
+第五项为ext的地址
+#+begin_src bash
+(gdb) disassemble foo
+Dump of assembler code for function foo:
+   0xf7f564a3 <+0>:	push   %ebp
+   0xf7f564a4 <+1>:	mov    %esp,%ebp
+   0xf7f564a6 <+3>:	push   %ebx
+   0xf7f564a7 <+4>:	sub    $0x4,%esp
+   0xf7f564aa <+7>:	call   0xf7f56380 <__x86.get_pc_thunk.bx>
+   0xf7f564af <+12>:	add    $0x1b51,%ebx
+   0xf7f564b5 <+18>:	call   0xf7f5647d <bar>
+   0xf7f564ba <+23>:	call   0xf7f56370 <ext@plt>
+   0xf7f564bf <+28>:	nop
+   0xf7f564c0 <+29>:	add    $0x4,%esp
+   0xf7f564c3 <+32>:	pop    %ebx
+   0xf7f564c4 <+33>:	pop    %ebp
+   0xf7f564c5 <+34>:	ret    
+End of assembler dump.
+(gdb) p/x ((unsigned int *)0xf7f58000)[0]
+$12 = 0x1f0c
+(gdb) p/x ((unsigned int *)0xf7f58000)[1]
+$13 = 0xf7f59000
+(gdb) p/x ((unsigned int *)0xf7f58000)[2]
+$14 = 0xf7f75d10
+(gdb) p/x ((unsigned int *)0xf7f58000)[3]
+$15 = 0xf7f56366
+
+(gdb) disassemble 0xf7f56370
+Dump of assembler code for function ext@plt:
+   0xf7f56370 <+0>:	jmp    *0x10(%ebx)
+   0xf7f56376 <+6>:	push   $0x8
+   0xf7f5637b <+11>:	jmp    0xf7f56350
+End of assembler dump.
+(gdb) disassemble 0xf7f75d10
+
+Dump of assembler code for function _dl_runtime_resolve:
+   0xf7f75d10 <+0>:	repz nop %ebx
+   0xf7f75d14 <+4>:	push   %eax
+   0xf7f75d15 <+5>:	push   %ecx
+   0xf7f75d16 <+6>:	push   %edx
+   0xf7f75d17 <+7>:	mov    0x10(%esp),%edx
+   0xf7f75d1b <+11>:	mov    0xc(%esp),%eax
+   0xf7f75d1f <+15>:	call   0xf7f6fe90 <_dl_fixup>
+   0xf7f75d24 <+20>:	pop    %edx
+   0xf7f75d25 <+21>:	mov    (%esp),%ecx
+   0xf7f75d28 <+24>:	mov    %eax,(%esp)
+   0xf7f75d2b <+27>:	mov    0x4(%esp),%eax
+   0xf7f75d2f <+31>:	ret    $0xc
+End of assembler dump.
+
+(gdb) p/x ((unsigned int *)0xf7f58000)[4]
+$16 = 0x804857d
+(gdb) disassemble 0x804857d
+Dump of assembler code for function ext:
+   0x0804857d <+0>:	push   %ebp
+   0x0804857e <+1>:	mov    %esp,%ebp
+   0x08048580 <+3>:	mov    $0x0,%eax
+   0x08048585 <+8>:	pop    %ebp
+   0x08048586 <+9>:	ret    
+End of assembler dump.
+
+(gdb) x/64xb 0xf7f56350
+0xf7f56350:	0xff	0xb3	0x04	0x00	0x00	0x00	0xff	0xa3
+0xf7f56358:	0x08	0x00	0x00	0x00	0x00	0x00	0x00	0x00
+#+end_src
+
+** 动态链接器
+
+.interp段存放动态链接器的路径
+#+begin_src bash
+objdump -s a.out 
+
+a.out:     file format elf32-i386
+
+Contents of section .interp:
+ 8048154 2f6c6962 2f6c642d 6c696e75 782e736f  /lib/ld-linux.so
+ 8048164 2e3200                               .2. 
+
+readelf -l a.out  |grep interpreter
+      [Requesting program interpreter: /lib/ld-linux.so.2]
+#+end_src
+
+.dynamic段存放动态链接基本信息
+#+begin_src bash
+readelf -d a.out
+
+Dynamic section at offset 0xf04 contains 25 entries:
+  Tag        Type                         Name/Value
+ 0x00000001 (NEEDED)                     Shared library: [./lib.so]
+ 0x00000001 (NEEDED)                     Shared library: [libc.so.6]
+ 0x0000000c (INIT)                       0x80483d0
+ 0x0000000d (FINI)                       0x8048628
+ 0x00000019 (INIT_ARRAY)                 0x8049efc
+ 0x0000001b (INIT_ARRAYSZ)               4 (bytes)
+ 0x0000001a (FINI_ARRAY)                 0x8049f00
+ 0x0000001c (FINI_ARRAYSZ)               4 (bytes)
+ 0x6ffffef5 (GNU_HASH)                   0x80481ac
+ 0x00000005 (STRTAB)                     0x80482b8
+ 0x00000006 (SYMTAB)                     0x80481e8
+ 0x0000000a (STRSZ)                      172 (bytes)
+ 0x0000000b (SYMENT)                     16 (bytes)
+ 0x00000015 (DEBUG)                      0x0
+ 0x00000003 (PLTGOT)                     0x804a000
+ 0x00000002 (PLTRELSZ)                   24 (bytes)
+ 0x00000014 (PLTREL)                     REL
+ 0x00000017 (JMPREL)                     0x80483b8
+ 0x00000011 (REL)                        0x80483a0
+ 0x00000012 (RELSZ)                      24 (bytes)
+ 0x00000013 (RELENT)                     8 (bytes)
+ 0x6ffffffe (VERNEED)                    0x8048380
+ 0x6fffffff (VERNEEDNUM)                 1
+ 0x6ffffff0 (VERSYM)                     0x8048364
+ 0x00000000 (NULL)                       0x0
+#+end_src
+
+ldd 查看依赖关系
+#+begin_src bash
+ldd a.out
+	linux-gate.so.1 (0xf7f87000)
+	./lib.so (0xf7f7f000)
+	libc.so.6 => /lib/libc.so.6 (0xf7dbd000)
+	/lib/ld-linux.so.2 (0xf7f89000)
+#+end_src
+
+.dynsym - 动态链接相关的符号
+.dynstr - 动态链接符号字符串表
+
+#+begin_src bash
+readelf -sD lib.so 
+
+Symbol table of `.gnu.hash' for image:
+  Num Buc:    Value  Size   Type   Bind Vis      Ndx Name
+    7   0: 00002014     0 NOTYPE  GLOBAL DEFAULT  20 _edata
+    8   0: 000004a3    35 FUNC    GLOBAL DEFAULT  11 foo
+    9   0: 0000201c     0 NOTYPE  GLOBAL DEFAULT  21 _end
+   10   1: 00002014     0 NOTYPE  GLOBAL DEFAULT  21 __bss_start
+#+end_src
+
+.rel.dyn - .got重定位表
+.rel.plt - .got.plt重定位表
+
+R_386_GLOB_DAT,R_386_JUMP_SLOT  - 直接填入符号地址
+R_386_RELATIVE                  - 基址重置
+
+#+begin_src bash
+readelf -r lib.so 
+
+Relocation section '.rel.dyn' at offset 0x2dc contains 8 entries:
+ Offset     Info    Type            Sym.Value  Sym. Name
+00001f00  00000008 R_386_RELATIVE   
+00001f04  00000008 R_386_RELATIVE   
+00001f08  00000008 R_386_RELATIVE   
+00001fec  00000106 R_386_GLOB_DAT    00000000   _ITM_deregisterTMClone
+00001ff0  00000206 R_386_GLOB_DAT    00000000   b
+00001ff4  00000306 R_386_GLOB_DAT    00000000   __cxa_finalize@GLIBC_2.1.3
+00001ff8  00000406 R_386_GLOB_DAT    00000000   __gmon_start__
+00001ffc  00000606 R_386_GLOB_DAT    00000000   _ITM_registerTMCloneTa
+
+Relocation section '.rel.plt' at offset 0x31c contains 2 entries:
+ Offset     Info    Type            Sym.Value  Sym. Name
+0000200c  00000307 R_386_JUMP_SLOT   00000000   __cxa_finalize@GLIBC_2.1.3
+00002010  00000507 R_386_JUMP_SLOT   00000000   ext
+
+  [19] .got              PROGBITS        00001fec 000fec 000014 04  WA  0   0  4
+  [20] .got.plt          PROGBITS        00002000 001000 000014 04  WA  0   0  4
+#+end_src
+
+如果不用PIC编译，重定位表不在.got.plt，而在.text中(绝对地址寻址)
+
+#+begin_src bash
+gcc -shared -o lib2.so -m32 lib.c -Wno-implicit-function-declaration
+readelf -r lib2.so
+
+Relocation section '.rel.dyn' at offset 0x2dc contains 10 entries:
+ Offset     Info    Type            Sym.Value  Sym. Name
+00000482  00000008 R_386_RELATIVE   
+00001efc  00000008 R_386_RELATIVE   
+00001f00  00000008 R_386_RELATIVE   
+00001f04  00000008 R_386_RELATIVE   
+0000048c  00000201 R_386_32          00000000   b
+000004a3  00000502 R_386_PC32        00000000   ext
+00001ff0  00000106 R_386_GLOB_DAT    00000000   _ITM_deregisterTMClone
+00001ff4  00000306 R_386_GLOB_DAT    00000000   __cxa_finalize@GLIBC_2.1.3
+00001ff8  00000406 R_386_GLOB_DAT    00000000   __gmon_start__
+00001ffc  00000606 R_386_GLOB_DAT    00000000   _ITM_registerTMCloneTa
+
+Relocation section '.rel.plt' at offset 0x32c contains 1 entry:
+ Offset     Info    Type            Sym.Value  Sym. Name
+0000200c  00000307 R_386_JUMP_SLOT   00000000   __cxa_finalize@GLIBC_2.1.3
+
+[11] .text             PROGBITS        00000380 000380 00012a 00  AX  0   0 16
+#+end_src
+
+动态链接器的工作流程
+- 自举
+自举代码为了防止套娃，不能依赖别的so，不能使用全局和静态变量，不能使用函数调用
+- 装载共享对象
+全局符号介入(Global Symbol Interpose) - 多个so里有同名的全局符号
+*第一个符号载入后，后面相同的符号被忽略*
+- 重定位和初始化
+so里的.init和.finit由动态链接器执行
+
+ld-linux.so.2也可单独执行
+kernel并不关心是EXEC还是DYN
+#+begin_src bash
+/lib/ld-linux.so.2
+Usage: ld.so [OPTION]... EXECUTABLE-FILE [ARGS-FOR-PROGRAM...]
+You have invoked `ld.so', the helper program for shared library executables.
+This program usually lives in the file `/lib/ld.so', and special directives
+in executable files using ELF shared libraries tell the system's program
+loader to load the helper program from this file.  This helper program loads
+the shared libraries needed by the program executable, prepares the program
+to run, and runs it.  You may invoke this helper program directly from the
+command line to load and run an ELF executable file; this is like executing
+that file itself, but always uses this helper program from the file you
+specified, instead of the helper program file specified in the executable
+file you run.  This is mostly of use for maintainers to test new versions
+of this helper program; chances are you did not intend to run this program.
+
+  --list                list all dependencies and how they are resolved
+  --verify              verify that given object really is a dynamically linked
+			object we can handle
+  --inhibit-cache       Do not use /etc/ld.so.cache
+  --library-path PATH   use given PATH instead of content of the environment
+			variable LD_LIBRARY_PATH
+  --inhibit-rpath LIST  ignore RUNPATH and RPATH information in object names
+			in LIST
+  --audit LIST          use objects named in LIST as auditors
+#+end_src
+
+
+动态装载库
+- dlopen  打开一个动态库
+- dlsym   查找符号,以打开动态库句柄为根节点进行查找
+- dlerror 查看是否有错
+- dlclose 卸载动态库，引用计数为0才取消映射关系，之前会运行".finit"的代码
+
+*有些gcc编译的默认参数是--enable-default-pie 需要额外加上-no-pie，使其生成EXEC而不是DYN*
+#+begin_src c
+#include <stdio.h>
+#include <dlfcn.h>
+
+/* gcc t.c -m32 -ldl -no-pie */
+/* ./a.out /lib32/libm-2.28.so  */
+/* 1.000000 */
+
+int main(int argc, char *argv[])
+{
+    void *handle;
+    double (*func)(double);
+    char *error;
+
+    handle = dlopen(argv[1], RTLD_NOW);
+    if (!handle) {
+        printf("failed to open lib\n");
+        return -1;
+    }
+
+    func = dlsym(handle, "sin");
+    if ((error = dlerror()) != NULL) {
+        printf("error %s\n", error);
+        dlclose(handle);
+    }
+
+    printf("%f\n", func(3.1415926 / 2));
+    dlclose(handle);
+    return 0;
+}
+#+end_src
+
+* 第八章 共享库的组织
+so兼容性以ABI为准
+版本号 libname.so.x.y.z
+- x 主版本,重大升级
+- y 次版本,增量升级
+- z 发布版本号,修正
+去掉.y.z，即为SONAME,用作.dynamic段里依赖关系,ldconfig可以建立相关的软链接
+#+begin_src bash
+gcc -fPIC -shared -o lib.so -m32 lib.c -Wno-implicit-function-declaration -Xlinker --version-script lib.ver -Wl,-soname,my_soname
+readelf -d lib.so
+
+Dynamic section at offset 0xef4 contains 27 entries:
+  Tag        Type                         Name/Value
+ 0x00000001 (NEEDED)                     Shared library: [libc.so.6]
+ 0x0000000e (SONAME)                     Library soname: [my_soname]
+#+end_src
+链接名则更为简单，gcc -lXXX 相当于gcc libXXX.so.x
+#+begin_src bash
+ls -ll /lib/libc.so.6 
+lrwxrwxrwx. 1 root root 12 Jul 23  2019 /lib/libc.so.6 -> libc-2.28.so
+#+end_src
+基于符号的版本机制，用于解决SONAME次版本号交会问题
+#+begin_src bash
+#file - lib.ver
+#gcc -fPIC -shared -o lib.so -m32 lib.c -Wno-implicit-function-declaration -Xlinker --version-script lib.ver
+VERS_1.2 {
+    global:
+        foo;
+    local:
+        *;
+};
+
+#gcc -fPIC -shared -o lib.so -m32 lib.c -Wno-implicit-function-declaration -Xlinker --version-script lib.ver
+VERS_1.1 {
+    global:
+        foo;
+    local:
+        *;
+};
+./a.out
+./a.out: ./lib.so: version `VERS_1.2' not found (required by ./a.out)
+#+end_src
+如上图，如果用VERS_1.1编译出的so再执行依赖它的可执行文件，会出错
+
+*FHS*, linux目录组织标准
+
+.so根据DT_NEED里的路径查找
+- 绝对路径
+- 相对路径
+1. 环境变量 LD\under{}LIBRARY\under{}PATH
+2. /etc/ld.so.cache <- 由ldconfig生成
+3. /usr/lib /lib
+此外，也可ld -rpath链接时指定路径，这样会在.dynamic里生成RPATH这个变量
+#+begin_src bash
+ld -rpath /auto/isbu_crdc/offlinediag/users/xuali2 1.o ./lib.so -m32 -m elf_i386
+readelf -d a.out 
+
+Dynamic section at offset 0xf50 contains 17 entries:
+  Tag        Type                         Name/Value
+ 0x00000001 (NEEDED)                     Shared library: [my_soname]
+ 0x0000000f (RPATH)                      Library rpath: [/auto/isbu_crdc/offlinediag/users/xuali2]
+#+end_src
+
+环境变量LD\under{}PRELOAD可以预加载共享库，无论是否有依赖
+环境变量LD\under{}DEBUG用来debug
+#+begin_src bash
+LD_DEBUG=files ./a.out 
+     11762:	
+     11762:	file=./lib.so [0];  needed by ./a.out [0]
+     11762:	file=./lib.so [0];  generating link map
+     11762:	  dynamic: 0xf7f51efc  base: 0xf7f50000   size: 0x0000201c
+     11762:	    entry: 0xf7f50380  phdr: 0xf7f50034  phnum:          7
+     11762:	
+     11762:	
+     11762:	file=libc.so.6 [0];  needed by ./a.out [0]
+     11762:	file=libc.so.6 [0];  generating link map
+     11762:	  dynamic: 0xf7f31d6c  base: 0xf7d8e000   size: 0x001a7780
+     11762:	    entry: 0xf7da8650  phdr: 0xf7d8e034  phnum:         10
+     11762:	
+     11762:	./lib.so: error: version lookup error: version `VERS_1.2' not found (required by ./a.out) (continued)
+./a.out: ./lib.so: version `VERS_1.2' not found (required by ./a.out)
+#+end_src
+
+* 第九章 Windows下的动态链接
+略
+
+* 第十章 内存
+*以下都基于x86 CPU*
+** 栈
+- 函数的返回地址和参数(现在很多体系结构，如powerpc, mips64, x64都是寄存器直接传参，参数多了才放入栈)
+- 临时变量(编译优化也会直接用寄存器)
+- 保存的上下文，函数调用前后不变的寄存器
+
+#+begin_src c
+int foo(int a)
+{
+    int b = a - 1;
+    return b;
+}
+#+end_src
+
+- esp指向栈顶
+- ebp索引变量
+#+begin_src asm
+  00000000 <foo>:
+     0:	55                   	push   %ebp ; 将ebp入栈, esp = esp - 2, [esp] = %ebp
+     1:	89 e5                	mov    %esp,%ebp ; epb = esp, *epb = *esp = old ebp
+     3:	83 ec 10             	sub    $0x10,%esp ; 开栈
+     6:	8b 45 08             	mov    0x8(%ebp),%eax ; 取实参a 0(%ebp) = old ebp 4(%ebp) = old pc
+     9:	83 e8 01             	sub    $0x1,%eax      ; 自增
+     c:	89 45 fc             	mov    %eax,-0x4(%ebp) ; b = a - 1;
+     f:	8b 45 fc             	mov    -0x4(%ebp),%eax ; 返回值eax
+    12:	c9                   	leave                  ; 相当于mov ebp esp, pop ebp, 相对的有个指令是ENTER == push ebp, mov esp ebp
+    13:	c3                   	ret                    ; 退出 恢复 cs ip
+#+end_src
+
+调用惯例
+默认用cdecl，以下call\under{}foo为cdecl方式
+#+begin_src c
+void call_foo(void)
+{
+    int c = 5;
+    foo(c);
+}
+#+end_src
+
+#+begin_src asm
+  00000014 <call_foo>:
+    14:	55                   	push   %ebp
+    15:	89 e5                	mov    %esp,%ebp
+    17:	83 ec 10             	sub    $0x10,%esp
+    1a:	c7 45 fc 05 00 00 00 	movl   $0x5,-0x4(%ebp)
+    21:	ff 75 fc             	pushl  -0x4(%ebp) ;传参
+    24:	e8 fc ff ff ff       	call   25 <call_foo+0x11> ;调用foo 相当于 push eip, jmp foo
+    29:	83 c4 04             	add    $0x4,%esp          ;将参数出栈
+    2c:	90                   	nop
+    2d:	c9                   	leave  
+    2e:	c3                   	ret 
+#+end_src
+
+| 调用惯例 | 实参出栈方 | 参数传递                       |
+|----------+------------+--------------------------------|
+| cdecl    | 函数调用方 | 从右至左                       |
+| stdcall  | 函数本身   | 从右至左                       |
+| fastcall | 函数本身   | 寄存器，更多的参数从右至左入栈 |
+| pascal   | 函数本身   | 从左至右                       |
+
+返回长节字类型会使用栈而不是寄存器，所以应避免
+#+begin_src c
+struct big {
+    char buf[128];
+};
+
+struct big foo(void)
+{
+    struct big b;
+    b.buf[0] = 0;
+    return b;
+}
+
+
+#+end_src
+
+#+begin_src asm
+    00000000 <foo>:
+       0:	55                   	push   %ebp
+       1:	89 e5                	mov    %esp,%ebp
+       3:	57                   	push   %edi
+       4:	56                   	push   %esi
+       5:	53                   	push   %ebx
+       6:	83 c4 80             	add    $0xffffff80,%esp ; esp = esp - 128
+       9:	c6 85 74 ff ff ff 00 	movb   $0x0,-0x8c(%ebp) ;b.buf[0] = 0;
+      10:	8b 45 08             	mov    0x8(%ebp),%eax   ;return b;
+      13:	89 c2                	mov    %eax,%edx
+      15:	8d 85 74 ff ff ff    	lea    -0x8c(%ebp),%eax
+      1b:	b9 80 00 00 00       	mov    $0x80,%ecx
+      20:	8b 18                	mov    (%eax),%ebx
+      22:	89 1a                	mov    %ebx,(%edx)
+      24:	8b 5c 08 fc          	mov    -0x4(%eax,%ecx,1),%ebx
+      28:	89 5c 0a fc          	mov    %ebx,-0x4(%edx,%ecx,1)
+      2c:	8d 5a 04             	lea    0x4(%edx),%ebx
+      2f:	83 e3 fc             	and    $0xfffffffc,%ebx
+      32:	29 da                	sub    %ebx,%edx
+      34:	29 d0                	sub    %edx,%eax
+      36:	01 d1                	add    %edx,%ecx
+      38:	83 e1 fc             	and    $0xfffffffc,%ecx
+      3b:	c1 e9 02             	shr    $0x2,%ecx
+      3e:	89 ca                	mov    %ecx,%edx
+      40:	89 df                	mov    %ebx,%edi
+      42:	89 c6                	mov    %eax,%esi
+      44:	89 d1                	mov    %edx,%ecx
+      46:	f3 a5                	rep movsl %ds:(%esi),%es:(%edi) ;
+      48:	8b 45 08             	mov    0x8(%ebp),%eax
+      4b:	83 ec 80             	sub    $0xffffff80,%esp
+      4e:	5b                   	pop    %ebx
+      4f:	5e                   	pop    %esi
+      50:	5f                   	pop    %edi
+      51:	5d                   	pop    %ebp
+      52:	c2 04 00             	ret    $0x4 ;pop 4个字节，看来大参数用了stdcall
+
+  00000055 <call_foo>:
+    55:	55                   	push   %ebp
+    56:	89 e5                	mov    %esp,%ebp
+    58:	83 c4 80             	add    $0xffffff80,%esp
+    5b:	8d 45 80             	lea    -0x80(%ebp),%eax ;传入一个地址给foo去存b
+    5e:	50                   	push   %eax
+    5f:	e8 fc ff ff ff       	call   60 <call_foo+0xb>
+    64:	90                   	nop
+    65:	c9                   	leave  
+    66:	c3                   	ret  
+#+end_src
+
+** 堆与内存管理
+
+通用做法是向系统申请页为单位的大块内存，然后在用户态设计数据结构管理及响应业务申请内存
+
+系统调用
+- brk
+- mmap
+
+堆分配算法
+- 空闲链表
+空闲块的开头有链表指针，指向下一个或上一个空闲块，产生 *外部碎片*
+- 位图
+每大块内存按固定大小切片，内部划分一片区域(常为内存头)存放位图表示空闲和已申请块，产生 *内部碎片*
+这种在现有系统里被广泛使用并有各种变种，经常按 *固定大小* 分为 8 16 32 64 128 256 等内存池
+
+* 第十一章 运行库
+glibc *git://sourceware.org/git/glibc.git*
+*以最简单的静态链接为例,同时不能-nostdlib或-nonstartfiles选项编译*
+
+入口函数
+- 不是main，一般为_start
+- 初始化进程环境，包括堆、I/O、线程、全局变量构造
+- 调用main
+- main返回后，清理环境，包括析构，关闭I/O等(就算不做操作系统也会帮忙)
+
+
+流程为 _start -> __libc_start_main -> main -> exit -> _exit
+#+begin_src asm
+  _start:
+      /* Clear the frame pointer.  The ABI suggests this be done, to mark
+         the outermost frame obviously.  */
+      xorl %ebp, %ebp
+
+      /* Extract the arguments as encoded on the stack and set up
+         the arguments for `main': argc, argv.  envp will be determined
+         later in __libc_start_main.  */
+      popl %esi		/* Pop the argument count.  */
+      movl %esp, %ecx		/* argv starts just at the current stack top.*/
+
+      /* Before pushing the arguments align the stack to a 16-byte
+      (SSE needs 16-byte alignment) boundary to avoid penalties from
+      misaligned accesses.  Thanks to Edward Seidl <seidl@janed.com>
+      for pointing this out.  */
+      andl $0xfffffff0, %esp
+      pushl %eax		/* Push garbage because we allocate
+                     28 more bytes.  */
+
+      /* Provide the highest stack address to the user code (for stacks
+         which grow downwards).  */
+      pushl %esp
+
+      pushl %edx		/* Push address of the shared library
+                     termination function.  */
+
+  #ifdef SHARED
+      /* Load PIC register.  */
+      call 1f
+      addl $_GLOBAL_OFFSET_TABLE_, %ebx
+
+      /* Push address of our own entry points to .fini and .init.  */
+      leal __libc_csu_fini@GOTOFF(%ebx), %eax
+      pushl %eax
+      leal __libc_csu_init@GOTOFF(%ebx), %eax
+      pushl %eax
+
+      pushl %ecx		/* Push second argument: argv.  */
+      pushl %esi		/* Push first argument: argc.  */
+
+      pushl main@GOT(%ebx)
+
+      /* Call the user's main function, and exit with its value.
+         But let the libc call main.    */
+      call __libc_start_main@PLT
+  #else
+      /* Push address of our own entry points to .fini and .init.  */
+      pushl $__libc_csu_fini
+      pushl $__libc_csu_init
+
+      pushl %ecx		/* Push second argument: argv.  */
+      pushl %esi		/* Push first argument: argc.  */
+
+      pushl $main
+
+      /* Call the user's main function, and exit with its value.
+         But let the libc call main.    */
+      call __libc_start_main
+  #endif
+
+      hlt			/* Crash if somehow `exit' does return.  */
+
+  _exit:
+      movl	4(%esp), %ebx
+
+      /* Try the new syscall first.  */
+  #ifdef __NR_exit_group
+      movl	$__NR_exit_group, %eax
+      ENTER_KERNEL
+  #endif
+
+      /* Not available.  Now the old one.  */
+      movl	$__NR_exit, %eax
+      /* Don't bother using ENTER_KERNEL here.  If the exit_group
+         syscall is not available AT_SYSINFO isn't either.  */
+      int	$0x80                   ;系统调用，进程退出
+#+end_src
+
+上述_start代码相当于
+#+begin_src c
+void _start()
+{
+    %ebp = 0;
+    int argc = pop from stack
+    char **argv = top of stack
+    __libc_start_main(main, argc, argv, __libc_csu_init, )
+}
+#+end_src
+
+在linux中，任何I/O都被抽象成对象
+fd -> 内核文件表 -> 内核对象
+
+C标准库ANSI C，最新的好像是C11
+** glibc启动文件
+#+begin_src bash
+ /usr/lib/gcc/x86_64-linux-gnu/6/collect2 -plugin /usr/lib/gcc/x86_64-linux-gnu/6/liblto_plugin.so -plugin-opt=/usr/lib/gcc/x86_64-linux-gnu/6/lto-wrapper -plugin-opt=-fresolution=/tmp/cchtzGwz.res -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_eh -plugin-opt=-pass-through=-lc --sysroot=/ --build-id -m elf_i386 --hash-style=gnu -static /usr/lib/gcc/x86_64-linux-gnu/6/../../../../lib32/crt1.o /usr/lib/gcc/x86_64-linux-gnu/6/../../../../lib32/crti.o /usr/lib/gcc/x86_64-linux-gnu/6/32/crtbeginT.o -L/usr/lib/gcc/x86_64-linux-gnu/6/32 -L/usr/lib/gcc/x86_64-linux-gnu/6/../../../../lib32 -L/lib/../lib32 -L/usr/lib/../lib32 -L/usr/lib/gcc/x86_64-linux-gnu/6 -L/usr/lib/gcc/x86_64-linux-gnu/6/../../.. /tmp/ccA5Dm0B.o --start-group -lgcc -lgcc_eh -lc --end-group /usr/lib/gcc/x86_64-linux-gnu/6/32/crtend.o /usr/lib/gcc/x86_64-linux-gnu/6/../../../../lib32/crtn.o
+COLLECT_GCC_OPTIONS='-m32' '-static' '-v' '-mtune=generic' '-march=i686'
+#+end_src
+
+*ld crt1.o crti.o [user\under{}objects] [system\under{}libraries] crtn.o*, 对比以下汇编，init和.fini段完美构成\under{}init()和\under{}fini()
+
+*注意[user\under{}objects] [system\under{}libraries].init .fini里的代码不能有ret，不然会退出_init函数，这个不像.ctor和.dtor段是存的函数指针*
+
+- crt1.o
+#+begin_src asm
+/usr/lib/gcc/x86_64-linux-gnu/6/../../../../lib32/crt1.o:     file format elf32-i386
+
+
+Disassembly of section .text:
+
+00000000 <_start>:
+   0:	31 ed                	xor    %ebp,%ebp
+   2:	5e                   	pop    %esi
+   3:	89 e1                	mov    %esp,%ecx
+   5:	83 e4 f0             	and    $0xfffffff0,%esp
+   8:	50                   	push   %eax
+   9:	54                   	push   %esp
+   a:	52                   	push   %edx
+   b:	e8 23 00 00 00       	call   33 <_start+0x33>
+  10:	81 c3 02 00 00 00    	add    $0x2,%ebx
+			12: R_386_GOTPC	_GLOBAL_OFFSET_TABLE_
+  16:	8d 83 00 00 00 00    	lea    0x0(%ebx),%eax
+			18: R_386_GOTOFF	__libc_csu_fini
+  1c:	50                   	push   %eax
+  1d:	8d 83 00 00 00 00    	lea    0x0(%ebx),%eax
+			1f: R_386_GOTOFF	__libc_csu_init
+  23:	50                   	push   %eax
+  24:	51                   	push   %ecx
+  25:	56                   	push   %esi
+  26:	8b 83 00 00 00 00    	mov    0x0(%ebx),%eax
+			28: R_386_GOT32X	main
+  2c:	50                   	push   %eax
+  2d:	e8 fc ff ff ff       	call   2e <_start+0x2e>
+			2e: R_386_PLT32	__libc_start_main
+  32:	f4                   	hlt    
+  33:	8b 1c 24             	mov    (%esp),%ebx
+  36:	c3                   	ret    
+  37:	66 90                	xchg   %ax,%ax
+  39:	66 90                	xchg   %ax,%ax
+  3b:	66 90                	xchg   %ax,%ax
+  3d:	66 90                	xchg   %ax,%ax
+  3f:	90                   	nop
+
+00000040 <_dl_relocate_static_pie>:
+  40:	c3                   	ret 
+#+end_src
+
+- crti.o
+#+begin_src asm
+objdump -dr /usr/lib/gcc/x86_64-linux-gnu/6/../../../../lib32/crti.o
+
+/usr/lib/gcc/x86_64-linux-gnu/6/../../../../lib32/crti.o:     file format elf32-i386
+
+
+Disassembly of section .init:
+
+00000000 <_init>:
+   0:	53                   	push   %ebx
+   1:	83 ec 08             	sub    $0x8,%esp
+   4:	e8 fc ff ff ff       	call   5 <_init+0x5>
+			5: R_386_PC32	__x86.get_pc_thunk.bx
+   9:	81 c3 02 00 00 00    	add    $0x2,%ebx
+			b: R_386_GOTPC	_GLOBAL_OFFSET_TABLE_
+   f:	8b 83 00 00 00 00    	mov    0x0(%ebx),%eax
+			11: R_386_GOT32X	__gmon_start__
+  15:	85 c0                	test   %eax,%eax
+  17:	74 02                	je     1b <_init+0x1b>
+  19:	ff d0                	call   *%eax
+
+Disassembly of section .gnu.linkonce.t.__x86.get_pc_thunk.bx:
+
+00000000 <__x86.get_pc_thunk.bx>:
+   0:	8b 1c 24             	mov    (%esp),%ebx
+   3:	c3                   	ret    
+
+Disassembly of section .fini:
+
+00000000 <_fini>:
+   0:	53                   	push   %ebx
+   1:	83 ec 08             	sub    $0x8,%esp
+   4:	e8 fc ff ff ff       	call   5 <_fini+0x5>
+			5: R_386_PC32	__x86.get_pc_thunk.bx
+   9:	81 c3 02 00 00 00    	add    $0x2,%ebx
+			b: R_386_GOTPC	_GLOBAL_OFFSET_TABLE_
+#+end_src
+
+- crtn.o
+#+begin_src asm
+objdump -dr /usr/lib/gcc/x86_64-linux-gnu/6/../../../../lib32/crtn.o
+
+/usr/lib/gcc/x86_64-linux-gnu/6/../../../../lib32/crtn.o:     file format elf32-i386
+
+
+Disassembly of section .init:
+
+00000000 <.init>:
+   0:	83 c4 08             	add    $0x8,%esp
+   3:	5b                   	pop    %ebx
+   4:	c3                   	ret    
+
+Disassembly of section .fini:
+
+00000000 <.fini>:
+   0:	83 c4 08             	add    $0x8,%esp
+   3:	5b                   	pop    %ebx
+   4:	c3                   	ret  
+#+end_src
+
+- crtbeginT.o 和 crtend.o，C++全局构造和析构
+
+多线程库里对很多不可重入函数加锁或者用了TLS
+TLS接口: pthread\under{}key\under{}create(), pthread\under{}getspecific(), pthread\under{}setspecific(), pthread\under{}key\under{}delete()
+
+glibc在处理C++全局构造和析构时, \under{}\under{}libc\under{}start\under{}main -> \under{}\under{}libc\under{}csu\under{}init -> \under{}init -> crtbeginT.o里的\under{}\under{}do\under{}global\under{}ctors\under{}aux -> 初始化.ctors段里函数指针，里面存放的构造函数,并用\under{}\under{}cxa\under{}exit注册了析构
+*.dtor原来是做析构的，但是有了__cxa_exit就不用了*
+
+** IO缓冲
+glibc的文件读写默认有缓冲模式,可以通过setbuf配置某文件的缓冲
+| 缓冲模式 | 常量   | 备注                    |
+|----------+--------+-------------------------|
+| 无缓冲   | _IONBF | 不使用缓冲              |
+| 行缓冲   | _IOLBF | 每收到\n或\r\n时会flush |
+| 全缓冲   | _IOFBF | 缓冲满才flush           |
+*在内核态，其实也有缓存的概念，例如write写，默认为回写而不是通写，也就是不立即写到硬盘，直到换页检测dirty位才写回*
+
+* 第十二章 系统调用与API
+linux使用0x80为系统调用的入口,各个通用寄存器用于传递参数
+| EAX | Name | Desc     | 参数          |
+|-----+------+----------+---------------|
+|   1 | exit | 退出进程 | EBX为退出码   |
+|   2 | fork | 复制进程 | EBX为复制参数 |
+
+linux用了CPU两种模式，用户模式和特权模式， *从boot开始的特权到进程0转为用户态后，后面要再次进入特权都需通过中断*
+
+中断,一个硬件或软件发出的请求，区别于CPU轮询(*但实际是CPU每次运行指令后都会去查看是否有中断产生，可认为是中断是硬件的轮询*)
+
+中断分硬中断(来自于外设的异常)和软中断(int指令)
+
+- 解发中断 int 0x80，不同的系统调用用不同的eax值表示，带参数可以用ebx等
+- 中断时，用户态切至内核态，找到当前进程的内核栈，将用户态寄存器存入内核栈(SS、ESP、EFLAGS、CS、EIP)
+- 从系统调用中返回时用iret
+
+软中断流程，以fork为例: fork-> int 0x80 -> system_call -> sys_fork
+
+_可以用__attribute__((regparm(0)))保证参数用寄存器传递_
+
+此外,intel也有个vdso库(ldd出来的linux-gate.so.1)，里面是系统调用的代码，可以通过访问vdso来使用系统调用
+#+begin_src bash
+./a.out &
+[1] 5030
+ldd a.out
+	linux-gate.so.1 (0xf779d000)
+	libc.so.6 => /lib32/libc.so.6 (0xf7595000)
+	/lib/ld-linux.so.2 (0xf779f000)
+cat /proc/5030/maps
+...
+f77d1000-f77d3000 r-xp 00000000 00:00 0                                  [vdso]
+...
+#+end_src
+
+* 第十三章 运行库实现
+MiniCRT,略

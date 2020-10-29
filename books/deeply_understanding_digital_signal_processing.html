@@ -1,0 +1,422 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2020-10-29 Thu 19:24 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>&lrm;</title>
+<meta name="generator" content="Org mode" />
+<meta name="author" content="xuali2" />
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: visible;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { width: 90%; }
+  /*]]>*/-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://fniessen.github.io/org-html-themes/styles/readtheorg/css/htmlize.css"/>
+<link rel="stylesheet" type="text/css" href="https://fniessen.github.io/org-html-themes/styles/readtheorg/css/readtheorg.css"/>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="https://fniessen.github.io/org-html-themes/styles/lib/js/jquery.stickytableheaders.min.js"></script>
+<script type="text/javascript" src="https://fniessen.github.io/org-html-themes/styles/readtheorg/js/readtheorg.js"></script>
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2019 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+</head>
+<body>
+<div id="content">
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#org45e64b0">1. 概述</a>
+<ul>
+<li><a href="#orgae22016">1.1. 优点</a></li>
+<li><a href="#org89cdee6">1.2. 缺点</a></li>
+<li><a href="#org34dc94a">1.3. 三把key</a></li>
+</ul>
+</li>
+<li><a href="#org9fc157c">2. 离散时间信号</a>
+<ul>
+<li><a href="#org9671f69">2.1. 分类</a></li>
+<li><a href="#org7dfae95">2.2. 时域</a></li>
+<li><a href="#org05316a1">2.3. 基本运算</a></li>
+<li><a href="#orga754932">2.4. 噪声</a></li>
+<li><a href="#orgd5b6472">2.5. 频域</a></li>
+<li><a href="#orgad62529">2.6. ADC</a></li>
+<li><a href="#org36136df">2.7. <b>信号带宽</b></a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<p>
+<span class="underline"><b>学以致用深入浅出数字信号处理</b></span><br />
+</p>
+
+<div id="outline-container-org45e64b0" class="outline-2">
+<h2 id="org45e64b0"><span class="section-number-2">1</span> 概述</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+信号处理是为提取、增强、存储和传输有用信息而设计的一种运算。<br />
+</p>
+<ul class="org-ul">
+<li>信号的采集，包括模／数变换技术、采样定理等。<br /></li>
+<li>离散时间信号的分析，包括时域及频率分析、离散傅里叶变换等。<br /></li>
+<li>离散系统的分析，包括差分方程、单位冲激响应、频率响应、Z变换等。<br /></li>
+<li>信号处理中的快速算法，包括快速傅里叶变换、快速卷积与相关等。<br /></li>
+<li>数字滤波技术，包括各种滤波器的设计与实现等。<br /></li>
+<li>信号的建模，包括MA、AR及ARMA等各种模型。<br /></li>
+<li>信号的传输与存储，包括信号的各种调制方式、压缩算法等。<br /></li>
+<li>信号的检测与估计，包括信号的参数估计、波形估计、各种检测算法等。<br /></li>
+<li>数字信号处理的实现，包括软件实现与硬件实现。<br /></li>
+<li>数字信号处理的应用。<br /></li>
+</ul>
+</div>
+<div id="outline-container-orgae22016" class="outline-3">
+<h3 id="orgae22016"><span class="section-number-3">1.1</span> 优点</h3>
+<div class="outline-text-3" id="text-1-1">
+<ul class="org-ul">
+<li>灵活性高<br />
+当模拟系统的功能和性能发生改变时，必须重新进行系统设计，至少需要改变系统中的某些器件或参数，然后再重新装配和调试，<br /></li>
+<li>可重复性好<br />
+用同样的信号送入两个配置相同的模拟系统，输出的结果是不会一样的。<br /></li>
+<li>稳定性好<br /></li>
+<li>抗干扰性能好<br /></li>
+<li>易于大规模集成<br /></li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org89cdee6" class="outline-3">
+<h3 id="org89cdee6"><span class="section-number-3">1.2</span> 缺点</h3>
+<div class="outline-text-3" id="text-1-2">
+<ul class="org-ul">
+<li>处理带宽比较小<br /></li>
+<li>动态范围不够大<br /></li>
+<li>处理速度有待提高<br /></li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org34dc94a" class="outline-3">
+<h3 id="org34dc94a"><span class="section-number-3">1.3</span> 三把key</h3>
+<div class="outline-text-3" id="text-1-3">
+<ul class="org-ul">
+<li>时域与频域的相互切换 - 傅里叶变换<br />
+更多地在时域与频域之间来回切换，理解其中的物理意义，可以说是数字信号处理的一种基本思维方式.<br /></li>
+<li>向量及向量坐标系<br /></li>
+<li>matlab<br /></li>
+</ul>
+</div>
+</div>
+</div>
+<div id="outline-container-org9fc157c" class="outline-2">
+<h2 id="org9fc157c"><span class="section-number-2">2</span> 离散时间信号</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+信号是携带有信息的物理量或物理现象，有限性与实值性。<br />
+</p>
+</div>
+<div id="outline-container-org9671f69" class="outline-3">
+<h3 id="org9671f69"><span class="section-number-3">2.1</span> 分类</h3>
+<div class="outline-text-3" id="text-2-1">
+<ul class="org-ul">
+<li>确定信号与随机信号<br /></li>
+<li>连续时间信号与离散时间信号<br /></li>
+<li>模拟信号与数字信号<br />
+数字信号（digitalsignal）是指在时间及幅度上都不连续的信号。<br /></li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org7dfae95" class="outline-3">
+<h3 id="org7dfae95"><span class="section-number-3">2.2</span> 时域</h3>
+<div class="outline-text-3" id="text-2-2">
+<ul class="org-ul">
+<li>单位冲激信号<br /></li>
+<li>单位阶跃信号<br /></li>
+<li>脉冲信号<br /></li>
+<li>正弦信号<br /></li>
+<li>指数信号<br /></li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org05316a1" class="outline-3">
+<h3 id="org05316a1"><span class="section-number-3">2.3</span> 基本运算</h3>
+<div class="outline-text-3" id="text-2-3">
+<p>
+相加，相减，累加，相乘，移位<br />
+</p>
+</div>
+</div>
+<div id="outline-container-orga754932" class="outline-3">
+<h3 id="orga754932"><span class="section-number-3">2.4</span> 噪声</h3>
+<div class="outline-text-3" id="text-2-4">
+<p>
+取决于信息是否需要<br />
+</p>
+</div>
+</div>
+<div id="outline-container-orgd5b6472" class="outline-3">
+<h3 id="orgd5b6472"><span class="section-number-3">2.5</span> 频域</h3>
+<div class="outline-text-3" id="text-2-5">
+<p>
+DTFT<br />
+</p>
+</div>
+</div>
+<div id="outline-container-orgad62529" class="outline-3">
+<h3 id="orgad62529"><span class="section-number-3">2.6</span> ADC</h3>
+<div class="outline-text-3" id="text-2-6">
+<p>
+采样，量化，编码<br />
+数字信号处理 == 编码后比特流的处理<br />
+</p>
+</div>
+</div>
+<div id="outline-container-org36136df" class="outline-3">
+<h3 id="org36136df"><span class="section-number-3">2.7</span> <b>信号带宽</b></h3>
+<div class="outline-text-3" id="text-2-7">
+<p>
+DFT后最高频率分量和最低频率分量之差<br />
+</p>
+<ul class="org-ul">
+<li>在一个域的相乘等于另一个域的卷积<br /></li>
+<li>与脉冲函数的卷积，在每个脉冲的位置上将产生一个波形的镜像。<br /></li>
+<li><a href="https://www.cnblogs.com/h2zZhou/p/8405717.html">https://www.cnblogs.com/h2zZhou/p/8405717.html</a><br /></li>
+</ul>
+<p>
+正弦波的叠加，也可以理解为螺旋线的叠加在实数空间的投影.<br />
+</p>
+</div>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: xuali2</p>
+<p class="date">Created: 2020-10-29 Thu 19:24</p>
+<p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
+</div>
+</body>
+</html>
