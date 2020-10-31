@@ -11,9 +11,1230 @@
 
 #+TITLE: 汇编语言 - ABI
 
+#+begin_src c
+//foo.c
+#include <stdio.h>
+#include <stdarg.h>
 
+int global_init_var = 84;
+int global_uninit_var;
+
+struct s1 {
+    int a;
+    int b;
+    int c;
+};
+
+struct s2 {
+    char *a;
+    int b;
+};
+
+
+//赋值与算术运算
+int func1(int i, struct s1 *s1, struct s2 *s2)
+{
+    static int static_var = 85;
+    static int static_var2;
+
+    int a = 1;
+
+    s1->c = s2->b;
+    return static_var + static_var2 + a + i;
+}
+
+//if else
+int func2(int i)
+{
+    if (i < 1) {
+        return 3;
+    } else {
+        printf("1 <= i\n");
+    }
+
+    return 1;
+}
+
+//switch case
+int func3(int i)
+{
+    int rc = -1;
+
+    switch (i) {
+    case 1:
+        rc = global_uninit_var;
+        break;
+    case 2:
+        rc = 8;
+        break;
+    case 15:
+        printf("i == 15");
+        break;
+    default:
+        break;
+    }
+    return rc;
+}
+
+
+//loop
+int func4(int bound)
+{
+    int i, sum = 0;
+
+    for (i = 0; i < bound; ++i) {
+        sum += i;
+    }
+
+    return sum;
+}
+
+//不定参
+int func5(int count, ...)
+{
+    va_list argp;
+    int i, sum = 0;
+
+    va_start(argp, count);
+    for (i = 0; i < count; ++i) {
+        sum += va_arg(argp, int);
+    }
+    va_end(argp);
+    return sum;
+}
+
+void func6(void)
+{
+    int i = 1;
+    int j = 1;
+    int k = 1;
+    int l = 1;
+    int m = 1;
+    int n = 1;
+
+    return;
+}
+
+int main(int argc, char *argv[])
+{
+    struct s1 s1 = {
+        .a = 1,
+        .b = 2,
+        .c = 3,
+    };
+
+    struct s2 s2 = {
+        .a = "hello",
+        .b = 15,
+    };
+
+    func1(argc, &s1, &s2);
+    func2(argc);
+    func3(argc);
+    func4(argc);
+    printf("%d\n", func5(5, 1, 2, 3, 4, 5));
+    func6();
+    return 0;
+}
+#+end_src
 * PowerPC32
+以PowerPC85XX为例，其属于PowerQuICC(Quad Intergrate Communication)通信处理器
+所有PowerPC都使用了定长32位指令，是RISC体系结构
+微处理器架构
+| gpr | 通用寄存器，32个                    |
+| pc  | 程序计数器/指令寄存器               |
+| lr  | 链接寄存器                          |
+| cr  | 条件寄存器，cr0～cr7，8个4bit的字段 |
+| ctr | 计数寄存器，类似x86里的ecx          |
+| xer | 定点导常及进位溢出信息              |
+| msr | 状态寄存器                          |
+
+除了(装入和存储)指令，有直接操作内存的指令，模型处理: *从内存检索数据，在寄存器中对它进行操作，然后将它存储回内存*
+PowerQuICC由三个模块组成
+| 嵌入式PowerPC核EMPCC          | 执行高层代码                                 |
+| 系统接口单元SIU&通信处理器CPM | 集成32位RISC内核，处理实际通信的底层通信功能 |
+
+** 指令
+指令缩写
+| st   | store                     |
+| ld   | load                      |
+| r    | right                     |
+| l    | left or logical           |
+| w    | word， *32位*             |
+| u    | update                    |
+| m    | move                      |
+| f    | from or field             |
+| t    | to or than                |
+| i    | Immediate                 |
+| h    | half word                 |
+| z    | zero                      |
+| b    | branch                    |
+| n    | and                       |
+| cmp  | compare                   |
+| sub  | subtract                  |
+| clr  | clear                     |
+| stwu | store word and  update r1 |
+
+数据读写指令
+| lbz, lhz, lwz r1, r2 | r2读入至r1，高位清0   |
+| stb, sth, stw r1, r2 | r1值存至r2            |
+| lis r1, 0x1122h      | r1 = 0x1122h << 16    |
+| addi r3, r3, 34h     | r3 = r3 + 34h         |
+| or r3, r10, r10      | r3 = r10 or r10 = r10 |
+
+特殊寄存器操作
+| mflr rd | rd从lr的值读入 |
+| mtlf rd | 将lr值存入rd   |
+
+数值计算指令
+| add r3, r4, r5   | r3 = r4 + r5       |
+| subf r3, r4, r5  | r3 = r5 - r4       |
+| mullw r3, r4, r5 | r3 = r4 * r5       |
+| divw r3, r4, r5  | r3 = r4 / r5       |
+| and r3, r4, r5   | r3 = r4 and r5     |
+| or r3, r4, r5    | r3 = r4 or r5      |
+| nor r3, r4, r5   | r3 = not(r4 or r5) |
+| xor r3, r4, r5   | r3 = r4 xor r5     |
+
+数据比较指令
+| cmpi   | 有符号立即数比较 |
+| cmp    | 有符号数比较     |
+| cmpli  | 无符号立即数比较 |
+| cmpl   | 无符号数比较     |
+| cmpwi  | 有符号立即数比较 |
+| cmpw   | 有符号数比较     |
+| cmplwi | 无符号立即数比较 |
+| cmplw  | 无符号数比较     |
+
+转移指令
+*l:LK转移指令下一条指令存入LR*
+*a:AA地址为目标地址*
+| b(ba bl bla) + 目标地址 | 无条件跳转            |
+| blr                     | 跳至LR处              |
+| bclr                    | 转移目标地址由lr指出  |
+| bcctrl                  | 转移目标地址由ctr指出 |
+| beq addr                | 等于则跳转addr        |
+| beq cr2, addr           | cr2为等于则跳转addr   |
+| bne addr                | 不等于则跳转addr      |
+| blt addr                | 小于则跳转addr        |
+| bgt addr                | 大于则跳转addr        |
+| ble addr                | 小于等于则跳转addr    |
+| bge addr                | 大于等于则跳转addr    |
+
+指令中的点号“.”表示：指令将更新条件寄存器CR0。如add. rD，rA，rB。
+指令中的字母“c”表示：指令显示说明结果影响XER寄存器中的进位位[CA]，如addc rD，rA，rB。
+指令中的字母“e”表示：在指令中把XER[CA]中的数据作为一个操作数，并在XER[CA]位记录进位位，如adde rD，rA，rB
+指令中的字母“o”表示：溢出标志。对于整数，在XER[OA]位记录溢出和在CR0[SO]记录溢出位，如addo rD，rA，rB
+
+** ABI
+** 例程
+*** gcc -g foo.c
+#+begin_src asm
+//赋值与算术运算
+int func1(int i, struct s1 *s1, struct s2 *s2)
+{
+10000508:	94 21 ff d0 	stwu    r1,-48(r1)
+1000050c:	93 e1 00 2c 	stw     r31,44(r1)
+10000510:	7c 3f 0b 78 	mr      r31,r1
+10000514:	90 7f 00 18 	stw     r3,24(r31)
+10000518:	90 9f 00 1c 	stw     r4,28(r31)
+1000051c:	90 bf 00 20 	stw     r5,32(r31)
+    static int static_var = 85;
+    static int static_var2;
+
+    int a = 1;
+10000520:	39 20 00 01 	li      r9,1
+10000524:	91 3f 00 08 	stw     r9,8(r31)
+
+    s1->c = s2->b;
+10000528:	81 3f 00 20 	lwz     r9,32(r31)
+1000052c:	81 49 00 04 	lwz     r10,4(r9)
+10000530:	81 3f 00 1c 	lwz     r9,28(r31)
+10000534:	91 49 00 08 	stw     r10,8(r9)
+    return static_var + static_var2 + a + i;
+10000538:	3d 20 10 01 	lis     r9,4097
+1000053c:	81 49 0b 90 	lwz     r10,2960(r9)
+10000540:	3d 20 10 01 	lis     r9,4097
+10000544:	81 29 0c 30 	lwz     r9,3120(r9)
+10000548:	7d 4a 4a 14 	add     r10,r10,r9
+1000054c:	81 3f 00 08 	lwz     r9,8(r31)
+10000550:	7d 4a 4a 14 	add     r10,r10,r9
+10000554:	81 3f 00 18 	lwz     r9,24(r31)
+10000558:	7d 2a 4a 14 	add     r9,r10,r9
+}
+1000055c:	7d 23 4b 78 	mr      r3,r9
+10000560:	39 7f 00 30 	addi    r11,r31,48
+10000564:	83 eb ff fc 	lwz     r31,-4(r11)
+10000568:	7d 61 5b 78 	mr      r1,r11
+1000056c:	4e 80 00 20 	blr
+
+10000570 <func2>:
+
+//if else
+int func2(int i)
+{
+10000570:	94 21 ff e0 	stwu    r1,-32(r1)
+10000574:	7c 08 02 a6 	mflr    r0
+10000578:	90 01 00 24 	stw     r0,36(r1)
+1000057c:	93 e1 00 1c 	stw     r31,28(r1)
+10000580:	7c 3f 0b 78 	mr      r31,r1
+10000584:	90 7f 00 08 	stw     r3,8(r31)
+    if (i < 1) {
+10000588:	81 3f 00 08 	lwz     r9,8(r31)
+1000058c:	2f 89 00 00 	cmpwi   cr7,r9,0
+10000590:	41 9d 00 0c 	bgt-    cr7,1000059c <func2+0x2c>
+        return 3;
+10000594:	39 20 00 03 	li      r9,3
+10000598:	48 00 00 14 	b       100005ac <func2+0x3c>
+    } else {
+        printf("1 <= i\n");
+1000059c:	3d 20 10 00 	lis     r9,4096
+100005a0:	38 69 0a 34 	addi    r3,r9,2612
+100005a4:	48 01 06 5d 	bl      10010c00 <puts@plt>
+    }
+
+    return 1;
+100005a8:	39 20 00 01 	li      r9,1
+}
+100005ac:	7d 23 4b 78 	mr      r3,r9
+100005b0:	39 7f 00 20 	addi    r11,r31,32
+100005b4:	80 0b 00 04 	lwz     r0,4(r11)
+100005b8:	7c 08 03 a6 	mtlr    r0
+100005bc:	83 eb ff fc 	lwz     r31,-4(r11)
+100005c0:	7d 61 5b 78 	mr      r1,r11
+100005c4:	4e 80 00 20 	blr
+
+100005c8 <func3>:
+
+//switch case
+int func3(int i)
+{
+100005c8:	94 21 ff d0 	stwu    r1,-48(r1)
+100005cc:	7c 08 02 a6 	mflr    r0
+100005d0:	90 01 00 34 	stw     r0,52(r1)
+100005d4:	93 e1 00 2c 	stw     r31,44(r1)
+100005d8:	7c 3f 0b 78 	mr      r31,r1
+100005dc:	90 7f 00 18 	stw     r3,24(r31)
+    int rc = -1;
+100005e0:	39 20 ff ff 	li      r9,-1
+100005e4:	91 3f 00 08 	stw     r9,8(r31)
+
+    switch (i) {
+100005e8:	81 3f 00 18 	lwz     r9,24(r31)
+100005ec:	2f 89 00 02 	cmpwi   cr7,r9,2
+100005f0:	41 9e 00 24 	beq-    cr7,10000614 <func3+0x4c>
+100005f4:	2f 89 00 0f 	cmpwi   cr7,r9,15
+100005f8:	41 9e 00 28 	beq-    cr7,10000620 <func3+0x58>
+100005fc:	2f 89 00 01 	cmpwi   cr7,r9,1
+10000600:	40 9e 00 34 	bne-    cr7,10000634 <func3+0x6c>
+    case 1:
+        rc = global_uninit_var;
+10000604:	3d 20 10 01 	lis     r9,4097
+10000608:	81 29 0b ac 	lwz     r9,2988(r9)
+1000060c:	91 3f 00 08 	stw     r9,8(r31)
+        break;
+10000610:	48 00 00 28 	b       10000638 <func3+0x70>
+    case 2:
+        rc = 8;
+10000614:	39 20 00 08 	li      r9,8
+10000618:	91 3f 00 08 	stw     r9,8(r31)
+        break;
+1000061c:	48 00 00 1c 	b       10000638 <func3+0x70>
+    case 15:
+        printf("i == 15");
+10000620:	3d 20 10 00 	lis     r9,4096
+10000624:	38 69 0a 3c 	addi    r3,r9,2620
+10000628:	4c c6 31 82 	crclr   4*cr1+eq
+1000062c:	48 01 05 cd 	bl      10010bf8 <printf@plt>
+        break;
+10000630:	48 00 00 08 	b       10000638 <func3+0x70>
+    default:
+        break;
+10000634:	60 00 00 00 	nop
+    }
+    return rc;
+10000638:	81 3f 00 08 	lwz     r9,8(r31)
+}
+1000063c:	7d 23 4b 78 	mr      r3,r9
+10000640:	39 7f 00 30 	addi    r11,r31,48
+10000644:	80 0b 00 04 	lwz     r0,4(r11)
+10000648:	7c 08 03 a6 	mtlr    r0
+1000064c:	83 eb ff fc 	lwz     r31,-4(r11)
+10000650:	7d 61 5b 78 	mr      r1,r11
+10000654:	4e 80 00 20 	blr
+
+10000658 <func4>:
+
+
+//loop
+int func4(int bound)
+{
+10000658:	94 21 ff d0 	stwu    r1,-48(r1)
+1000065c:	93 e1 00 2c 	stw     r31,44(r1)
+10000660:	7c 3f 0b 78 	mr      r31,r1
+10000664:	90 7f 00 18 	stw     r3,24(r31)
+    int i, sum = 0;
+10000668:	39 20 00 00 	li      r9,0
+1000066c:	91 3f 00 0c 	stw     r9,12(r31)
+
+    for (i = 0; i < bound; ++i) {
+10000670:	39 20 00 00 	li      r9,0
+10000674:	91 3f 00 08 	stw     r9,8(r31)
+10000678:	48 00 00 20 	b       10000698 <func4+0x40>
+        sum += i;
+1000067c:	81 5f 00 0c 	lwz     r10,12(r31)
+10000680:	81 3f 00 08 	lwz     r9,8(r31)
+10000684:	7d 2a 4a 14 	add     r9,r10,r9
+10000688:	91 3f 00 0c 	stw     r9,12(r31)
+//loop
+int func4(int bound)
+{
+    int i, sum = 0;
+
+    for (i = 0; i < bound; ++i) {
+1000068c:	81 3f 00 08 	lwz     r9,8(r31)
+10000690:	39 29 00 01 	addi    r9,r9,1
+10000694:	91 3f 00 08 	stw     r9,8(r31)
+10000698:	81 5f 00 08 	lwz     r10,8(r31)
+1000069c:	81 3f 00 18 	lwz     r9,24(r31)
+100006a0:	7f 8a 48 00 	cmpw    cr7,r10,r9
+100006a4:	41 9c ff d8 	blt+    cr7,1000067c <func4+0x24>
+        sum += i;
+    }
+
+    return sum;
+100006a8:	81 3f 00 0c 	lwz     r9,12(r31)
+}
+100006ac:	7d 23 4b 78 	mr      r3,r9
+100006b0:	39 7f 00 30 	addi    r11,r31,48
+100006b4:	83 eb ff fc 	lwz     r31,-4(r11)
+100006b8:	7d 61 5b 78 	mr      r1,r11
+100006bc:	4e 80 00 20 	blr
+
+100006c0 <func5>:
+
+//不定参
+int func5(int count, ...)
+{
+100006c0:	94 21 ff a0 	stwu    r1,-96(r1)
+100006c4:	93 e1 00 5c 	stw     r31,92(r1)
+100006c8:	7c 3f 0b 78 	mr      r31,r1
+100006cc:	90 9f 00 2c 	stw     r4,44(r31)
+100006d0:	90 bf 00 30 	stw     r5,48(r31)
+100006d4:	90 df 00 34 	stw     r6,52(r31)
+100006d8:	90 ff 00 38 	stw     r7,56(r31)
+100006dc:	91 1f 00 3c 	stw     r8,60(r31)
+100006e0:	91 3f 00 40 	stw     r9,64(r31)
+100006e4:	91 5f 00 44 	stw     r10,68(r31)
+100006e8:	90 7f 00 48 	stw     r3,72(r31)
+    va_list argp;
+    int i, sum = 0;
+100006ec:	39 20 00 00 	li      r9,0
+100006f0:	91 3f 00 0c 	stw     r9,12(r31)
+
+    va_start(argp, count);
+100006f4:	39 20 00 01 	li      r9,1
+100006f8:	99 3f 00 10 	stb     r9,16(r31)
+100006fc:	39 20 00 00 	li      r9,0
+10000700:	99 3f 00 11 	stb     r9,17(r31)
+10000704:	39 3f 00 68 	addi    r9,r31,104
+10000708:	91 3f 00 14 	stw     r9,20(r31)
+1000070c:	39 3f 00 28 	addi    r9,r31,40
+10000710:	91 3f 00 18 	stw     r9,24(r31)
+    for (i = 0; i < count; ++i) {
+10000714:	39 20 00 00 	li      r9,0
+10000718:	91 3f 00 08 	stw     r9,8(r31)
+1000071c:	48 00 00 68 	b       10000784 <func5+0xc4>
+        sum += va_arg(argp, int);
+10000720:	89 3f 00 10 	lbz     r9,16(r31)
+10000724:	55 29 06 3e 	clrlwi  r9,r9,24
+10000728:	2b 89 00 08 	cmplwi  cr7,r9,8
+1000072c:	40 9c 00 2c 	bge-    cr7,10000758 <func5+0x98>
+10000730:	81 1f 00 18 	lwz     r8,24(r31)
+10000734:	89 3f 00 10 	lbz     r9,16(r31)
+10000738:	55 2a 06 3e 	clrlwi  r10,r9,24
+1000073c:	7d 49 53 78 	mr      r9,r10
+10000740:	55 29 10 3a 	rlwinm  r9,r9,2,0,29
+10000744:	7d 28 4a 14 	add     r9,r8,r9
+10000748:	39 4a 00 01 	addi    r10,r10,1
+1000074c:	55 4a 06 3e 	clrlwi  r10,r10,24
+10000750:	99 5f 00 10 	stb     r10,16(r31)
+10000754:	48 00 00 14 	b       10000768 <func5+0xa8>
+10000758:	81 5f 00 14 	lwz     r10,20(r31)
+1000075c:	7d 49 53 78 	mr      r9,r10
+10000760:	39 4a 00 04 	addi    r10,r10,4
+10000764:	91 5f 00 14 	stw     r10,20(r31)
+10000768:	81 29 00 00 	lwz     r9,0(r9)
+1000076c:	81 5f 00 0c 	lwz     r10,12(r31)
+10000770:	7d 2a 4a 14 	add     r9,r10,r9
+10000774:	91 3f 00 0c 	stw     r9,12(r31)
+{
+    va_list argp;
+    int i, sum = 0;
+
+    va_start(argp, count);
+    for (i = 0; i < count; ++i) {
+10000778:	81 3f 00 08 	lwz     r9,8(r31)
+1000077c:	39 29 00 01 	addi    r9,r9,1
+10000780:	91 3f 00 08 	stw     r9,8(r31)
+10000784:	81 5f 00 08 	lwz     r10,8(r31)
+10000788:	81 3f 00 48 	lwz     r9,72(r31)
+1000078c:	7f 8a 48 00 	cmpw    cr7,r10,r9
+10000790:	41 9c ff 90 	blt+    cr7,10000720 <func5+0x60>
+        sum += va_arg(argp, int);
+    }
+    va_end(argp);
+    return sum;
+10000794:	81 3f 00 0c 	lwz     r9,12(r31)
+}
+10000798:	7d 23 4b 78 	mr      r3,r9
+1000079c:	39 7f 00 60 	addi    r11,r31,96
+100007a0:	83 eb ff fc 	lwz     r31,-4(r11)
+100007a4:	7d 61 5b 78 	mr      r1,r11
+100007a8:	4e 80 00 20 	blr
+
+100007ac <func6>:
+
+void func6(void)
+{
+100007ac:	94 21 ff d0 	stwu    r1,-48(r1)
+100007b0:	93 e1 00 2c 	stw     r31,44(r1)
+100007b4:	7c 3f 0b 78 	mr      r31,r1
+    int i = 1;
+100007b8:	39 20 00 01 	li      r9,1
+100007bc:	91 3f 00 08 	stw     r9,8(r31)
+    int j = 1;
+100007c0:	39 20 00 01 	li      r9,1
+100007c4:	91 3f 00 0c 	stw     r9,12(r31)
+    int k = 1;
+100007c8:	39 20 00 01 	li      r9,1
+100007cc:	91 3f 00 10 	stw     r9,16(r31)
+    int l = 1;
+100007d0:	39 20 00 01 	li      r9,1
+100007d4:	91 3f 00 14 	stw     r9,20(r31)
+    int m = 1;
+100007d8:	39 20 00 01 	li      r9,1
+100007dc:	91 3f 00 18 	stw     r9,24(r31)
+    int n = 1;
+100007e0:	39 20 00 01 	li      r9,1
+100007e4:	91 3f 00 1c 	stw     r9,28(r31)
+
+    return;
+100007e8:	60 00 00 00 	nop
+}
+100007ec:	39 7f 00 30 	addi    r11,r31,48
+100007f0:	83 eb ff fc 	lwz     r31,-4(r11)
+100007f4:	7d 61 5b 78 	mr      r1,r11
+100007f8:	4e 80 00 20 	blr
+
+100007fc <main>:
+
+int main(int argc, char *argv[])
+{
+100007fc:	94 21 ff c0 	stwu    r1,-64(r1)
+10000800:	7c 08 02 a6 	mflr    r0
+10000804:	90 01 00 44 	stw     r0,68(r1)
+10000808:	93 e1 00 3c 	stw     r31,60(r1)
+1000080c:	7c 3f 0b 78 	mr      r31,r1
+10000810:	90 7f 00 28 	stw     r3,40(r31)
+10000814:	90 9f 00 2c 	stw     r4,44(r31)
+    struct s1 s1 = {
+10000818:	3d 20 10 00 	lis     r9,4096
+1000081c:	39 29 0a 48 	addi    r9,r9,2632
+10000820:	81 09 00 00 	lwz     r8,0(r9)
+10000824:	81 49 00 04 	lwz     r10,4(r9)
+10000828:	81 29 00 08 	lwz     r9,8(r9)
+1000082c:	91 1f 00 08 	stw     r8,8(r31)
+10000830:	91 5f 00 0c 	stw     r10,12(r31)
+10000834:	91 3f 00 10 	stw     r9,16(r31)
+        .a = 1,
+        .b = 2,
+        .c = 3,
+    };
+
+    struct s2 s2 = {
+10000838:	3d 20 10 00 	lis     r9,4096
+1000083c:	39 29 0a 5c 	addi    r9,r9,2652
+10000840:	81 49 00 00 	lwz     r10,0(r9)
+10000844:	81 29 00 04 	lwz     r9,4(r9)
+10000848:	91 5f 00 14 	stw     r10,20(r31)
+1000084c:	91 3f 00 18 	stw     r9,24(r31)
+        .a = "hello",
+        .b = 15,
+    };
+
+    func1(argc, &s1, &s2);
+10000850:	39 3f 00 14 	addi    r9,r31,20
+10000854:	80 7f 00 28 	lwz     r3,40(r31)
+10000858:	39 5f 00 08 	addi    r10,r31,8
+1000085c:	7d 44 53 78 	mr      r4,r10
+10000860:	7d 25 4b 78 	mr      r5,r9
+10000864:	4b ff fc a5 	bl      10000508 <func1>
+    func2(argc);
+10000868:	80 7f 00 28 	lwz     r3,40(r31)
+1000086c:	4b ff fd 05 	bl      10000570 <func2>
+    func3(argc);
+10000870:	80 7f 00 28 	lwz     r3,40(r31)
+10000874:	4b ff fd 55 	bl      100005c8 <func3>
+    func4(argc);
+10000878:	80 7f 00 28 	lwz     r3,40(r31)
+1000087c:	4b ff fd dd 	bl      10000658 <func4>
+    printf("%d\n", func5(5, 1, 2, 3, 4, 5));
+10000880:	38 60 00 05 	li      r3,5
+10000884:	38 80 00 01 	li      r4,1
+10000888:	38 a0 00 02 	li      r5,2
+1000088c:	38 c0 00 03 	li      r6,3
+10000890:	38 e0 00 04 	li      r7,4
+10000894:	39 00 00 05 	li      r8,5
+10000898:	4c c6 31 82 	crclr   4*cr1+eq
+1000089c:	4b ff fe 25 	bl      100006c0 <func5>
+100008a0:	7c 69 1b 78 	mr      r9,r3
+100008a4:	3d 40 10 00 	lis     r10,4096
+100008a8:	38 6a 0a 44 	addi    r3,r10,2628
+100008ac:	7d 24 4b 78 	mr      r4,r9
+100008b0:	4c c6 31 82 	crclr   4*cr1+eq
+100008b4:	48 01 03 45 	bl      10010bf8 <printf@plt>
+    func6();
+100008b8:	4b ff fe f5 	bl      100007ac <func6>
+    return 0;
+100008bc:	39 20 00 00 	li      r9,0
+}
+100008c0:	7d 23 4b 78 	mr      r3,r9
+100008c4:	39 7f 00 40 	addi    r11,r31,64
+100008c8:	80 0b 00 04 	lwz     r0,4(r11)
+100008cc:	7c 08 03 a6 	mtlr    r0
+100008d0:	83 eb ff fc 	lwz     r31,-4(r11)
+100008d4:	7d 61 5b 78 	mr      r1,r11
+100008d8:	4e 80 00 20 	blr
+100008dc:	00 01 81 cc 	.long 0x181cc
+#+end_src
+*** gcc -O2 foo.c
 
 * Mips64
-
+$0 常量0
+#31 $RA 返回地址
 * X86
+** 指令
+- 通用数据传送指令
+| mov     | 传送字或字节.                                                                                             |
+| movsx   | 先符号扩展,再传送.                                                                                        |
+| movzx   | 先零扩展,再传送.                                                                                          |
+| push    | 把字压入堆栈.                                                                                             |
+| pop     | 把字弹出堆栈.                                                                                             |
+| pusha   | 把ax,cx,dx,bx,sp,bp,si,di依次压入堆栈.                                                                    |
+| popa    | 把di,si,bp,sp,bx,dx,cx,ax依次弹出堆栈.                                                                    |
+| pushad  | 把eax,ecx,edx,ebx,esp,ebp,esi,edi依次压入堆栈.                                                            |
+| popad   | 把edi,esi,ebp,esp,ebx,edx,ecx,eax依次弹出堆栈.                                                            |
+| bswap   | 交换32位寄存器里字节的顺序                                                                                |
+| xchg    | 交换字或字节.(至少有一个操作数为寄存器,段寄存器不可作为操作数)                                            |
+| cmpxchg | 比较并交换操作数.(第二个操作数必须为累加器al/ax/eax)                                                      |
+| xadd    | 先交换再累加.(结果在第一个操作数里)                                                                       |
+| xlat    | 字节查表转换.----bx指向一张256字节的表的起点,al为表的索引值(0-255,即0-ffh);返回al为查表结果.([bx+al]->al) |
+
+- 端口指令
+| in  | i/o端口输入. ( 语法: in   累加器,    {端口号│dx} )                                                                                    |
+| out | i/o端口输出. ( 语法: out {端口号│dx},累加器 )输入输出端口由立即方式指定时,    其范围是 0-255; 由寄存器 dx 指定时,其范围是    0-65535. |
+
+- 目的地址传送指令
+| lea | 装入有效地址.例: lea dx,string ;把偏移地址存到dx.                              |
+| lds | 传送目标指针,把指针内容装入ds.例: lds si,string   ;把段地址:偏移地址存到ds:si. |
+| les | 传送目标指针,把指针内容装入es.例: les di,string   ;把段地址:偏移地址存到es:di. |
+| lfs | 传送目标指针,把指针内容装入fs.例: lfs di,string   ;把段地址:偏移地址存到fs:di. |
+| lgs | 传送目标指针,把指针内容装入gs.例: lgs di,string   ;把段地址:偏移地址存到gs:di. |
+| lss | 传送目标指针,把指针内容装入ss.例: lss di,string   ;把段地址:偏移地址存到ss:di. |
+
+- 标志传送指令
+| lahf  | 标志寄存器传送,把标志装入ah.           |
+| sahf  | 标志寄存器传送,把ah内容装入标志寄存器. |
+| pushf | 标志入栈.                              |
+| popf  | 标志出栈.                              |
+| pushd | 32位标志入栈.                          |
+| popd  | 32位标志出栈.                          |
+
+- 算术运算指令
+| adc  | 带进位加法.                                                                           |
+| inc  | 加 1.                                                                                 |
+| aaa  | 加法的ascii码调整.                                                                    |
+| daa  | 加法的十进制调整.                                                                     |
+| sub  | 减法.                                                                                 |
+| sbb  | 带借位减法.                                                                           |
+| dec  | 减 1.                                                                                 |
+| neg  | 求反(以    0 减之).                                                                   |
+| cmp  | 比较.(两操作数作减法,仅修改标志位,不回送结果).                                        |
+| aas  | 减法的ascii码调整.                                                                    |
+| das  | 减法的十进制调整.                                                                     |
+| mul  | 无符号乘法.结果回送ah和al(字节运算),或dx和ax(字运算),                                 |
+| imul | 整数乘法.结果回送ah和al(字节运算),或dx和ax(字运算),                                   |
+| aam  | 乘法的ascii码调整.                                                                    |
+| div  | 无符号除法.结果回送:商回送al,余数回送ah, (字节运算);或 商回送ax,余数回送dx, (字运算). |
+| idiv | 整数除法.结果回送:商回送al,余数回送ah, (字节运算);或 商回送ax,余数回送dx, (字运算).   |
+| aad  | 除法的ascii码调整.                                                                    |
+| cbw  | 字节转换为字. (把al中字节的符号扩展到ah中去)                                          |
+| cwd  | 字转换为双字. (把ax中的字的符号扩展到dx中去)                                          |
+| cwde | 字转换为双字. (把ax中的字符号扩展到eax中去)                                           |
+| cdq  | 双字扩展. (把eax中的字的符号扩展到edx中去)                                            |
+
+- 逻辑运算指令
+| and  | 与运算.                                          |
+| or   | 或运算.                                          |
+| xor  | 异或运算.                                        |
+| not  | 取反.                                            |
+| test | 测试.(两操作数作与运算,仅修改标志位,不回送结果). |
+| shl  | 逻辑左移.                                        |
+| sal  | 算术左移.(=shl)                                  |
+| shr  | 逻辑右移.                                        |
+| sar  | 算术右移.(=shr)                                  |
+| rol  | 循环左移.                                        |
+| ror  | 循环右移.                                        |
+| rcl  | 通过进位的循环左移.                              |
+| rcr  | 通过进位的循环右移.                              |
+
+- 串指令
+  ds:si 源串段寄存器 :源串变址.
+  es:di 目标串段寄存器:目标串变址.
+  cx 重复次数计数器.
+  al/ax 扫描值.
+  d标志   0表示重复操作中si和di应自动增量; 1表示应自动减量.
+  z标志   用来控制扫描或比较操作的结束.
+| movs        | 串传送.( movsb 传送字符. movsw 传送字. movsd 传送双字. )                                             |
+| cmps        | 串比较.( cmpsb 比较字符. cmpsw 比较字. )                                                             |
+| scas        | 串扫描.把al或ax的内容与目标串作比较,比较结果反映在标志位.                                            |
+| lods        | 装入串.把源串中的元素(字或字节)逐一装入al或ax中.( lodsb 传送字符. lodsw 传送字.    lodsd 传送双字. ) |
+| stos        | 保存串.是lods的逆过程.                                                                               |
+| rep         | 当cx/ecx<>0时重复.                                                                                   |
+| repe/repz   | 当zf=1或比较结果相等,且cx/ecx<>0时重复.                                                              |
+| repne/repnz | 当zf=0或比较结果不相等,且cx/ecx<>0时重复.                                                            |
+| repc        | 当cf=1且cx/ecx<>0时重复.                                                                             |
+| repnc       | 当cf=0且cx/ecx<>0时重复.                                                                             |
+
+- 程序转移指令
+| jmp      | 无条件转移指令        |
+| call     | 过程调用              |
+| ret/retf | 过程返回.             |
+| ja/jnbe  | 不小于或不等于时转移. |
+| jae/jnb  | 大于或等于转移.       |
+| jb/jnae  | 小于转移.             |
+| jbe/jna  | 小于或等于转移.       |
+| jg/jnle  | 大于转移.             |
+| jge/jnl  | 大于或等于转移.       |
+| jl/jnge  | 小于转移.             |
+| jle/jng  | 小于或等于转移.       |
+| je/jz    | 等于转移.             |
+| jne/jnz  | 不等于时转移.         |
+| jc       | 有进位时转移.         |
+| jnc      | 无进位时转移.         |
+| jno      | 不溢出时转移.         |
+| jnp/jpo  | 奇偶性为奇数时转移.   |
+| jns      | 符号位为 "0" 时转移.  |
+| jo       | 溢出转移.             |
+| jp/jpe   | 奇偶性为偶数时转移.   |
+| js       | 符号位为 "1" 时转移.  |
+
+- 其他
+| lcall                     | 长调转                                                     |
+| cmove                     |                                                            |
+| lea 0x0(%esi,%eiz,1),%esi | base(offset, index, i)，就是 base+offset+index*i, eiz恒为0 |
+
+** ABI
+- esp和ebp之间即为当前函数对应的栈空间
+- 函数返回值存在eax中
+- 函数实参入栈从右至左push，调用方负责清除入参
+- 不定参时，通ebp + x向栈内索引变量
++------------+
+|   local    |
+|  variable  | <----- esp
+|            |
++------------+
+|            |
+|            |
+|   local    |
+|  variable  |
+|            |
+|            |
+|            |
++------------+
+|   local    |
+|  variable  |
+|            |
++------------+
+|            |
+|  old  ebp  | <----- ebp
+|            |
++------------+
+|            |
+|  prev  ip  |
+|            |
++------------+
+|            |
+|  prev  cs  |
+|            |
++------------+
+
+** 例程
+
+*gcc -m32 -g foo.c*
+#+begin_src asm
+//赋值与算术运算
+int func1(int i, struct s1 *s1, struct s2 *s2)
+{
+ 80484dd:	55                   	push   %ebp
+ 80484de:	89 e5                	mov    %esp,%ebp
+ 80484e0:	83 ec 10             	sub    $0x10,%esp        ;开栈
+    static int static_var = 85;
+    static int static_var2;
+
+    int a = 1;
+ 80484e3:	c7 45 fc 01 00 00 00 	movl   $0x1,-0x4(%ebp)   ; &a = ebp - 4, a = 1
+
+    s1->c = s2->b;
+ 80484ea:	8b 45 10             	mov    0x10(%ebp),%eax   ; eax = s2
+ 80484ed:	8b 50 04             	mov    0x4(%eax),%edx    ; edx = s2->b
+ 80484f0:	8b 45 0c             	mov    0xc(%ebp),%eax    ; eax = s1
+ 80484f3:	89 50 08             	mov    %edx,0x8(%eax)    ; s1->c = edx
+    return static_var + static_var2 + a + i;
+ 80484f6:	8b 15 20 a0 04 08    	mov    0x804a020,%edx    ; edx = static_var
+ 80484fc:	a1 28 a0 04 08       	mov    0x804a028,%eax    ; eax = static_var2
+ 8048501:	01 c2                	add    %eax,%edx         ; edx = edx + eax
+ 8048503:	8b 45 fc             	mov    -0x4(%ebp),%eax   ; eax = 1
+ 8048506:	01 c2                	add    %eax,%edx         ; edx = edx + eax = static_var + static_var2 + 1
+ 8048508:	8b 45 08             	mov    0x8(%ebp),%eax    ; eax = i
+ 804850b:	01 d0                	add    %edx,%eax         ; eax = edx + eax = static_var + static_var2 + i + 1
+}
+ 804850d:	c9                   	leave                    ; esp = ebp, pop ebp
+ 804850e:	c3                   	ret                      ; pop cs:ip
+
+0804850f <func2>:
+
+//if else
+int func2(int i)
+{
+ 804850f:	55                   	push   %ebp
+ 8048510:	89 e5                	mov    %esp,%ebp
+ 8048512:	83 ec 08             	sub    $0x8,%esp               ; 开栈
+    if (i < 1) {
+ 8048515:	83 7d 08 00          	cmpl   $0x0,0x8(%ebp)          ; 判断i和0x0
+ 8048519:	7f 07                	jg     8048522 <func2+0x13>    ; 如果大于0x0则跳转至0x8048522，因为i < 1即为i <= 0
+        return 3;
+ 804851b:	b8 03 00 00 00       	mov    $0x3,%eax               ; 返回值置为3
+ 8048520:	eb 15                	jmp    8048537 <func2+0x28>
+    } else {
+        printf("1 <= i\n");
+ 8048522:	83 ec 0c             	sub    $0xc,%esp               ; esp = esp - 0xc
+ 8048525:	68 5c 87 04 08       	push   $0x804875c              ; 将"1 <=i\n"的地址入栈，esp = esp - 4
+ 804852a:	e8 51 fe ff ff       	call   8048380 <puts@plt>      ; 因为没有可选参数，则直接使用puts
+ 804852f:	83 c4 10             	add    $0x10,%esp              ; esp = esp + 0x10，恢复esp，其实esp = esp - 0xc非必须，可以直接push最后esp = esp + 4
+    }
+
+    return 1;
+ 8048532:	b8 01 00 00 00       	mov    $0x1,%eax               ; 返回值值为1
+}
+ 8048537:	c9                   	leave
+ 8048538:	c3                   	ret
+
+08048539 <func3>:
+
+//switch case
+int func3(int i)
+{
+ 8048539:	55                   	push   %ebp
+ 804853a:	89 e5                	mov    %esp,%ebp
+ 804853c:	83 ec 18             	sub    $0x18,%esp             ; 开栈
+    int rc = -1;
+ 804853f:	c7 45 f4 ff ff ff ff 	movl   $0xffffffff,-0xc(%ebp) ; rc = -1
+
+    switch (i) {
+ 8048546:	83 7d 08 02          	cmpl   $0x2,0x8(%ebp)         ; i和0x2比较
+ 804854a:	74 16                	je     8048562 <func3+0x29>   ; 相等跳转8048562
+ 804854c:	83 7d 08 0f          	cmpl   $0xf,0x8(%ebp)         ; i和0xf比较
+ 8048550:	74 19                	je     804856b <func3+0x32>   ; 相等跳转804856b
+ 8048552:	83 7d 08 01          	cmpl   $0x1,0x8(%ebp)         ; i和0x1比较
+ 8048556:	75 25                	jne    804857d <func3+0x44>   ; 不等则跳转804857d
+    case 1:
+        rc = global_uninit_var;
+ 8048558:	a1 2c a0 04 08       	mov    0x804a02c,%eax         ; 相等即到这里, eax = global_uninit_var = *0x804a02c, *注意这里不是$0x804a02c，所以不是立即数，而是[0x804a02c]*
+ 804855d:	89 45 f4             	mov    %eax,-0xc(%ebp)        ; rc = *(ebp - 0xc) = eax
+        break;
+ 8048560:	eb 1c                	jmp    804857e <func3+0x45>   ; 跳转至末尾
+    case 2:
+        rc = 8;
+ 8048562:	c7 45 f4 08 00 00 00 	movl   $0x8,-0xc(%ebp)        ; rc = 8;
+        break;
+ 8048569:	eb 13                	jmp    804857e <func3+0x45>   ; 跳转至末尾
+    case 15:
+        printf("i == 15");
+ 804856b:	83 ec 0c             	sub    $0xc,%esp
+ 804856e:	68 63 87 04 08       	push   $0x8048763
+ 8048573:	e8 f8 fd ff ff       	call   8048370 <printf@plt>
+ 8048578:	83 c4 10             	add    $0x10,%esp             ; printf
+        break;
+ 804857b:	eb 01                	jmp    804857e <func3+0x45>
+    default:
+        break;
+ 804857d:	90                   	nop                           ; nothing
+    }
+    return rc;
+ 804857e:	8b 45 f4             	mov    -0xc(%ebp),%eax        ; eax = rc
+}
+ 8048581:	c9                   	leave
+ 8048582:	c3                   	ret
+
+08048583 <func4>:
+
+
+//loop
+int func4(int bound)
+{
+ 8048583:	55                   	push   %ebp
+ 8048584:	89 e5                	mov    %esp,%ebp
+ 8048586:	83 ec 10             	sub    $0x10,%esp             ; 开栈
+    int i, sum = 0;
+ 8048589:	c7 45 f8 00 00 00 00 	movl   $0x0,-0x8(%ebp)        ; sum = *(ebp - 8) = 0
+
+    for (i = 0; i < bound; ++i) {
+ 8048590:	c7 45 fc 00 00 00 00 	movl   $0x0,-0x4(%ebp)        ; i = *(ebp - 4) = 0
+ 8048597:	eb 0a                	jmp    80485a3 <func4+0x20>   ; 跳转
+        sum += i;
+ 8048599:	8b 45 fc             	mov    -0x4(%ebp),%eax        ; eax = i
+ 804859c:	01 45 f8             	add    %eax,-0x8(%ebp)        ; sum += eax
+    for (i = 0; i < bound; ++i) {
+ 804859f:	83 45 fc 01          	addl   $0x1,-0x4(%ebp)        ; i += 1
+ 80485a3:	8b 45 fc             	mov    -0x4(%ebp),%eax        ; eax = *(ebp - 4)
+ 80485a6:	3b 45 08             	cmp    0x8(%ebp),%eax         ; 比较 eax和sum
+ 80485a9:	7c ee                	jl     8048599 <func4+0x16>   ; 少于则跳转至8048599
+    }
+
+    return sum;
+ 80485ab:	8b 45 f8             	mov    -0x8(%ebp),%eax        ; eax = sum
+}
+ 80485ae:	c9                   	leave
+ 80485af:	c3                   	ret
+
+080485b0 <func5>:
+
+//不定参
+int func5(int count, ...)
+{
+ 80485b0:	55                   	push   %ebp
+ 80485b1:	89 e5                	mov    %esp,%ebp
+ 80485b3:	83 ec 10             	sub    $0x10,%esp             ; 开栈
+    va_list argp;
+    int i, sum = 0;
+ 80485b6:	c7 45 f8 00 00 00 00 	movl   $0x0,-0x8(%ebp)        ; sum = *(ebp - 8) = 0
+
+    va_start(argp, count);
+ 80485bd:	8d 45 0c             	lea    0xc(%ebp),%eax         ; eax = ebp + 0xc = &count
+ 80485c0:	89 45 f4             	mov    %eax,-0xc(%ebp)        ; argp = ebp - 0xc = eax
+    for (i = 0; i < count; ++i) {
+ 80485c3:	c7 45 fc 00 00 00 00 	movl   $0x0,-0x4(%ebp)        ; i = *(ebp - 0x4) = 0
+ 80485ca:	eb 12                	jmp    80485de <func5+0x2e>   ; 跳至0x80485de
+        sum += va_arg(argp, int);
+ 80485cc:	8b 45 f4             	mov    -0xc(%ebp),%eax        ; eax = argp
+ 80485cf:	8d 50 04             	lea    0x4(%eax),%edx         ; edx = eax + 4
+ 80485d2:	89 55 f4             	mov    %edx,-0xc(%ebp)        ; argp = edx
+ 80485d5:	8b 00                	mov    (%eax),%eax            ; eax = *(eax)
+ 80485d7:	01 45 f8             	add    %eax,-0x8(%ebp)        ; sum = *(ebp - 0x8) + eax
+    for (i = 0; i < count; ++i) {
+ 80485da:	83 45 fc 01          	addl   $0x1,-0x4(%ebp)        ; i = i + 1
+ 80485de:	8b 45 fc             	mov    -0x4(%ebp),%eax        ; eax = *(ebp - 0x4)
+ 80485e1:	3b 45 08             	cmp    0x8(%ebp),%eax         ; 比较eax和count = *(ebp + 0x8)
+ 80485e4:	7c e6                	jl     80485cc <func5+0x1c>   ; 跳至80485cc
+    }
+    va_end(argp);
+    return sum;
+ 80485e6:	8b 45 f8             	mov    -0x8(%ebp),%eax        ; eax = sum = *(ebp - 0x8)
+}
+ 80485e9:	c9                   	leave                         ; 出栈
+ 80485ea:	c3                   	ret
+
+080485eb <func6>:
+
+void func6(void)
+{
+ 80485eb:	55                   	push   %ebp
+ 80485ec:	89 e5                	mov    %esp,%ebp
+ 80485ee:	83 ec 20             	sub    $0x20,%esp
+    int i = 1;
+ 80485f1:	c7 45 fc 01 00 00 00 	movl   $0x1,-0x4(%ebp)
+    int j = 1;
+ 80485f8:	c7 45 f8 01 00 00 00 	movl   $0x1,-0x8(%ebp)
+    int k = 1;
+ 80485ff:	c7 45 f4 01 00 00 00 	movl   $0x1,-0xc(%ebp)
+    int l = 1;
+ 8048606:	c7 45 f0 01 00 00 00 	movl   $0x1,-0x10(%ebp)
+    int m = 1;
+ 804860d:	c7 45 ec 01 00 00 00 	movl   $0x1,-0x14(%ebp)
+    int n = 1;
+ 8048614:	c7 45 e8 01 00 00 00 	movl   $0x1,-0x18(%ebp)
+
+    return;
+ 804861b:	90                   	nop
+}
+ 804861c:	c9                   	leave
+ 804861d:	c3                   	ret
+
+0804861e <main>:
+
+int main(int argc, char *argv[])
+{
+ 804861e:	8d 4c 24 04          	lea    0x4(%esp),%ecx     ; ecx = &(esp + 0x4), 即&argc
+ 8048622:	83 e4 f0             	and    $0xfffffff0,%esp   ;
+ 8048625:	ff 71 fc             	pushl  -0x4(%ecx)         ; push *(ecx - 4) = *(prev esp)
+ 8048628:	55                   	push   %ebp
+ 8048629:	89 e5                	mov    %esp,%ebp
+ 804862b:	53                   	push   %ebx
+ 804862c:	51                   	push   %ecx
+ 804862d:	83 ec 20             	sub    $0x20,%esp         ; 开栈
+ 8048630:	89 cb                	mov    %ecx,%ebx          ; ebx = ecx, *ecx是argc, &argv是&argc + sizeof(void *)
+    struct s1 s1 = {
+ 8048632:	c7 45 ec 01 00 00 00 	movl   $0x1,-0x14(%ebp)
+ 8048639:	c7 45 f0 02 00 00 00 	movl   $0x2,-0x10(%ebp)
+ 8048640:	c7 45 f4 03 00 00 00 	movl   $0x3,-0xc(%ebp)
+        .a = 1,
+        .b = 2,
+        .c = 3,
+    };
+
+    struct s2 s2 = {
+ 8048647:	c7 45 e4 6b 87 04 08 	movl   $0x804876b,-0x1c(%ebp)
+ 804864e:	c7 45 e8 0f 00 00 00 	movl   $0xf,-0x18(%ebp)
+        .a = "hello",
+        .b = 15,
+    };
+
+    func1(argc, &s1, &s2);
+ 8048655:	8d 45 e4             	lea    -0x1c(%ebp),%eax
+ 8048658:	50                   	push   %eax
+ 8048659:	8d 45 ec             	lea    -0x14(%ebp),%eax
+ 804865c:	50                   	push   %eax
+ 804865d:	ff 33                	pushl  (%ebx)             ; push argc
+ 804865f:	e8 79 fe ff ff       	call   80484dd <func1>
+ 8048664:	83 c4 0c             	add    $0xc,%esp
+    func2(argc);
+ 8048667:	83 ec 0c             	sub    $0xc,%esp
+ 804866a:	ff 33                	pushl  (%ebx)
+ 804866c:	e8 9e fe ff ff       	call   804850f <func2>
+ 8048671:	83 c4 10             	add    $0x10,%esp
+    func3(argc);
+ 8048674:	83 ec 0c             	sub    $0xc,%esp
+ 8048677:	ff 33                	pushl  (%ebx)
+ 8048679:	e8 bb fe ff ff       	call   8048539 <func3>
+ 804867e:	83 c4 10             	add    $0x10,%esp
+    func4(argc);
+ 8048681:	83 ec 0c             	sub    $0xc,%esp
+ 8048684:	ff 33                	pushl  (%ebx)
+ 8048686:	e8 f8 fe ff ff       	call   8048583 <func4>
+ 804868b:	83 c4 10             	add    $0x10,%esp
+    printf("%d\n", func5(5, 1, 2, 3, 4, 5));
+ 804868e:	83 ec 08             	sub    $0x8,%esp
+ 8048691:	6a 05                	push   $0x5
+ 8048693:	6a 04                	push   $0x4
+ 8048695:	6a 03                	push   $0x3
+ 8048697:	6a 02                	push   $0x2
+ 8048699:	6a 01                	push   $0x1
+ 804869b:	6a 05                	push   $0x5
+ 804869d:	e8 0e ff ff ff       	call   80485b0 <func5>
+ 80486a2:	83 c4 20             	add    $0x20,%esp
+ 80486a5:	83 ec 08             	sub    $0x8,%esp
+ 80486a8:	50                   	push   %eax
+ 80486a9:	68 71 87 04 08       	push   $0x8048771
+ 80486ae:	e8 bd fc ff ff       	call   8048370 <printf@plt>
+ 80486b3:	83 c4 10             	add    $0x10,%esp
+    func6();
+ 80486b6:	e8 30 ff ff ff       	call   80485eb <func6>
+    return 0;
+ 80486bb:	b8 00 00 00 00       	mov    $0x0,%eax
+}
+ 80486c0:	8d 65 f8             	lea    -0x8(%ebp),%esp
+ 80486c3:	59                   	pop    %ecx
+ 80486c4:	5b                   	pop    %ebx
+ 80486c5:	5d                   	pop    %ebp
+ 80486c6:	8d 61 fc             	lea    -0x4(%ecx),%esp
+ 80486c9:	c3                   	ret
+ 80486ca:	66 90                	xchg   %ax,%ax
+ 80486cc:	66 90                	xchg   %ax,%ax
+ 80486ce:	66 90                	xchg   %ax,%ax
+#+end_src
+
+*gcc -m32 -O2 foo.c*
+#+begin_src asm
+
+; 编译器对main的优化
+; - func1 无任何输出
+; - func2 如果i非0，则输出"1<= i\n"，因为为确定值，所以直接内联
+Disassembly of section .text:
+
+080483a0 <main>:
+ 80483a0:	8d 4c 24 04          	lea    0x4(%esp),%ecx      ; ecx = &argc
+ 80483a4:	83 e4 f0             	and    $0xfffffff0,%esp
+ 80483a7:	ff 71 fc             	pushl  -0x4(%ecx)          ; push *(ecx - 4) = *(prev esp)
+ 80483aa:	55                   	push   %ebp
+ 80483ab:	89 e5                	mov    %esp,%ebp
+ 80483ad:	53                   	push   %ebx
+ 80483ae:	8b 19                	mov    (%ecx),%ebx         ; ebx = *ecx = argc
+ 80483b0:	51                   	push   %ecx
+ 80483b1:	85 db                	test   %ebx,%ebx           ; ebx非0则不执行puts("1 <= i\n")
+ 80483b3:	7e 10                	jle    80483c5 <main+0x25>
+ 80483b5:	83 ec 0c             	sub    $0xc,%esp
+ 80483b8:	68 ec 86 04 08       	push   $0x80486ec
+ 80483bd:	e8 be ff ff ff       	call   8048380 <puts@plt>
+ 80483c2:	83 c4 10             	add    $0x10,%esp
+ 80483c5:	83 ec 0c             	sub    $0xc,%esp
+ 80483c8:	53                   	push   %ebx                ; push i = argc
+ 80483c9:	e8 d2 01 00 00       	call   80485a0 <func3>
+ 80483ce:	58                   	pop    %eax
+ 80483cf:	5a                   	pop    %edx
+ 80483d0:	6a 05                	push   $0x5
+ 80483d2:	6a 04                	push   $0x4
+ 80483d4:	6a 03                	push   $0x3
+ 80483d6:	6a 02                	push   $0x2
+ 80483d8:	6a 01                	push   $0x1
+ 80483da:	6a 05                	push   $0x5
+ 80483dc:	e8 3f 02 00 00       	call   8048620 <func5>     ; call fun5
+ 80483e1:	83 c4 18             	add    $0x18,%esp
+ 80483e4:	50                   	push   %eax
+ 80483e5:	68 fb 86 04 08       	push   $0x80486fb
+ 80483ea:	e8 81 ff ff ff       	call   8048370 <printf@plt> ; print
+ 80483ef:	83 c4 10             	add    $0x10,%esp
+ 80483f2:	8d 65 f8             	lea    -0x8(%ebp),%esp
+ 80483f5:	31 c0                	xor    %eax,%eax
+ 80483f7:	59                   	pop    %ecx
+ 80483f8:	5b                   	pop    %ebx
+ 80483f9:	5d                   	pop    %ebp
+ 80483fa:	8d 61 fc             	lea    -0x4(%ecx),%esp
+ 80483fd:	c3                   	ret
+
+08048540 <func1>:
+ 8048540:	8b 44 24 0c          	mov    0xc(%esp),%eax        ; eax = s2
+ 8048544:	8b 50 04             	mov    0x4(%eax),%edx        ; edx = s2->b
+ 8048547:	8b 44 24 08          	mov    0x8(%esp),%eax        ; eax = s1
+ 804854b:	89 50 08             	mov    %edx,0x8(%eax)        ; s1->c = edx = s2->b
+ 804854e:	8b 44 24 04          	mov    0x4(%esp),%eax        ; eax = i
+ 8048552:	83 c0 56             	add    $0x56,%eax            ; eax = i + 0x56, *首先static_var2并没有人用，所以编译认为是0，其实a永远为1所以static_var + 1= 85 + 1 = 0x56*
+ 8048555:	c3                   	ret
+ 8048556:	8d 76 00             	lea    0x0(%esi),%esi
+ 8048559:	8d bc 27 00 00 00 00 	lea    0x0(%edi,%eiz,1),%edi
+
+08048560 <func2>:
+ 8048560:	83 ec 0c             	sub    $0xc,%esp             ; esp = esp - 0xc
+ 8048563:	8b 44 24 10          	mov    0x10(%esp),%eax       ; eax = *(esp + 0x10) = i
+ 8048567:	85 c0                	test   %eax,%eax             ; 判断是否为0
+ 8048569:	7e 1d                	jle    8048588 <func2+0x28>  ; 小于跳转
+ 804856b:	83 ec 0c             	sub    $0xc,%esp
+ 804856e:	68 ec 86 04 08       	push   $0x80486ec
+ 8048573:	e8 08 fe ff ff       	call   8048380 <puts@plt>
+ 8048578:	83 c4 10             	add    $0x10,%esp            ; puts("1 <= i\n")
+ 804857b:	b8 01 00 00 00       	mov    $0x1,%eax             ; 返回值1
+ 8048580:	83 c4 0c             	add    $0xc,%esp
+ 8048583:	c3                   	ret
+ 8048584:	8d 74 26 00          	lea    0x0(%esi,%eiz,1),%esi
+ 8048588:	b8 03 00 00 00       	mov    $0x3,%eax             ; 返回值3
+ 804858d:	83 c4 0c             	add    $0xc,%esp
+ 8048590:	c3                   	ret
+ 8048591:	eb 0d                	jmp    80485a0 <func3>
+ 8048593:	90                   	nop
+ 8048594:	90                   	nop
+ 8048595:	90                   	nop
+ 8048596:	90                   	nop
+ 8048597:	90                   	nop
+ 8048598:	90                   	nop
+ 8048599:	90                   	nop
+ 804859a:	90                   	nop
+ 804859b:	90                   	nop
+ 804859c:	90                   	nop
+ 804859d:	90                   	nop
+ 804859e:	90                   	nop
+ 804859f:	90                   	nop
+
+080485a0 <func3>:
+ 80485a0:	83 ec 0c             	sub    $0xc,%esp
+ 80485a3:	b8 08 00 00 00       	mov    $0x8,%eax             ; 返回值8先赋值好
+ 80485a8:	8b 54 24 10          	mov    0x10(%esp),%edx       ; edx = 入参i
+ 80485ac:	83 fa 02             	cmp    $0x2,%edx             ; 和2比较
+ 80485af:	74 14                	je     80485c5 <func3+0x25>  ; 相等时出栈
+ 80485b1:	83 fa 0f             	cmp    $0xf,%edx             ; 和0xf比较
+ 80485b4:	74 1a                	je     80485d0 <func3+0x30>  ; 相等时跳转
+ 80485b6:	83 fa 01             	cmp    $0x1,%edx             ; 和1比较
+ 80485b9:	b8 ff ff ff ff       	mov    $0xffffffff,%eax
+ 80485be:	0f 44 05 24 a0 04 08 	cmove  0x804a024,%eax        ; rc = global_uninit_var
+ 80485c5:	83 c4 0c             	add    $0xc,%esp
+ 80485c8:	c3                   	ret
+ 80485c9:	8d b4 26 00 00 00 00 	lea    0x0(%esi,%eiz,1),%esi
+ 80485d0:	83 ec 0c             	sub    $0xc,%esp             ; i == 15,执行puts，返回-1
+ 80485d3:	68 f3 86 04 08       	push   $0x80486f3
+ 80485d8:	e8 93 fd ff ff       	call   8048370 <printf@plt>
+ 80485dd:	83 c4 10             	add    $0x10,%esp
+ 80485e0:	b8 ff ff ff ff       	mov    $0xffffffff,%eax
+ 80485e5:	83 c4 0c             	add    $0xc,%esp
+ 80485e8:	c3                   	ret
+ 80485e9:	8d b4 26 00 00 00 00 	lea    0x0(%esi,%eiz,1),%esi
+
+080485f0 <func4>:
+; 编译器优化后，并没有局部变量i，eax即为sum，edx用作i的作用，每个loop edx和bound比，同时将edx加到返回值eax中
+ 80485f0:	8b 4c 24 04          	mov    0x4(%esp),%ecx        ; ecx = bound
+ 80485f4:	31 c0                	xor    %eax,%eax             ; eax = 0
+ 80485f6:	85 c9                	test   %ecx,%ecx             ; ecx = 0 ?
+ 80485f8:	7e 16                	jle    8048610 <func4+0x20>  ; bound = 0即退出
+ 80485fa:	31 d2                	xor    %edx,%edx             ; edx = 0
+ 80485fc:	8d 74 26 00          	lea    0x0(%esi,%eiz,1),%esi ; 相当于nop
+ 8048600:	01 d0                	add    %edx,%eax             ;
+ 8048602:	83 c2 01             	add    $0x1,%edx             ; edx = edx + 1
+ 8048605:	39 d1                	cmp    %edx,%ecx             ; edx和ecx比较
+ 8048607:	75 f7                	jne    8048600 <func4+0x10>  ; 继续回跳+1
+ 8048609:	c3                   	ret
+ 804860a:	8d b6 00 00 00 00    	lea    0x0(%esi),%esi
+ 8048610:	c3                   	ret
+ 8048611:	eb 0d                	jmp    8048620 <func5>
+ 8048613:	90                   	nop
+ 8048614:	90                   	nop
+ 8048615:	90                   	nop
+ 8048616:	90                   	nop
+ 8048617:	90                   	nop
+ 8048618:	90                   	nop
+ 8048619:	90                   	nop
+ 804861a:	90                   	nop
+ 804861b:	90                   	nop
+ 804861c:	90                   	nop
+ 804861d:	90                   	nop
+ 804861e:	90                   	nop
+ 804861f:	90                   	nop
+
+08048620 <func5>:
+ 8048620:	8b 4c 24 04          	mov    0x4(%esp),%ecx        ; ecx = count
+ 8048624:	31 c0                	xor    %eax,%eax             ; eax = 0
+ 8048626:	85 c9                	test   %ecx,%ecx
+ 8048628:	7e 16                	jle    8048640 <func5+0x20>  ; 为0则直接退出
+ 804862a:	31 d2                	xor    %edx,%edx             ; edx = 0
+ 804862c:	8d 74 26 00          	lea    0x0(%esi,%eiz,1),%esi ; nop
+ 8048630:	03 44 94 08          	add    0x8(%esp,%edx,4),%eax ; eax = 0x8 + esp + 4 * edx，即count地址下面的不定参，加到eax中
+ 8048634:	83 c2 01             	add    $0x1,%edx             ; edx 递增
+ 8048637:	39 d1                	cmp    %edx,%ecx             ; edx < count则继续,编译器将 i < count优化为i != count
+ 8048639:	75 f5                	jne    8048630 <func5+0x10>
+ 804863b:	c3                   	ret
+ 804863c:	8d 74 26 00          	lea    0x0(%esi,%eiz,1),%esi
+ 8048640:	c3                   	ret
+ 8048641:	eb 0d                	jmp    8048650 <func6>
+ 8048643:	90                   	nop
+ 8048644:	90                   	nop
+ 8048645:	90                   	nop
+ 8048646:	90                   	nop
+ 8048647:	90                   	nop
+ 8048648:	90                   	nop
+ 8048649:	90                   	nop
+ 804864a:	90                   	nop
+ 804864b:	90                   	nop
+ 804864c:	90                   	nop
+ 804864d:	90                   	nop
+ 804864e:	90                   	nop
+ 804864f:	90                   	nop
+
+08048650 <func6>:
+ 8048650:	c3                   	ret             ; 因为func6无任何输出及副作用，所以直接返回
+ 8048651:	66 90                	xchg   %ax,%ax
+ 8048653:	66 90                	xchg   %ax,%ax
+ 8048655:	66 90                	xchg   %ax,%ax
+ 8048657:	66 90                	xchg   %ax,%ax
+ 8048659:	66 90                	xchg   %ax,%ax
+ 804865b:	66 90                	xchg   %ax,%ax
+ 804865d:	66 90                	xchg   %ax,%ax
+ 804865f:	90                   	nop
+#+end_src

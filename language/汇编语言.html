@@ -1,0 +1,2418 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2020-11-01 Sun 00:18 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>汇编语言 - ABI</title>
+<meta name="generator" content="Org mode" />
+<meta name="author" content="xuali2" />
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: visible;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { width: 90%; }
+  /*]]>*/-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://fniessen.github.io/org-html-themes/styles/readtheorg/css/htmlize.css"/>
+<link rel="stylesheet" type="text/css" href="https://fniessen.github.io/org-html-themes/styles/readtheorg/css/readtheorg.css"/>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="https://fniessen.github.io/org-html-themes/styles/lib/js/jquery.stickytableheaders.min.js"></script>
+<script type="text/javascript" src="https://fniessen.github.io/org-html-themes/styles/readtheorg/js/readtheorg.js"></script>
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2019 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+</head>
+<body>
+<div id="content">
+<h1 class="title">汇编语言 - ABI</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#orgf25e885">1. PowerPC32</a>
+<ul>
+<li><a href="#org231a8f3">1.1. 指令</a></li>
+<li><a href="#org14add15">1.2. ABI</a></li>
+<li><a href="#org4ad46fb">1.3. 例程</a>
+<ul>
+<li><a href="#org314c0e9">1.3.1. gcc -g foo.c</a></li>
+<li><a href="#org4dc24ad">1.3.2. gcc -O2 foo.c</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#orgea16c82">2. Mips64</a></li>
+<li><a href="#org522e469">3. X86</a>
+<ul>
+<li><a href="#org4027e12">3.1. 指令</a></li>
+<li><a href="#orgd2bc150">3.2. ABI</a></li>
+<li><a href="#org72b40dd">3.3. 例程</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div class="org-src-container">
+<pre class="src src-c"><span style="color: #75715E;">//</span><span style="color: #E6DB74;">foo.c</span>
+<span style="color: #F92672;">#include</span> <span style="color: #AE81FF;">&lt;</span><span style="color: #E6DB74;">stdio.h</span><span style="color: #AE81FF;">&gt;</span>
+<span style="color: #F92672;">#include</span> <span style="color: #AE81FF;">&lt;</span><span style="color: #E6DB74;">stdarg.h</span><span style="color: #AE81FF;">&gt;</span>
+
+<span style="color: #66D9EF;">int</span> <span style="color: #FD971F;">global_init_var</span> = 84;
+<span style="color: #66D9EF;">int</span> <span style="color: #FD971F;">global_uninit_var</span>;
+
+<span style="color: #F92672;">struct</span> <span style="color: #66D9EF;">s1</span> <span style="color: #AE81FF;">{</span>
+    <span style="color: #66D9EF;">int</span> <span style="color: #FD971F;">a</span>;
+    <span style="color: #66D9EF;">int</span> <span style="color: #FD971F;">b</span>;
+    <span style="color: #66D9EF;">int</span> <span style="color: #FD971F;">c</span>;
+<span style="color: #AE81FF;">}</span>;
+
+<span style="color: #F92672;">struct</span> <span style="color: #66D9EF;">s2</span> <span style="color: #AE81FF;">{</span>
+    <span style="color: #66D9EF;">char</span> *<span style="color: #FD971F;">a</span>;
+    <span style="color: #66D9EF;">int</span> <span style="color: #FD971F;">b</span>;
+<span style="color: #AE81FF;">}</span>;
+
+
+<span style="color: #75715E;">//</span><span style="color: #E6DB74;">&#36171;&#20540;&#19982;&#31639;&#26415;&#36816;&#31639;</span>
+<span style="color: #66D9EF;">int</span> <span style="color: #A6E22E; font-size: 130%;">func1</span><span style="color: #AE81FF;">(</span><span style="color: #66D9EF;">int</span> <span style="color: #FD971F;">i</span>, <span style="color: #F92672;">struct</span> <span style="color: #66D9EF;">s1</span> *<span style="color: #FD971F;">s1</span>, <span style="color: #F92672;">struct</span> <span style="color: #66D9EF;">s2</span> *<span style="color: #FD971F;">s2</span><span style="color: #AE81FF;">)</span>
+<span style="color: #AE81FF;">{</span>
+    <span style="color: #F92672;">static</span> <span style="color: #66D9EF;">int</span> <span style="color: #FD971F;">static_var</span> = 85;
+    <span style="color: #F92672;">static</span> <span style="color: #66D9EF;">int</span> <span style="color: #FD971F;">static_var2</span>;
+
+    <span style="color: #66D9EF;">int</span> <span style="color: #FD971F;">a</span> = 1;
+
+    s1-&gt;c = s2-&gt;b;
+    <span style="color: #F92672;">return</span> static_var + static_var2 + a + i;
+<span style="color: #AE81FF;">}</span>
+
+<span style="color: #75715E;">//</span><span style="color: #E6DB74;">if else</span>
+<span style="color: #66D9EF;">int</span> <span style="color: #A6E22E; font-size: 130%;">func2</span><span style="color: #AE81FF;">(</span><span style="color: #66D9EF;">int</span> <span style="color: #FD971F;">i</span><span style="color: #AE81FF;">)</span>
+<span style="color: #AE81FF;">{</span>
+    <span style="color: #A6E22E; font-weight: bold;">if</span> <span style="color: #66D9EF;">(</span>i &lt; 1<span style="color: #66D9EF;">)</span> <span style="color: #66D9EF;">{</span>
+        <span style="color: #F92672;">return</span> 3;
+    <span style="color: #66D9EF;">}</span> <span style="color: #F92672;">else</span> <span style="color: #66D9EF;">{</span>
+        <span style="color: #A6E22E; font-weight: bold;">printf</span><span style="color: #A6E22E;">(</span><span style="color: #E6DB74;">"1 &lt;= i\n"</span><span style="color: #A6E22E;">)</span>;
+    <span style="color: #66D9EF;">}</span>
+
+    <span style="color: #F92672;">return</span> 1;
+<span style="color: #AE81FF;">}</span>
+
+<span style="color: #75715E;">//</span><span style="color: #E6DB74;">switch case</span>
+<span style="color: #66D9EF;">int</span> <span style="color: #A6E22E; font-size: 130%;">func3</span><span style="color: #AE81FF;">(</span><span style="color: #66D9EF;">int</span> <span style="color: #FD971F;">i</span><span style="color: #AE81FF;">)</span>
+<span style="color: #AE81FF;">{</span>
+    <span style="color: #66D9EF;">int</span> <span style="color: #FD971F;">rc</span> = -1;
+
+    <span style="color: #A6E22E; font-weight: bold;">switch</span> <span style="color: #66D9EF;">(</span>i<span style="color: #66D9EF;">)</span> <span style="color: #66D9EF;">{</span>
+    <span style="color: #F92672;">case</span> 1:
+        rc = global_uninit_var;
+        <span style="color: #F92672;">break</span>;
+    <span style="color: #F92672;">case</span> 2:
+        rc = 8;
+        <span style="color: #F92672;">break</span>;
+    <span style="color: #F92672;">case</span> 15:
+        <span style="color: #A6E22E; font-weight: bold;">printf</span><span style="color: #A6E22E;">(</span><span style="color: #E6DB74;">"i == 15"</span><span style="color: #A6E22E;">)</span>;
+        <span style="color: #F92672;">break</span>;
+    <span style="color: #F92672;">default</span>:
+        <span style="color: #F92672;">break</span>;
+    <span style="color: #66D9EF;">}</span>
+    <span style="color: #F92672;">return</span> rc;
+<span style="color: #AE81FF;">}</span>
+
+
+<span style="color: #75715E;">//</span><span style="color: #E6DB74;">loop</span>
+<span style="color: #66D9EF;">int</span> <span style="color: #A6E22E; font-size: 130%;">func4</span><span style="color: #AE81FF;">(</span><span style="color: #66D9EF;">int</span> <span style="color: #FD971F;">bound</span><span style="color: #AE81FF;">)</span>
+<span style="color: #AE81FF;">{</span>
+    <span style="color: #66D9EF;">int</span> <span style="color: #FD971F;">i</span>, <span style="color: #FD971F;">sum</span> = 0;
+
+    <span style="color: #A6E22E; font-weight: bold;">for</span> <span style="color: #66D9EF;">(</span>i = 0; i &lt; bound; ++i<span style="color: #66D9EF;">)</span> <span style="color: #66D9EF;">{</span>
+        sum += i;
+    <span style="color: #66D9EF;">}</span>
+
+    <span style="color: #F92672;">return</span> sum;
+<span style="color: #AE81FF;">}</span>
+
+<span style="color: #75715E;">//</span><span style="color: #E6DB74;">&#19981;&#23450;&#21442;</span>
+<span style="color: #66D9EF;">int</span> <span style="color: #A6E22E; font-size: 130%;">func5</span><span style="color: #AE81FF;">(</span><span style="color: #66D9EF;">int</span> <span style="color: #FD971F;">count</span>, ...<span style="color: #AE81FF;">)</span>
+<span style="color: #AE81FF;">{</span>
+    <span style="color: #66D9EF;">va_list</span> <span style="color: #FD971F;">argp</span>;
+    <span style="color: #66D9EF;">int</span> <span style="color: #FD971F;">i</span>, <span style="color: #FD971F;">sum</span> = 0;
+
+    <span style="color: #A6E22E; font-weight: bold;">va_start</span><span style="color: #66D9EF;">(</span>argp, count<span style="color: #66D9EF;">)</span>;
+    <span style="color: #A6E22E; font-weight: bold;">for</span> <span style="color: #66D9EF;">(</span>i = 0; i &lt; count; ++i<span style="color: #66D9EF;">)</span> <span style="color: #66D9EF;">{</span>
+        sum += <span style="color: #A6E22E; font-weight: bold;">va_arg</span><span style="color: #A6E22E;">(</span>argp, <span style="color: #66D9EF;">int</span><span style="color: #A6E22E;">)</span>;
+    <span style="color: #66D9EF;">}</span>
+    <span style="color: #A6E22E; font-weight: bold;">va_end</span><span style="color: #66D9EF;">(</span>argp<span style="color: #66D9EF;">)</span>;
+    <span style="color: #F92672;">return</span> sum;
+<span style="color: #AE81FF;">}</span>
+
+<span style="color: #66D9EF;">void</span> <span style="color: #A6E22E; font-size: 130%;">func6</span><span style="color: #AE81FF;">(</span><span style="color: #66D9EF;">void</span><span style="color: #AE81FF;">)</span>
+<span style="color: #AE81FF;">{</span>
+    <span style="color: #66D9EF;">int</span> <span style="color: #FD971F;">i</span> = 1;
+    <span style="color: #66D9EF;">int</span> <span style="color: #FD971F;">j</span> = 1;
+    <span style="color: #66D9EF;">int</span> <span style="color: #FD971F;">k</span> = 1;
+    <span style="color: #66D9EF;">int</span> <span style="color: #FD971F;">l</span> = 1;
+    <span style="color: #66D9EF;">int</span> <span style="color: #FD971F;">m</span> = 1;
+    <span style="color: #66D9EF;">int</span> <span style="color: #FD971F;">n</span> = 1;
+
+    <span style="color: #F92672;">return</span>;
+<span style="color: #AE81FF;">}</span>
+
+<span style="color: #66D9EF;">int</span> <span style="color: #A6E22E; font-size: 130%;">main</span><span style="color: #AE81FF;">(</span><span style="color: #66D9EF;">int</span> <span style="color: #FD971F;">argc</span>, <span style="color: #66D9EF;">char</span> *<span style="color: #FD971F;">argv</span><span style="color: #66D9EF;">[]</span><span style="color: #AE81FF;">)</span>
+<span style="color: #AE81FF;">{</span>
+    <span style="color: #F92672;">struct</span> <span style="color: #66D9EF;">s1</span> <span style="color: #FD971F;">s1</span> = <span style="color: #66D9EF;">{</span>
+        .a = 1,
+        .b = 2,
+        .c = 3,
+    <span style="color: #66D9EF;">}</span>;
+
+    <span style="color: #F92672;">struct</span> <span style="color: #66D9EF;">s2</span> <span style="color: #FD971F;">s2</span> = <span style="color: #66D9EF;">{</span>
+        .a = <span style="color: #E6DB74;">"hello"</span>,
+        .b = 15,
+    <span style="color: #66D9EF;">}</span>;
+
+    <span style="color: #A6E22E; font-weight: bold;">func1</span><span style="color: #66D9EF;">(</span>argc, &amp;s1, &amp;s2<span style="color: #66D9EF;">)</span>;
+    <span style="color: #A6E22E; font-weight: bold;">func2</span><span style="color: #66D9EF;">(</span>argc<span style="color: #66D9EF;">)</span>;
+    <span style="color: #A6E22E; font-weight: bold;">func3</span><span style="color: #66D9EF;">(</span>argc<span style="color: #66D9EF;">)</span>;
+    <span style="color: #A6E22E; font-weight: bold;">func4</span><span style="color: #66D9EF;">(</span>argc<span style="color: #66D9EF;">)</span>;
+    <span style="color: #A6E22E; font-weight: bold;">printf</span><span style="color: #66D9EF;">(</span><span style="color: #E6DB74;">"%d\n"</span>, <span style="color: #A6E22E; font-weight: bold;">func5</span><span style="color: #A6E22E;">(</span>5, 1, 2, 3, 4, 5<span style="color: #A6E22E;">)</span><span style="color: #66D9EF;">)</span>;
+    <span style="color: #A6E22E; font-weight: bold;">func6</span><span style="color: #66D9EF;">()</span>;
+    <span style="color: #F92672;">return</span> 0;
+<span style="color: #AE81FF;">}</span>
+</pre>
+</div>
+<div id="outline-container-orgf25e885" class="outline-2">
+<h2 id="orgf25e885"><span class="section-number-2">1</span> PowerPC32</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+以PowerPC85XX为例，其属于PowerQuICC(Quad Intergrate Communication)通信处理器<br />
+所有PowerPC都使用了定长32位指令，是RISC体系结构<br />
+微处理器架构<br />
+</p>
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="org-left">gpr</td>
+<td class="org-left">通用寄存器，32个</td>
+</tr>
+
+<tr>
+<td class="org-left">pc</td>
+<td class="org-left">程序计数器/指令寄存器</td>
+</tr>
+
+<tr>
+<td class="org-left">lr</td>
+<td class="org-left">链接寄存器</td>
+</tr>
+
+<tr>
+<td class="org-left">cr</td>
+<td class="org-left">条件寄存器，cr0～cr7，8个4bit的字段</td>
+</tr>
+
+<tr>
+<td class="org-left">ctr</td>
+<td class="org-left">计数寄存器，类似x86里的ecx</td>
+</tr>
+
+<tr>
+<td class="org-left">xer</td>
+<td class="org-left">定点导常及进位溢出信息</td>
+</tr>
+
+<tr>
+<td class="org-left">msr</td>
+<td class="org-left">状态寄存器</td>
+</tr>
+</tbody>
+</table>
+
+<p>
+除了(装入和存储)指令，有直接操作内存的指令，模型处理: <b>从内存检索数据，在寄存器中对它进行操作，然后将它存储回内存</b><br />
+PowerQuICC由三个模块组成<br />
+</p>
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="org-left">嵌入式PowerPC核EMPCC</td>
+<td class="org-left">执行高层代码</td>
+</tr>
+
+<tr>
+<td class="org-left">系统接口单元SIU&amp;通信处理器CPM</td>
+<td class="org-left">集成32位RISC内核，处理实际通信的底层通信功能</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+<div id="outline-container-org231a8f3" class="outline-3">
+<h3 id="org231a8f3"><span class="section-number-3">1.1</span> 指令</h3>
+<div class="outline-text-3" id="text-1-1">
+<p>
+指令缩写<br />
+</p>
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="org-left">st</td>
+<td class="org-left">store</td>
+</tr>
+
+<tr>
+<td class="org-left">ld</td>
+<td class="org-left">load</td>
+</tr>
+
+<tr>
+<td class="org-left">r</td>
+<td class="org-left">right</td>
+</tr>
+
+<tr>
+<td class="org-left">l</td>
+<td class="org-left">left or logical</td>
+</tr>
+
+<tr>
+<td class="org-left">w</td>
+<td class="org-left">word， <b>32位</b></td>
+</tr>
+
+<tr>
+<td class="org-left">u</td>
+<td class="org-left">update</td>
+</tr>
+
+<tr>
+<td class="org-left">m</td>
+<td class="org-left">move</td>
+</tr>
+
+<tr>
+<td class="org-left">f</td>
+<td class="org-left">from or field</td>
+</tr>
+
+<tr>
+<td class="org-left">t</td>
+<td class="org-left">to or than</td>
+</tr>
+
+<tr>
+<td class="org-left">i</td>
+<td class="org-left">Immediate</td>
+</tr>
+
+<tr>
+<td class="org-left">h</td>
+<td class="org-left">half word</td>
+</tr>
+
+<tr>
+<td class="org-left">z</td>
+<td class="org-left">zero</td>
+</tr>
+
+<tr>
+<td class="org-left">b</td>
+<td class="org-left">branch</td>
+</tr>
+
+<tr>
+<td class="org-left">n</td>
+<td class="org-left">and</td>
+</tr>
+
+<tr>
+<td class="org-left">cmp</td>
+<td class="org-left">compare</td>
+</tr>
+
+<tr>
+<td class="org-left">sub</td>
+<td class="org-left">subtract</td>
+</tr>
+
+<tr>
+<td class="org-left">clr</td>
+<td class="org-left">clear</td>
+</tr>
+
+<tr>
+<td class="org-left">stwu</td>
+<td class="org-left">store word and  update r1</td>
+</tr>
+</tbody>
+</table>
+
+<p>
+数据读写指令<br />
+</p>
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="org-left">lbz, lhz, lwz r1, r2</td>
+<td class="org-left">r2读入至r1，高位清0</td>
+</tr>
+
+<tr>
+<td class="org-left">stb, sth, stw r1, r2</td>
+<td class="org-left">r1值存至r2</td>
+</tr>
+
+<tr>
+<td class="org-left">lis r1, 0x1122h</td>
+<td class="org-left">r1 = 0x1122h &lt;&lt; 16</td>
+</tr>
+
+<tr>
+<td class="org-left">addi r3, r3, 34h</td>
+<td class="org-left">r3 = r3 + 34h</td>
+</tr>
+
+<tr>
+<td class="org-left">or r3, r10, r10</td>
+<td class="org-left">r3 = r10 or r10 = r10</td>
+</tr>
+</tbody>
+</table>
+
+<p>
+特殊寄存器操作<br />
+</p>
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="org-left">mflr rd</td>
+<td class="org-left">rd从lr的值读入</td>
+</tr>
+
+<tr>
+<td class="org-left">mtlf rd</td>
+<td class="org-left">将lr值存入rd</td>
+</tr>
+</tbody>
+</table>
+
+<p>
+数值计算指令<br />
+</p>
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="org-left">add r3, r4, r5</td>
+<td class="org-left">r3 = r4 + r5</td>
+</tr>
+
+<tr>
+<td class="org-left">subf r3, r4, r5</td>
+<td class="org-left">r3 = r5 - r4</td>
+</tr>
+
+<tr>
+<td class="org-left">mullw r3, r4, r5</td>
+<td class="org-left">r3 = r4 * r5</td>
+</tr>
+
+<tr>
+<td class="org-left">divw r3, r4, r5</td>
+<td class="org-left">r3 = r4 / r5</td>
+</tr>
+
+<tr>
+<td class="org-left">and r3, r4, r5</td>
+<td class="org-left">r3 = r4 and r5</td>
+</tr>
+
+<tr>
+<td class="org-left">or r3, r4, r5</td>
+<td class="org-left">r3 = r4 or r5</td>
+</tr>
+
+<tr>
+<td class="org-left">nor r3, r4, r5</td>
+<td class="org-left">r3 = not(r4 or r5)</td>
+</tr>
+
+<tr>
+<td class="org-left">xor r3, r4, r5</td>
+<td class="org-left">r3 = r4 xor r5</td>
+</tr>
+</tbody>
+</table>
+
+<p>
+数据比较指令<br />
+</p>
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="org-left">cmpi</td>
+<td class="org-left">有符号立即数比较</td>
+</tr>
+
+<tr>
+<td class="org-left">cmp</td>
+<td class="org-left">有符号数比较</td>
+</tr>
+
+<tr>
+<td class="org-left">cmpli</td>
+<td class="org-left">无符号立即数比较</td>
+</tr>
+
+<tr>
+<td class="org-left">cmpl</td>
+<td class="org-left">无符号数比较</td>
+</tr>
+
+<tr>
+<td class="org-left">cmpwi</td>
+<td class="org-left">有符号立即数比较</td>
+</tr>
+
+<tr>
+<td class="org-left">cmpw</td>
+<td class="org-left">有符号数比较</td>
+</tr>
+
+<tr>
+<td class="org-left">cmplwi</td>
+<td class="org-left">无符号立即数比较</td>
+</tr>
+
+<tr>
+<td class="org-left">cmplw</td>
+<td class="org-left">无符号数比较</td>
+</tr>
+</tbody>
+</table>
+
+<p>
+转移指令<br />
+<b>l:LK转移指令下一条指令存入LR</b><br />
+<b>a:AA地址为目标地址</b><br />
+</p>
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="org-left">b(ba bl bla) + 目标地址</td>
+<td class="org-left">无条件跳转</td>
+</tr>
+
+<tr>
+<td class="org-left">blr</td>
+<td class="org-left">跳至LR处</td>
+</tr>
+
+<tr>
+<td class="org-left">bclr</td>
+<td class="org-left">转移目标地址由lr指出</td>
+</tr>
+
+<tr>
+<td class="org-left">bcctrl</td>
+<td class="org-left">转移目标地址由ctr指出</td>
+</tr>
+
+<tr>
+<td class="org-left">beq addr</td>
+<td class="org-left">等于则跳转addr</td>
+</tr>
+
+<tr>
+<td class="org-left">beq cr2, addr</td>
+<td class="org-left">cr2为等于则跳转addr</td>
+</tr>
+
+<tr>
+<td class="org-left">bne addr</td>
+<td class="org-left">不等于则跳转addr</td>
+</tr>
+
+<tr>
+<td class="org-left">blt addr</td>
+<td class="org-left">小于则跳转addr</td>
+</tr>
+
+<tr>
+<td class="org-left">bgt addr</td>
+<td class="org-left">大于则跳转addr</td>
+</tr>
+
+<tr>
+<td class="org-left">ble addr</td>
+<td class="org-left">小于等于则跳转addr</td>
+</tr>
+
+<tr>
+<td class="org-left">bge addr</td>
+<td class="org-left">大于等于则跳转addr</td>
+</tr>
+</tbody>
+</table>
+
+<p>
+指令中的点号“.”表示：指令将更新条件寄存器CR0。如add. rD，rA，rB。<br />
+指令中的字母“c”表示：指令显示说明结果影响XER寄存器中的进位位[CA]，如addc rD，rA，rB。<br />
+指令中的字母“e”表示：在指令中把XER[CA]中的数据作为一个操作数，并在XER[CA]位记录进位位，如adde rD，rA，rB<br />
+指令中的字母“o”表示：溢出标志。对于整数，在XER[OA]位记录溢出和在CR0[SO]记录溢出位，如addo rD，rA，rB<br />
+</p>
+</div>
+</div>
+
+<div id="outline-container-org14add15" class="outline-3">
+<h3 id="org14add15"><span class="section-number-3">1.2</span> ABI</h3>
+</div>
+<div id="outline-container-org4ad46fb" class="outline-3">
+<h3 id="org4ad46fb"><span class="section-number-3">1.3</span> 例程</h3>
+<div class="outline-text-3" id="text-1-3">
+</div>
+<div id="outline-container-org314c0e9" class="outline-4">
+<h4 id="org314c0e9"><span class="section-number-4">1.3.1</span> gcc -g foo.c</h4>
+<div class="outline-text-4" id="text-1-3-1">
+<div class="org-src-container">
+<pre class="src src-asm"><span style="color: #75715E;">//</span><span style="color: #E6DB74;">&#36171;&#20540;&#19982;&#31639;&#26415;&#36816;&#31639;</span>
+<span style="color: #A6E22E; font-size: 130%;">int</span> <span style="color: #F92672;">func1</span>(int i, struct s1 *s1, struct s2 *s2)
+{
+<span style="color: #A6E22E; font-size: 130%;">10000508</span>:   <span style="color: #F92672;">94</span> 21 ff d0     stwu    r1,-48(r1)
+<span style="color: #A6E22E; font-size: 130%;">1000050c</span>:   <span style="color: #F92672;">93</span> e1 00 2c     stw     r31,44(r1)
+<span style="color: #A6E22E; font-size: 130%;">10000510</span>:   <span style="color: #F92672;">7c</span> 3f 0b 78     mr      r31,r1
+<span style="color: #A6E22E; font-size: 130%;">10000514</span>:   <span style="color: #F92672;">90</span> 7f 00 18     stw     r3,24(r31)
+<span style="color: #A6E22E; font-size: 130%;">10000518</span>:   <span style="color: #F92672;">90</span> 9f 00 1c     stw     r4,28(r31)
+<span style="color: #A6E22E; font-size: 130%;">1000051c</span>:   <span style="color: #F92672;">90</span> bf 00 20     stw     r5,32(r31)
+    <span style="color: #F92672;">static</span> int static_var = 85<span style="color: #75715E;">;</span>
+    <span style="color: #F92672;">static</span> int static_var2<span style="color: #75715E;">;</span>
+
+    <span style="color: #F92672;">int</span> a = 1<span style="color: #75715E;">;</span>
+<span style="color: #A6E22E; font-size: 130%;">10000520</span>:   <span style="color: #F92672;">39</span> 20 00 01     li      r9,1
+<span style="color: #A6E22E; font-size: 130%;">10000524</span>:   <span style="color: #F92672;">91</span> 3f 00 08     stw     r9,8(r31)
+
+    <span style="color: #F92672;">s1-&gt;c</span> = s2-&gt;b<span style="color: #75715E;">;</span>
+<span style="color: #A6E22E; font-size: 130%;">10000528</span>:   <span style="color: #F92672;">81</span> 3f 00 20     lwz     r9,32(r31)
+<span style="color: #A6E22E; font-size: 130%;">1000052c</span>:   <span style="color: #F92672;">81</span> 49 00 04     lwz     r10,4(r9)
+<span style="color: #A6E22E; font-size: 130%;">10000530</span>:   <span style="color: #F92672;">81</span> 3f 00 1c     lwz     r9,28(r31)
+<span style="color: #A6E22E; font-size: 130%;">10000534</span>:   <span style="color: #F92672;">91</span> 49 00 08     stw     r10,8(r9)
+    <span style="color: #F92672;">return</span> static_var + static_var2 + a + i<span style="color: #75715E;">;</span>
+<span style="color: #A6E22E; font-size: 130%;">10000538</span>:   <span style="color: #F92672;">3d</span> 20 10 01     lis     r9,4097
+<span style="color: #A6E22E; font-size: 130%;">1000053c</span>:   <span style="color: #F92672;">81</span> 49 0b 90     lwz     r10,2960(r9)
+<span style="color: #A6E22E; font-size: 130%;">10000540</span>:   <span style="color: #F92672;">3d</span> 20 10 01     lis     r9,4097
+<span style="color: #A6E22E; font-size: 130%;">10000544</span>:   <span style="color: #F92672;">81</span> 29 0c 30     lwz     r9,3120(r9)
+<span style="color: #A6E22E; font-size: 130%;">10000548</span>:   <span style="color: #F92672;">7d</span> 4a 4a 14     add     r10,r10,r9
+<span style="color: #A6E22E; font-size: 130%;">1000054c</span>:   <span style="color: #F92672;">81</span> 3f 00 08     lwz     r9,8(r31)
+<span style="color: #A6E22E; font-size: 130%;">10000550</span>:   <span style="color: #F92672;">7d</span> 4a 4a 14     add     r10,r10,r9
+<span style="color: #A6E22E; font-size: 130%;">10000554</span>:   <span style="color: #F92672;">81</span> 3f 00 18     lwz     r9,24(r31)
+<span style="color: #A6E22E; font-size: 130%;">10000558</span>:   <span style="color: #F92672;">7d</span> 2a 4a 14     add     r9,r10,r9
+}
+<span style="color: #A6E22E; font-size: 130%;">1000055c</span>:   <span style="color: #F92672;">7d</span> 23 4b 78     mr      r3,r9
+<span style="color: #A6E22E; font-size: 130%;">10000560</span>:   <span style="color: #F92672;">39</span> 7f 00 30     addi    r11,r31,48
+<span style="color: #A6E22E; font-size: 130%;">10000564</span>:   <span style="color: #F92672;">83</span> eb ff fc     lwz     r31,-4(r11)
+<span style="color: #A6E22E; font-size: 130%;">10000568</span>:   <span style="color: #F92672;">7d</span> 61 5b 78     mr      r1,r11
+<span style="color: #A6E22E; font-size: 130%;">1000056c</span>:   <span style="color: #F92672;">4e</span> 80 00 20     blr
+
+<span style="color: #A6E22E; font-size: 130%;">10000570</span> &lt;func2&gt;:
+
+<span style="color: #75715E;">//</span><span style="color: #E6DB74;">if else</span>
+<span style="color: #A6E22E; font-size: 130%;">int</span> <span style="color: #F92672;">func2</span>(int i)
+{
+<span style="color: #A6E22E; font-size: 130%;">10000570</span>:   <span style="color: #F92672;">94</span> 21 ff e0     stwu    r1,-32(r1)
+<span style="color: #A6E22E; font-size: 130%;">10000574</span>:   <span style="color: #F92672;">7c</span> 08 02 a6     mflr    r0
+<span style="color: #A6E22E; font-size: 130%;">10000578</span>:   <span style="color: #F92672;">90</span> 01 00 24     stw     r0,36(r1)
+<span style="color: #A6E22E; font-size: 130%;">1000057c</span>:   <span style="color: #F92672;">93</span> e1 00 1c     stw     r31,28(r1)
+<span style="color: #A6E22E; font-size: 130%;">10000580</span>:   <span style="color: #F92672;">7c</span> 3f 0b 78     mr      r31,r1
+<span style="color: #A6E22E; font-size: 130%;">10000584</span>:   <span style="color: #F92672;">90</span> 7f 00 08     stw     r3,8(r31)
+    <span style="color: #F92672;">if</span> (i &lt; 1) {
+<span style="color: #A6E22E; font-size: 130%;">10000588</span>:   <span style="color: #F92672;">81</span> 3f 00 08     lwz     r9,8(r31)
+<span style="color: #A6E22E; font-size: 130%;">1000058c</span>:   <span style="color: #F92672;">2f</span> 89 00 00     cmpwi   cr7,r9,0
+<span style="color: #A6E22E; font-size: 130%;">10000590</span>:   <span style="color: #F92672;">41</span> 9d 00 0c     bgt-    cr7,1000059c &lt;func2+0x2c&gt;
+        <span style="color: #F92672;">return</span> 3<span style="color: #75715E;">;</span>
+<span style="color: #A6E22E; font-size: 130%;">10000594</span>:   <span style="color: #F92672;">39</span> 20 00 03     li      r9,3
+<span style="color: #A6E22E; font-size: 130%;">10000598</span>:   <span style="color: #F92672;">48</span> 00 00 14     b       100005ac &lt;func2+0x3c&gt;
+    } else {
+        <span style="color: #F92672;">printf</span>(<span style="color: #E6DB74;">"1 &lt;= i\n"</span>)<span style="color: #75715E;">;</span>
+<span style="color: #A6E22E; font-size: 130%;">1000059c</span>:   <span style="color: #F92672;">3d</span> 20 10 00     lis     r9,4096
+<span style="color: #A6E22E; font-size: 130%;">100005a0</span>:   <span style="color: #F92672;">38</span> 69 0a 34     addi    r3,r9,2612
+<span style="color: #A6E22E; font-size: 130%;">100005a4</span>:   <span style="color: #F92672;">48</span> 01 06 5d     bl      10010c00 <a href="mailto:puts%40plt">&lt;puts@plt&gt;</a>
+    }
+
+    <span style="color: #F92672;">return</span> 1<span style="color: #75715E;">;</span>
+<span style="color: #A6E22E; font-size: 130%;">100005a8</span>:   <span style="color: #F92672;">39</span> 20 00 01     li      r9,1
+}
+<span style="color: #A6E22E; font-size: 130%;">100005ac</span>:   <span style="color: #F92672;">7d</span> 23 4b 78     mr      r3,r9
+<span style="color: #A6E22E; font-size: 130%;">100005b0</span>:   <span style="color: #F92672;">39</span> 7f 00 20     addi    r11,r31,32
+<span style="color: #A6E22E; font-size: 130%;">100005b4</span>:   <span style="color: #F92672;">80</span> 0b 00 04     lwz     r0,4(r11)
+<span style="color: #A6E22E; font-size: 130%;">100005b8</span>:   <span style="color: #F92672;">7c</span> 08 03 a6     mtlr    r0
+<span style="color: #A6E22E; font-size: 130%;">100005bc</span>:   <span style="color: #F92672;">83</span> eb ff fc     lwz     r31,-4(r11)
+<span style="color: #A6E22E; font-size: 130%;">100005c0</span>:   <span style="color: #F92672;">7d</span> 61 5b 78     mr      r1,r11
+<span style="color: #A6E22E; font-size: 130%;">100005c4</span>:   <span style="color: #F92672;">4e</span> 80 00 20     blr
+
+<span style="color: #A6E22E; font-size: 130%;">100005c8</span> &lt;func3&gt;:
+
+<span style="color: #75715E;">//</span><span style="color: #E6DB74;">switch case</span>
+<span style="color: #A6E22E; font-size: 130%;">int</span> <span style="color: #F92672;">func3</span>(int i)
+{
+<span style="color: #A6E22E; font-size: 130%;">100005c8</span>:   <span style="color: #F92672;">94</span> 21 ff d0     stwu    r1,-48(r1)
+<span style="color: #A6E22E; font-size: 130%;">100005cc</span>:   <span style="color: #F92672;">7c</span> 08 02 a6     mflr    r0
+<span style="color: #A6E22E; font-size: 130%;">100005d0</span>:   <span style="color: #F92672;">90</span> 01 00 34     stw     r0,52(r1)
+<span style="color: #A6E22E; font-size: 130%;">100005d4</span>:   <span style="color: #F92672;">93</span> e1 00 2c     stw     r31,44(r1)
+<span style="color: #A6E22E; font-size: 130%;">100005d8</span>:   <span style="color: #F92672;">7c</span> 3f 0b 78     mr      r31,r1
+<span style="color: #A6E22E; font-size: 130%;">100005dc</span>:   <span style="color: #F92672;">90</span> 7f 00 18     stw     r3,24(r31)
+    <span style="color: #F92672;">int</span> rc = -1<span style="color: #75715E;">;</span>
+<span style="color: #A6E22E; font-size: 130%;">100005e0</span>:   <span style="color: #F92672;">39</span> 20 ff ff     li      r9,-1
+<span style="color: #A6E22E; font-size: 130%;">100005e4</span>:   <span style="color: #F92672;">91</span> 3f 00 08     stw     r9,8(r31)
+
+    <span style="color: #F92672;">switch</span> (i) {
+<span style="color: #A6E22E; font-size: 130%;">100005e8</span>:   <span style="color: #F92672;">81</span> 3f 00 18     lwz     r9,24(r31)
+<span style="color: #A6E22E; font-size: 130%;">100005ec</span>:   <span style="color: #F92672;">2f</span> 89 00 02     cmpwi   cr7,r9,2
+<span style="color: #A6E22E; font-size: 130%;">100005f0</span>:   <span style="color: #F92672;">41</span> 9e 00 24     beq-    cr7,10000614 &lt;func3+0x4c&gt;
+<span style="color: #A6E22E; font-size: 130%;">100005f4</span>:   <span style="color: #F92672;">2f</span> 89 00 0f     cmpwi   cr7,r9,15
+<span style="color: #A6E22E; font-size: 130%;">100005f8</span>:   <span style="color: #F92672;">41</span> 9e 00 28     beq-    cr7,10000620 &lt;func3+0x58&gt;
+<span style="color: #A6E22E; font-size: 130%;">100005fc</span>:   <span style="color: #F92672;">2f</span> 89 00 01     cmpwi   cr7,r9,1
+<span style="color: #A6E22E; font-size: 130%;">10000600</span>:   <span style="color: #F92672;">40</span> 9e 00 34     bne-    cr7,10000634 &lt;func3+0x6c&gt;
+    <span style="color: #F92672;">case</span> 1:
+        <span style="color: #F92672;">rc</span> = global_uninit_var<span style="color: #75715E;">;</span>
+<span style="color: #A6E22E; font-size: 130%;">10000604</span>:   <span style="color: #F92672;">3d</span> 20 10 01     lis     r9,4097
+<span style="color: #A6E22E; font-size: 130%;">10000608</span>:   <span style="color: #F92672;">81</span> 29 0b ac     lwz     r9,2988(r9)
+<span style="color: #A6E22E; font-size: 130%;">1000060c</span>:   <span style="color: #F92672;">91</span> 3f 00 08     stw     r9,8(r31)
+        <span style="color: #F92672;">break</span><span style="color: #75715E;">;</span>
+<span style="color: #A6E22E; font-size: 130%;">10000610</span>:   <span style="color: #F92672;">48</span> 00 00 28     b       10000638 &lt;func3+0x70&gt;
+    <span style="color: #F92672;">case</span> 2:
+        <span style="color: #F92672;">rc</span> = 8<span style="color: #75715E;">;</span>
+<span style="color: #A6E22E; font-size: 130%;">10000614</span>:   <span style="color: #F92672;">39</span> 20 00 08     li      r9,8
+<span style="color: #A6E22E; font-size: 130%;">10000618</span>:   <span style="color: #F92672;">91</span> 3f 00 08     stw     r9,8(r31)
+        <span style="color: #F92672;">break</span><span style="color: #75715E;">;</span>
+<span style="color: #A6E22E; font-size: 130%;">1000061c</span>:   <span style="color: #F92672;">48</span> 00 00 1c     b       10000638 &lt;func3+0x70&gt;
+    <span style="color: #F92672;">case</span> 15:
+        <span style="color: #F92672;">printf</span>(<span style="color: #E6DB74;">"i == 15"</span>)<span style="color: #75715E;">;</span>
+<span style="color: #A6E22E; font-size: 130%;">10000620</span>:   <span style="color: #F92672;">3d</span> 20 10 00     lis     r9,4096
+<span style="color: #A6E22E; font-size: 130%;">10000624</span>:   <span style="color: #F92672;">38</span> 69 0a 3c     addi    r3,r9,2620
+<span style="color: #A6E22E; font-size: 130%;">10000628</span>:   <span style="color: #F92672;">4c</span> c6 31 82     crclr   4*cr1+eq
+<span style="color: #A6E22E; font-size: 130%;">1000062c</span>:   <span style="color: #F92672;">48</span> 01 05 cd     bl      10010bf8 <a href="mailto:printf%40plt">&lt;printf@plt&gt;</a>
+        <span style="color: #F92672;">break</span><span style="color: #75715E;">;</span>
+<span style="color: #A6E22E; font-size: 130%;">10000630</span>:   <span style="color: #F92672;">48</span> 00 00 08     b       10000638 &lt;func3+0x70&gt;
+    <span style="color: #F92672;">default</span>:
+        <span style="color: #F92672;">break</span><span style="color: #75715E;">;</span>
+<span style="color: #A6E22E; font-size: 130%;">10000634</span>:   <span style="color: #F92672;">60</span> 00 00 00     nop
+    }
+    <span style="color: #F92672;">return</span> rc<span style="color: #75715E;">;</span>
+<span style="color: #A6E22E; font-size: 130%;">10000638</span>:   <span style="color: #F92672;">81</span> 3f 00 08     lwz     r9,8(r31)
+}
+<span style="color: #A6E22E; font-size: 130%;">1000063c</span>:   <span style="color: #F92672;">7d</span> 23 4b 78     mr      r3,r9
+<span style="color: #A6E22E; font-size: 130%;">10000640</span>:   <span style="color: #F92672;">39</span> 7f 00 30     addi    r11,r31,48
+<span style="color: #A6E22E; font-size: 130%;">10000644</span>:   <span style="color: #F92672;">80</span> 0b 00 04     lwz     r0,4(r11)
+<span style="color: #A6E22E; font-size: 130%;">10000648</span>:   <span style="color: #F92672;">7c</span> 08 03 a6     mtlr    r0
+<span style="color: #A6E22E; font-size: 130%;">1000064c</span>:   <span style="color: #F92672;">83</span> eb ff fc     lwz     r31,-4(r11)
+<span style="color: #A6E22E; font-size: 130%;">10000650</span>:   <span style="color: #F92672;">7d</span> 61 5b 78     mr      r1,r11
+<span style="color: #A6E22E; font-size: 130%;">10000654</span>:   <span style="color: #F92672;">4e</span> 80 00 20     blr
+
+<span style="color: #A6E22E; font-size: 130%;">10000658</span> &lt;func4&gt;:
+
+
+<span style="color: #75715E;">//</span><span style="color: #E6DB74;">loop</span>
+<span style="color: #A6E22E; font-size: 130%;">int</span> <span style="color: #F92672;">func4</span>(int bound)
+{
+<span style="color: #A6E22E; font-size: 130%;">10000658</span>:   <span style="color: #F92672;">94</span> 21 ff d0     stwu    r1,-48(r1)
+<span style="color: #A6E22E; font-size: 130%;">1000065c</span>:   <span style="color: #F92672;">93</span> e1 00 2c     stw     r31,44(r1)
+<span style="color: #A6E22E; font-size: 130%;">10000660</span>:   <span style="color: #F92672;">7c</span> 3f 0b 78     mr      r31,r1
+<span style="color: #A6E22E; font-size: 130%;">10000664</span>:   <span style="color: #F92672;">90</span> 7f 00 18     stw     r3,24(r31)
+    <span style="color: #F92672;">int</span> i, sum = 0<span style="color: #75715E;">;</span>
+<span style="color: #A6E22E; font-size: 130%;">10000668</span>:   <span style="color: #F92672;">39</span> 20 00 00     li      r9,0
+<span style="color: #A6E22E; font-size: 130%;">1000066c</span>:   <span style="color: #F92672;">91</span> 3f 00 0c     stw     r9,12(r31)
+
+    <span style="color: #F92672;">for</span> (i = 0<span style="color: #75715E;">; </span><span style="color: #E6DB74;">i &lt; bound; ++i) {</span>
+<span style="color: #A6E22E; font-size: 130%;">10000670</span>:   <span style="color: #F92672;">39</span> 20 00 00     li      r9,0
+<span style="color: #A6E22E; font-size: 130%;">10000674</span>:   <span style="color: #F92672;">91</span> 3f 00 08     stw     r9,8(r31)
+<span style="color: #A6E22E; font-size: 130%;">10000678</span>:   <span style="color: #F92672;">48</span> 00 00 20     b       10000698 &lt;func4+0x40&gt;
+        <span style="color: #F92672;">sum</span> += i<span style="color: #75715E;">;</span>
+<span style="color: #A6E22E; font-size: 130%;">1000067c</span>:   <span style="color: #F92672;">81</span> 5f 00 0c     lwz     r10,12(r31)
+<span style="color: #A6E22E; font-size: 130%;">10000680</span>:   <span style="color: #F92672;">81</span> 3f 00 08     lwz     r9,8(r31)
+<span style="color: #A6E22E; font-size: 130%;">10000684</span>:   <span style="color: #F92672;">7d</span> 2a 4a 14     add     r9,r10,r9
+<span style="color: #A6E22E; font-size: 130%;">10000688</span>:   <span style="color: #F92672;">91</span> 3f 00 0c     stw     r9,12(r31)
+<span style="color: #75715E;">//</span><span style="color: #E6DB74;">loop</span>
+<span style="color: #A6E22E; font-size: 130%;">int</span> <span style="color: #F92672;">func4</span>(int bound)
+{
+    <span style="color: #F92672;">int</span> i, sum = 0<span style="color: #75715E;">;</span>
+
+    <span style="color: #F92672;">for</span> (i = 0<span style="color: #75715E;">; </span><span style="color: #E6DB74;">i &lt; bound; ++i) {</span>
+<span style="color: #A6E22E; font-size: 130%;">1000068c</span>:   <span style="color: #F92672;">81</span> 3f 00 08     lwz     r9,8(r31)
+<span style="color: #A6E22E; font-size: 130%;">10000690</span>:   <span style="color: #F92672;">39</span> 29 00 01     addi    r9,r9,1
+<span style="color: #A6E22E; font-size: 130%;">10000694</span>:   <span style="color: #F92672;">91</span> 3f 00 08     stw     r9,8(r31)
+<span style="color: #A6E22E; font-size: 130%;">10000698</span>:   <span style="color: #F92672;">81</span> 5f 00 08     lwz     r10,8(r31)
+<span style="color: #A6E22E; font-size: 130%;">1000069c</span>:   <span style="color: #F92672;">81</span> 3f 00 18     lwz     r9,24(r31)
+<span style="color: #A6E22E; font-size: 130%;">100006a0</span>:   <span style="color: #F92672;">7f</span> 8a 48 00     cmpw    cr7,r10,r9
+<span style="color: #A6E22E; font-size: 130%;">100006a4</span>:   <span style="color: #F92672;">41</span> 9c ff d8     blt+    cr7,1000067c &lt;func4+0x24&gt;
+        <span style="color: #F92672;">sum</span> += i<span style="color: #75715E;">;</span>
+    }
+
+    <span style="color: #F92672;">return</span> sum<span style="color: #75715E;">;</span>
+<span style="color: #A6E22E; font-size: 130%;">100006a8</span>:   <span style="color: #F92672;">81</span> 3f 00 0c     lwz     r9,12(r31)
+}
+<span style="color: #A6E22E; font-size: 130%;">100006ac</span>:   <span style="color: #F92672;">7d</span> 23 4b 78     mr      r3,r9
+<span style="color: #A6E22E; font-size: 130%;">100006b0</span>:   <span style="color: #F92672;">39</span> 7f 00 30     addi    r11,r31,48
+<span style="color: #A6E22E; font-size: 130%;">100006b4</span>:   <span style="color: #F92672;">83</span> eb ff fc     lwz     r31,-4(r11)
+<span style="color: #A6E22E; font-size: 130%;">100006b8</span>:   <span style="color: #F92672;">7d</span> 61 5b 78     mr      r1,r11
+<span style="color: #A6E22E; font-size: 130%;">100006bc</span>:   <span style="color: #F92672;">4e</span> 80 00 20     blr
+
+<span style="color: #A6E22E; font-size: 130%;">100006c0</span> &lt;func5&gt;:
+
+<span style="color: #75715E;">//</span><span style="color: #E6DB74;">&#19981;&#23450;&#21442;</span>
+<span style="color: #A6E22E; font-size: 130%;">int</span> <span style="color: #F92672;">func5</span>(int count, ...)
+{
+<span style="color: #A6E22E; font-size: 130%;">100006c0</span>:   <span style="color: #F92672;">94</span> 21 ff a0     stwu    r1,-96(r1)
+<span style="color: #A6E22E; font-size: 130%;">100006c4</span>:   <span style="color: #F92672;">93</span> e1 00 5c     stw     r31,92(r1)
+<span style="color: #A6E22E; font-size: 130%;">100006c8</span>:   <span style="color: #F92672;">7c</span> 3f 0b 78     mr      r31,r1
+<span style="color: #A6E22E; font-size: 130%;">100006cc</span>:   <span style="color: #F92672;">90</span> 9f 00 2c     stw     r4,44(r31)
+<span style="color: #A6E22E; font-size: 130%;">100006d0</span>:   <span style="color: #F92672;">90</span> bf 00 30     stw     r5,48(r31)
+<span style="color: #A6E22E; font-size: 130%;">100006d4</span>:   <span style="color: #F92672;">90</span> df 00 34     stw     r6,52(r31)
+<span style="color: #A6E22E; font-size: 130%;">100006d8</span>:   <span style="color: #F92672;">90</span> ff 00 38     stw     r7,56(r31)
+<span style="color: #A6E22E; font-size: 130%;">100006dc</span>:   <span style="color: #F92672;">91</span> 1f 00 3c     stw     r8,60(r31)
+<span style="color: #A6E22E; font-size: 130%;">100006e0</span>:   <span style="color: #F92672;">91</span> 3f 00 40     stw     r9,64(r31)
+<span style="color: #A6E22E; font-size: 130%;">100006e4</span>:   <span style="color: #F92672;">91</span> 5f 00 44     stw     r10,68(r31)
+<span style="color: #A6E22E; font-size: 130%;">100006e8</span>:   <span style="color: #F92672;">90</span> 7f 00 48     stw     r3,72(r31)
+    <span style="color: #F92672;">va_list</span> argp<span style="color: #75715E;">;</span>
+    <span style="color: #F92672;">int</span> i, sum = 0<span style="color: #75715E;">;</span>
+<span style="color: #A6E22E; font-size: 130%;">100006ec</span>:   <span style="color: #F92672;">39</span> 20 00 00     li      r9,0
+<span style="color: #A6E22E; font-size: 130%;">100006f0</span>:   <span style="color: #F92672;">91</span> 3f 00 0c     stw     r9,12(r31)
+
+    <span style="color: #F92672;">va_start</span>(argp, count)<span style="color: #75715E;">;</span>
+<span style="color: #A6E22E; font-size: 130%;">100006f4</span>:   <span style="color: #F92672;">39</span> 20 00 01     li      r9,1
+<span style="color: #A6E22E; font-size: 130%;">100006f8</span>:   <span style="color: #F92672;">99</span> 3f 00 10     stb     r9,16(r31)
+<span style="color: #A6E22E; font-size: 130%;">100006fc</span>:   <span style="color: #F92672;">39</span> 20 00 00     li      r9,0
+<span style="color: #A6E22E; font-size: 130%;">10000700</span>:   <span style="color: #F92672;">99</span> 3f 00 11     stb     r9,17(r31)
+<span style="color: #A6E22E; font-size: 130%;">10000704</span>:   <span style="color: #F92672;">39</span> 3f 00 68     addi    r9,r31,104
+<span style="color: #A6E22E; font-size: 130%;">10000708</span>:   <span style="color: #F92672;">91</span> 3f 00 14     stw     r9,20(r31)
+<span style="color: #A6E22E; font-size: 130%;">1000070c</span>:   <span style="color: #F92672;">39</span> 3f 00 28     addi    r9,r31,40
+<span style="color: #A6E22E; font-size: 130%;">10000710</span>:   <span style="color: #F92672;">91</span> 3f 00 18     stw     r9,24(r31)
+    <span style="color: #F92672;">for</span> (i = 0<span style="color: #75715E;">; </span><span style="color: #E6DB74;">i &lt; count; ++i) {</span>
+<span style="color: #A6E22E; font-size: 130%;">10000714</span>:   <span style="color: #F92672;">39</span> 20 00 00     li      r9,0
+<span style="color: #A6E22E; font-size: 130%;">10000718</span>:   <span style="color: #F92672;">91</span> 3f 00 08     stw     r9,8(r31)
+<span style="color: #A6E22E; font-size: 130%;">1000071c</span>:   <span style="color: #F92672;">48</span> 00 00 68     b       10000784 &lt;func5+0xc4&gt;
+        <span style="color: #F92672;">sum</span> += va_arg(argp, int)<span style="color: #75715E;">;</span>
+<span style="color: #A6E22E; font-size: 130%;">10000720</span>:   <span style="color: #F92672;">89</span> 3f 00 10     lbz     r9,16(r31)
+<span style="color: #A6E22E; font-size: 130%;">10000724</span>:   <span style="color: #F92672;">55</span> 29 06 3e     clrlwi  r9,r9,24
+<span style="color: #A6E22E; font-size: 130%;">10000728</span>:   <span style="color: #F92672;">2b</span> 89 00 08     cmplwi  cr7,r9,8
+<span style="color: #A6E22E; font-size: 130%;">1000072c</span>:   <span style="color: #F92672;">40</span> 9c 00 2c     bge-    cr7,10000758 &lt;func5+0x98&gt;
+<span style="color: #A6E22E; font-size: 130%;">10000730</span>:   <span style="color: #F92672;">81</span> 1f 00 18     lwz     r8,24(r31)
+<span style="color: #A6E22E; font-size: 130%;">10000734</span>:   <span style="color: #F92672;">89</span> 3f 00 10     lbz     r9,16(r31)
+<span style="color: #A6E22E; font-size: 130%;">10000738</span>:   <span style="color: #F92672;">55</span> 2a 06 3e     clrlwi  r10,r9,24
+<span style="color: #A6E22E; font-size: 130%;">1000073c</span>:   <span style="color: #F92672;">7d</span> 49 53 78     mr      r9,r10
+<span style="color: #A6E22E; font-size: 130%;">10000740</span>:   <span style="color: #F92672;">55</span> 29 10 3a     rlwinm  r9,r9,2,0,29
+<span style="color: #A6E22E; font-size: 130%;">10000744</span>:   <span style="color: #F92672;">7d</span> 28 4a 14     add     r9,r8,r9
+<span style="color: #A6E22E; font-size: 130%;">10000748</span>:   <span style="color: #F92672;">39</span> 4a 00 01     addi    r10,r10,1
+<span style="color: #A6E22E; font-size: 130%;">1000074c</span>:   <span style="color: #F92672;">55</span> 4a 06 3e     clrlwi  r10,r10,24
+<span style="color: #A6E22E; font-size: 130%;">10000750</span>:   <span style="color: #F92672;">99</span> 5f 00 10     stb     r10,16(r31)
+<span style="color: #A6E22E; font-size: 130%;">10000754</span>:   <span style="color: #F92672;">48</span> 00 00 14     b       10000768 &lt;func5+0xa8&gt;
+<span style="color: #A6E22E; font-size: 130%;">10000758</span>:   <span style="color: #F92672;">81</span> 5f 00 14     lwz     r10,20(r31)
+<span style="color: #A6E22E; font-size: 130%;">1000075c</span>:   <span style="color: #F92672;">7d</span> 49 53 78     mr      r9,r10
+<span style="color: #A6E22E; font-size: 130%;">10000760</span>:   <span style="color: #F92672;">39</span> 4a 00 04     addi    r10,r10,4
+<span style="color: #A6E22E; font-size: 130%;">10000764</span>:   <span style="color: #F92672;">91</span> 5f 00 14     stw     r10,20(r31)
+<span style="color: #A6E22E; font-size: 130%;">10000768</span>:   <span style="color: #F92672;">81</span> 29 00 00     lwz     r9,0(r9)
+<span style="color: #A6E22E; font-size: 130%;">1000076c</span>:   <span style="color: #F92672;">81</span> 5f 00 0c     lwz     r10,12(r31)
+<span style="color: #A6E22E; font-size: 130%;">10000770</span>:   <span style="color: #F92672;">7d</span> 2a 4a 14     add     r9,r10,r9
+<span style="color: #A6E22E; font-size: 130%;">10000774</span>:   <span style="color: #F92672;">91</span> 3f 00 0c     stw     r9,12(r31)
+{
+    <span style="color: #F92672;">va_list</span> argp<span style="color: #75715E;">;</span>
+    <span style="color: #F92672;">int</span> i, sum = 0<span style="color: #75715E;">;</span>
+
+    <span style="color: #F92672;">va_start</span>(argp, count)<span style="color: #75715E;">;</span>
+    <span style="color: #F92672;">for</span> (i = 0<span style="color: #75715E;">; </span><span style="color: #E6DB74;">i &lt; count; ++i) {</span>
+<span style="color: #A6E22E; font-size: 130%;">10000778</span>:   <span style="color: #F92672;">81</span> 3f 00 08     lwz     r9,8(r31)
+<span style="color: #A6E22E; font-size: 130%;">1000077c</span>:   <span style="color: #F92672;">39</span> 29 00 01     addi    r9,r9,1
+<span style="color: #A6E22E; font-size: 130%;">10000780</span>:   <span style="color: #F92672;">91</span> 3f 00 08     stw     r9,8(r31)
+<span style="color: #A6E22E; font-size: 130%;">10000784</span>:   <span style="color: #F92672;">81</span> 5f 00 08     lwz     r10,8(r31)
+<span style="color: #A6E22E; font-size: 130%;">10000788</span>:   <span style="color: #F92672;">81</span> 3f 00 48     lwz     r9,72(r31)
+<span style="color: #A6E22E; font-size: 130%;">1000078c</span>:   <span style="color: #F92672;">7f</span> 8a 48 00     cmpw    cr7,r10,r9
+<span style="color: #A6E22E; font-size: 130%;">10000790</span>:   <span style="color: #F92672;">41</span> 9c ff 90     blt+    cr7,10000720 &lt;func5+0x60&gt;
+        <span style="color: #F92672;">sum</span> += va_arg(argp, int)<span style="color: #75715E;">;</span>
+    }
+    <span style="color: #F92672;">va_end</span>(argp)<span style="color: #75715E;">;</span>
+    <span style="color: #F92672;">return</span> sum<span style="color: #75715E;">;</span>
+<span style="color: #A6E22E; font-size: 130%;">10000794</span>:   <span style="color: #F92672;">81</span> 3f 00 0c     lwz     r9,12(r31)
+}
+<span style="color: #A6E22E; font-size: 130%;">10000798</span>:   <span style="color: #F92672;">7d</span> 23 4b 78     mr      r3,r9
+<span style="color: #A6E22E; font-size: 130%;">1000079c</span>:   <span style="color: #F92672;">39</span> 7f 00 60     addi    r11,r31,96
+<span style="color: #A6E22E; font-size: 130%;">100007a0</span>:   <span style="color: #F92672;">83</span> eb ff fc     lwz     r31,-4(r11)
+<span style="color: #A6E22E; font-size: 130%;">100007a4</span>:   <span style="color: #F92672;">7d</span> 61 5b 78     mr      r1,r11
+<span style="color: #A6E22E; font-size: 130%;">100007a8</span>:   <span style="color: #F92672;">4e</span> 80 00 20     blr
+
+<span style="color: #A6E22E; font-size: 130%;">100007ac</span> &lt;func6&gt;:
+
+<span style="color: #A6E22E; font-size: 130%;">void</span> <span style="color: #F92672;">func6</span>(void)
+{
+<span style="color: #A6E22E; font-size: 130%;">100007ac</span>:   <span style="color: #F92672;">94</span> 21 ff d0     stwu    r1,-48(r1)
+<span style="color: #A6E22E; font-size: 130%;">100007b0</span>:   <span style="color: #F92672;">93</span> e1 00 2c     stw     r31,44(r1)
+<span style="color: #A6E22E; font-size: 130%;">100007b4</span>:   <span style="color: #F92672;">7c</span> 3f 0b 78     mr      r31,r1
+    <span style="color: #F92672;">int</span> i = 1<span style="color: #75715E;">;</span>
+<span style="color: #A6E22E; font-size: 130%;">100007b8</span>:   <span style="color: #F92672;">39</span> 20 00 01     li      r9,1
+<span style="color: #A6E22E; font-size: 130%;">100007bc</span>:   <span style="color: #F92672;">91</span> 3f 00 08     stw     r9,8(r31)
+    <span style="color: #F92672;">int</span> j = 1<span style="color: #75715E;">;</span>
+<span style="color: #A6E22E; font-size: 130%;">100007c0</span>:   <span style="color: #F92672;">39</span> 20 00 01     li      r9,1
+<span style="color: #A6E22E; font-size: 130%;">100007c4</span>:   <span style="color: #F92672;">91</span> 3f 00 0c     stw     r9,12(r31)
+    <span style="color: #F92672;">int</span> k = 1<span style="color: #75715E;">;</span>
+<span style="color: #A6E22E; font-size: 130%;">100007c8</span>:   <span style="color: #F92672;">39</span> 20 00 01     li      r9,1
+<span style="color: #A6E22E; font-size: 130%;">100007cc</span>:   <span style="color: #F92672;">91</span> 3f 00 10     stw     r9,16(r31)
+    <span style="color: #F92672;">int</span> l = 1<span style="color: #75715E;">;</span>
+<span style="color: #A6E22E; font-size: 130%;">100007d0</span>:   <span style="color: #F92672;">39</span> 20 00 01     li      r9,1
+<span style="color: #A6E22E; font-size: 130%;">100007d4</span>:   <span style="color: #F92672;">91</span> 3f 00 14     stw     r9,20(r31)
+    <span style="color: #F92672;">int</span> m = 1<span style="color: #75715E;">;</span>
+<span style="color: #A6E22E; font-size: 130%;">100007d8</span>:   <span style="color: #F92672;">39</span> 20 00 01     li      r9,1
+<span style="color: #A6E22E; font-size: 130%;">100007dc</span>:   <span style="color: #F92672;">91</span> 3f 00 18     stw     r9,24(r31)
+    <span style="color: #F92672;">int</span> n = 1<span style="color: #75715E;">;</span>
+<span style="color: #A6E22E; font-size: 130%;">100007e0</span>:   <span style="color: #F92672;">39</span> 20 00 01     li      r9,1
+<span style="color: #A6E22E; font-size: 130%;">100007e4</span>:   <span style="color: #F92672;">91</span> 3f 00 1c     stw     r9,28(r31)
+
+    <span style="color: #F92672;">return</span><span style="color: #75715E;">;</span>
+<span style="color: #A6E22E; font-size: 130%;">100007e8</span>:   <span style="color: #F92672;">60</span> 00 00 00     nop
+}
+<span style="color: #A6E22E; font-size: 130%;">100007ec</span>:   <span style="color: #F92672;">39</span> 7f 00 30     addi    r11,r31,48
+<span style="color: #A6E22E; font-size: 130%;">100007f0</span>:   <span style="color: #F92672;">83</span> eb ff fc     lwz     r31,-4(r11)
+<span style="color: #A6E22E; font-size: 130%;">100007f4</span>:   <span style="color: #F92672;">7d</span> 61 5b 78     mr      r1,r11
+<span style="color: #A6E22E; font-size: 130%;">100007f8</span>:   <span style="color: #F92672;">4e</span> 80 00 20     blr
+
+<span style="color: #A6E22E; font-size: 130%;">100007fc</span> &lt;main&gt;:
+
+<span style="color: #A6E22E; font-size: 130%;">int</span> <span style="color: #F92672;">main</span>(int argc, char *argv[])
+{
+<span style="color: #A6E22E; font-size: 130%;">100007fc</span>:   <span style="color: #F92672;">94</span> 21 ff c0     stwu    r1,-64(r1)
+<span style="color: #A6E22E; font-size: 130%;">10000800</span>:   <span style="color: #F92672;">7c</span> 08 02 a6     mflr    r0
+<span style="color: #A6E22E; font-size: 130%;">10000804</span>:   <span style="color: #F92672;">90</span> 01 00 44     stw     r0,68(r1)
+<span style="color: #A6E22E; font-size: 130%;">10000808</span>:   <span style="color: #F92672;">93</span> e1 00 3c     stw     r31,60(r1)
+<span style="color: #A6E22E; font-size: 130%;">1000080c</span>:   <span style="color: #F92672;">7c</span> 3f 0b 78     mr      r31,r1
+<span style="color: #A6E22E; font-size: 130%;">10000810</span>:   <span style="color: #F92672;">90</span> 7f 00 28     stw     r3,40(r31)
+<span style="color: #A6E22E; font-size: 130%;">10000814</span>:   <span style="color: #F92672;">90</span> 9f 00 2c     stw     r4,44(r31)
+    <span style="color: #F92672;">struct</span> s1 s1 = {
+<span style="color: #A6E22E; font-size: 130%;">10000818</span>:   <span style="color: #F92672;">3d</span> 20 10 00     lis     r9,4096
+<span style="color: #A6E22E; font-size: 130%;">1000081c</span>:   <span style="color: #F92672;">39</span> 29 0a 48     addi    r9,r9,2632
+<span style="color: #A6E22E; font-size: 130%;">10000820</span>:   <span style="color: #F92672;">81</span> 09 00 00     lwz     r8,0(r9)
+<span style="color: #A6E22E; font-size: 130%;">10000824</span>:   <span style="color: #F92672;">81</span> 49 00 04     lwz     r10,4(r9)
+<span style="color: #A6E22E; font-size: 130%;">10000828</span>:   <span style="color: #F92672;">81</span> 29 00 08     lwz     r9,8(r9)
+<span style="color: #A6E22E; font-size: 130%;">1000082c</span>:   <span style="color: #F92672;">91</span> 1f 00 08     stw     r8,8(r31)
+<span style="color: #A6E22E; font-size: 130%;">10000830</span>:   <span style="color: #F92672;">91</span> 5f 00 0c     stw     r10,12(r31)
+<span style="color: #A6E22E; font-size: 130%;">10000834</span>:   <span style="color: #F92672;">91</span> 3f 00 10     stw     r9,16(r31)
+        <span style="color: #F92672;">.a</span> = 1,
+        <span style="color: #F92672;">.b</span> = 2,
+        <span style="color: #F92672;">.c</span> = 3,
+    }<span style="color: #75715E;">;</span>
+
+    <span style="color: #F92672;">struct</span> s2 s2 = {
+<span style="color: #A6E22E; font-size: 130%;">10000838</span>:   <span style="color: #F92672;">3d</span> 20 10 00     lis     r9,4096
+<span style="color: #A6E22E; font-size: 130%;">1000083c</span>:   <span style="color: #F92672;">39</span> 29 0a 5c     addi    r9,r9,2652
+<span style="color: #A6E22E; font-size: 130%;">10000840</span>:   <span style="color: #F92672;">81</span> 49 00 00     lwz     r10,0(r9)
+<span style="color: #A6E22E; font-size: 130%;">10000844</span>:   <span style="color: #F92672;">81</span> 29 00 04     lwz     r9,4(r9)
+<span style="color: #A6E22E; font-size: 130%;">10000848</span>:   <span style="color: #F92672;">91</span> 5f 00 14     stw     r10,20(r31)
+<span style="color: #A6E22E; font-size: 130%;">1000084c</span>:   <span style="color: #F92672;">91</span> 3f 00 18     stw     r9,24(r31)
+        <span style="color: #F92672;">.a</span> = <span style="color: #E6DB74;">"hello"</span>,
+        <span style="color: #F92672;">.b</span> = 15,
+    }<span style="color: #75715E;">;</span>
+
+    <span style="color: #F92672;">func1</span>(argc, &amp;s1, &amp;s2)<span style="color: #75715E;">;</span>
+<span style="color: #A6E22E; font-size: 130%;">10000850</span>:   <span style="color: #F92672;">39</span> 3f 00 14     addi    r9,r31,20
+<span style="color: #A6E22E; font-size: 130%;">10000854</span>:   <span style="color: #F92672;">80</span> 7f 00 28     lwz     r3,40(r31)
+<span style="color: #A6E22E; font-size: 130%;">10000858</span>:   <span style="color: #F92672;">39</span> 5f 00 08     addi    r10,r31,8
+<span style="color: #A6E22E; font-size: 130%;">1000085c</span>:   <span style="color: #F92672;">7d</span> 44 53 78     mr      r4,r10
+<span style="color: #A6E22E; font-size: 130%;">10000860</span>:   <span style="color: #F92672;">7d</span> 25 4b 78     mr      r5,r9
+<span style="color: #A6E22E; font-size: 130%;">10000864</span>:   <span style="color: #F92672;">4b</span> ff fc a5     bl      10000508 &lt;func1&gt;
+    <span style="color: #F92672;">func2</span>(argc)<span style="color: #75715E;">;</span>
+<span style="color: #A6E22E; font-size: 130%;">10000868</span>:   <span style="color: #F92672;">80</span> 7f 00 28     lwz     r3,40(r31)
+<span style="color: #A6E22E; font-size: 130%;">1000086c</span>:   <span style="color: #F92672;">4b</span> ff fd 05     bl      10000570 &lt;func2&gt;
+    <span style="color: #F92672;">func3</span>(argc)<span style="color: #75715E;">;</span>
+<span style="color: #A6E22E; font-size: 130%;">10000870</span>:   <span style="color: #F92672;">80</span> 7f 00 28     lwz     r3,40(r31)
+<span style="color: #A6E22E; font-size: 130%;">10000874</span>:   <span style="color: #F92672;">4b</span> ff fd 55     bl      100005c8 &lt;func3&gt;
+    <span style="color: #F92672;">func4</span>(argc)<span style="color: #75715E;">;</span>
+<span style="color: #A6E22E; font-size: 130%;">10000878</span>:   <span style="color: #F92672;">80</span> 7f 00 28     lwz     r3,40(r31)
+<span style="color: #A6E22E; font-size: 130%;">1000087c</span>:   <span style="color: #F92672;">4b</span> ff fd dd     bl      10000658 &lt;func4&gt;
+    <span style="color: #F92672;">printf</span>(<span style="color: #E6DB74;">"%d\n"</span>, func5(5, 1, 2, 3, 4, 5))<span style="color: #75715E;">;</span>
+<span style="color: #A6E22E; font-size: 130%;">10000880</span>:   <span style="color: #F92672;">38</span> 60 00 05     li      r3,5
+<span style="color: #A6E22E; font-size: 130%;">10000884</span>:   <span style="color: #F92672;">38</span> 80 00 01     li      r4,1
+<span style="color: #A6E22E; font-size: 130%;">10000888</span>:   <span style="color: #F92672;">38</span> a0 00 02     li      r5,2
+<span style="color: #A6E22E; font-size: 130%;">1000088c</span>:   <span style="color: #F92672;">38</span> c0 00 03     li      r6,3
+<span style="color: #A6E22E; font-size: 130%;">10000890</span>:   <span style="color: #F92672;">38</span> e0 00 04     li      r7,4
+<span style="color: #A6E22E; font-size: 130%;">10000894</span>:   <span style="color: #F92672;">39</span> 00 00 05     li      r8,5
+<span style="color: #A6E22E; font-size: 130%;">10000898</span>:   <span style="color: #F92672;">4c</span> c6 31 82     crclr   4*cr1+eq
+<span style="color: #A6E22E; font-size: 130%;">1000089c</span>:   <span style="color: #F92672;">4b</span> ff fe 25     bl      100006c0 &lt;func5&gt;
+<span style="color: #A6E22E; font-size: 130%;">100008a0</span>:   <span style="color: #F92672;">7c</span> 69 1b 78     mr      r9,r3
+<span style="color: #A6E22E; font-size: 130%;">100008a4</span>:   <span style="color: #F92672;">3d</span> 40 10 00     lis     r10,4096
+<span style="color: #A6E22E; font-size: 130%;">100008a8</span>:   <span style="color: #F92672;">38</span> 6a 0a 44     addi    r3,r10,2628
+<span style="color: #A6E22E; font-size: 130%;">100008ac</span>:   <span style="color: #F92672;">7d</span> 24 4b 78     mr      r4,r9
+<span style="color: #A6E22E; font-size: 130%;">100008b0</span>:   <span style="color: #F92672;">4c</span> c6 31 82     crclr   4*cr1+eq
+<span style="color: #A6E22E; font-size: 130%;">100008b4</span>:   <span style="color: #F92672;">48</span> 01 03 45     bl      10010bf8 <a href="mailto:printf%40plt">&lt;printf@plt&gt;</a>
+    <span style="color: #F92672;">func6</span>()<span style="color: #75715E;">;</span>
+<span style="color: #A6E22E; font-size: 130%;">100008b8</span>:   <span style="color: #F92672;">4b</span> ff fe f5     bl      100007ac &lt;func6&gt;
+    <span style="color: #F92672;">return</span> 0<span style="color: #75715E;">;</span>
+<span style="color: #A6E22E; font-size: 130%;">100008bc</span>:   <span style="color: #F92672;">39</span> 20 00 00     li      r9,0
+}
+<span style="color: #A6E22E; font-size: 130%;">100008c0</span>:   <span style="color: #F92672;">7d</span> 23 4b 78     mr      r3,r9
+<span style="color: #A6E22E; font-size: 130%;">100008c4</span>:   <span style="color: #F92672;">39</span> 7f 00 40     addi    r11,r31,64
+<span style="color: #A6E22E; font-size: 130%;">100008c8</span>:   <span style="color: #F92672;">80</span> 0b 00 04     lwz     r0,4(r11)
+<span style="color: #A6E22E; font-size: 130%;">100008cc</span>:   <span style="color: #F92672;">7c</span> 08 03 a6     mtlr    r0
+<span style="color: #A6E22E; font-size: 130%;">100008d0</span>:   <span style="color: #F92672;">83</span> eb ff fc     lwz     r31,-4(r11)
+<span style="color: #A6E22E; font-size: 130%;">100008d4</span>:   <span style="color: #F92672;">7d</span> 61 5b 78     mr      r1,r11
+<span style="color: #A6E22E; font-size: 130%;">100008d8</span>:   <span style="color: #F92672;">4e</span> 80 00 20     blr
+<span style="color: #A6E22E; font-size: 130%;">100008dc</span>:   <span style="color: #F92672;">00</span> 01 81 cc     .long 0x181cc
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org4dc24ad" class="outline-4">
+<h4 id="org4dc24ad"><span class="section-number-4">1.3.2</span> gcc -O2 foo.c</h4>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgea16c82" class="outline-2">
+<h2 id="orgea16c82"><span class="section-number-2">2</span> Mips64</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+$0 常量0<br />
+#31 $RA 返回地址<br />
+</p>
+</div>
+</div>
+<div id="outline-container-org522e469" class="outline-2">
+<h2 id="org522e469"><span class="section-number-2">3</span> X86</h2>
+<div class="outline-text-2" id="text-3">
+</div>
+<div id="outline-container-org4027e12" class="outline-3">
+<h3 id="org4027e12"><span class="section-number-3">3.1</span> 指令</h3>
+<div class="outline-text-3" id="text-3-1">
+<ul class="org-ul">
+<li>通用数据传送指令<br /></li>
+</ul>
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="org-left">mov</td>
+<td class="org-left">传送字或字节.</td>
+</tr>
+
+<tr>
+<td class="org-left">movsx</td>
+<td class="org-left">先符号扩展,再传送.</td>
+</tr>
+
+<tr>
+<td class="org-left">movzx</td>
+<td class="org-left">先零扩展,再传送.</td>
+</tr>
+
+<tr>
+<td class="org-left">push</td>
+<td class="org-left">把字压入堆栈.</td>
+</tr>
+
+<tr>
+<td class="org-left">pop</td>
+<td class="org-left">把字弹出堆栈.</td>
+</tr>
+
+<tr>
+<td class="org-left">pusha</td>
+<td class="org-left">把ax,cx,dx,bx,sp,bp,si,di依次压入堆栈.</td>
+</tr>
+
+<tr>
+<td class="org-left">popa</td>
+<td class="org-left">把di,si,bp,sp,bx,dx,cx,ax依次弹出堆栈.</td>
+</tr>
+
+<tr>
+<td class="org-left">pushad</td>
+<td class="org-left">把eax,ecx,edx,ebx,esp,ebp,esi,edi依次压入堆栈.</td>
+</tr>
+
+<tr>
+<td class="org-left">popad</td>
+<td class="org-left">把edi,esi,ebp,esp,ebx,edx,ecx,eax依次弹出堆栈.</td>
+</tr>
+
+<tr>
+<td class="org-left">bswap</td>
+<td class="org-left">交换32位寄存器里字节的顺序</td>
+</tr>
+
+<tr>
+<td class="org-left">xchg</td>
+<td class="org-left">交换字或字节.(至少有一个操作数为寄存器,段寄存器不可作为操作数)</td>
+</tr>
+
+<tr>
+<td class="org-left">cmpxchg</td>
+<td class="org-left">比较并交换操作数.(第二个操作数必须为累加器al/ax/eax)</td>
+</tr>
+
+<tr>
+<td class="org-left">xadd</td>
+<td class="org-left">先交换再累加.(结果在第一个操作数里)</td>
+</tr>
+
+<tr>
+<td class="org-left">xlat</td>
+<td class="org-left">字节查表转换.-&#x2014;bx指向一张256字节的表的起点,al为表的索引值(0-255,即0-ffh);返回al为查表结果.([bx+al]-&gt;al)</td>
+</tr>
+</tbody>
+</table>
+
+<ul class="org-ul">
+<li>端口指令<br /></li>
+</ul>
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="org-left">in</td>
+<td class="org-left">i/o端口输入. ( 语法: in   累加器,    {端口号│dx} )</td>
+</tr>
+
+<tr>
+<td class="org-left">out</td>
+<td class="org-left">i/o端口输出. ( 语法: out {端口号│dx},累加器 )输入输出端口由立即方式指定时,    其范围是 0-255; 由寄存器 dx 指定时,其范围是    0-65535.</td>
+</tr>
+</tbody>
+</table>
+
+<ul class="org-ul">
+<li>目的地址传送指令<br /></li>
+</ul>
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="org-left">lea</td>
+<td class="org-left">装入有效地址.例: lea dx,string ;把偏移地址存到dx.</td>
+</tr>
+
+<tr>
+<td class="org-left">lds</td>
+<td class="org-left">传送目标指针,把指针内容装入ds.例: lds si,string   ;把段地址:偏移地址存到ds:si.</td>
+</tr>
+
+<tr>
+<td class="org-left">les</td>
+<td class="org-left">传送目标指针,把指针内容装入es.例: les di,string   ;把段地址:偏移地址存到es:di.</td>
+</tr>
+
+<tr>
+<td class="org-left">lfs</td>
+<td class="org-left">传送目标指针,把指针内容装入fs.例: lfs di,string   ;把段地址:偏移地址存到fs:di.</td>
+</tr>
+
+<tr>
+<td class="org-left">lgs</td>
+<td class="org-left">传送目标指针,把指针内容装入gs.例: lgs di,string   ;把段地址:偏移地址存到gs:di.</td>
+</tr>
+
+<tr>
+<td class="org-left">lss</td>
+<td class="org-left">传送目标指针,把指针内容装入ss.例: lss di,string   ;把段地址:偏移地址存到ss:di.</td>
+</tr>
+</tbody>
+</table>
+
+<ul class="org-ul">
+<li>标志传送指令<br /></li>
+</ul>
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="org-left">lahf</td>
+<td class="org-left">标志寄存器传送,把标志装入ah.</td>
+</tr>
+
+<tr>
+<td class="org-left">sahf</td>
+<td class="org-left">标志寄存器传送,把ah内容装入标志寄存器.</td>
+</tr>
+
+<tr>
+<td class="org-left">pushf</td>
+<td class="org-left">标志入栈.</td>
+</tr>
+
+<tr>
+<td class="org-left">popf</td>
+<td class="org-left">标志出栈.</td>
+</tr>
+
+<tr>
+<td class="org-left">pushd</td>
+<td class="org-left">32位标志入栈.</td>
+</tr>
+
+<tr>
+<td class="org-left">popd</td>
+<td class="org-left">32位标志出栈.</td>
+</tr>
+</tbody>
+</table>
+
+<ul class="org-ul">
+<li>算术运算指令<br /></li>
+</ul>
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="org-left">adc</td>
+<td class="org-left">带进位加法.</td>
+</tr>
+
+<tr>
+<td class="org-left">inc</td>
+<td class="org-left">加 1.</td>
+</tr>
+
+<tr>
+<td class="org-left">aaa</td>
+<td class="org-left">加法的ascii码调整.</td>
+</tr>
+
+<tr>
+<td class="org-left">daa</td>
+<td class="org-left">加法的十进制调整.</td>
+</tr>
+
+<tr>
+<td class="org-left">sub</td>
+<td class="org-left">减法.</td>
+</tr>
+
+<tr>
+<td class="org-left">sbb</td>
+<td class="org-left">带借位减法.</td>
+</tr>
+
+<tr>
+<td class="org-left">dec</td>
+<td class="org-left">减 1.</td>
+</tr>
+
+<tr>
+<td class="org-left">neg</td>
+<td class="org-left">求反(以    0 减之).</td>
+</tr>
+
+<tr>
+<td class="org-left">cmp</td>
+<td class="org-left">比较.(两操作数作减法,仅修改标志位,不回送结果).</td>
+</tr>
+
+<tr>
+<td class="org-left">aas</td>
+<td class="org-left">减法的ascii码调整.</td>
+</tr>
+
+<tr>
+<td class="org-left">das</td>
+<td class="org-left">减法的十进制调整.</td>
+</tr>
+
+<tr>
+<td class="org-left">mul</td>
+<td class="org-left">无符号乘法.结果回送ah和al(字节运算),或dx和ax(字运算),</td>
+</tr>
+
+<tr>
+<td class="org-left">imul</td>
+<td class="org-left">整数乘法.结果回送ah和al(字节运算),或dx和ax(字运算),</td>
+</tr>
+
+<tr>
+<td class="org-left">aam</td>
+<td class="org-left">乘法的ascii码调整.</td>
+</tr>
+
+<tr>
+<td class="org-left">div</td>
+<td class="org-left">无符号除法.结果回送:商回送al,余数回送ah, (字节运算);或 商回送ax,余数回送dx, (字运算).</td>
+</tr>
+
+<tr>
+<td class="org-left">idiv</td>
+<td class="org-left">整数除法.结果回送:商回送al,余数回送ah, (字节运算);或 商回送ax,余数回送dx, (字运算).</td>
+</tr>
+
+<tr>
+<td class="org-left">aad</td>
+<td class="org-left">除法的ascii码调整.</td>
+</tr>
+
+<tr>
+<td class="org-left">cbw</td>
+<td class="org-left">字节转换为字. (把al中字节的符号扩展到ah中去)</td>
+</tr>
+
+<tr>
+<td class="org-left">cwd</td>
+<td class="org-left">字转换为双字. (把ax中的字的符号扩展到dx中去)</td>
+</tr>
+
+<tr>
+<td class="org-left">cwde</td>
+<td class="org-left">字转换为双字. (把ax中的字符号扩展到eax中去)</td>
+</tr>
+
+<tr>
+<td class="org-left">cdq</td>
+<td class="org-left">双字扩展. (把eax中的字的符号扩展到edx中去)</td>
+</tr>
+</tbody>
+</table>
+
+<ul class="org-ul">
+<li>逻辑运算指令<br /></li>
+</ul>
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="org-left">and</td>
+<td class="org-left">与运算.</td>
+</tr>
+
+<tr>
+<td class="org-left">or</td>
+<td class="org-left">或运算.</td>
+</tr>
+
+<tr>
+<td class="org-left">xor</td>
+<td class="org-left">异或运算.</td>
+</tr>
+
+<tr>
+<td class="org-left">not</td>
+<td class="org-left">取反.</td>
+</tr>
+
+<tr>
+<td class="org-left">test</td>
+<td class="org-left">测试.(两操作数作与运算,仅修改标志位,不回送结果).</td>
+</tr>
+
+<tr>
+<td class="org-left">shl</td>
+<td class="org-left">逻辑左移.</td>
+</tr>
+
+<tr>
+<td class="org-left">sal</td>
+<td class="org-left">算术左移.(=shl)</td>
+</tr>
+
+<tr>
+<td class="org-left">shr</td>
+<td class="org-left">逻辑右移.</td>
+</tr>
+
+<tr>
+<td class="org-left">sar</td>
+<td class="org-left">算术右移.(=shr)</td>
+</tr>
+
+<tr>
+<td class="org-left">rol</td>
+<td class="org-left">循环左移.</td>
+</tr>
+
+<tr>
+<td class="org-left">ror</td>
+<td class="org-left">循环右移.</td>
+</tr>
+
+<tr>
+<td class="org-left">rcl</td>
+<td class="org-left">通过进位的循环左移.</td>
+</tr>
+
+<tr>
+<td class="org-left">rcr</td>
+<td class="org-left">通过进位的循环右移.</td>
+</tr>
+</tbody>
+</table>
+
+<ul class="org-ul">
+<li>串指令<br />
+ds:si 源串段寄存器 :源串变址.<br />
+es:di 目标串段寄存器:目标串变址.<br />
+cx 重复次数计数器.<br />
+al/ax 扫描值.<br />
+d标志   0表示重复操作中si和di应自动增量; 1表示应自动减量.<br />
+z标志   用来控制扫描或比较操作的结束.<br /></li>
+</ul>
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="org-left">movs</td>
+<td class="org-left">串传送.( movsb 传送字符. movsw 传送字. movsd 传送双字. )</td>
+</tr>
+
+<tr>
+<td class="org-left">cmps</td>
+<td class="org-left">串比较.( cmpsb 比较字符. cmpsw 比较字. )</td>
+</tr>
+
+<tr>
+<td class="org-left">scas</td>
+<td class="org-left">串扫描.把al或ax的内容与目标串作比较,比较结果反映在标志位.</td>
+</tr>
+
+<tr>
+<td class="org-left">lods</td>
+<td class="org-left">装入串.把源串中的元素(字或字节)逐一装入al或ax中.( lodsb 传送字符. lodsw 传送字.    lodsd 传送双字. )</td>
+</tr>
+
+<tr>
+<td class="org-left">stos</td>
+<td class="org-left">保存串.是lods的逆过程.</td>
+</tr>
+
+<tr>
+<td class="org-left">rep</td>
+<td class="org-left">当cx/ecx&lt;&gt;0时重复.</td>
+</tr>
+
+<tr>
+<td class="org-left">repe/repz</td>
+<td class="org-left">当zf=1或比较结果相等,且cx/ecx&lt;&gt;0时重复.</td>
+</tr>
+
+<tr>
+<td class="org-left">repne/repnz</td>
+<td class="org-left">当zf=0或比较结果不相等,且cx/ecx&lt;&gt;0时重复.</td>
+</tr>
+
+<tr>
+<td class="org-left">repc</td>
+<td class="org-left">当cf=1且cx/ecx&lt;&gt;0时重复.</td>
+</tr>
+
+<tr>
+<td class="org-left">repnc</td>
+<td class="org-left">当cf=0且cx/ecx&lt;&gt;0时重复.</td>
+</tr>
+</tbody>
+</table>
+
+<ul class="org-ul">
+<li>程序转移指令<br /></li>
+</ul>
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="org-left">jmp</td>
+<td class="org-left">无条件转移指令</td>
+</tr>
+
+<tr>
+<td class="org-left">call</td>
+<td class="org-left">过程调用</td>
+</tr>
+
+<tr>
+<td class="org-left">ret/retf</td>
+<td class="org-left">过程返回.</td>
+</tr>
+
+<tr>
+<td class="org-left">ja/jnbe</td>
+<td class="org-left">不小于或不等于时转移.</td>
+</tr>
+
+<tr>
+<td class="org-left">jae/jnb</td>
+<td class="org-left">大于或等于转移.</td>
+</tr>
+
+<tr>
+<td class="org-left">jb/jnae</td>
+<td class="org-left">小于转移.</td>
+</tr>
+
+<tr>
+<td class="org-left">jbe/jna</td>
+<td class="org-left">小于或等于转移.</td>
+</tr>
+
+<tr>
+<td class="org-left">jg/jnle</td>
+<td class="org-left">大于转移.</td>
+</tr>
+
+<tr>
+<td class="org-left">jge/jnl</td>
+<td class="org-left">大于或等于转移.</td>
+</tr>
+
+<tr>
+<td class="org-left">jl/jnge</td>
+<td class="org-left">小于转移.</td>
+</tr>
+
+<tr>
+<td class="org-left">jle/jng</td>
+<td class="org-left">小于或等于转移.</td>
+</tr>
+
+<tr>
+<td class="org-left">je/jz</td>
+<td class="org-left">等于转移.</td>
+</tr>
+
+<tr>
+<td class="org-left">jne/jnz</td>
+<td class="org-left">不等于时转移.</td>
+</tr>
+
+<tr>
+<td class="org-left">jc</td>
+<td class="org-left">有进位时转移.</td>
+</tr>
+
+<tr>
+<td class="org-left">jnc</td>
+<td class="org-left">无进位时转移.</td>
+</tr>
+
+<tr>
+<td class="org-left">jno</td>
+<td class="org-left">不溢出时转移.</td>
+</tr>
+
+<tr>
+<td class="org-left">jnp/jpo</td>
+<td class="org-left">奇偶性为奇数时转移.</td>
+</tr>
+
+<tr>
+<td class="org-left">jns</td>
+<td class="org-left">符号位为 "0" 时转移.</td>
+</tr>
+
+<tr>
+<td class="org-left">jo</td>
+<td class="org-left">溢出转移.</td>
+</tr>
+
+<tr>
+<td class="org-left">jp/jpe</td>
+<td class="org-left">奇偶性为偶数时转移.</td>
+</tr>
+
+<tr>
+<td class="org-left">js</td>
+<td class="org-left">符号位为 "1" 时转移.</td>
+</tr>
+</tbody>
+</table>
+
+<ul class="org-ul">
+<li>其他<br /></li>
+</ul>
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="org-left">lcall</td>
+<td class="org-left">长调转</td>
+</tr>
+
+<tr>
+<td class="org-left">cmove</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">lea 0x0(%esi,%eiz,1),%esi</td>
+<td class="org-left">base(offset, index, i)，就是 base+offset+index*i, eiz恒为0</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+
+<div id="outline-container-orgd2bc150" class="outline-3">
+<h3 id="orgd2bc150"><span class="section-number-3">3.2</span> ABI</h3>
+<div class="outline-text-3" id="text-3-2">
+<ul class="org-ul">
+<li>esp和ebp之间即为当前函数对应的栈空间<br /></li>
+<li>函数返回值存在eax中<br /></li>
+<li>函数实参入栈从右至左push，调用方负责清除入参<br /></li>
+<li>不定参时，通ebp + x向栈内索引变量<br /></li>
+</ul>
+<!-- This HTML table template is generated by emacs 26.1 -->
+<table border="1">
+  <tr>
+    <td align="left" valign="top">
+      &nbsp;&nbsp;&nbsp;local&nbsp;&nbsp;&nbsp;&nbsp;<br />
+      &nbsp;&nbsp;variable&nbsp;&nbsp;<br />
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    </td>
+  </tr>
+  <tr>
+    <td align="left" valign="top">
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br />
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br />
+      &nbsp;&nbsp;&nbsp;local&nbsp;&nbsp;&nbsp;&nbsp;<br />
+      &nbsp;&nbsp;variable&nbsp;&nbsp;<br />
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br />
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br />
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    </td>
+  </tr>
+  <tr>
+    <td align="left" valign="top">
+      &nbsp;&nbsp;&nbsp;local&nbsp;&nbsp;&nbsp;&nbsp;<br />
+      &nbsp;&nbsp;variable&nbsp;&nbsp;<br />
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    </td>
+  </tr>
+  <tr>
+    <td align="left" valign="top">
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br />
+      &nbsp;&nbsp;old&nbsp;&nbsp;ebp&nbsp;&nbsp;<br />
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    </td>
+  </tr>
+  <tr>
+    <td align="left" valign="top">
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br />
+      &nbsp;&nbsp;prev&nbsp;&nbsp;ip&nbsp;&nbsp;<br />
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    </td>
+  </tr>
+  <tr>
+    <td align="left" valign="top">
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br />
+      &nbsp;&nbsp;prev&nbsp;&nbsp;cs&nbsp;&nbsp;<br />
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    </td>
+  </tr>
+</table>
+</div>
+</div>
+
+<div id="outline-container-org72b40dd" class="outline-3">
+<h3 id="org72b40dd"><span class="section-number-3">3.3</span> 例程</h3>
+<div class="outline-text-3" id="text-3-3">
+<p>
+<b>gcc -m32 -g foo.c</b><br />
+</p>
+<div class="org-src-container">
+<pre class="src src-asm"><span style="color: #75715E;">//</span><span style="color: #E6DB74;">&#36171;&#20540;&#19982;&#31639;&#26415;&#36816;&#31639;</span>
+<span style="color: #A6E22E; font-size: 130%;">int</span> <span style="color: #F92672;">func1</span>(int i, struct s1 *s1, struct s2 *s2)
+{
+ <span style="color: #F92672;">80484dd</span>:   55                      push   <span style="color: #FD971F;">%ebp</span>
+ <span style="color: #F92672;">80484de</span>:   89 e5                   mov    <span style="color: #FD971F;">%esp</span>,<span style="color: #FD971F;">%ebp</span>
+ <span style="color: #F92672;">80484e0</span>:   83 ec 10                sub    $0x10,<span style="color: #FD971F;">%esp</span>        <span style="color: #75715E;">;</span><span style="color: #E6DB74;">&#24320;&#26632;</span>
+    <span style="color: #F92672;">static</span> int static_var = 85<span style="color: #75715E;">;</span>
+    <span style="color: #F92672;">static</span> int static_var2<span style="color: #75715E;">;</span>
+
+    <span style="color: #F92672;">int</span> a = 1<span style="color: #75715E;">;</span>
+ <span style="color: #F92672;">80484e3</span>:   c7 45 fc 01 00 00 00    movl   $0x1,-0x4(<span style="color: #FD971F;">%ebp</span>)   <span style="color: #75715E;">; </span><span style="color: #E6DB74;">&amp;a = ebp - 4, a = 1</span>
+
+    <span style="color: #F92672;">s1-&gt;c</span> = s2-&gt;b<span style="color: #75715E;">;</span>
+ <span style="color: #F92672;">80484ea</span>:   8b 45 10                mov    0x10(<span style="color: #FD971F;">%ebp</span>),<span style="color: #FD971F;">%eax</span>   <span style="color: #75715E;">; </span><span style="color: #E6DB74;">eax = s2</span>
+ <span style="color: #F92672;">80484ed</span>:   8b 50 04                mov    0x4(<span style="color: #FD971F;">%eax</span>),<span style="color: #FD971F;">%edx</span>    <span style="color: #75715E;">; </span><span style="color: #E6DB74;">edx = s2-&gt;b</span>
+ <span style="color: #F92672;">80484f0</span>:   8b 45 0c                mov    0xc(<span style="color: #FD971F;">%ebp</span>),<span style="color: #FD971F;">%eax</span>    <span style="color: #75715E;">; </span><span style="color: #E6DB74;">eax = s1</span>
+ <span style="color: #F92672;">80484f3</span>:   89 50 08                mov    <span style="color: #FD971F;">%edx</span>,0x8(<span style="color: #FD971F;">%eax</span>)    <span style="color: #75715E;">; </span><span style="color: #E6DB74;">s1-&gt;c = edx</span>
+    <span style="color: #F92672;">return</span> static_var + static_var2 + a + i<span style="color: #75715E;">;</span>
+ <span style="color: #F92672;">80484f6</span>:   8b 15 20 a0 04 08       mov    0x804a020,<span style="color: #FD971F;">%edx</span>    <span style="color: #75715E;">; </span><span style="color: #E6DB74;">edx = static_var</span>
+ <span style="color: #F92672;">80484fc</span>:   a1 28 a0 04 08          mov    0x804a028,<span style="color: #FD971F;">%eax</span>    <span style="color: #75715E;">; </span><span style="color: #E6DB74;">eax = static_var2</span>
+ <span style="color: #F92672;">8048501</span>:   01 c2                   add    <span style="color: #FD971F;">%eax</span>,<span style="color: #FD971F;">%edx</span>         <span style="color: #75715E;">; </span><span style="color: #E6DB74;">edx = edx + eax</span>
+ <span style="color: #F92672;">8048503</span>:   8b 45 fc                mov    -0x4(<span style="color: #FD971F;">%ebp</span>),<span style="color: #FD971F;">%eax</span>   <span style="color: #75715E;">; </span><span style="color: #E6DB74;">eax = 1</span>
+ <span style="color: #F92672;">8048506</span>:   01 c2                   add    <span style="color: #FD971F;">%eax</span>,<span style="color: #FD971F;">%edx</span>         <span style="color: #75715E;">; </span><span style="color: #E6DB74;">edx = edx + eax = static_var + static_var2 + 1</span>
+ <span style="color: #F92672;">8048508</span>:   8b 45 08                mov    0x8(<span style="color: #FD971F;">%ebp</span>),<span style="color: #FD971F;">%eax</span>    <span style="color: #75715E;">; </span><span style="color: #E6DB74;">eax = i</span>
+ <span style="color: #F92672;">804850b</span>:   01 d0                   add    <span style="color: #FD971F;">%edx</span>,<span style="color: #FD971F;">%eax</span>         <span style="color: #75715E;">; </span><span style="color: #E6DB74;">eax = edx + eax = static_var + static_var2 + i + 1</span>
+}
+ <span style="color: #F92672;">804850d</span>:   c9                      leave                    <span style="color: #75715E;">; </span><span style="color: #E6DB74;">esp = ebp, pop ebp</span>
+ <span style="color: #F92672;">804850e</span>:   c3                      ret                      <span style="color: #75715E;">; </span><span style="color: #E6DB74;">pop cs:ip</span>
+
+<span style="color: #A6E22E; font-size: 130%;">0804850f</span> &lt;func2&gt;:
+
+<span style="color: #75715E;">//</span><span style="color: #E6DB74;">if else</span>
+<span style="color: #A6E22E; font-size: 130%;">int</span> <span style="color: #F92672;">func2</span>(int i)
+{
+ <span style="color: #F92672;">804850f</span>:   55                      push   <span style="color: #FD971F;">%ebp</span>
+ <span style="color: #F92672;">8048510</span>:   89 e5                   mov    <span style="color: #FD971F;">%esp</span>,<span style="color: #FD971F;">%ebp</span>
+ <span style="color: #F92672;">8048512</span>:   83 ec 08                sub    $0x8,<span style="color: #FD971F;">%esp</span>               <span style="color: #75715E;">; </span><span style="color: #E6DB74;">&#24320;&#26632;</span>
+    <span style="color: #F92672;">if</span> (i &lt; 1) {
+ <span style="color: #F92672;">8048515</span>:   83 7d 08 00             cmpl   $0x0,0x8(<span style="color: #FD971F;">%ebp</span>)          <span style="color: #75715E;">; </span><span style="color: #E6DB74;">&#21028;&#26029;i&#21644;0x0</span>
+ <span style="color: #F92672;">8048519</span>:   7f 07                   jg     8048522 &lt;func2+0x13&gt;    <span style="color: #75715E;">; </span><span style="color: #E6DB74;">&#22914;&#26524;&#22823;&#20110;0x0&#21017;&#36339;&#36716;&#33267;0x8048522&#65292;&#22240;&#20026;i &lt; 1&#21363;&#20026;i &lt;= 0</span>
+        <span style="color: #F92672;">return</span> 3<span style="color: #75715E;">;</span>
+ <span style="color: #F92672;">804851b</span>:   b8 03 00 00 00          mov    $0x3,<span style="color: #FD971F;">%eax</span>               <span style="color: #75715E;">; </span><span style="color: #E6DB74;">&#36820;&#22238;&#20540;&#32622;&#20026;3</span>
+ <span style="color: #F92672;">8048520</span>:   eb 15                   jmp    8048537 &lt;func2+0x28&gt;
+    } else {
+        <span style="color: #F92672;">printf</span>(<span style="color: #E6DB74;">"1 &lt;= i\n"</span>)<span style="color: #75715E;">;</span>
+ <span style="color: #F92672;">8048522</span>:   83 ec 0c                sub    $0xc,<span style="color: #FD971F;">%esp</span>               <span style="color: #75715E;">; </span><span style="color: #E6DB74;">esp = esp - 0xc</span>
+ <span style="color: #F92672;">8048525</span>:   68 5c 87 04 08          push   $0x804875c              <span style="color: #75715E;">; </span><span style="color: #E6DB74;">&#23558;"1 &lt;=i\n"&#30340;&#22320;&#22336;&#20837;&#26632;&#65292;esp = esp - 4</span>
+ <span style="color: #F92672;">804852a</span>:   e8 51 fe ff ff          call   8048380 <a href="mailto:puts%40plt">&lt;puts@plt&gt;</a>      <span style="color: #75715E;">; </span><span style="color: #E6DB74;">&#22240;&#20026;&#27809;&#26377;&#21487;&#36873;&#21442;&#25968;&#65292;&#21017;&#30452;&#25509;&#20351;&#29992;puts</span>
+ <span style="color: #F92672;">804852f</span>:   83 c4 10                add    $0x10,<span style="color: #FD971F;">%esp</span>              <span style="color: #75715E;">; </span><span style="color: #E6DB74;">esp = esp + 0x10&#65292;&#24674;&#22797;esp&#65292;&#20854;&#23454;esp = esp - 0xc&#38750;&#24517;&#39035;&#65292;&#21487;&#20197;&#30452;&#25509;push&#26368;&#21518;esp = esp + 4</span>
+    }
+
+    <span style="color: #F92672;">return</span> 1<span style="color: #75715E;">;</span>
+ <span style="color: #F92672;">8048532</span>:   b8 01 00 00 00          mov    $0x1,<span style="color: #FD971F;">%eax</span>               <span style="color: #75715E;">; </span><span style="color: #E6DB74;">&#36820;&#22238;&#20540;&#20540;&#20026;1</span>
+}
+ <span style="color: #F92672;">8048537</span>:   c9                      leave
+ <span style="color: #F92672;">8048538</span>:   c3                      ret
+
+<span style="color: #A6E22E; font-size: 130%;">08048539</span> &lt;func3&gt;:
+
+<span style="color: #75715E;">//</span><span style="color: #E6DB74;">switch case</span>
+<span style="color: #A6E22E; font-size: 130%;">int</span> <span style="color: #F92672;">func3</span>(int i)
+{
+ <span style="color: #F92672;">8048539</span>:   55                      push   <span style="color: #FD971F;">%ebp</span>
+ <span style="color: #F92672;">804853a</span>:   89 e5                   mov    <span style="color: #FD971F;">%esp</span>,<span style="color: #FD971F;">%ebp</span>
+ <span style="color: #F92672;">804853c</span>:   83 ec 18                sub    $0x18,<span style="color: #FD971F;">%esp</span>             <span style="color: #75715E;">; </span><span style="color: #E6DB74;">&#24320;&#26632;</span>
+    <span style="color: #F92672;">int</span> rc = -1<span style="color: #75715E;">;</span>
+ <span style="color: #F92672;">804853f</span>:   c7 45 f4 ff ff ff ff    movl   $0xffffffff,-0xc(<span style="color: #FD971F;">%ebp</span>) <span style="color: #75715E;">; </span><span style="color: #E6DB74;">rc = -1</span>
+
+    <span style="color: #F92672;">switch</span> (i) {
+ <span style="color: #F92672;">8048546</span>:   83 7d 08 02             cmpl   $0x2,0x8(<span style="color: #FD971F;">%ebp</span>)         <span style="color: #75715E;">; </span><span style="color: #E6DB74;">i&#21644;0x2&#27604;&#36739;</span>
+ <span style="color: #F92672;">804854a</span>:   74 16                   je     8048562 &lt;func3+0x29&gt;   <span style="color: #75715E;">; </span><span style="color: #E6DB74;">&#30456;&#31561;&#36339;&#36716;8048562</span>
+ <span style="color: #F92672;">804854c</span>:   83 7d 08 0f             cmpl   $0xf,0x8(<span style="color: #FD971F;">%ebp</span>)         <span style="color: #75715E;">; </span><span style="color: #E6DB74;">i&#21644;0xf&#27604;&#36739;</span>
+ <span style="color: #F92672;">8048550</span>:   74 19                   je     804856b &lt;func3+0x32&gt;   <span style="color: #75715E;">; </span><span style="color: #E6DB74;">&#30456;&#31561;&#36339;&#36716;804856b</span>
+ <span style="color: #F92672;">8048552</span>:   83 7d 08 01             cmpl   $0x1,0x8(<span style="color: #FD971F;">%ebp</span>)         <span style="color: #75715E;">; </span><span style="color: #E6DB74;">i&#21644;0x1&#27604;&#36739;</span>
+ <span style="color: #F92672;">8048556</span>:   75 25                   jne    804857d &lt;func3+0x44&gt;   <span style="color: #75715E;">; </span><span style="color: #E6DB74;">&#19981;&#31561;&#21017;&#36339;&#36716;804857d</span>
+    <span style="color: #F92672;">case</span> 1:
+        <span style="color: #F92672;">rc</span> = global_uninit_var<span style="color: #75715E;">;</span>
+ <span style="color: #F92672;">8048558</span>:   a1 2c a0 04 08          mov    0x804a02c,<span style="color: #FD971F;">%eax</span>         <span style="color: #75715E;">; </span><span style="color: #E6DB74;">&#30456;&#31561;&#21363;&#21040;&#36825;&#37324;, eax = global_uninit_var = *0x804a02c, *&#27880;&#24847;&#36825;&#37324;&#19981;&#26159;$0x804a02c&#65292;&#25152;&#20197;&#19981;&#26159;&#31435;&#21363;&#25968;&#65292;&#32780;&#26159;[0x804a02c]*</span>
+ <span style="color: #F92672;">804855d</span>:   89 45 f4                mov    <span style="color: #FD971F;">%eax</span>,-0xc(<span style="color: #FD971F;">%ebp</span>)        <span style="color: #75715E;">; </span><span style="color: #E6DB74;">rc = *(ebp - 0xc) = eax</span>
+        <span style="color: #F92672;">break</span><span style="color: #75715E;">;</span>
+ <span style="color: #F92672;">8048560</span>:   eb 1c                   jmp    804857e &lt;func3+0x45&gt;   <span style="color: #75715E;">; </span><span style="color: #E6DB74;">&#36339;&#36716;&#33267;&#26411;&#23614;</span>
+    <span style="color: #F92672;">case</span> 2:
+        <span style="color: #F92672;">rc</span> = 8<span style="color: #75715E;">;</span>
+ <span style="color: #F92672;">8048562</span>:   c7 45 f4 08 00 00 00    movl   $0x8,-0xc(<span style="color: #FD971F;">%ebp</span>)        <span style="color: #75715E;">; </span><span style="color: #E6DB74;">rc = 8;</span>
+        <span style="color: #F92672;">break</span><span style="color: #75715E;">;</span>
+ <span style="color: #F92672;">8048569</span>:   eb 13                   jmp    804857e &lt;func3+0x45&gt;   <span style="color: #75715E;">; </span><span style="color: #E6DB74;">&#36339;&#36716;&#33267;&#26411;&#23614;</span>
+    <span style="color: #F92672;">case</span> 15:
+        <span style="color: #F92672;">printf</span>(<span style="color: #E6DB74;">"i == 15"</span>)<span style="color: #75715E;">;</span>
+ <span style="color: #F92672;">804856b</span>:   83 ec 0c                sub    $0xc,<span style="color: #FD971F;">%esp</span>
+ <span style="color: #F92672;">804856e</span>:   68 63 87 04 08          push   $0x8048763
+ <span style="color: #F92672;">8048573</span>:   e8 f8 fd ff ff          call   8048370 <a href="mailto:printf%40plt">&lt;printf@plt&gt;</a>
+ <span style="color: #F92672;">8048578</span>:   83 c4 10                add    $0x10,<span style="color: #FD971F;">%esp</span>             <span style="color: #75715E;">; </span><span style="color: #E6DB74;">printf</span>
+        <span style="color: #F92672;">break</span><span style="color: #75715E;">;</span>
+ <span style="color: #F92672;">804857b</span>:   eb 01                   jmp    804857e &lt;func3+0x45&gt;
+    <span style="color: #F92672;">default</span>:
+        <span style="color: #F92672;">break</span><span style="color: #75715E;">;</span>
+ <span style="color: #F92672;">804857d</span>:   90                      nop                           <span style="color: #75715E;">; </span><span style="color: #E6DB74;">nothing</span>
+    }
+    <span style="color: #F92672;">return</span> rc<span style="color: #75715E;">;</span>
+ <span style="color: #F92672;">804857e</span>:   8b 45 f4                mov    -0xc(<span style="color: #FD971F;">%ebp</span>),<span style="color: #FD971F;">%eax</span>        <span style="color: #75715E;">; </span><span style="color: #E6DB74;">eax = rc</span>
+}
+ <span style="color: #F92672;">8048581</span>:   c9                      leave
+ <span style="color: #F92672;">8048582</span>:   c3                      ret
+
+<span style="color: #A6E22E; font-size: 130%;">08048583</span> &lt;func4&gt;:
+
+
+<span style="color: #75715E;">//</span><span style="color: #E6DB74;">loop</span>
+<span style="color: #A6E22E; font-size: 130%;">int</span> <span style="color: #F92672;">func4</span>(int bound)
+{
+ <span style="color: #F92672;">8048583</span>:   55                      push   <span style="color: #FD971F;">%ebp</span>
+ <span style="color: #F92672;">8048584</span>:   89 e5                   mov    <span style="color: #FD971F;">%esp</span>,<span style="color: #FD971F;">%ebp</span>
+ <span style="color: #F92672;">8048586</span>:   83 ec 10                sub    $0x10,<span style="color: #FD971F;">%esp</span>             <span style="color: #75715E;">; </span><span style="color: #E6DB74;">&#24320;&#26632;</span>
+    <span style="color: #F92672;">int</span> i, sum = 0<span style="color: #75715E;">;</span>
+ <span style="color: #F92672;">8048589</span>:   c7 45 f8 00 00 00 00    movl   $0x0,-0x8(<span style="color: #FD971F;">%ebp</span>)        <span style="color: #75715E;">; </span><span style="color: #E6DB74;">sum = *(ebp - 8) = 0</span>
+
+    <span style="color: #F92672;">for</span> (i = 0<span style="color: #75715E;">; </span><span style="color: #E6DB74;">i &lt; bound; ++i) {</span>
+ <span style="color: #F92672;">8048590</span>:   c7 45 fc 00 00 00 00    movl   $0x0,-0x4(<span style="color: #FD971F;">%ebp</span>)        <span style="color: #75715E;">; </span><span style="color: #E6DB74;">i = *(ebp - 4) = 0</span>
+ <span style="color: #F92672;">8048597</span>:   eb 0a                   jmp    80485a3 &lt;func4+0x20&gt;   <span style="color: #75715E;">; </span><span style="color: #E6DB74;">&#36339;&#36716;</span>
+        <span style="color: #F92672;">sum</span> += i<span style="color: #75715E;">;</span>
+ <span style="color: #F92672;">8048599</span>:   8b 45 fc                mov    -0x4(<span style="color: #FD971F;">%ebp</span>),<span style="color: #FD971F;">%eax</span>        <span style="color: #75715E;">; </span><span style="color: #E6DB74;">eax = i</span>
+ <span style="color: #F92672;">804859c</span>:   01 45 f8                add    <span style="color: #FD971F;">%eax</span>,-0x8(<span style="color: #FD971F;">%ebp</span>)        <span style="color: #75715E;">; </span><span style="color: #E6DB74;">sum += eax</span>
+    <span style="color: #F92672;">for</span> (i = 0<span style="color: #75715E;">; </span><span style="color: #E6DB74;">i &lt; bound; ++i) {</span>
+ <span style="color: #F92672;">804859f</span>:   83 45 fc 01             addl   $0x1,-0x4(<span style="color: #FD971F;">%ebp</span>)        <span style="color: #75715E;">; </span><span style="color: #E6DB74;">i += 1</span>
+ <span style="color: #F92672;">80485a3</span>:   8b 45 fc                mov    -0x4(<span style="color: #FD971F;">%ebp</span>),<span style="color: #FD971F;">%eax</span>        <span style="color: #75715E;">; </span><span style="color: #E6DB74;">eax = *(ebp - 4)</span>
+ <span style="color: #F92672;">80485a6</span>:   3b 45 08                cmp    0x8(<span style="color: #FD971F;">%ebp</span>),<span style="color: #FD971F;">%eax</span>         <span style="color: #75715E;">; </span><span style="color: #E6DB74;">&#27604;&#36739; eax&#21644;sum</span>
+ <span style="color: #F92672;">80485a9</span>:   7c ee                   jl     8048599 &lt;func4+0x16&gt;   <span style="color: #75715E;">; </span><span style="color: #E6DB74;">&#23569;&#20110;&#21017;&#36339;&#36716;&#33267;8048599</span>
+    }
+
+    <span style="color: #F92672;">return</span> sum<span style="color: #75715E;">;</span>
+ <span style="color: #F92672;">80485ab</span>:   8b 45 f8                mov    -0x8(<span style="color: #FD971F;">%ebp</span>),<span style="color: #FD971F;">%eax</span>        <span style="color: #75715E;">; </span><span style="color: #E6DB74;">eax = sum</span>
+}
+ <span style="color: #F92672;">80485ae</span>:   c9                      leave
+ <span style="color: #F92672;">80485af</span>:   c3                      ret
+
+<span style="color: #A6E22E; font-size: 130%;">080485b0</span> &lt;func5&gt;:
+
+<span style="color: #75715E;">//</span><span style="color: #E6DB74;">&#19981;&#23450;&#21442;</span>
+<span style="color: #A6E22E; font-size: 130%;">int</span> <span style="color: #F92672;">func5</span>(int count, ...)
+{
+ <span style="color: #F92672;">80485b0</span>:   55                      push   <span style="color: #FD971F;">%ebp</span>
+ <span style="color: #F92672;">80485b1</span>:   89 e5                   mov    <span style="color: #FD971F;">%esp</span>,<span style="color: #FD971F;">%ebp</span>
+ <span style="color: #F92672;">80485b3</span>:   83 ec 10                sub    $0x10,<span style="color: #FD971F;">%esp</span>             <span style="color: #75715E;">; </span><span style="color: #E6DB74;">&#24320;&#26632;</span>
+    <span style="color: #F92672;">va_list</span> argp<span style="color: #75715E;">;</span>
+    <span style="color: #F92672;">int</span> i, sum = 0<span style="color: #75715E;">;</span>
+ <span style="color: #F92672;">80485b6</span>:   c7 45 f8 00 00 00 00    movl   $0x0,-0x8(<span style="color: #FD971F;">%ebp</span>)        <span style="color: #75715E;">; </span><span style="color: #E6DB74;">sum = *(ebp - 8) = 0</span>
+
+    <span style="color: #F92672;">va_start</span>(argp, count)<span style="color: #75715E;">;</span>
+ <span style="color: #F92672;">80485bd</span>:   8d 45 0c                lea    0xc(<span style="color: #FD971F;">%ebp</span>),<span style="color: #FD971F;">%eax</span>         <span style="color: #75715E;">; </span><span style="color: #E6DB74;">eax = ebp + 0xc = &amp;count</span>
+ <span style="color: #F92672;">80485c0</span>:   89 45 f4                mov    <span style="color: #FD971F;">%eax</span>,-0xc(<span style="color: #FD971F;">%ebp</span>)        <span style="color: #75715E;">; </span><span style="color: #E6DB74;">argp = ebp - 0xc = eax</span>
+    <span style="color: #F92672;">for</span> (i = 0<span style="color: #75715E;">; </span><span style="color: #E6DB74;">i &lt; count; ++i) {</span>
+ <span style="color: #F92672;">80485c3</span>:   c7 45 fc 00 00 00 00    movl   $0x0,-0x4(<span style="color: #FD971F;">%ebp</span>)        <span style="color: #75715E;">; </span><span style="color: #E6DB74;">i = *(ebp - 0x4) = 0</span>
+ <span style="color: #F92672;">80485ca</span>:   eb 12                   jmp    80485de &lt;func5+0x2e&gt;   <span style="color: #75715E;">; </span><span style="color: #E6DB74;">&#36339;&#33267;0x80485de</span>
+        <span style="color: #F92672;">sum</span> += va_arg(argp, int)<span style="color: #75715E;">;</span>
+ <span style="color: #F92672;">80485cc</span>:   8b 45 f4                mov    -0xc(<span style="color: #FD971F;">%ebp</span>),<span style="color: #FD971F;">%eax</span>        <span style="color: #75715E;">; </span><span style="color: #E6DB74;">eax = argp</span>
+ <span style="color: #F92672;">80485cf</span>:   8d 50 04                lea    0x4(<span style="color: #FD971F;">%eax</span>),<span style="color: #FD971F;">%edx</span>         <span style="color: #75715E;">; </span><span style="color: #E6DB74;">edx = eax + 4</span>
+ <span style="color: #F92672;">80485d2</span>:   89 55 f4                mov    <span style="color: #FD971F;">%edx</span>,-0xc(<span style="color: #FD971F;">%ebp</span>)        <span style="color: #75715E;">; </span><span style="color: #E6DB74;">argp = edx</span>
+ <span style="color: #F92672;">80485d5</span>:   8b 00                   mov    (<span style="color: #FD971F;">%eax</span>),<span style="color: #FD971F;">%eax</span>            <span style="color: #75715E;">; </span><span style="color: #E6DB74;">eax = *(eax)</span>
+ <span style="color: #F92672;">80485d7</span>:   01 45 f8                add    <span style="color: #FD971F;">%eax</span>,-0x8(<span style="color: #FD971F;">%ebp</span>)        <span style="color: #75715E;">; </span><span style="color: #E6DB74;">sum = *(ebp - 0x8) + eax</span>
+    <span style="color: #F92672;">for</span> (i = 0<span style="color: #75715E;">; </span><span style="color: #E6DB74;">i &lt; count; ++i) {</span>
+ <span style="color: #F92672;">80485da</span>:   83 45 fc 01             addl   $0x1,-0x4(<span style="color: #FD971F;">%ebp</span>)        <span style="color: #75715E;">; </span><span style="color: #E6DB74;">i = i + 1</span>
+ <span style="color: #F92672;">80485de</span>:   8b 45 fc                mov    -0x4(<span style="color: #FD971F;">%ebp</span>),<span style="color: #FD971F;">%eax</span>        <span style="color: #75715E;">; </span><span style="color: #E6DB74;">eax = *(ebp - 0x4)</span>
+ <span style="color: #F92672;">80485e1</span>:   3b 45 08                cmp    0x8(<span style="color: #FD971F;">%ebp</span>),<span style="color: #FD971F;">%eax</span>         <span style="color: #75715E;">; </span><span style="color: #E6DB74;">&#27604;&#36739;eax&#21644;count = *(ebp + 0x8)</span>
+ <span style="color: #F92672;">80485e4</span>:   7c e6                   jl     80485cc &lt;func5+0x1c&gt;   <span style="color: #75715E;">; </span><span style="color: #E6DB74;">&#36339;&#33267;80485cc</span>
+    }
+    <span style="color: #F92672;">va_end</span>(argp)<span style="color: #75715E;">;</span>
+    <span style="color: #F92672;">return</span> sum<span style="color: #75715E;">;</span>
+ <span style="color: #F92672;">80485e6</span>:   8b 45 f8                mov    -0x8(<span style="color: #FD971F;">%ebp</span>),<span style="color: #FD971F;">%eax</span>        <span style="color: #75715E;">; </span><span style="color: #E6DB74;">eax = sum = *(ebp - 0x8)</span>
+}
+ <span style="color: #F92672;">80485e9</span>:   c9                      leave                         <span style="color: #75715E;">; </span><span style="color: #E6DB74;">&#20986;&#26632;</span>
+ <span style="color: #F92672;">80485ea</span>:   c3                      ret
+
+<span style="color: #A6E22E; font-size: 130%;">080485eb</span> &lt;func6&gt;:
+
+<span style="color: #A6E22E; font-size: 130%;">void</span> <span style="color: #F92672;">func6</span>(void)
+{
+ <span style="color: #F92672;">80485eb</span>:   55                      push   <span style="color: #FD971F;">%ebp</span>
+ <span style="color: #F92672;">80485ec</span>:   89 e5                   mov    <span style="color: #FD971F;">%esp</span>,<span style="color: #FD971F;">%ebp</span>
+ <span style="color: #F92672;">80485ee</span>:   83 ec 20                sub    $0x20,<span style="color: #FD971F;">%esp</span>
+    <span style="color: #F92672;">int</span> i = 1<span style="color: #75715E;">;</span>
+ <span style="color: #F92672;">80485f1</span>:   c7 45 fc 01 00 00 00    movl   $0x1,-0x4(<span style="color: #FD971F;">%ebp</span>)
+    <span style="color: #F92672;">int</span> j = 1<span style="color: #75715E;">;</span>
+ <span style="color: #F92672;">80485f8</span>:   c7 45 f8 01 00 00 00    movl   $0x1,-0x8(<span style="color: #FD971F;">%ebp</span>)
+    <span style="color: #F92672;">int</span> k = 1<span style="color: #75715E;">;</span>
+ <span style="color: #F92672;">80485ff</span>:   c7 45 f4 01 00 00 00    movl   $0x1,-0xc(<span style="color: #FD971F;">%ebp</span>)
+    <span style="color: #F92672;">int</span> l = 1<span style="color: #75715E;">;</span>
+ <span style="color: #F92672;">8048606</span>:   c7 45 f0 01 00 00 00    movl   $0x1,-0x10(<span style="color: #FD971F;">%ebp</span>)
+    <span style="color: #F92672;">int</span> m = 1<span style="color: #75715E;">;</span>
+ <span style="color: #F92672;">804860d</span>:   c7 45 ec 01 00 00 00    movl   $0x1,-0x14(<span style="color: #FD971F;">%ebp</span>)
+    <span style="color: #F92672;">int</span> n = 1<span style="color: #75715E;">;</span>
+ <span style="color: #F92672;">8048614</span>:   c7 45 e8 01 00 00 00    movl   $0x1,-0x18(<span style="color: #FD971F;">%ebp</span>)
+
+    <span style="color: #F92672;">return</span><span style="color: #75715E;">;</span>
+ <span style="color: #F92672;">804861b</span>:   90                      nop
+}
+ <span style="color: #F92672;">804861c</span>:   c9                      leave
+ <span style="color: #F92672;">804861d</span>:   c3                      ret
+
+<span style="color: #A6E22E; font-size: 130%;">0804861e</span> &lt;main&gt;:
+
+<span style="color: #A6E22E; font-size: 130%;">int</span> <span style="color: #F92672;">main</span>(int argc, char *argv[])
+{
+ <span style="color: #F92672;">804861e</span>:   8d 4c 24 04             lea    0x4(<span style="color: #FD971F;">%esp</span>),<span style="color: #FD971F;">%ecx</span>     <span style="color: #75715E;">; </span><span style="color: #E6DB74;">ecx = &amp;(esp + 0x4), &#21363;&amp;argc</span>
+ <span style="color: #F92672;">8048622</span>:   83 e4 f0                and    $0xfffffff0,<span style="color: #FD971F;">%esp</span>   <span style="color: #75715E;">;</span>
+ <span style="color: #F92672;">8048625</span>:   ff 71 fc                pushl  -0x4(<span style="color: #FD971F;">%ecx</span>)         <span style="color: #75715E;">; </span><span style="color: #E6DB74;">push *(ecx - 4) = *(prev esp)</span>
+ <span style="color: #F92672;">8048628</span>:   55                      push   <span style="color: #FD971F;">%ebp</span>
+ <span style="color: #F92672;">8048629</span>:   89 e5                   mov    <span style="color: #FD971F;">%esp</span>,<span style="color: #FD971F;">%ebp</span>
+ <span style="color: #F92672;">804862b</span>:   53                      push   <span style="color: #FD971F;">%ebx</span>
+ <span style="color: #F92672;">804862c</span>:   51                      push   <span style="color: #FD971F;">%ecx</span>
+ <span style="color: #F92672;">804862d</span>:   83 ec 20                sub    $0x20,<span style="color: #FD971F;">%esp</span>         <span style="color: #75715E;">; </span><span style="color: #E6DB74;">&#24320;&#26632;</span>
+ <span style="color: #F92672;">8048630</span>:   89 cb                   mov    <span style="color: #FD971F;">%ecx</span>,<span style="color: #FD971F;">%ebx</span>          <span style="color: #75715E;">; </span><span style="color: #E6DB74;">ebx = ecx, *ecx&#26159;argc, &amp;argv&#26159;&amp;argc + sizeof(void *)</span>
+    <span style="color: #F92672;">struct</span> s1 s1 = {
+ <span style="color: #F92672;">8048632</span>:   c7 45 ec 01 00 00 00    movl   $0x1,-0x14(<span style="color: #FD971F;">%ebp</span>)
+ <span style="color: #F92672;">8048639</span>:   c7 45 f0 02 00 00 00    movl   $0x2,-0x10(<span style="color: #FD971F;">%ebp</span>)
+ <span style="color: #F92672;">8048640</span>:   c7 45 f4 03 00 00 00    movl   $0x3,-0xc(<span style="color: #FD971F;">%ebp</span>)
+        <span style="color: #F92672;">.a</span> = 1,
+        <span style="color: #F92672;">.b</span> = 2,
+        <span style="color: #F92672;">.c</span> = 3,
+    }<span style="color: #75715E;">;</span>
+
+    <span style="color: #F92672;">struct</span> s2 s2 = {
+ <span style="color: #F92672;">8048647</span>:   c7 45 e4 6b 87 04 08    movl   $0x804876b,-0x1c(<span style="color: #FD971F;">%ebp</span>)
+ <span style="color: #F92672;">804864e</span>:   c7 45 e8 0f 00 00 00    movl   $0xf,-0x18(<span style="color: #FD971F;">%ebp</span>)
+        <span style="color: #F92672;">.a</span> = <span style="color: #E6DB74;">"hello"</span>,
+        <span style="color: #F92672;">.b</span> = 15,
+    }<span style="color: #75715E;">;</span>
+
+    <span style="color: #F92672;">func1</span>(argc, &amp;s1, &amp;s2)<span style="color: #75715E;">;</span>
+ <span style="color: #F92672;">8048655</span>:   8d 45 e4                lea    -0x1c(<span style="color: #FD971F;">%ebp</span>),<span style="color: #FD971F;">%eax</span>
+ <span style="color: #F92672;">8048658</span>:   50                      push   <span style="color: #FD971F;">%eax</span>
+ <span style="color: #F92672;">8048659</span>:   8d 45 ec                lea    -0x14(<span style="color: #FD971F;">%ebp</span>),<span style="color: #FD971F;">%eax</span>
+ <span style="color: #F92672;">804865c</span>:   50                      push   <span style="color: #FD971F;">%eax</span>
+ <span style="color: #F92672;">804865d</span>:   ff 33                   pushl  (<span style="color: #FD971F;">%ebx</span>)             <span style="color: #75715E;">; </span><span style="color: #E6DB74;">push argc</span>
+ <span style="color: #F92672;">804865f</span>:   e8 79 fe ff ff          call   80484dd &lt;func1&gt;
+ <span style="color: #F92672;">8048664</span>:   83 c4 0c                add    $0xc,<span style="color: #FD971F;">%esp</span>
+    <span style="color: #F92672;">func2</span>(argc)<span style="color: #75715E;">;</span>
+ <span style="color: #F92672;">8048667</span>:   83 ec 0c                sub    $0xc,<span style="color: #FD971F;">%esp</span>
+ <span style="color: #F92672;">804866a</span>:   ff 33                   pushl  (<span style="color: #FD971F;">%ebx</span>)
+ <span style="color: #F92672;">804866c</span>:   e8 9e fe ff ff          call   804850f &lt;func2&gt;
+ <span style="color: #F92672;">8048671</span>:   83 c4 10                add    $0x10,<span style="color: #FD971F;">%esp</span>
+    <span style="color: #F92672;">func3</span>(argc)<span style="color: #75715E;">;</span>
+ <span style="color: #F92672;">8048674</span>:   83 ec 0c                sub    $0xc,<span style="color: #FD971F;">%esp</span>
+ <span style="color: #F92672;">8048677</span>:   ff 33                   pushl  (<span style="color: #FD971F;">%ebx</span>)
+ <span style="color: #F92672;">8048679</span>:   e8 bb fe ff ff          call   8048539 &lt;func3&gt;
+ <span style="color: #F92672;">804867e</span>:   83 c4 10                add    $0x10,<span style="color: #FD971F;">%esp</span>
+    <span style="color: #F92672;">func4</span>(argc)<span style="color: #75715E;">;</span>
+ <span style="color: #F92672;">8048681</span>:   83 ec 0c                sub    $0xc,<span style="color: #FD971F;">%esp</span>
+ <span style="color: #F92672;">8048684</span>:   ff 33                   pushl  (<span style="color: #FD971F;">%ebx</span>)
+ <span style="color: #F92672;">8048686</span>:   e8 f8 fe ff ff          call   8048583 &lt;func4&gt;
+ <span style="color: #F92672;">804868b</span>:   83 c4 10                add    $0x10,<span style="color: #FD971F;">%esp</span>
+    <span style="color: #F92672;">printf</span>(<span style="color: #E6DB74;">"%d\n"</span>, func5(5, 1, 2, 3, 4, 5))<span style="color: #75715E;">;</span>
+ <span style="color: #F92672;">804868e</span>:   83 ec 08                sub    $0x8,<span style="color: #FD971F;">%esp</span>
+ <span style="color: #F92672;">8048691</span>:   6a 05                   push   $0x5
+ <span style="color: #F92672;">8048693</span>:   6a 04                   push   $0x4
+ <span style="color: #F92672;">8048695</span>:   6a 03                   push   $0x3
+ <span style="color: #F92672;">8048697</span>:   6a 02                   push   $0x2
+ <span style="color: #F92672;">8048699</span>:   6a 01                   push   $0x1
+ <span style="color: #F92672;">804869b</span>:   6a 05                   push   $0x5
+ <span style="color: #F92672;">804869d</span>:   e8 0e ff ff ff          call   80485b0 &lt;func5&gt;
+ <span style="color: #F92672;">80486a2</span>:   83 c4 20                add    $0x20,<span style="color: #FD971F;">%esp</span>
+ <span style="color: #F92672;">80486a5</span>:   83 ec 08                sub    $0x8,<span style="color: #FD971F;">%esp</span>
+ <span style="color: #F92672;">80486a8</span>:   50                      push   <span style="color: #FD971F;">%eax</span>
+ <span style="color: #F92672;">80486a9</span>:   68 71 87 04 08          push   $0x8048771
+ <span style="color: #F92672;">80486ae</span>:   e8 bd fc ff ff          call   8048370 <a href="mailto:printf%40plt">&lt;printf@plt&gt;</a>
+ <span style="color: #F92672;">80486b3</span>:   83 c4 10                add    $0x10,<span style="color: #FD971F;">%esp</span>
+    <span style="color: #F92672;">func6</span>()<span style="color: #75715E;">;</span>
+ <span style="color: #F92672;">80486b6</span>:   e8 30 ff ff ff          call   80485eb &lt;func6&gt;
+    <span style="color: #F92672;">return</span> 0<span style="color: #75715E;">;</span>
+ <span style="color: #F92672;">80486bb</span>:   b8 00 00 00 00          mov    $0x0,<span style="color: #FD971F;">%eax</span>
+}
+ <span style="color: #F92672;">80486c0</span>:   8d 65 f8                lea    -0x8(<span style="color: #FD971F;">%ebp</span>),<span style="color: #FD971F;">%esp</span>
+ <span style="color: #F92672;">80486c3</span>:   59                      pop    <span style="color: #FD971F;">%ecx</span>
+ <span style="color: #F92672;">80486c4</span>:   5b                      pop    <span style="color: #FD971F;">%ebx</span>
+ <span style="color: #F92672;">80486c5</span>:   5d                      pop    <span style="color: #FD971F;">%ebp</span>
+ <span style="color: #F92672;">80486c6</span>:   8d 61 fc                lea    -0x4(<span style="color: #FD971F;">%ecx</span>),<span style="color: #FD971F;">%esp</span>
+ <span style="color: #F92672;">80486c9</span>:   c3                      ret
+ <span style="color: #F92672;">80486ca</span>:   66 90                   xchg   <span style="color: #FD971F;">%ax</span>,<span style="color: #FD971F;">%ax</span>
+ <span style="color: #F92672;">80486cc</span>:   66 90                   xchg   <span style="color: #FD971F;">%ax</span>,<span style="color: #FD971F;">%ax</span>
+ <span style="color: #F92672;">80486ce</span>:   66 90                   xchg   <span style="color: #FD971F;">%ax</span>,<span style="color: #FD971F;">%ax</span>
+</pre>
+</div>
+
+<p>
+<b>gcc -m32 -O2 foo.c</b><br />
+</p>
+<div class="org-src-container">
+<pre class="src src-asm">
+<span style="color: #75715E;">; </span><span style="color: #E6DB74;">&#32534;&#35793;&#22120;&#23545;main&#30340;&#20248;&#21270;</span>
+<span style="color: #75715E;">; </span><span style="color: #E6DB74;">- func1 &#26080;&#20219;&#20309;&#36755;&#20986;</span>
+<span style="color: #75715E;">; </span><span style="color: #E6DB74;">- func2 &#22914;&#26524;i&#38750;0&#65292;&#21017;&#36755;&#20986;"1&lt;= i\n"&#65292;&#22240;&#20026;&#20026;&#30830;&#23450;&#20540;&#65292;&#25152;&#20197;&#30452;&#25509;&#20869;&#32852;</span>
+<span style="color: #A6E22E; font-size: 130%;">Disassembly</span> <span style="color: #F92672;">of</span> section .text:
+
+<span style="color: #A6E22E; font-size: 130%;">080483a0</span> &lt;main&gt;:
+ <span style="color: #F92672;">80483a0</span>:   8d 4c 24 04             lea    0x4(<span style="color: #FD971F;">%esp</span>),<span style="color: #FD971F;">%ecx</span>      <span style="color: #75715E;">; </span><span style="color: #E6DB74;">ecx = &amp;argc</span>
+ <span style="color: #F92672;">80483a4</span>:   83 e4 f0                and    $0xfffffff0,<span style="color: #FD971F;">%esp</span>
+ <span style="color: #F92672;">80483a7</span>:   ff 71 fc                pushl  -0x4(<span style="color: #FD971F;">%ecx</span>)          <span style="color: #75715E;">; </span><span style="color: #E6DB74;">push *(ecx - 4) = *(prev esp)</span>
+ <span style="color: #F92672;">80483aa</span>:   55                      push   <span style="color: #FD971F;">%ebp</span>
+ <span style="color: #F92672;">80483ab</span>:   89 e5                   mov    <span style="color: #FD971F;">%esp</span>,<span style="color: #FD971F;">%ebp</span>
+ <span style="color: #F92672;">80483ad</span>:   53                      push   <span style="color: #FD971F;">%ebx</span>
+ <span style="color: #F92672;">80483ae</span>:   8b 19                   mov    (<span style="color: #FD971F;">%ecx</span>),<span style="color: #FD971F;">%ebx</span>         <span style="color: #75715E;">; </span><span style="color: #E6DB74;">ebx = *ecx = argc</span>
+ <span style="color: #F92672;">80483b0</span>:   51                      push   <span style="color: #FD971F;">%ecx</span>
+ <span style="color: #F92672;">80483b1</span>:   85 db                   test   <span style="color: #FD971F;">%ebx</span>,<span style="color: #FD971F;">%ebx</span>           <span style="color: #75715E;">; </span><span style="color: #E6DB74;">ebx&#38750;0&#21017;&#19981;&#25191;&#34892;puts("1 &lt;= i\n")</span>
+ <span style="color: #F92672;">80483b3</span>:   7e 10                   jle    80483c5 &lt;main+0x25&gt;
+ <span style="color: #F92672;">80483b5</span>:   83 ec 0c                sub    $0xc,<span style="color: #FD971F;">%esp</span>
+ <span style="color: #F92672;">80483b8</span>:   68 ec 86 04 08          push   $0x80486ec
+ <span style="color: #F92672;">80483bd</span>:   e8 be ff ff ff          call   8048380 <a href="mailto:puts%40plt">&lt;puts@plt&gt;</a>
+ <span style="color: #F92672;">80483c2</span>:   83 c4 10                add    $0x10,<span style="color: #FD971F;">%esp</span>
+ <span style="color: #F92672;">80483c5</span>:   83 ec 0c                sub    $0xc,<span style="color: #FD971F;">%esp</span>
+ <span style="color: #F92672;">80483c8</span>:   53                      push   <span style="color: #FD971F;">%ebx</span>                <span style="color: #75715E;">; </span><span style="color: #E6DB74;">push i = argc</span>
+ <span style="color: #F92672;">80483c9</span>:   e8 d2 01 00 00          call   80485a0 &lt;func3&gt;
+ <span style="color: #F92672;">80483ce</span>:   58                      pop    <span style="color: #FD971F;">%eax</span>
+ <span style="color: #F92672;">80483cf</span>:   5a                      pop    <span style="color: #FD971F;">%edx</span>
+ <span style="color: #F92672;">80483d0</span>:   6a 05                   push   $0x5
+ <span style="color: #F92672;">80483d2</span>:   6a 04                   push   $0x4
+ <span style="color: #F92672;">80483d4</span>:   6a 03                   push   $0x3
+ <span style="color: #F92672;">80483d6</span>:   6a 02                   push   $0x2
+ <span style="color: #F92672;">80483d8</span>:   6a 01                   push   $0x1
+ <span style="color: #F92672;">80483da</span>:   6a 05                   push   $0x5
+ <span style="color: #F92672;">80483dc</span>:   e8 3f 02 00 00          call   8048620 &lt;func5&gt;     <span style="color: #75715E;">; </span><span style="color: #E6DB74;">call fun5</span>
+ <span style="color: #F92672;">80483e1</span>:   83 c4 18                add    $0x18,<span style="color: #FD971F;">%esp</span>
+ <span style="color: #F92672;">80483e4</span>:   50                      push   <span style="color: #FD971F;">%eax</span>
+ <span style="color: #F92672;">80483e5</span>:   68 fb 86 04 08          push   $0x80486fb
+ <span style="color: #F92672;">80483ea</span>:   e8 81 ff ff ff          call   8048370 <a href="mailto:printf%40plt">&lt;printf@plt&gt;</a> <span style="color: #75715E;">; </span><span style="color: #E6DB74;">print</span>
+ <span style="color: #F92672;">80483ef</span>:   83 c4 10                add    $0x10,<span style="color: #FD971F;">%esp</span>
+ <span style="color: #F92672;">80483f2</span>:   8d 65 f8                lea    -0x8(<span style="color: #FD971F;">%ebp</span>),<span style="color: #FD971F;">%esp</span>
+ <span style="color: #F92672;">80483f5</span>:   31 c0                   xor    <span style="color: #FD971F;">%eax</span>,<span style="color: #FD971F;">%eax</span>
+ <span style="color: #F92672;">80483f7</span>:   59                      pop    <span style="color: #FD971F;">%ecx</span>
+ <span style="color: #F92672;">80483f8</span>:   5b                      pop    <span style="color: #FD971F;">%ebx</span>
+ <span style="color: #F92672;">80483f9</span>:   5d                      pop    <span style="color: #FD971F;">%ebp</span>
+ <span style="color: #F92672;">80483fa</span>:   8d 61 fc                lea    -0x4(<span style="color: #FD971F;">%ecx</span>),<span style="color: #FD971F;">%esp</span>
+ <span style="color: #F92672;">80483fd</span>:   c3                      ret
+
+<span style="color: #A6E22E; font-size: 130%;">08048540</span> &lt;func1&gt;:
+ <span style="color: #F92672;">8048540</span>:   8b 44 24 0c             mov    0xc(<span style="color: #FD971F;">%esp</span>),<span style="color: #FD971F;">%eax</span>        <span style="color: #75715E;">; </span><span style="color: #E6DB74;">eax = s2</span>
+ <span style="color: #F92672;">8048544</span>:   8b 50 04                mov    0x4(<span style="color: #FD971F;">%eax</span>),<span style="color: #FD971F;">%edx</span>        <span style="color: #75715E;">; </span><span style="color: #E6DB74;">edx = s2-&gt;b</span>
+ <span style="color: #F92672;">8048547</span>:   8b 44 24 08             mov    0x8(<span style="color: #FD971F;">%esp</span>),<span style="color: #FD971F;">%eax</span>        <span style="color: #75715E;">; </span><span style="color: #E6DB74;">eax = s1</span>
+ <span style="color: #F92672;">804854b</span>:   89 50 08                mov    <span style="color: #FD971F;">%edx</span>,0x8(<span style="color: #FD971F;">%eax</span>)        <span style="color: #75715E;">; </span><span style="color: #E6DB74;">s1-&gt;c = edx = s2-&gt;b</span>
+ <span style="color: #F92672;">804854e</span>:   8b 44 24 04             mov    0x4(<span style="color: #FD971F;">%esp</span>),<span style="color: #FD971F;">%eax</span>        <span style="color: #75715E;">; </span><span style="color: #E6DB74;">eax = i</span>
+ <span style="color: #F92672;">8048552</span>:   83 c0 56                add    $0x56,<span style="color: #FD971F;">%eax</span>            <span style="color: #75715E;">; </span><span style="color: #E6DB74;">eax = i + 0x56, *&#39318;&#20808;static_var2&#24182;&#27809;&#26377;&#20154;&#29992;&#65292;&#25152;&#20197;&#32534;&#35793;&#35748;&#20026;&#26159;0&#65292;&#20854;&#23454;a&#27704;&#36828;&#20026;1&#25152;&#20197;static_var + 1= 85 + 1 = 0x56*</span>
+ <span style="color: #F92672;">8048555</span>:   c3                      ret
+ <span style="color: #F92672;">8048556</span>:   8d 76 00                lea    0x0(<span style="color: #FD971F;">%esi</span>),<span style="color: #FD971F;">%esi</span>
+ <span style="color: #F92672;">8048559</span>:   8d bc 27 00 00 00 00    lea    0x0(<span style="color: #FD971F;">%edi</span>,<span style="color: #FD971F;">%eiz</span>,1),<span style="color: #FD971F;">%edi</span>
+
+<span style="color: #A6E22E; font-size: 130%;">08048560</span> &lt;func2&gt;:
+ <span style="color: #F92672;">8048560</span>:   83 ec 0c                sub    $0xc,<span style="color: #FD971F;">%esp</span>             <span style="color: #75715E;">; </span><span style="color: #E6DB74;">esp = esp - 0xc</span>
+ <span style="color: #F92672;">8048563</span>:   8b 44 24 10             mov    0x10(<span style="color: #FD971F;">%esp</span>),<span style="color: #FD971F;">%eax</span>       <span style="color: #75715E;">; </span><span style="color: #E6DB74;">eax = *(esp + 0x10) = i</span>
+ <span style="color: #F92672;">8048567</span>:   85 c0                   test   <span style="color: #FD971F;">%eax</span>,<span style="color: #FD971F;">%eax</span>             <span style="color: #75715E;">; </span><span style="color: #E6DB74;">&#21028;&#26029;&#26159;&#21542;&#20026;0</span>
+ <span style="color: #F92672;">8048569</span>:   7e 1d                   jle    8048588 &lt;func2+0x28&gt;  <span style="color: #75715E;">; </span><span style="color: #E6DB74;">&#23567;&#20110;&#36339;&#36716;</span>
+ <span style="color: #F92672;">804856b</span>:   83 ec 0c                sub    $0xc,<span style="color: #FD971F;">%esp</span>
+ <span style="color: #F92672;">804856e</span>:   68 ec 86 04 08          push   $0x80486ec
+ <span style="color: #F92672;">8048573</span>:   e8 08 fe ff ff          call   8048380 <a href="mailto:puts%40plt">&lt;puts@plt&gt;</a>
+ <span style="color: #F92672;">8048578</span>:   83 c4 10                add    $0x10,<span style="color: #FD971F;">%esp</span>            <span style="color: #75715E;">; </span><span style="color: #E6DB74;">puts("1 &lt;= i\n")</span>
+ <span style="color: #F92672;">804857b</span>:   b8 01 00 00 00          mov    $0x1,<span style="color: #FD971F;">%eax</span>             <span style="color: #75715E;">; </span><span style="color: #E6DB74;">&#36820;&#22238;&#20540;1</span>
+ <span style="color: #F92672;">8048580</span>:   83 c4 0c                add    $0xc,<span style="color: #FD971F;">%esp</span>
+ <span style="color: #F92672;">8048583</span>:   c3                      ret
+ <span style="color: #F92672;">8048584</span>:   8d 74 26 00             lea    0x0(<span style="color: #FD971F;">%esi</span>,<span style="color: #FD971F;">%eiz</span>,1),<span style="color: #FD971F;">%esi</span>
+ <span style="color: #F92672;">8048588</span>:   b8 03 00 00 00          mov    $0x3,<span style="color: #FD971F;">%eax</span>             <span style="color: #75715E;">; </span><span style="color: #E6DB74;">&#36820;&#22238;&#20540;3</span>
+ <span style="color: #F92672;">804858d</span>:   83 c4 0c                add    $0xc,<span style="color: #FD971F;">%esp</span>
+ <span style="color: #F92672;">8048590</span>:   c3                      ret
+ <span style="color: #F92672;">8048591</span>:   eb 0d                   jmp    80485a0 &lt;func3&gt;
+ <span style="color: #F92672;">8048593</span>:   90                      nop
+ <span style="color: #F92672;">8048594</span>:   90                      nop
+ <span style="color: #F92672;">8048595</span>:   90                      nop
+ <span style="color: #F92672;">8048596</span>:   90                      nop
+ <span style="color: #F92672;">8048597</span>:   90                      nop
+ <span style="color: #F92672;">8048598</span>:   90                      nop
+ <span style="color: #F92672;">8048599</span>:   90                      nop
+ <span style="color: #F92672;">804859a</span>:   90                      nop
+ <span style="color: #F92672;">804859b</span>:   90                      nop
+ <span style="color: #F92672;">804859c</span>:   90                      nop
+ <span style="color: #F92672;">804859d</span>:   90                      nop
+ <span style="color: #F92672;">804859e</span>:   90                      nop
+ <span style="color: #F92672;">804859f</span>:   90                      nop
+
+<span style="color: #A6E22E; font-size: 130%;">080485a0</span> &lt;func3&gt;:
+ <span style="color: #F92672;">80485a0</span>:   83 ec 0c                sub    $0xc,<span style="color: #FD971F;">%esp</span>
+ <span style="color: #F92672;">80485a3</span>:   b8 08 00 00 00          mov    $0x8,<span style="color: #FD971F;">%eax</span>             <span style="color: #75715E;">; </span><span style="color: #E6DB74;">&#36820;&#22238;&#20540;8&#20808;&#36171;&#20540;&#22909;</span>
+ <span style="color: #F92672;">80485a8</span>:   8b 54 24 10             mov    0x10(<span style="color: #FD971F;">%esp</span>),<span style="color: #FD971F;">%edx</span>       <span style="color: #75715E;">; </span><span style="color: #E6DB74;">edx = &#20837;&#21442;i</span>
+ <span style="color: #F92672;">80485ac</span>:   83 fa 02                cmp    $0x2,<span style="color: #FD971F;">%edx</span>             <span style="color: #75715E;">; </span><span style="color: #E6DB74;">&#21644;2&#27604;&#36739;</span>
+ <span style="color: #F92672;">80485af</span>:   74 14                   je     80485c5 &lt;func3+0x25&gt;  <span style="color: #75715E;">; </span><span style="color: #E6DB74;">&#30456;&#31561;&#26102;&#20986;&#26632;</span>
+ <span style="color: #F92672;">80485b1</span>:   83 fa 0f                cmp    $0xf,<span style="color: #FD971F;">%edx</span>             <span style="color: #75715E;">; </span><span style="color: #E6DB74;">&#21644;0xf&#27604;&#36739;</span>
+ <span style="color: #F92672;">80485b4</span>:   74 1a                   je     80485d0 &lt;func3+0x30&gt;  <span style="color: #75715E;">; </span><span style="color: #E6DB74;">&#30456;&#31561;&#26102;&#36339;&#36716;</span>
+ <span style="color: #F92672;">80485b6</span>:   83 fa 01                cmp    $0x1,<span style="color: #FD971F;">%edx</span>             <span style="color: #75715E;">; </span><span style="color: #E6DB74;">&#21644;1&#27604;&#36739;</span>
+ <span style="color: #F92672;">80485b9</span>:   b8 ff ff ff ff          mov    $0xffffffff,<span style="color: #FD971F;">%eax</span>
+ <span style="color: #F92672;">80485be</span>:   0f 44 05 24 a0 04 08    cmove  0x804a024,<span style="color: #FD971F;">%eax</span>        <span style="color: #75715E;">; </span><span style="color: #E6DB74;">rc = global_uninit_var</span>
+ <span style="color: #F92672;">80485c5</span>:   83 c4 0c                add    $0xc,<span style="color: #FD971F;">%esp</span>
+ <span style="color: #F92672;">80485c8</span>:   c3                      ret
+ <span style="color: #F92672;">80485c9</span>:   8d b4 26 00 00 00 00    lea    0x0(<span style="color: #FD971F;">%esi</span>,<span style="color: #FD971F;">%eiz</span>,1),<span style="color: #FD971F;">%esi</span>
+ <span style="color: #F92672;">80485d0</span>:   83 ec 0c                sub    $0xc,<span style="color: #FD971F;">%esp</span>             <span style="color: #75715E;">; </span><span style="color: #E6DB74;">i == 15,&#25191;&#34892;puts&#65292;&#36820;&#22238;-1</span>
+ <span style="color: #F92672;">80485d3</span>:   68 f3 86 04 08          push   $0x80486f3
+ <span style="color: #F92672;">80485d8</span>:   e8 93 fd ff ff          call   8048370 <a href="mailto:printf%40plt">&lt;printf@plt&gt;</a>
+ <span style="color: #F92672;">80485dd</span>:   83 c4 10                add    $0x10,<span style="color: #FD971F;">%esp</span>
+ <span style="color: #F92672;">80485e0</span>:   b8 ff ff ff ff          mov    $0xffffffff,<span style="color: #FD971F;">%eax</span>
+ <span style="color: #F92672;">80485e5</span>:   83 c4 0c                add    $0xc,<span style="color: #FD971F;">%esp</span>
+ <span style="color: #F92672;">80485e8</span>:   c3                      ret
+ <span style="color: #F92672;">80485e9</span>:   8d b4 26 00 00 00 00    lea    0x0(<span style="color: #FD971F;">%esi</span>,<span style="color: #FD971F;">%eiz</span>,1),<span style="color: #FD971F;">%esi</span>
+
+<span style="color: #A6E22E; font-size: 130%;">080485f0</span> &lt;func4&gt;:
+<span style="color: #75715E;">; </span><span style="color: #E6DB74;">&#32534;&#35793;&#22120;&#20248;&#21270;&#21518;&#65292;&#24182;&#27809;&#26377;&#23616;&#37096;&#21464;&#37327;i&#65292;eax&#21363;&#20026;sum&#65292;edx&#29992;&#20316;i&#30340;&#20316;&#29992;&#65292;&#27599;&#20010;loop edx&#21644;bound&#27604;&#65292;&#21516;&#26102;&#23558;edx&#21152;&#21040;&#36820;&#22238;&#20540;eax&#20013;</span>
+ <span style="color: #F92672;">80485f0</span>:   8b 4c 24 04             mov    0x4(<span style="color: #FD971F;">%esp</span>),<span style="color: #FD971F;">%ecx</span>        <span style="color: #75715E;">; </span><span style="color: #E6DB74;">ecx = bound</span>
+ <span style="color: #F92672;">80485f4</span>:   31 c0                   xor    <span style="color: #FD971F;">%eax</span>,<span style="color: #FD971F;">%eax</span>             <span style="color: #75715E;">; </span><span style="color: #E6DB74;">eax = 0</span>
+ <span style="color: #F92672;">80485f6</span>:   85 c9                   test   <span style="color: #FD971F;">%ecx</span>,<span style="color: #FD971F;">%ecx</span>             <span style="color: #75715E;">; </span><span style="color: #E6DB74;">ecx = 0 ?</span>
+ <span style="color: #F92672;">80485f8</span>:   7e 16                   jle    8048610 &lt;func4+0x20&gt;  <span style="color: #75715E;">; </span><span style="color: #E6DB74;">bound = 0&#21363;&#36864;&#20986;</span>
+ <span style="color: #F92672;">80485fa</span>:   31 d2                   xor    <span style="color: #FD971F;">%edx</span>,<span style="color: #FD971F;">%edx</span>             <span style="color: #75715E;">; </span><span style="color: #E6DB74;">edx = 0</span>
+ <span style="color: #F92672;">80485fc</span>:   8d 74 26 00             lea    0x0(<span style="color: #FD971F;">%esi</span>,<span style="color: #FD971F;">%eiz</span>,1),<span style="color: #FD971F;">%esi</span> <span style="color: #75715E;">; </span><span style="color: #E6DB74;">&#30456;&#24403;&#20110;nop</span>
+ <span style="color: #F92672;">8048600</span>:   01 d0                   add    <span style="color: #FD971F;">%edx</span>,<span style="color: #FD971F;">%eax</span>             <span style="color: #75715E;">;</span>
+ <span style="color: #F92672;">8048602</span>:   83 c2 01                add    $0x1,<span style="color: #FD971F;">%edx</span>             <span style="color: #75715E;">; </span><span style="color: #E6DB74;">edx = edx + 1</span>
+ <span style="color: #F92672;">8048605</span>:   39 d1                   cmp    <span style="color: #FD971F;">%edx</span>,<span style="color: #FD971F;">%ecx</span>             <span style="color: #75715E;">; </span><span style="color: #E6DB74;">edx&#21644;ecx&#27604;&#36739;</span>
+ <span style="color: #F92672;">8048607</span>:   75 f7                   jne    8048600 &lt;func4+0x10&gt;  <span style="color: #75715E;">; </span><span style="color: #E6DB74;">&#32487;&#32493;&#22238;&#36339;+1</span>
+ <span style="color: #F92672;">8048609</span>:   c3                      ret
+ <span style="color: #F92672;">804860a</span>:   8d b6 00 00 00 00       lea    0x0(<span style="color: #FD971F;">%esi</span>),<span style="color: #FD971F;">%esi</span>
+ <span style="color: #F92672;">8048610</span>:   c3                      ret
+ <span style="color: #F92672;">8048611</span>:   eb 0d                   jmp    8048620 &lt;func5&gt;
+ <span style="color: #F92672;">8048613</span>:   90                      nop
+ <span style="color: #F92672;">8048614</span>:   90                      nop
+ <span style="color: #F92672;">8048615</span>:   90                      nop
+ <span style="color: #F92672;">8048616</span>:   90                      nop
+ <span style="color: #F92672;">8048617</span>:   90                      nop
+ <span style="color: #F92672;">8048618</span>:   90                      nop
+ <span style="color: #F92672;">8048619</span>:   90                      nop
+ <span style="color: #F92672;">804861a</span>:   90                      nop
+ <span style="color: #F92672;">804861b</span>:   90                      nop
+ <span style="color: #F92672;">804861c</span>:   90                      nop
+ <span style="color: #F92672;">804861d</span>:   90                      nop
+ <span style="color: #F92672;">804861e</span>:   90                      nop
+ <span style="color: #F92672;">804861f</span>:   90                      nop
+
+<span style="color: #A6E22E; font-size: 130%;">08048620</span> &lt;func5&gt;:
+ <span style="color: #F92672;">8048620</span>:   8b 4c 24 04             mov    0x4(<span style="color: #FD971F;">%esp</span>),<span style="color: #FD971F;">%ecx</span>        <span style="color: #75715E;">; </span><span style="color: #E6DB74;">ecx = count</span>
+ <span style="color: #F92672;">8048624</span>:   31 c0                   xor    <span style="color: #FD971F;">%eax</span>,<span style="color: #FD971F;">%eax</span>             <span style="color: #75715E;">; </span><span style="color: #E6DB74;">eax = 0</span>
+ <span style="color: #F92672;">8048626</span>:   85 c9                   test   <span style="color: #FD971F;">%ecx</span>,<span style="color: #FD971F;">%ecx</span>
+ <span style="color: #F92672;">8048628</span>:   7e 16                   jle    8048640 &lt;func5+0x20&gt;  <span style="color: #75715E;">; </span><span style="color: #E6DB74;">&#20026;0&#21017;&#30452;&#25509;&#36864;&#20986;</span>
+ <span style="color: #F92672;">804862a</span>:   31 d2                   xor    <span style="color: #FD971F;">%edx</span>,<span style="color: #FD971F;">%edx</span>             <span style="color: #75715E;">; </span><span style="color: #E6DB74;">edx = 0</span>
+ <span style="color: #F92672;">804862c</span>:   8d 74 26 00             lea    0x0(<span style="color: #FD971F;">%esi</span>,<span style="color: #FD971F;">%eiz</span>,1),<span style="color: #FD971F;">%esi</span> <span style="color: #75715E;">; </span><span style="color: #E6DB74;">nop</span>
+ <span style="color: #F92672;">8048630</span>:   03 44 94 08             add    0x8(<span style="color: #FD971F;">%esp</span>,<span style="color: #FD971F;">%edx</span>,4),<span style="color: #FD971F;">%eax</span> <span style="color: #75715E;">; </span><span style="color: #E6DB74;">eax = 0x8 + esp + 4 * edx&#65292;&#21363;count&#22320;&#22336;&#19979;&#38754;&#30340;&#19981;&#23450;&#21442;&#65292;&#21152;&#21040;eax&#20013;</span>
+ <span style="color: #F92672;">8048634</span>:   83 c2 01                add    $0x1,<span style="color: #FD971F;">%edx</span>             <span style="color: #75715E;">; </span><span style="color: #E6DB74;">edx &#36882;&#22686;</span>
+ <span style="color: #F92672;">8048637</span>:   39 d1                   cmp    <span style="color: #FD971F;">%edx</span>,<span style="color: #FD971F;">%ecx</span>             <span style="color: #75715E;">; </span><span style="color: #E6DB74;">edx &lt; count&#21017;&#32487;&#32493;,&#32534;&#35793;&#22120;&#23558; i &lt; count&#20248;&#21270;&#20026;i != count</span>
+ <span style="color: #F92672;">8048639</span>:   75 f5                   jne    8048630 &lt;func5+0x10&gt;
+ <span style="color: #F92672;">804863b</span>:   c3                      ret
+ <span style="color: #F92672;">804863c</span>:   8d 74 26 00             lea    0x0(<span style="color: #FD971F;">%esi</span>,<span style="color: #FD971F;">%eiz</span>,1),<span style="color: #FD971F;">%esi</span>
+ <span style="color: #F92672;">8048640</span>:   c3                      ret
+ <span style="color: #F92672;">8048641</span>:   eb 0d                   jmp    8048650 &lt;func6&gt;
+ <span style="color: #F92672;">8048643</span>:   90                      nop
+ <span style="color: #F92672;">8048644</span>:   90                      nop
+ <span style="color: #F92672;">8048645</span>:   90                      nop
+ <span style="color: #F92672;">8048646</span>:   90                      nop
+ <span style="color: #F92672;">8048647</span>:   90                      nop
+ <span style="color: #F92672;">8048648</span>:   90                      nop
+ <span style="color: #F92672;">8048649</span>:   90                      nop
+ <span style="color: #F92672;">804864a</span>:   90                      nop
+ <span style="color: #F92672;">804864b</span>:   90                      nop
+ <span style="color: #F92672;">804864c</span>:   90                      nop
+ <span style="color: #F92672;">804864d</span>:   90                      nop
+ <span style="color: #F92672;">804864e</span>:   90                      nop
+ <span style="color: #F92672;">804864f</span>:   90                      nop
+
+<span style="color: #A6E22E; font-size: 130%;">08048650</span> &lt;func6&gt;:
+ <span style="color: #F92672;">8048650</span>:   c3                      ret             <span style="color: #75715E;">; </span><span style="color: #E6DB74;">&#22240;&#20026;func6&#26080;&#20219;&#20309;&#36755;&#20986;&#21450;&#21103;&#20316;&#29992;&#65292;&#25152;&#20197;&#30452;&#25509;&#36820;&#22238;</span>
+ <span style="color: #F92672;">8048651</span>:   66 90                   xchg   <span style="color: #FD971F;">%ax</span>,<span style="color: #FD971F;">%ax</span>
+ <span style="color: #F92672;">8048653</span>:   66 90                   xchg   <span style="color: #FD971F;">%ax</span>,<span style="color: #FD971F;">%ax</span>
+ <span style="color: #F92672;">8048655</span>:   66 90                   xchg   <span style="color: #FD971F;">%ax</span>,<span style="color: #FD971F;">%ax</span>
+ <span style="color: #F92672;">8048657</span>:   66 90                   xchg   <span style="color: #FD971F;">%ax</span>,<span style="color: #FD971F;">%ax</span>
+ <span style="color: #F92672;">8048659</span>:   66 90                   xchg   <span style="color: #FD971F;">%ax</span>,<span style="color: #FD971F;">%ax</span>
+ <span style="color: #F92672;">804865b</span>:   66 90                   xchg   <span style="color: #FD971F;">%ax</span>,<span style="color: #FD971F;">%ax</span>
+ <span style="color: #F92672;">804865d</span>:   66 90                   xchg   <span style="color: #FD971F;">%ax</span>,<span style="color: #FD971F;">%ax</span>
+ <span style="color: #F92672;">804865f</span>:   90                      nop
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: xuali2</p>
+<p class="date">Created: 2020-11-01 Sun 00:18</p>
+<p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
+</div>
+</body>
+</html>
