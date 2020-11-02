@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2020-11-01 Sun 00:18 -->
+<!-- 2020-11-02 Mon 11:10 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>汇编语言 - ABI</title>
@@ -253,24 +253,24 @@ for the JavaScript code in this tag.
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#orgf25e885">1. PowerPC32</a>
+<li><a href="#org54d362d">1. PowerPC32</a>
 <ul>
-<li><a href="#org231a8f3">1.1. 指令</a></li>
-<li><a href="#org14add15">1.2. ABI</a></li>
-<li><a href="#org4ad46fb">1.3. 例程</a>
+<li><a href="#orgf849512">1.1. 指令</a></li>
+<li><a href="#org17d8a80">1.2. ABI</a></li>
+<li><a href="#org850652d">1.3. 例程</a>
 <ul>
-<li><a href="#org314c0e9">1.3.1. gcc -g foo.c</a></li>
-<li><a href="#org4dc24ad">1.3.2. gcc -O2 foo.c</a></li>
+<li><a href="#org5bb0448">1.3.1. gcc -g foo.c</a></li>
+<li><a href="#orge5f355c">1.3.2. gcc -O2 foo.c</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li><a href="#orgea16c82">2. Mips64</a></li>
-<li><a href="#org522e469">3. X86</a>
+<li><a href="#org25fb78b">2. Mips64</a></li>
+<li><a href="#orgdf00953">3. X86</a>
 <ul>
-<li><a href="#org4027e12">3.1. 指令</a></li>
-<li><a href="#orgd2bc150">3.2. ABI</a></li>
-<li><a href="#org72b40dd">3.3. 例程</a></li>
+<li><a href="#orgc5860ab">3.1. 指令</a></li>
+<li><a href="#org18c63d1">3.2. ABI</a></li>
+<li><a href="#orgc079268">3.3. 例程</a></li>
 </ul>
 </li>
 </ul>
@@ -403,8 +403,8 @@ for the JavaScript code in this tag.
 <span style="color: #AE81FF;">}</span>
 </pre>
 </div>
-<div id="outline-container-orgf25e885" class="outline-2">
-<h2 id="orgf25e885"><span class="section-number-2">1</span> PowerPC32</h2>
+<div id="outline-container-org54d362d" class="outline-2">
+<h2 id="org54d362d"><span class="section-number-2">1</span> PowerPC32</h2>
 <div class="outline-text-2" id="text-1">
 <p>
 以PowerPC85XX为例，其属于PowerQuICC(Quad Intergrate Communication)通信处理器<br />
@@ -483,8 +483,8 @@ PowerQuICC由三个模块组成<br />
 </table>
 </div>
 
-<div id="outline-container-org231a8f3" class="outline-3">
-<h3 id="org231a8f3"><span class="section-number-3">1.1</span> 指令</h3>
+<div id="outline-container-orgf849512" class="outline-3">
+<h3 id="orgf849512"><span class="section-number-3">1.1</span> 指令</h3>
 <div class="outline-text-3" id="text-1-1">
 <p>
 指令缩写<br />
@@ -704,8 +704,19 @@ PowerQuICC由三个模块组成<br />
 <td class="org-left">xor r3, r4, r5</td>
 <td class="org-left">r3 = r4 xor r5</td>
 </tr>
+
+<tr>
+<td class="org-left">crclr</td>
+<td class="org-left">control register clear</td>
+</tr>
 </tbody>
 </table>
+
+<p>
+crclr bx 等同于 crxor bx, bx, bx 作用是将条件寄存器相应的位清零<br />
+crclr so 等同于 crxor 3, 3, 3 将cr0的so位(第3位)清零<br />
+ crclr 4*cr3+eq 等同于 crxor 14, 14, 14 将cr3的eq位清零<br />
+</p>
 
 <p>
 数据比较指令<br />
@@ -841,73 +852,104 @@ PowerQuICC由三个模块组成<br />
 </div>
 </div>
 
-<div id="outline-container-org14add15" class="outline-3">
-<h3 id="org14add15"><span class="section-number-3">1.2</span> ABI</h3>
+<div id="outline-container-org17d8a80" class="outline-3">
+<h3 id="org17d8a80"><span class="section-number-3">1.2</span> ABI</h3>
+<div class="outline-text-3" id="text-1-2">
+<ul class="org-ul">
+<li>r1是栈指针<br /></li>
+<li>开栈时r1 = r1 - 栈空间，同时将之前的r1存在r1-栈空间处,此后将r31=r1，用r31索引栈变量<br /></li>
+<li>寄存器传实参，从r3开始，不够会放到栈中<br /></li>
+<li>返回值存在r3中<br /></li>
+<li>r1和r1'之间即为当前函数对应的栈空间<br /></li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-artist">+------------+
+|   old r1'  | &lt;----- r1
++------------+
+|            |
++------------+
+|  local var |
++------------+
+|     ...    |
++------------+
+|  prev r31  |
++------------+
+|  old r1''  | &lt;----- old r1'
++------------+
+| return lr  |
++------------+
+|     ...    |
++------------+
+</pre>
 </div>
-<div id="outline-container-org4ad46fb" class="outline-3">
-<h3 id="org4ad46fb"><span class="section-number-3">1.3</span> 例程</h3>
+</div>
+</div>
+
+<div id="outline-container-org850652d" class="outline-3">
+<h3 id="org850652d"><span class="section-number-3">1.3</span> 例程</h3>
 <div class="outline-text-3" id="text-1-3">
 </div>
-<div id="outline-container-org314c0e9" class="outline-4">
-<h4 id="org314c0e9"><span class="section-number-4">1.3.1</span> gcc -g foo.c</h4>
+<div id="outline-container-org5bb0448" class="outline-4">
+<h4 id="org5bb0448"><span class="section-number-4">1.3.1</span> gcc -g foo.c</h4>
 <div class="outline-text-4" id="text-1-3-1">
 <div class="org-src-container">
 <pre class="src src-asm"><span style="color: #75715E;">//</span><span style="color: #E6DB74;">&#36171;&#20540;&#19982;&#31639;&#26415;&#36816;&#31639;</span>
 <span style="color: #A6E22E; font-size: 130%;">int</span> <span style="color: #F92672;">func1</span>(int i, struct s1 *s1, struct s2 *s2)
 {
-<span style="color: #A6E22E; font-size: 130%;">10000508</span>:   <span style="color: #F92672;">94</span> 21 ff d0     stwu    r1,-48(r1)
-<span style="color: #A6E22E; font-size: 130%;">1000050c</span>:   <span style="color: #F92672;">93</span> e1 00 2c     stw     r31,44(r1)
-<span style="color: #A6E22E; font-size: 130%;">10000510</span>:   <span style="color: #F92672;">7c</span> 3f 0b 78     mr      r31,r1
-<span style="color: #A6E22E; font-size: 130%;">10000514</span>:   <span style="color: #F92672;">90</span> 7f 00 18     stw     r3,24(r31)
+<span style="color: #A6E22E; font-size: 130%;">10000508</span>:   <span style="color: #F92672;">94</span> 21 ff d0     stwu    r1,-48(r1) <span style="color: #75715E;">; </span><span style="color: #E6DB74;">&#23558;r1&#23384;&#22312;r1-48&#65292;&#24182;&#26356;&#26032;r1 = r1-48</span>
+<span style="color: #A6E22E; font-size: 130%;">1000050c</span>:   <span style="color: #F92672;">93</span> e1 00 2c     stw     r31,44(r1) <span style="color: #75715E;">; </span><span style="color: #E6DB74;">&#23384;r31&#21040;r1 + 44</span>
+<span style="color: #A6E22E; font-size: 130%;">10000510</span>:   <span style="color: #F92672;">7c</span> 3f 0b 78     mr      r31,r1     <span style="color: #75715E;">; </span><span style="color: #E6DB74;">r31 = r1</span>
+<span style="color: #A6E22E; font-size: 130%;">10000514</span>:   <span style="color: #F92672;">90</span> 7f 00 18     stw     r3,24(r31) <span style="color: #75715E;">; </span><span style="color: #E6DB74;">&#20837;&#21442;&#23384;&#21040;&#26632;&#20013; *(r31+24) = r3, *(r31+28) = r4, *(r3+32) = r5</span>
 <span style="color: #A6E22E; font-size: 130%;">10000518</span>:   <span style="color: #F92672;">90</span> 9f 00 1c     stw     r4,28(r31)
 <span style="color: #A6E22E; font-size: 130%;">1000051c</span>:   <span style="color: #F92672;">90</span> bf 00 20     stw     r5,32(r31)
     <span style="color: #F92672;">static</span> int static_var = 85<span style="color: #75715E;">;</span>
     <span style="color: #F92672;">static</span> int static_var2<span style="color: #75715E;">;</span>
 
     <span style="color: #F92672;">int</span> a = 1<span style="color: #75715E;">;</span>
-<span style="color: #A6E22E; font-size: 130%;">10000520</span>:   <span style="color: #F92672;">39</span> 20 00 01     li      r9,1
-<span style="color: #A6E22E; font-size: 130%;">10000524</span>:   <span style="color: #F92672;">91</span> 3f 00 08     stw     r9,8(r31)
+<span style="color: #A6E22E; font-size: 130%;">10000520</span>:   <span style="color: #F92672;">39</span> 20 00 01     li      r9,1       <span style="color: #75715E;">; </span><span style="color: #E6DB74;">r9 = 1</span>
+<span style="color: #A6E22E; font-size: 130%;">10000524</span>:   <span style="color: #F92672;">91</span> 3f 00 08     stw     r9,8(r31)  <span style="color: #75715E;">; </span><span style="color: #E6DB74;">a = *(r31 + 8) = r9 = 1</span>
 
     <span style="color: #F92672;">s1-&gt;c</span> = s2-&gt;b<span style="color: #75715E;">;</span>
-<span style="color: #A6E22E; font-size: 130%;">10000528</span>:   <span style="color: #F92672;">81</span> 3f 00 20     lwz     r9,32(r31)
-<span style="color: #A6E22E; font-size: 130%;">1000052c</span>:   <span style="color: #F92672;">81</span> 49 00 04     lwz     r10,4(r9)
-<span style="color: #A6E22E; font-size: 130%;">10000530</span>:   <span style="color: #F92672;">81</span> 3f 00 1c     lwz     r9,28(r31)
-<span style="color: #A6E22E; font-size: 130%;">10000534</span>:   <span style="color: #F92672;">91</span> 49 00 08     stw     r10,8(r9)
+<span style="color: #A6E22E; font-size: 130%;">10000528</span>:   <span style="color: #F92672;">81</span> 3f 00 20     lwz     r9,32(r31)    <span style="color: #75715E;">; </span><span style="color: #E6DB74;">r9 = s2</span>
+<span style="color: #A6E22E; font-size: 130%;">1000052c</span>:   <span style="color: #F92672;">81</span> 49 00 04     lwz     r10,4(r9)     <span style="color: #75715E;">; </span><span style="color: #E6DB74;">r10 = s2-&gt;b</span>
+<span style="color: #A6E22E; font-size: 130%;">10000530</span>:   <span style="color: #F92672;">81</span> 3f 00 1c     lwz     r9,28(r31)    <span style="color: #75715E;">; </span><span style="color: #E6DB74;">r9 = s1</span>
+<span style="color: #A6E22E; font-size: 130%;">10000534</span>:   <span style="color: #F92672;">91</span> 49 00 08     stw     r10,8(r9)     <span style="color: #75715E;">; </span><span style="color: #E6DB74;">s1-&gt;c = r10</span>
     <span style="color: #F92672;">return</span> static_var + static_var2 + a + i<span style="color: #75715E;">;</span>
 <span style="color: #A6E22E; font-size: 130%;">10000538</span>:   <span style="color: #F92672;">3d</span> 20 10 01     lis     r9,4097
-<span style="color: #A6E22E; font-size: 130%;">1000053c</span>:   <span style="color: #F92672;">81</span> 49 0b 90     lwz     r10,2960(r9)
+<span style="color: #A6E22E; font-size: 130%;">1000053c</span>:   <span style="color: #F92672;">81</span> 49 0b 90     lwz     r10,2960(r9)  <span style="color: #75715E;">; </span><span style="color: #E6DB74;">r10 = static_var = *((4097 &lt;&lt; 16) + 2960)</span>
 <span style="color: #A6E22E; font-size: 130%;">10000540</span>:   <span style="color: #F92672;">3d</span> 20 10 01     lis     r9,4097
-<span style="color: #A6E22E; font-size: 130%;">10000544</span>:   <span style="color: #F92672;">81</span> 29 0c 30     lwz     r9,3120(r9)
-<span style="color: #A6E22E; font-size: 130%;">10000548</span>:   <span style="color: #F92672;">7d</span> 4a 4a 14     add     r10,r10,r9
-<span style="color: #A6E22E; font-size: 130%;">1000054c</span>:   <span style="color: #F92672;">81</span> 3f 00 08     lwz     r9,8(r31)
-<span style="color: #A6E22E; font-size: 130%;">10000550</span>:   <span style="color: #F92672;">7d</span> 4a 4a 14     add     r10,r10,r9
-<span style="color: #A6E22E; font-size: 130%;">10000554</span>:   <span style="color: #F92672;">81</span> 3f 00 18     lwz     r9,24(r31)
-<span style="color: #A6E22E; font-size: 130%;">10000558</span>:   <span style="color: #F92672;">7d</span> 2a 4a 14     add     r9,r10,r9
+<span style="color: #A6E22E; font-size: 130%;">10000544</span>:   <span style="color: #F92672;">81</span> 29 0c 30     lwz     r9,3120(r9)   <span style="color: #75715E;">; </span><span style="color: #E6DB74;">r9 = static_var2</span>
+<span style="color: #A6E22E; font-size: 130%;">10000548</span>:   <span style="color: #F92672;">7d</span> 4a 4a 14     add     r10,r10,r9    <span style="color: #75715E;">; </span><span style="color: #E6DB74;">r10 = static_var + static_var2</span>
+<span style="color: #A6E22E; font-size: 130%;">1000054c</span>:   <span style="color: #F92672;">81</span> 3f 00 08     lwz     r9,8(r31)     <span style="color: #75715E;">; </span><span style="color: #E6DB74;">r9 = a</span>
+<span style="color: #A6E22E; font-size: 130%;">10000550</span>:   <span style="color: #F92672;">7d</span> 4a 4a 14     add     r10,r10,r9    <span style="color: #75715E;">; </span><span style="color: #E6DB74;">r10 = static_var + static_var2 + a</span>
+<span style="color: #A6E22E; font-size: 130%;">10000554</span>:   <span style="color: #F92672;">81</span> 3f 00 18     lwz     r9,24(r31)    <span style="color: #75715E;">; </span><span style="color: #E6DB74;">r9 = i</span>
+<span style="color: #A6E22E; font-size: 130%;">10000558</span>:   <span style="color: #F92672;">7d</span> 2a 4a 14     add     r9,r10,r9     <span style="color: #75715E;">; </span><span style="color: #E6DB74;">r9 = static_var + static_var2 + a + i</span>
 }
-<span style="color: #A6E22E; font-size: 130%;">1000055c</span>:   <span style="color: #F92672;">7d</span> 23 4b 78     mr      r3,r9
-<span style="color: #A6E22E; font-size: 130%;">10000560</span>:   <span style="color: #F92672;">39</span> 7f 00 30     addi    r11,r31,48
-<span style="color: #A6E22E; font-size: 130%;">10000564</span>:   <span style="color: #F92672;">83</span> eb ff fc     lwz     r31,-4(r11)
-<span style="color: #A6E22E; font-size: 130%;">10000568</span>:   <span style="color: #F92672;">7d</span> 61 5b 78     mr      r1,r11
-<span style="color: #A6E22E; font-size: 130%;">1000056c</span>:   <span style="color: #F92672;">4e</span> 80 00 20     blr
+<span style="color: #A6E22E; font-size: 130%;">1000055c</span>:   <span style="color: #F92672;">7d</span> 23 4b 78     mr      r3,r9         <span style="color: #75715E;">; </span><span style="color: #E6DB74;">&#36820;&#22238;&#20540;</span>
+<span style="color: #A6E22E; font-size: 130%;">10000560</span>:   <span style="color: #F92672;">39</span> 7f 00 30     addi    r11,r31,48    <span style="color: #75715E;">;</span>
+<span style="color: #A6E22E; font-size: 130%;">10000564</span>:   <span style="color: #F92672;">83</span> eb ff fc     lwz     r31,-4(r11)   <span style="color: #75715E;">; </span><span style="color: #E6DB74;">&#21644;&#21069;&#38754;&#25351;&#20196;&#37197;&#21512;&#24674;&#22797;r31&#30340;&#20540;</span>
+<span style="color: #A6E22E; font-size: 130%;">10000568</span>:   <span style="color: #F92672;">7d</span> 61 5b 78     mr      r1,r11        <span style="color: #75715E;">; </span><span style="color: #E6DB74;">r1 = r11 = &#35843;&#29992;&#27492;&#20989;&#25968;&#30340;&#26632;&#65292;&#21363;&#20986;&#26632;</span>
+<span style="color: #A6E22E; font-size: 130%;">1000056c</span>:   <span style="color: #F92672;">4e</span> 80 00 20     blr                   <span style="color: #75715E;">; </span><span style="color: #E6DB74;">lr&#23492;&#23384;&#22120;&#23384;&#30340;&#26159;&#35843;&#29992;&#27492;&#20989;&#25968;&#30340;&#20195;&#30721;&#19979;&#19968;&#34892;&#25351;&#20196;</span>
 
 <span style="color: #A6E22E; font-size: 130%;">10000570</span> &lt;func2&gt;:
 
 <span style="color: #75715E;">//</span><span style="color: #E6DB74;">if else</span>
 <span style="color: #A6E22E; font-size: 130%;">int</span> <span style="color: #F92672;">func2</span>(int i)
 {
-<span style="color: #A6E22E; font-size: 130%;">10000570</span>:   <span style="color: #F92672;">94</span> 21 ff e0     stwu    r1,-32(r1)
-<span style="color: #A6E22E; font-size: 130%;">10000574</span>:   <span style="color: #F92672;">7c</span> 08 02 a6     mflr    r0
+<span style="color: #A6E22E; font-size: 130%;">10000570</span>:   <span style="color: #F92672;">94</span> 21 ff e0     stwu    r1,-32(r1)                  <span style="color: #75715E;">; </span><span style="color: #E6DB74;">&#24320;&#26632;</span>
+<span style="color: #A6E22E; font-size: 130%;">10000574</span>:   <span style="color: #F92672;">7c</span> 08 02 a6     mflr    r0                          <span style="color: #75715E;">; </span><span style="color: #E6DB74;">r0 = lr</span>
 <span style="color: #A6E22E; font-size: 130%;">10000578</span>:   <span style="color: #F92672;">90</span> 01 00 24     stw     r0,36(r1)
 <span style="color: #A6E22E; font-size: 130%;">1000057c</span>:   <span style="color: #F92672;">93</span> e1 00 1c     stw     r31,28(r1)
 <span style="color: #A6E22E; font-size: 130%;">10000580</span>:   <span style="color: #F92672;">7c</span> 3f 0b 78     mr      r31,r1
 <span style="color: #A6E22E; font-size: 130%;">10000584</span>:   <span style="color: #F92672;">90</span> 7f 00 08     stw     r3,8(r31)
     <span style="color: #F92672;">if</span> (i &lt; 1) {
-<span style="color: #A6E22E; font-size: 130%;">10000588</span>:   <span style="color: #F92672;">81</span> 3f 00 08     lwz     r9,8(r31)
-<span style="color: #A6E22E; font-size: 130%;">1000058c</span>:   <span style="color: #F92672;">2f</span> 89 00 00     cmpwi   cr7,r9,0
-<span style="color: #A6E22E; font-size: 130%;">10000590</span>:   <span style="color: #F92672;">41</span> 9d 00 0c     bgt-    cr7,1000059c &lt;func2+0x2c&gt;
+<span style="color: #A6E22E; font-size: 130%;">10000588</span>:   <span style="color: #F92672;">81</span> 3f 00 08     lwz     r9,8(r31)                   <span style="color: #75715E;">; </span><span style="color: #E6DB74;">r9 = i</span>
+<span style="color: #A6E22E; font-size: 130%;">1000058c</span>:   <span style="color: #F92672;">2f</span> 89 00 00     cmpwi   cr7,r9,0                    <span style="color: #75715E;">; </span><span style="color: #E6DB74;">r9&#19982;0&#27604;&#36739;&#65292;&#32467;&#26524;&#25918;&#22312;cr7&#20013;</span>
+<span style="color: #A6E22E; font-size: 130%;">10000590</span>:   <span style="color: #F92672;">41</span> 9d 00 0c     bgt-    cr7,1000059c &lt;func2+0x2c&gt;   <span style="color: #75715E;">; </span><span style="color: #E6DB74;">&#22823;&#20110;&#21017;&#36339;&#36716;</span>
         <span style="color: #F92672;">return</span> 3<span style="color: #75715E;">;</span>
 <span style="color: #A6E22E; font-size: 130%;">10000594</span>:   <span style="color: #F92672;">39</span> 20 00 03     li      r9,3
-<span style="color: #A6E22E; font-size: 130%;">10000598</span>:   <span style="color: #F92672;">48</span> 00 00 14     b       100005ac &lt;func2+0x3c&gt;
+<span style="color: #A6E22E; font-size: 130%;">10000598</span>:   <span style="color: #F92672;">48</span> 00 00 14     b       100005ac &lt;func2+0x3c&gt;       <span style="color: #75715E;">; </span><span style="color: #E6DB74;">r9 = 3,&#36339;&#36716;</span>
     } else {
         <span style="color: #F92672;">printf</span>(<span style="color: #E6DB74;">"1 &lt;= i\n"</span>)<span style="color: #75715E;">;</span>
 <span style="color: #A6E22E; font-size: 130%;">1000059c</span>:   <span style="color: #F92672;">3d</span> 20 10 00     lis     r9,4096
@@ -918,12 +960,12 @@ PowerQuICC由三个模块组成<br />
     <span style="color: #F92672;">return</span> 1<span style="color: #75715E;">;</span>
 <span style="color: #A6E22E; font-size: 130%;">100005a8</span>:   <span style="color: #F92672;">39</span> 20 00 01     li      r9,1
 }
-<span style="color: #A6E22E; font-size: 130%;">100005ac</span>:   <span style="color: #F92672;">7d</span> 23 4b 78     mr      r3,r9
+<span style="color: #A6E22E; font-size: 130%;">100005ac</span>:   <span style="color: #F92672;">7d</span> 23 4b 78     mr      r3,r9                       <span style="color: #75715E;">; </span><span style="color: #E6DB74;">r3 = r9&#65292;&#30830;&#23450;&#36820;&#22238;&#20540;</span>
 <span style="color: #A6E22E; font-size: 130%;">100005b0</span>:   <span style="color: #F92672;">39</span> 7f 00 20     addi    r11,r31,32
-<span style="color: #A6E22E; font-size: 130%;">100005b4</span>:   <span style="color: #F92672;">80</span> 0b 00 04     lwz     r0,4(r11)
-<span style="color: #A6E22E; font-size: 130%;">100005b8</span>:   <span style="color: #F92672;">7c</span> 08 03 a6     mtlr    r0
-<span style="color: #A6E22E; font-size: 130%;">100005bc</span>:   <span style="color: #F92672;">83</span> eb ff fc     lwz     r31,-4(r11)
-<span style="color: #A6E22E; font-size: 130%;">100005c0</span>:   <span style="color: #F92672;">7d</span> 61 5b 78     mr      r1,r11
+<span style="color: #A6E22E; font-size: 130%;">100005b4</span>:   <span style="color: #F92672;">80</span> 0b 00 04     lwz     r0,4(r11)                   <span style="color: #75715E;">; </span><span style="color: #E6DB74;">&#30456;&#24403;&#20110; lwz r0, 36(r11)&#65292;&#24674;&#22797;r0</span>
+<span style="color: #A6E22E; font-size: 130%;">100005b8</span>:   <span style="color: #F92672;">7c</span> 08 03 a6     mtlr    r0                          <span style="color: #75715E;">; </span><span style="color: #E6DB74;">lr = r0&#65292;&#24674;&#22797;lr&#20540;</span>
+<span style="color: #A6E22E; font-size: 130%;">100005bc</span>:   <span style="color: #F92672;">83</span> eb ff fc     lwz     r31,-4(r11)                 <span style="color: #75715E;">; </span><span style="color: #E6DB74;">&#24674;&#22797;r31</span>
+<span style="color: #A6E22E; font-size: 130%;">100005c0</span>:   <span style="color: #F92672;">7d</span> 61 5b 78     mr      r1,r11                      <span style="color: #75715E;">; </span><span style="color: #E6DB74;">&#36864;&#26632;</span>
 <span style="color: #A6E22E; font-size: 130%;">100005c4</span>:   <span style="color: #F92672;">4e</span> 80 00 20     blr
 
 <span style="color: #A6E22E; font-size: 130%;">100005c8</span> &lt;func3&gt;:
@@ -931,24 +973,24 @@ PowerQuICC由三个模块组成<br />
 <span style="color: #75715E;">//</span><span style="color: #E6DB74;">switch case</span>
 <span style="color: #A6E22E; font-size: 130%;">int</span> <span style="color: #F92672;">func3</span>(int i)
 {
-<span style="color: #A6E22E; font-size: 130%;">100005c8</span>:   <span style="color: #F92672;">94</span> 21 ff d0     stwu    r1,-48(r1)
+<span style="color: #A6E22E; font-size: 130%;">100005c8</span>:   <span style="color: #F92672;">94</span> 21 ff d0     stwu    r1,-48(r1)                       <span style="color: #75715E;">; </span><span style="color: #E6DB74;">&#24320;&#26632;</span>
 <span style="color: #A6E22E; font-size: 130%;">100005cc</span>:   <span style="color: #F92672;">7c</span> 08 02 a6     mflr    r0
 <span style="color: #A6E22E; font-size: 130%;">100005d0</span>:   <span style="color: #F92672;">90</span> 01 00 34     stw     r0,52(r1)
 <span style="color: #A6E22E; font-size: 130%;">100005d4</span>:   <span style="color: #F92672;">93</span> e1 00 2c     stw     r31,44(r1)
 <span style="color: #A6E22E; font-size: 130%;">100005d8</span>:   <span style="color: #F92672;">7c</span> 3f 0b 78     mr      r31,r1
-<span style="color: #A6E22E; font-size: 130%;">100005dc</span>:   <span style="color: #F92672;">90</span> 7f 00 18     stw     r3,24(r31)
+<span style="color: #A6E22E; font-size: 130%;">100005dc</span>:   <span style="color: #F92672;">90</span> 7f 00 18     stw     r3,24(r31)                       <span style="color: #75715E;">; </span><span style="color: #E6DB74;">&#23384;&#20837;&#21442;i</span>
     <span style="color: #F92672;">int</span> rc = -1<span style="color: #75715E;">;</span>
 <span style="color: #A6E22E; font-size: 130%;">100005e0</span>:   <span style="color: #F92672;">39</span> 20 ff ff     li      r9,-1
-<span style="color: #A6E22E; font-size: 130%;">100005e4</span>:   <span style="color: #F92672;">91</span> 3f 00 08     stw     r9,8(r31)
+<span style="color: #A6E22E; font-size: 130%;">100005e4</span>:   <span style="color: #F92672;">91</span> 3f 00 08     stw     r9,8(r31)                        <span style="color: #75715E;">; </span><span style="color: #E6DB74;">&#23384;rc, -1</span>
 
     <span style="color: #F92672;">switch</span> (i) {
 <span style="color: #A6E22E; font-size: 130%;">100005e8</span>:   <span style="color: #F92672;">81</span> 3f 00 18     lwz     r9,24(r31)
 <span style="color: #A6E22E; font-size: 130%;">100005ec</span>:   <span style="color: #F92672;">2f</span> 89 00 02     cmpwi   cr7,r9,2
-<span style="color: #A6E22E; font-size: 130%;">100005f0</span>:   <span style="color: #F92672;">41</span> 9e 00 24     beq-    cr7,10000614 &lt;func3+0x4c&gt;
+<span style="color: #A6E22E; font-size: 130%;">100005f0</span>:   <span style="color: #F92672;">41</span> 9e 00 24     beq-    cr7,10000614 &lt;func3+0x4c&gt;        <span style="color: #75715E;">; </span><span style="color: #E6DB74;">i == 2&#21017;&#36339;&#36716;</span>
 <span style="color: #A6E22E; font-size: 130%;">100005f4</span>:   <span style="color: #F92672;">2f</span> 89 00 0f     cmpwi   cr7,r9,15
-<span style="color: #A6E22E; font-size: 130%;">100005f8</span>:   <span style="color: #F92672;">41</span> 9e 00 28     beq-    cr7,10000620 &lt;func3+0x58&gt;
+<span style="color: #A6E22E; font-size: 130%;">100005f8</span>:   <span style="color: #F92672;">41</span> 9e 00 28     beq-    cr7,10000620 &lt;func3+0x58&gt;        <span style="color: #75715E;">; </span><span style="color: #E6DB74;">i == 15&#21017;&#36339;&#36716;</span>
 <span style="color: #A6E22E; font-size: 130%;">100005fc</span>:   <span style="color: #F92672;">2f</span> 89 00 01     cmpwi   cr7,r9,1
-<span style="color: #A6E22E; font-size: 130%;">10000600</span>:   <span style="color: #F92672;">40</span> 9e 00 34     bne-    cr7,10000634 &lt;func3+0x6c&gt;
+<span style="color: #A6E22E; font-size: 130%;">10000600</span>:   <span style="color: #F92672;">40</span> 9e 00 34     bne-    cr7,10000634 &lt;func3+0x6c&gt;        <span style="color: #75715E;">; </span><span style="color: #E6DB74;">i == 1&#21017;&#36339;&#36716;</span>
     <span style="color: #F92672;">case</span> 1:
         <span style="color: #F92672;">rc</span> = global_uninit_var<span style="color: #75715E;">;</span>
 <span style="color: #A6E22E; font-size: 130%;">10000604</span>:   <span style="color: #F92672;">3d</span> 20 10 01     lis     r9,4097
@@ -959,12 +1001,12 @@ PowerQuICC由三个模块组成<br />
     <span style="color: #F92672;">case</span> 2:
         <span style="color: #F92672;">rc</span> = 8<span style="color: #75715E;">;</span>
 <span style="color: #A6E22E; font-size: 130%;">10000614</span>:   <span style="color: #F92672;">39</span> 20 00 08     li      r9,8
-<span style="color: #A6E22E; font-size: 130%;">10000618</span>:   <span style="color: #F92672;">91</span> 3f 00 08     stw     r9,8(r31)
+<span style="color: #A6E22E; font-size: 130%;">10000618</span>:   <span style="color: #F92672;">91</span> 3f 00 08     stw     r9,8(r31)                        <span style="color: #75715E;">; </span><span style="color: #E6DB74;">rc = 8</span>
         <span style="color: #F92672;">break</span><span style="color: #75715E;">;</span>
 <span style="color: #A6E22E; font-size: 130%;">1000061c</span>:   <span style="color: #F92672;">48</span> 00 00 1c     b       10000638 &lt;func3+0x70&gt;
     <span style="color: #F92672;">case</span> 15:
         <span style="color: #F92672;">printf</span>(<span style="color: #E6DB74;">"i == 15"</span>)<span style="color: #75715E;">;</span>
-<span style="color: #A6E22E; font-size: 130%;">10000620</span>:   <span style="color: #F92672;">3d</span> 20 10 00     lis     r9,4096
+<span style="color: #A6E22E; font-size: 130%;">10000620</span>:   <span style="color: #F92672;">3d</span> 20 10 00     lis     r9,4096                          <span style="color: #75715E;">; </span><span style="color: #E6DB74;">printf, &#20854;&#23454;&#29992;puts&#20063;&#34892;</span>
 <span style="color: #A6E22E; font-size: 130%;">10000624</span>:   <span style="color: #F92672;">38</span> 69 0a 3c     addi    r3,r9,2620
 <span style="color: #A6E22E; font-size: 130%;">10000628</span>:   <span style="color: #F92672;">4c</span> c6 31 82     crclr   4*cr1+eq
 <span style="color: #A6E22E; font-size: 130%;">1000062c</span>:   <span style="color: #F92672;">48</span> 01 05 cd     bl      10010bf8 <a href="mailto:printf%40plt">&lt;printf@plt&gt;</a>
@@ -975,7 +1017,7 @@ PowerQuICC由三个模块组成<br />
 <span style="color: #A6E22E; font-size: 130%;">10000634</span>:   <span style="color: #F92672;">60</span> 00 00 00     nop
     }
     <span style="color: #F92672;">return</span> rc<span style="color: #75715E;">;</span>
-<span style="color: #A6E22E; font-size: 130%;">10000638</span>:   <span style="color: #F92672;">81</span> 3f 00 08     lwz     r9,8(r31)
+<span style="color: #A6E22E; font-size: 130%;">10000638</span>:   <span style="color: #F92672;">81</span> 3f 00 08     lwz     r9,8(r31)                        <span style="color: #75715E;">; </span><span style="color: #E6DB74;">&#20197;&#19979;&#32479;&#19968;&#36864;&#20986;,r3 = *(r31 + 8)</span>
 }
 <span style="color: #A6E22E; font-size: 130%;">1000063c</span>:   <span style="color: #F92672;">7d</span> 23 4b 78     mr      r3,r9
 <span style="color: #A6E22E; font-size: 130%;">10000640</span>:   <span style="color: #F92672;">39</span> 7f 00 30     addi    r11,r31,48
@@ -994,32 +1036,32 @@ PowerQuICC由三个模块组成<br />
 <span style="color: #A6E22E; font-size: 130%;">10000658</span>:   <span style="color: #F92672;">94</span> 21 ff d0     stwu    r1,-48(r1)
 <span style="color: #A6E22E; font-size: 130%;">1000065c</span>:   <span style="color: #F92672;">93</span> e1 00 2c     stw     r31,44(r1)
 <span style="color: #A6E22E; font-size: 130%;">10000660</span>:   <span style="color: #F92672;">7c</span> 3f 0b 78     mr      r31,r1
-<span style="color: #A6E22E; font-size: 130%;">10000664</span>:   <span style="color: #F92672;">90</span> 7f 00 18     stw     r3,24(r31)
+<span style="color: #A6E22E; font-size: 130%;">10000664</span>:   <span style="color: #F92672;">90</span> 7f 00 18     stw     r3,24(r31)               <span style="color: #75715E;">; </span><span style="color: #E6DB74;">*(r31 + 24) = bound</span>
     <span style="color: #F92672;">int</span> i, sum = 0<span style="color: #75715E;">;</span>
 <span style="color: #A6E22E; font-size: 130%;">10000668</span>:   <span style="color: #F92672;">39</span> 20 00 00     li      r9,0
-<span style="color: #A6E22E; font-size: 130%;">1000066c</span>:   <span style="color: #F92672;">91</span> 3f 00 0c     stw     r9,12(r31)
+<span style="color: #A6E22E; font-size: 130%;">1000066c</span>:   <span style="color: #F92672;">91</span> 3f 00 0c     stw     r9,12(r31)               <span style="color: #75715E;">; </span><span style="color: #E6DB74;">sum = 0</span>
 
     <span style="color: #F92672;">for</span> (i = 0<span style="color: #75715E;">; </span><span style="color: #E6DB74;">i &lt; bound; ++i) {</span>
 <span style="color: #A6E22E; font-size: 130%;">10000670</span>:   <span style="color: #F92672;">39</span> 20 00 00     li      r9,0
-<span style="color: #A6E22E; font-size: 130%;">10000674</span>:   <span style="color: #F92672;">91</span> 3f 00 08     stw     r9,8(r31)
+<span style="color: #A6E22E; font-size: 130%;">10000674</span>:   <span style="color: #F92672;">91</span> 3f 00 08     stw     r9,8(r31)                <span style="color: #75715E;">; </span><span style="color: #E6DB74;">i = 0</span>
 <span style="color: #A6E22E; font-size: 130%;">10000678</span>:   <span style="color: #F92672;">48</span> 00 00 20     b       10000698 &lt;func4+0x40&gt;
         <span style="color: #F92672;">sum</span> += i<span style="color: #75715E;">;</span>
-<span style="color: #A6E22E; font-size: 130%;">1000067c</span>:   <span style="color: #F92672;">81</span> 5f 00 0c     lwz     r10,12(r31)
-<span style="color: #A6E22E; font-size: 130%;">10000680</span>:   <span style="color: #F92672;">81</span> 3f 00 08     lwz     r9,8(r31)
-<span style="color: #A6E22E; font-size: 130%;">10000684</span>:   <span style="color: #F92672;">7d</span> 2a 4a 14     add     r9,r10,r9
-<span style="color: #A6E22E; font-size: 130%;">10000688</span>:   <span style="color: #F92672;">91</span> 3f 00 0c     stw     r9,12(r31)
+<span style="color: #A6E22E; font-size: 130%;">1000067c</span>:   <span style="color: #F92672;">81</span> 5f 00 0c     lwz     r10,12(r31)              <span style="color: #75715E;">; </span><span style="color: #E6DB74;">r10 = sum</span>
+<span style="color: #A6E22E; font-size: 130%;">10000680</span>:   <span style="color: #F92672;">81</span> 3f 00 08     lwz     r9,8(r31)                <span style="color: #75715E;">; </span><span style="color: #E6DB74;">r9 = i</span>
+<span style="color: #A6E22E; font-size: 130%;">10000684</span>:   <span style="color: #F92672;">7d</span> 2a 4a 14     add     r9,r10,r9                <span style="color: #75715E;">; </span><span style="color: #E6DB74;">r9 = sum + i</span>
+<span style="color: #A6E22E; font-size: 130%;">10000688</span>:   <span style="color: #F92672;">91</span> 3f 00 0c     stw     r9,12(r31)               <span style="color: #75715E;">; </span><span style="color: #E6DB74;">sum = r9</span>
 <span style="color: #75715E;">//</span><span style="color: #E6DB74;">loop</span>
 <span style="color: #A6E22E; font-size: 130%;">int</span> <span style="color: #F92672;">func4</span>(int bound)
 {
     <span style="color: #F92672;">int</span> i, sum = 0<span style="color: #75715E;">;</span>
 
     <span style="color: #F92672;">for</span> (i = 0<span style="color: #75715E;">; </span><span style="color: #E6DB74;">i &lt; bound; ++i) {</span>
-<span style="color: #A6E22E; font-size: 130%;">1000068c</span>:   <span style="color: #F92672;">81</span> 3f 00 08     lwz     r9,8(r31)
-<span style="color: #A6E22E; font-size: 130%;">10000690</span>:   <span style="color: #F92672;">39</span> 29 00 01     addi    r9,r9,1
+<span style="color: #A6E22E; font-size: 130%;">1000068c</span>:   <span style="color: #F92672;">81</span> 3f 00 08     lwz     r9,8(r31)                <span style="color: #75715E;">; </span><span style="color: #E6DB74;">&#21462;i</span>
+<span style="color: #A6E22E; font-size: 130%;">10000690</span>:   <span style="color: #F92672;">39</span> 29 00 01     addi    r9,r9,1                  <span style="color: #75715E;">; </span><span style="color: #E6DB74;">r9 = r9 + 1</span>
 <span style="color: #A6E22E; font-size: 130%;">10000694</span>:   <span style="color: #F92672;">91</span> 3f 00 08     stw     r9,8(r31)
 <span style="color: #A6E22E; font-size: 130%;">10000698</span>:   <span style="color: #F92672;">81</span> 5f 00 08     lwz     r10,8(r31)
 <span style="color: #A6E22E; font-size: 130%;">1000069c</span>:   <span style="color: #F92672;">81</span> 3f 00 18     lwz     r9,24(r31)
-<span style="color: #A6E22E; font-size: 130%;">100006a0</span>:   <span style="color: #F92672;">7f</span> 8a 48 00     cmpw    cr7,r10,r9
+<span style="color: #A6E22E; font-size: 130%;">100006a0</span>:   <span style="color: #F92672;">7f</span> 8a 48 00     cmpw    cr7,r10,r9               <span style="color: #75715E;">; </span><span style="color: #E6DB74;">i &lt; bound?</span>
 <span style="color: #A6E22E; font-size: 130%;">100006a4</span>:   <span style="color: #F92672;">41</span> 9c ff d8     blt+    cr7,1000067c &lt;func4+0x24&gt;
         <span style="color: #F92672;">sum</span> += i<span style="color: #75715E;">;</span>
     }
@@ -1047,28 +1089,28 @@ PowerQuICC由三个模块组成<br />
 <span style="color: #A6E22E; font-size: 130%;">100006d8</span>:   <span style="color: #F92672;">90</span> ff 00 38     stw     r7,56(r31)
 <span style="color: #A6E22E; font-size: 130%;">100006dc</span>:   <span style="color: #F92672;">91</span> 1f 00 3c     stw     r8,60(r31)
 <span style="color: #A6E22E; font-size: 130%;">100006e0</span>:   <span style="color: #F92672;">91</span> 3f 00 40     stw     r9,64(r31)
-<span style="color: #A6E22E; font-size: 130%;">100006e4</span>:   <span style="color: #F92672;">91</span> 5f 00 44     stw     r10,68(r31)
+<span style="color: #A6E22E; font-size: 130%;">100006e4</span>:   <span style="color: #F92672;">91</span> 5f 00 44     stw     r10,68(r31)    <span style="color: #75715E;">;</span><span style="color: #E6DB74;">&#20445;&#23384;&#23492;&#23384;&#22120;</span>
 <span style="color: #A6E22E; font-size: 130%;">100006e8</span>:   <span style="color: #F92672;">90</span> 7f 00 48     stw     r3,72(r31)
     <span style="color: #F92672;">va_list</span> argp<span style="color: #75715E;">;</span>
     <span style="color: #F92672;">int</span> i, sum = 0<span style="color: #75715E;">;</span>
 <span style="color: #A6E22E; font-size: 130%;">100006ec</span>:   <span style="color: #F92672;">39</span> 20 00 00     li      r9,0
-<span style="color: #A6E22E; font-size: 130%;">100006f0</span>:   <span style="color: #F92672;">91</span> 3f 00 0c     stw     r9,12(r31)
+<span style="color: #A6E22E; font-size: 130%;">100006f0</span>:   <span style="color: #F92672;">91</span> 3f 00 0c     stw     r9,12(r31)     <span style="color: #75715E;">; </span><span style="color: #E6DB74;">sum = *(r31 + 12) = 0</span>
 
     <span style="color: #F92672;">va_start</span>(argp, count)<span style="color: #75715E;">;</span>
 <span style="color: #A6E22E; font-size: 130%;">100006f4</span>:   <span style="color: #F92672;">39</span> 20 00 01     li      r9,1
-<span style="color: #A6E22E; font-size: 130%;">100006f8</span>:   <span style="color: #F92672;">99</span> 3f 00 10     stb     r9,16(r31)
+<span style="color: #A6E22E; font-size: 130%;">100006f8</span>:   <span style="color: #F92672;">99</span> 3f 00 10     stb     r9,16(r31)     <span style="color: #75715E;">; </span>
 <span style="color: #A6E22E; font-size: 130%;">100006fc</span>:   <span style="color: #F92672;">39</span> 20 00 00     li      r9,0
-<span style="color: #A6E22E; font-size: 130%;">10000700</span>:   <span style="color: #F92672;">99</span> 3f 00 11     stb     r9,17(r31)
+<span style="color: #A6E22E; font-size: 130%;">10000700</span>:   <span style="color: #F92672;">99</span> 3f 00 11     stb     r9,17(r31)     <span style="color: #75715E;">; </span>
 <span style="color: #A6E22E; font-size: 130%;">10000704</span>:   <span style="color: #F92672;">39</span> 3f 00 68     addi    r9,r31,104
 <span style="color: #A6E22E; font-size: 130%;">10000708</span>:   <span style="color: #F92672;">91</span> 3f 00 14     stw     r9,20(r31)
 <span style="color: #A6E22E; font-size: 130%;">1000070c</span>:   <span style="color: #F92672;">39</span> 3f 00 28     addi    r9,r31,40
 <span style="color: #A6E22E; font-size: 130%;">10000710</span>:   <span style="color: #F92672;">91</span> 3f 00 18     stw     r9,24(r31)
     <span style="color: #F92672;">for</span> (i = 0<span style="color: #75715E;">; </span><span style="color: #E6DB74;">i &lt; count; ++i) {</span>
 <span style="color: #A6E22E; font-size: 130%;">10000714</span>:   <span style="color: #F92672;">39</span> 20 00 00     li      r9,0
-<span style="color: #A6E22E; font-size: 130%;">10000718</span>:   <span style="color: #F92672;">91</span> 3f 00 08     stw     r9,8(r31)
+<span style="color: #A6E22E; font-size: 130%;">10000718</span>:   <span style="color: #F92672;">91</span> 3f 00 08     stw     r9,8(r31)      <span style="color: #75715E;">; </span><span style="color: #E6DB74;">i = 0</span>
 <span style="color: #A6E22E; font-size: 130%;">1000071c</span>:   <span style="color: #F92672;">48</span> 00 00 68     b       10000784 &lt;func5+0xc4&gt;
         <span style="color: #F92672;">sum</span> += va_arg(argp, int)<span style="color: #75715E;">;</span>
-<span style="color: #A6E22E; font-size: 130%;">10000720</span>:   <span style="color: #F92672;">89</span> 3f 00 10     lbz     r9,16(r31)
+<span style="color: #A6E22E; font-size: 130%;">10000720</span>:   <span style="color: #F92672;">89</span> 3f 00 10     lbz     r9,16(r31)                   <span style="color: #75715E;">; </span>
 <span style="color: #A6E22E; font-size: 130%;">10000724</span>:   <span style="color: #F92672;">55</span> 29 06 3e     clrlwi  r9,r9,24
 <span style="color: #A6E22E; font-size: 130%;">10000728</span>:   <span style="color: #F92672;">2b</span> 89 00 08     cmplwi  cr7,r9,8
 <span style="color: #A6E22E; font-size: 130%;">1000072c</span>:   <span style="color: #F92672;">40</span> 9c 00 2c     bge-    cr7,10000758 &lt;func5+0x98&gt;
@@ -1099,10 +1141,10 @@ PowerQuICC由三个模块组成<br />
 <span style="color: #A6E22E; font-size: 130%;">10000778</span>:   <span style="color: #F92672;">81</span> 3f 00 08     lwz     r9,8(r31)
 <span style="color: #A6E22E; font-size: 130%;">1000077c</span>:   <span style="color: #F92672;">39</span> 29 00 01     addi    r9,r9,1
 <span style="color: #A6E22E; font-size: 130%;">10000780</span>:   <span style="color: #F92672;">91</span> 3f 00 08     stw     r9,8(r31)
-<span style="color: #A6E22E; font-size: 130%;">10000784</span>:   <span style="color: #F92672;">81</span> 5f 00 08     lwz     r10,8(r31)
-<span style="color: #A6E22E; font-size: 130%;">10000788</span>:   <span style="color: #F92672;">81</span> 3f 00 48     lwz     r9,72(r31)
-<span style="color: #A6E22E; font-size: 130%;">1000078c</span>:   <span style="color: #F92672;">7f</span> 8a 48 00     cmpw    cr7,r10,r9
-<span style="color: #A6E22E; font-size: 130%;">10000790</span>:   <span style="color: #F92672;">41</span> 9c ff 90     blt+    cr7,10000720 &lt;func5+0x60&gt;
+<span style="color: #A6E22E; font-size: 130%;">10000784</span>:   <span style="color: #F92672;">81</span> 5f 00 08     lwz     r10,8(r31)                <span style="color: #75715E;">; </span><span style="color: #E6DB74;">r10 = i</span>
+<span style="color: #A6E22E; font-size: 130%;">10000788</span>:   <span style="color: #F92672;">81</span> 3f 00 48     lwz     r9,72(r31)                <span style="color: #75715E;">; </span><span style="color: #E6DB74;">r9 = count</span>
+<span style="color: #A6E22E; font-size: 130%;">1000078c</span>:   <span style="color: #F92672;">7f</span> 8a 48 00     cmpw    cr7,r10,r9                <span style="color: #75715E;">; </span><span style="color: #E6DB74;">&#27604;&#36739;</span>
+<span style="color: #A6E22E; font-size: 130%;">10000790</span>:   <span style="color: #F92672;">41</span> 9c ff 90     blt+    cr7,10000720 &lt;func5+0x60&gt; <span style="color: #75715E;">; </span><span style="color: #E6DB74;">&#23567;&#20110;&#36339;&#36716;</span>
         <span style="color: #F92672;">sum</span> += va_arg(argp, int)<span style="color: #75715E;">;</span>
     }
     <span style="color: #F92672;">va_end</span>(argp)<span style="color: #75715E;">;</span>
@@ -1160,20 +1202,22 @@ PowerQuICC由三个模块组成<br />
 <span style="color: #A6E22E; font-size: 130%;">1000080c</span>:   <span style="color: #F92672;">7c</span> 3f 0b 78     mr      r31,r1
 <span style="color: #A6E22E; font-size: 130%;">10000810</span>:   <span style="color: #F92672;">90</span> 7f 00 28     stw     r3,40(r31)
 <span style="color: #A6E22E; font-size: 130%;">10000814</span>:   <span style="color: #F92672;">90</span> 9f 00 2c     stw     r4,44(r31)
+<span style="color: #75715E;">; </span><span style="color: #E6DB74;">10000a40 00000001 00000002 00000003, &#20174;.rodata&#20013;&#21462;&#20540;&#65292;&#20854;&#23454;&#22810;&#27492;&#19968;&#20030;</span>
     <span style="color: #F92672;">struct</span> s1 s1 = {
 <span style="color: #A6E22E; font-size: 130%;">10000818</span>:   <span style="color: #F92672;">3d</span> 20 10 00     lis     r9,4096
 <span style="color: #A6E22E; font-size: 130%;">1000081c</span>:   <span style="color: #F92672;">39</span> 29 0a 48     addi    r9,r9,2632
 <span style="color: #A6E22E; font-size: 130%;">10000820</span>:   <span style="color: #F92672;">81</span> 09 00 00     lwz     r8,0(r9)
 <span style="color: #A6E22E; font-size: 130%;">10000824</span>:   <span style="color: #F92672;">81</span> 49 00 04     lwz     r10,4(r9)
 <span style="color: #A6E22E; font-size: 130%;">10000828</span>:   <span style="color: #F92672;">81</span> 29 00 08     lwz     r9,8(r9)
-<span style="color: #A6E22E; font-size: 130%;">1000082c</span>:   <span style="color: #F92672;">91</span> 1f 00 08     stw     r8,8(r31)
-<span style="color: #A6E22E; font-size: 130%;">10000830</span>:   <span style="color: #F92672;">91</span> 5f 00 0c     stw     r10,12(r31)
-<span style="color: #A6E22E; font-size: 130%;">10000834</span>:   <span style="color: #F92672;">91</span> 3f 00 10     stw     r9,16(r31)
+<span style="color: #A6E22E; font-size: 130%;">1000082c</span>:   <span style="color: #F92672;">91</span> 1f 00 08     stw     r8,8(r31)      <span style="color: #75715E;">; </span><span style="color: #E6DB74;">s1-&gt;a = 1</span>
+<span style="color: #A6E22E; font-size: 130%;">10000830</span>:   <span style="color: #F92672;">91</span> 5f 00 0c     stw     r10,12(r31)    <span style="color: #75715E;">; </span><span style="color: #E6DB74;">s1-&gt;b = 2</span>
+<span style="color: #A6E22E; font-size: 130%;">10000834</span>:   <span style="color: #F92672;">91</span> 3f 00 10     stw     r9,16(r31)     <span style="color: #75715E;">; </span><span style="color: #E6DB74;">s1-&gt;c = 3</span>
         <span style="color: #F92672;">.a</span> = 1,
         <span style="color: #F92672;">.b</span> = 2,
         <span style="color: #F92672;">.c</span> = 3,
     }<span style="color: #75715E;">;</span>
 
+<span style="color: #75715E;">;</span>
     <span style="color: #F92672;">struct</span> s2 s2 = {
 <span style="color: #A6E22E; font-size: 130%;">10000838</span>:   <span style="color: #F92672;">3d</span> 20 10 00     lis     r9,4096
 <span style="color: #A6E22E; font-size: 130%;">1000083c</span>:   <span style="color: #F92672;">39</span> 29 0a 5c     addi    r9,r9,2652
@@ -1233,14 +1277,14 @@ PowerQuICC由三个模块组成<br />
 </div>
 </div>
 </div>
-<div id="outline-container-org4dc24ad" class="outline-4">
-<h4 id="org4dc24ad"><span class="section-number-4">1.3.2</span> gcc -O2 foo.c</h4>
+<div id="outline-container-orge5f355c" class="outline-4">
+<h4 id="orge5f355c"><span class="section-number-4">1.3.2</span> gcc -O2 foo.c</h4>
 </div>
 </div>
 </div>
 
-<div id="outline-container-orgea16c82" class="outline-2">
-<h2 id="orgea16c82"><span class="section-number-2">2</span> Mips64</h2>
+<div id="outline-container-org25fb78b" class="outline-2">
+<h2 id="org25fb78b"><span class="section-number-2">2</span> Mips64</h2>
 <div class="outline-text-2" id="text-2">
 <p>
 $0 常量0<br />
@@ -1248,12 +1292,12 @@ $0 常量0<br />
 </p>
 </div>
 </div>
-<div id="outline-container-org522e469" class="outline-2">
-<h2 id="org522e469"><span class="section-number-2">3</span> X86</h2>
+<div id="outline-container-orgdf00953" class="outline-2">
+<h2 id="orgdf00953"><span class="section-number-2">3</span> X86</h2>
 <div class="outline-text-2" id="text-3">
 </div>
-<div id="outline-container-org4027e12" class="outline-3">
-<h3 id="org4027e12"><span class="section-number-3">3.1</span> 指令</h3>
+<div id="outline-container-orgc5860ab" class="outline-3">
+<h3 id="orgc5860ab"><span class="section-number-3">3.1</span> 指令</h3>
 <div class="outline-text-3" id="text-3-1">
 <ul class="org-ul">
 <li>通用数据传送指令<br /></li>
@@ -1869,69 +1913,51 @@ z标志   用来控制扫描或比较操作的结束.<br /></li>
 </div>
 </div>
 
-<div id="outline-container-orgd2bc150" class="outline-3">
-<h3 id="orgd2bc150"><span class="section-number-3">3.2</span> ABI</h3>
+<div id="outline-container-org18c63d1" class="outline-3">
+<h3 id="org18c63d1"><span class="section-number-3">3.2</span> ABI</h3>
 <div class="outline-text-3" id="text-3-2">
 <ul class="org-ul">
+<li>esp是栈指针<br /></li>
 <li>esp和ebp之间即为当前函数对应的栈空间<br /></li>
 <li>函数返回值存在eax中<br /></li>
 <li>函数实参入栈从右至左push，调用方负责清除入参<br /></li>
 <li>不定参时，通ebp + x向栈内索引变量<br /></li>
+<li>以下栈帧为未优化的标准模型，优化时会根据实际情况对此裁剪<br /></li>
 </ul>
-<!-- This HTML table template is generated by emacs 26.1 -->
-<table border="1">
-  <tr>
-    <td align="left" valign="top">
-      &nbsp;&nbsp;&nbsp;local&nbsp;&nbsp;&nbsp;&nbsp;<br />
-      &nbsp;&nbsp;variable&nbsp;&nbsp;<br />
-      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-    </td>
-  </tr>
-  <tr>
-    <td align="left" valign="top">
-      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br />
-      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br />
-      &nbsp;&nbsp;&nbsp;local&nbsp;&nbsp;&nbsp;&nbsp;<br />
-      &nbsp;&nbsp;variable&nbsp;&nbsp;<br />
-      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br />
-      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br />
-      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-    </td>
-  </tr>
-  <tr>
-    <td align="left" valign="top">
-      &nbsp;&nbsp;&nbsp;local&nbsp;&nbsp;&nbsp;&nbsp;<br />
-      &nbsp;&nbsp;variable&nbsp;&nbsp;<br />
-      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-    </td>
-  </tr>
-  <tr>
-    <td align="left" valign="top">
-      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br />
-      &nbsp;&nbsp;old&nbsp;&nbsp;ebp&nbsp;&nbsp;<br />
-      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-    </td>
-  </tr>
-  <tr>
-    <td align="left" valign="top">
-      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br />
-      &nbsp;&nbsp;prev&nbsp;&nbsp;ip&nbsp;&nbsp;<br />
-      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-    </td>
-  </tr>
-  <tr>
-    <td align="left" valign="top">
-      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br />
-      &nbsp;&nbsp;prev&nbsp;&nbsp;cs&nbsp;&nbsp;<br />
-      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-    </td>
-  </tr>
-</table>
+
+<div class="org-src-container">
+<pre class="src src-artist">+------------+
+|   local    |
+|  variable  | &lt;----- esp
+|            |
++------------+
+|            |
+|            |
+|   local    |
+|  variable  |
+|            |
+|            |
+|            |
++------------+
+|   local    |
+|  variable  |
+|            |
++------------+
+|            |
+|  old  ebp  | &lt;----- ebp
+|            |
++------------+
+|            |
+|  prev  ip  |
+|            |
++------------+
+</pre>
+</div>
 </div>
 </div>
 
-<div id="outline-container-org72b40dd" class="outline-3">
-<h3 id="org72b40dd"><span class="section-number-3">3.3</span> 例程</h3>
+<div id="outline-container-orgc079268" class="outline-3">
+<h3 id="orgc079268"><span class="section-number-3">3.3</span> 例程</h3>
 <div class="outline-text-3" id="text-3-3">
 <p>
 <b>gcc -m32 -g foo.c</b><br />
@@ -2411,7 +2437,7 @@ z标志   用来控制扫描或比较操作的结束.<br /></li>
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: xuali2</p>
-<p class="date">Created: 2020-11-01 Sun 00:18</p>
+<p class="date">Created: 2020-11-02 Mon 11:10</p>
 <p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>
