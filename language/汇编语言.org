@@ -137,6 +137,18 @@ int main(int argc, char *argv[])
     return 0;
 }
 #+end_src
+
+RISC vs CISC
+
+- CISC 目标是用最少的机器码执行程序，需要硬件能理解并执行一系列操作
+- RISC 一个时钟周期内只执行一条指令
+
+| CISC                   | RISC               |
+| 侧重在硬件             | 侧重在软件         |
+| 多时钟复杂指令         | 单时钟精简指令     |
+| 有直接内存到内存的指令 | 操作都要通过寄存器 |
+| 代码少，高指令周期     | 代码多，低指令周期 |
+
 * PowerPC32
 以PowerPC85XX为例，其属于PowerQuICC(Quad Intergrate Communication)通信处理器
 所有PowerPC都使用了定长32位指令，是RISC体系结构
@@ -199,7 +211,7 @@ PowerQuICC由三个模块组成
 
 crclr bx 等同于 crxor bx, bx, bx 作用是将条件寄存器相应的位清零
 crclr so 等同于 crxor 3, 3, 3 将cr0的so位(第3位)清零
- crclr 4*cr3+eq 等同于 crxor 14, 14, 14 将cr3的eq位清零
+crclr 4*cr3+eq 等同于 crxor 14, 14, 14 将cr3的eq位清零
 
 数据比较指令
 | cmpi   | 有符号立即数比较 |
@@ -241,7 +253,7 @@ crclr so 等同于 crxor 3, 3, 3 将cr0的so位(第3位)清零
 
 #+begin_src artist
 +------------+
-|   old r1'  | <----- r1
+|   old r1'  | <----- r1, r31
 +------------+
 |            |
 +------------+
@@ -570,10 +582,13 @@ int main(int argc, char *argv[])
 1000080c:	7c 3f 0b 78 	mr      r31,r1
 10000810:	90 7f 00 28 	stw     r3,40(r31)
 10000814:	90 9f 00 2c 	stw     r4,44(r31)
-; 10000a40 00000001 00000002 00000003, 从.rodata中取值，其实多此一举
+; 10000a40 20313500 25640a00 00000001 00000002   15.%d..........
+; 10000a50 00000003 68656c6c 6f000000 10000a54  ....hello......T
+; 10000a60 0000000f                             ....
+; 从.rodata中取值，其实多此一举
     struct s1 s1 = {
 10000818:	3d 20 10 00 	lis     r9,4096
-1000081c:	39 29 0a 48 	addi    r9,r9,2632
+1000081c:	39 29 0a 48 	addi    r9,r9,2632     ; r9 = 0x10000a48
 10000820:	81 09 00 00 	lwz     r8,0(r9)
 10000824:	81 49 00 04 	lwz     r10,4(r9)
 10000828:	81 29 00 08 	lwz     r9,8(r9)
@@ -588,22 +603,22 @@ int main(int argc, char *argv[])
 ;
     struct s2 s2 = {
 10000838:	3d 20 10 00 	lis     r9,4096
-1000083c:	39 29 0a 5c 	addi    r9,r9,2652
-10000840:	81 49 00 00 	lwz     r10,0(r9)
-10000844:	81 29 00 04 	lwz     r9,4(r9)
-10000848:	91 5f 00 14 	stw     r10,20(r31)
-1000084c:	91 3f 00 18 	stw     r9,24(r31)
+1000083c:	39 29 0a 5c 	addi    r9,r9,2652     ; r9 = 0x0x10000a5c
+10000840:	81 49 00 00 	lwz     r10,0(r9)      ; r10 = *(0x10000a5c) = 0x10000a54
+10000844:	81 29 00 04 	lwz     r9,4(r9)       ; r9 = *(0x10000a60) = 0
+10000848:	91 5f 00 14 	stw     r10,20(r31)    ; s2->a = 0x10000a54, 指向"hello"
+1000084c:	91 3f 00 18 	stw     r9,24(r31)     ; s2->b = 15
         .a = "hello",
         .b = 15,
     };
 
     func1(argc, &s1, &s2);
 10000850:	39 3f 00 14 	addi    r9,r31,20
-10000854:	80 7f 00 28 	lwz     r3,40(r31)
+10000854:	80 7f 00 28 	lwz     r3,40(r31)         ; r3 = argc
 10000858:	39 5f 00 08 	addi    r10,r31,8
-1000085c:	7d 44 53 78 	mr      r4,r10
-10000860:	7d 25 4b 78 	mr      r5,r9
-10000864:	4b ff fc a5 	bl      10000508 <func1>
+1000085c:	7d 44 53 78 	mr      r4,r10             ; r4 = &s1
+10000860:	7d 25 4b 78 	mr      r5,r9              ; r5 = &s2
+10000864:	4b ff fc a5 	bl      10000508 <func1>   ; 跳转，下一跳存在lr寄存器中
     func2(argc);
 10000868:	80 7f 00 28 	lwz     r3,40(r31)
 1000086c:	4b ff fd 05 	bl      10000570 <func2>
@@ -624,14 +639,14 @@ int main(int argc, char *argv[])
 1000089c:	4b ff fe 25 	bl      100006c0 <func5>
 100008a0:	7c 69 1b 78 	mr      r9,r3
 100008a4:	3d 40 10 00 	lis     r10,4096
-100008a8:	38 6a 0a 44 	addi    r3,r10,2628
-100008ac:	7d 24 4b 78 	mr      r4,r9
+100008a8:	38 6a 0a 44 	addi    r3,r10,2628           ; r3 = "%d\n"
+100008ac:	7d 24 4b 78 	mr      r4,r9                 ; r4 = func5的返回值
 100008b0:	4c c6 31 82 	crclr   4*cr1+eq
 100008b4:	48 01 03 45 	bl      10010bf8 <printf@plt>
     func6();
 100008b8:	4b ff fe f5 	bl      100007ac <func6>
     return 0;
-100008bc:	39 20 00 00 	li      r9,0
+100008bc:	39 20 00 00 	li      r9,0                  ; return 0
 }
 100008c0:	7d 23 4b 78 	mr      r3,r9
 100008c4:	39 7f 00 40 	addi    r11,r31,64
@@ -643,7 +658,156 @@ int main(int argc, char *argv[])
 100008dc:	00 01 81 cc 	.long 0x181cc
 #+end_src
 *** gcc -O2 foo.c
+- 如果寄存器足够，则不在栈中开空间给局部变量
+- 不会马上开栈，对于会快速返回的分支，有时不会开栈
+- 会优化掉无输入输出的函数
 
+#+begin_src asm
+;Contents of section .rodata:
+; 10000830 10018998 10000304 100006f0 100007a4  ................
+; 10000840 00020001 31203c3d 20690000 69203d3d  ....1 <= i..i ==
+; 10000850 20313500 25640a00                     15.%d..
+
+
+; func1, func4对于main来说无用，所以直接不调用
+10000304 <main>:
+10000304:	94 21 ff f0 	stwu    r1,-16(r1)
+10000308:	7c 08 02 a6 	mflr    r0
+1000030c:	93 e1 00 0c 	stw     r31,12(r1)
+10000310:	7c 7f 1b 78 	mr      r31,r3
+10000314:	90 01 00 14 	stw     r0,20(r1)         ; 开栈
+10000318:	48 00 02 6d 	bl      10000584 <func2>  ; 调用func2
+1000031c:	7f e3 fb 78 	mr      r3,r31
+10000320:	48 00 02 a1 	bl      100005c0 <func3>  ; 调用func3
+10000324:	38 80 00 01 	li      r4,1
+10000328:	38 a0 00 02 	li      r5,2
+1000032c:	38 c0 00 03 	li      r6,3
+10000330:	38 e0 00 04 	li      r7,4
+10000334:	39 00 00 05 	li      r8,5
+10000338:	38 60 00 05 	li      r3,5
+1000033c:	4c c6 31 82 	crclr   4*cr1+eq
+10000340:	48 00 03 0d 	bl      1000064c <func5>  ; 调用func5
+10000344:	7c 64 1b 78 	mr      r4,r3
+10000348:	3c 60 10 00 	lis     r3,4096
+1000034c:	38 63 08 54 	addi    r3,r3,2132
+10000350:	4c c6 31 82 	crclr   4*cr1+eq
+10000354:	48 01 06 95 	bl      100109e8 <printf@plt> ; 调用printf
+10000358:	80 01 00 14 	lwz     r0,20(r1)
+1000035c:	83 e1 00 0c 	lwz     r31,12(r1)
+10000360:	38 60 00 00 	li      r3,0
+10000364:	7c 08 03 a6 	mtlr    r0
+10000368:	38 21 00 10 	addi    r1,r1,16
+1000036c:	4e 80 00 20 	blr                           ; 返回
+
+; static_var + static_var2 + a = 86，优化
+
+10000574 <func1>:
+10000574:	81 25 00 04 	lwz     r9,4(r5)
+10000578:	38 63 00 56 	addi    r3,r3,86  ; 返回值 86+i
+1000057c:	91 24 00 08 	stw     r9,8(r4)  ; s1->c = s2->b;
+10000580:	4e 80 00 20 	blr
+
+10000584 <func2>:
+10000584:	2f 83 00 00 	cmpwi   cr7,r3,0
+10000588:	41 9d 00 0c 	bgt-    cr7,10000594 <func2+0x10>
+1000058c:	38 60 00 03 	li      r3,3                   ; return 3
+10000590:	4e 80 00 20 	blr
+10000594:	94 21 ff f0 	stwu    r1,-16(r1)
+10000598:	3c 60 10 00 	lis     r3,4096
+1000059c:	7c 08 02 a6 	mflr    r0
+100005a0:	38 63 08 44 	addi    r3,r3,2116             ; 1 <= i
+100005a4:	90 01 00 14 	stw     r0,20(r1)              ; 存lr到上一个函数栈中
+100005a8:	48 01 04 49 	bl      100109f0 <puts@plt>
+100005ac:	80 01 00 14 	lwz     r0,20(r1)
+100005b0:	38 60 00 01 	li      r3,1
+100005b4:	38 21 00 10 	addi    r1,r1,16               ; return 1
+100005b8:	7c 08 03 a6 	mtlr    r0
+100005bc:	4e 80 00 20 	blr
+
+100005c0 <func3>:
+100005c0:	2f 83 00 02 	cmpwi   cr7,r3,2                  ; i == 2
+100005c4:	41 9e 00 58 	beq-    cr7,1000061c <func3+0x5c>
+100005c8:	2f 83 00 0f 	cmpwi   cr7,r3,15                 ; i == 15
+100005cc:	41 9e 00 20 	beq-    cr7,100005ec <func3+0x2c>
+100005d0:	2f 83 00 01 	cmpwi   cr7,r3,1                  ; i == 1
+100005d4:	41 9e 00 0c 	beq-    cr7,100005e0 <func3+0x20>
+100005d8:	38 60 ff ff 	li      r3,-1                     ; 默认返回-1
+100005dc:	4e 80 00 20 	blr
+100005e0:	3d 20 10 01 	lis     r9,4097
+100005e4:	80 69 09 9c 	lwz     r3,2460(r9)               ; 返回global_uninit_var
+100005e8:	4e 80 00 20 	blr
+100005ec:	94 21 ff f0 	stwu    r1,-16(r1)
+100005f0:	3c 60 10 00 	lis     r3,4096
+100005f4:	7c 08 02 a6 	mflr    r0
+100005f8:	38 63 08 4c 	addi    r3,r3,2124                ; "i == 15"
+100005fc:	90 01 00 14 	stw     r0,20(r1)
+10000600:	4c c6 31 82 	crclr   4*cr1+eq
+10000604:	48 01 03 e5 	bl      100109e8 <printf@plt>
+10000608:	80 01 00 14 	lwz     r0,20(r1)
+1000060c:	38 60 ff ff 	li      r3,-1
+10000610:	38 21 00 10 	addi    r1,r1,16
+10000614:	7c 08 03 a6 	mtlr    r0
+10000618:	4e 80 00 20 	blr
+1000061c:	38 60 00 08 	li      r3,8                    ; return 8
+10000620:	4e 80 00 20 	blr
+
+10000624 <func4>:
+10000624:	7c 6a 1b 79 	mr.     r10,r3
+10000628:	38 60 00 00 	li      r3,0
+1000062c:	40 81 00 1c 	ble-    10000648 <func4+0x24>   ; bound <= 0 即退出
+10000630:	39 20 00 00 	li      r9,0
+10000634:	7d 49 03 a6 	mtctr   r10                     ; r10 = bound存到ctr
+10000638:	7c 63 4a 14 	add     r3,r3,r9                ; r3 = r3 + i
+1000063c:	39 29 00 01 	addi    r9,r9,1                 ; i自增
+10000640:	42 00 ff f8 	bdnz+   10000638 <func4+0x14>
+10000644:	4e 80 00 20 	blr
+10000648:	4e 80 00 20 	blr
+
+1000064c <func5>:
+1000064c:	94 21 ff c0 	stwu    r1,-64(r1)
+10000650:	7c 6c 1b 79 	mr.     r12,r3
+10000654:	38 01 00 48 	addi    r0,r1,72
+10000658:	39 61 00 18 	addi    r11,r1,24
+1000065c:	91 21 00 30 	stw     r9,48(r1)
+10000660:	39 20 00 01 	li      r9,1
+10000664:	90 81 00 1c 	stw     r4,28(r1)
+10000668:	90 a1 00 20 	stw     r5,32(r1)
+1000066c:	90 c1 00 24 	stw     r6,36(r1)
+10000670:	90 e1 00 28 	stw     r7,40(r1)
+10000674:	91 01 00 2c 	stw     r8,44(r1)
+10000678:	91 41 00 34 	stw     r10,52(r1)
+1000067c:	99 21 00 08 	stb     r9,8(r1)
+10000680:	90 01 00 0c 	stw     r0,12(r1)
+10000684:	91 61 00 10 	stw     r11,16(r1)
+10000688:	40 81 00 58 	ble-    100006e0 <func5+0x94>
+1000068c:	39 20 00 01 	li      r9,1
+10000690:	7c 08 03 78 	mr      r8,r0
+10000694:	38 60 00 00 	li      r3,0
+10000698:	7d 89 03 a6 	mtctr   r12
+1000069c:	48 00 00 18 	b       100006b4 <func5+0x68>
+100006a0:	7d 4b 52 14 	add     r10,r11,r10
+100006a4:	54 e9 06 3e 	clrlwi  r9,r7,24
+100006a8:	81 4a 00 00 	lwz     r10,0(r10)
+100006ac:	7c 63 52 14 	add     r3,r3,r10
+100006b0:	42 40 00 28 	bdz-    100006d8 <func5+0x8c>
+100006b4:	2b 89 00 07 	cmplwi  cr7,r9,7
+100006b8:	55 2a 10 3a 	rlwinm  r10,r9,2,0,29
+100006bc:	38 e9 00 01 	addi    r7,r9,1
+100006c0:	40 bd ff e0 	ble-    cr7,100006a0 <func5+0x54>
+100006c4:	7d 0a 43 78 	mr      r10,r8
+100006c8:	39 08 00 04 	addi    r8,r8,4
+100006cc:	81 4a 00 00 	lwz     r10,0(r10)
+100006d0:	7c 63 52 14 	add     r3,r3,r10
+100006d4:	42 00 ff e0 	bdnz+   100006b4 <func5+0x68>
+100006d8:	38 21 00 40 	addi    r1,r1,64
+100006dc:	4e 80 00 20 	blr
+100006e0:	38 60 00 00 	li      r3,0
+100006e4:	4b ff ff f4 	b       100006d8 <func5+0x8c>
+
+100006e8 <func6>:                                          ; 无输入输出，直接返回
+100006e8:	4e 80 00 20 	blr
+100006ec:	00 01 81 b0 	.long 0x181b0
+#+end_src
 * Mips64
 $0 常量0
 #31 $RA 返回地址
@@ -806,7 +970,6 @@ $0 常量0
 #+end_src
 
 ** 例程
-
 *gcc -m32 -g foo.c*
 #+begin_src asm
 //赋值与算术运算
@@ -1272,4 +1435,313 @@ Disassembly of section .text:
  804865b:	66 90                	xchg   %ax,%ax
  804865d:	66 90                	xchg   %ax,%ax
  804865f:	90                   	nop
+#+end_src
+* X64
+** 指令
+** ABI
+** 例程
+*gcc -g foo.c*
+#+begin_src asm
+
+//赋值与算术运算
+int func1(int i, struct s1 *s1, struct s2 *s2)
+{
+  4005d6:	55                   	push   %rbp
+  4005d7:	48 89 e5             	mov    %rsp,%rbp
+  4005da:	89 7d ec             	mov    %edi,-0x14(%rbp)
+  4005dd:	48 89 75 e0          	mov    %rsi,-0x20(%rbp)
+  4005e1:	48 89 55 d8          	mov    %rdx,-0x28(%rbp)
+    static int static_var = 85;
+    static int static_var2;
+
+    int a = 1;
+  4005e5:	c7 45 fc 01 00 00 00 	movl   $0x1,-0x4(%rbp)
+
+    s1->c = s2->b;
+  4005ec:	48 8b 45 d8          	mov    -0x28(%rbp),%rax
+  4005f0:	8b 50 08             	mov    0x8(%rax),%edx
+  4005f3:	48 8b 45 e0          	mov    -0x20(%rbp),%rax
+  4005f7:	89 50 08             	mov    %edx,0x8(%rax)
+    return static_var + static_var2 + a + i;
+  4005fa:	8b 15 30 0a 20 00    	mov    0x200a30(%rip),%edx        # 601030 <static_var.2372>
+  400600:	8b 05 32 0a 20 00    	mov    0x200a32(%rip),%eax        # 601038 <__TMC_END__>
+  400606:	01 c2                	add    %eax,%edx
+  400608:	8b 45 fc             	mov    -0x4(%rbp),%eax
+  40060b:	01 c2                	add    %eax,%edx
+  40060d:	8b 45 ec             	mov    -0x14(%rbp),%eax
+  400610:	01 d0                	add    %edx,%eax
+}
+  400612:	5d                   	pop    %rbp
+  400613:	c3                   	retq   
+
+0000000000400614 <func2>:
+
+//if else
+int func2(int i)
+{
+  400614:	55                   	push   %rbp
+  400615:	48 89 e5             	mov    %rsp,%rbp
+  400618:	48 83 ec 10          	sub    $0x10,%rsp
+  40061c:	89 7d fc             	mov    %edi,-0x4(%rbp)
+    if (i < 1) {
+  40061f:	83 7d fc 00          	cmpl   $0x0,-0x4(%rbp)
+  400623:	7f 07                	jg     40062c <func2+0x18>
+        return 3;
+  400625:	b8 03 00 00 00       	mov    $0x3,%eax
+  40062a:	eb 0f                	jmp    40063b <func2+0x27>
+    } else {
+        printf("1 <= i\n");
+  40062c:	bf 38 09 40 00       	mov    $0x400938,%edi
+  400631:	e8 9a fe ff ff       	callq  4004d0 <puts@plt>
+    }
+
+    return 1;
+  400636:	b8 01 00 00 00       	mov    $0x1,%eax
+}
+  40063b:	c9                   	leaveq 
+  40063c:	c3                   	retq   
+
+000000000040063d <func3>:
+
+//switch case
+int func3(int i)
+{
+  40063d:	55                   	push   %rbp
+  40063e:	48 89 e5             	mov    %rsp,%rbp
+  400641:	48 83 ec 20          	sub    $0x20,%rsp
+  400645:	89 7d ec             	mov    %edi,-0x14(%rbp)
+    int rc = -1;
+  400648:	c7 45 fc ff ff ff ff 	movl   $0xffffffff,-0x4(%rbp)
+
+    switch (i) {
+  40064f:	83 7d ec 02          	cmpl   $0x2,-0x14(%rbp)
+  400653:	74 17                	je     40066c <func3+0x2f>
+  400655:	83 7d ec 0f          	cmpl   $0xf,-0x14(%rbp)
+  400659:	74 1a                	je     400675 <func3+0x38>
+  40065b:	83 7d ec 01          	cmpl   $0x1,-0x14(%rbp)
+  40065f:	75 25                	jne    400686 <func3+0x49>
+    case 1:
+        rc = global_uninit_var;
+  400661:	8b 05 d5 09 20 00    	mov    0x2009d5(%rip),%eax        # 60103c <global_uninit_var>
+  400667:	89 45 fc             	mov    %eax,-0x4(%rbp)
+        break;
+  40066a:	eb 1b                	jmp    400687 <func3+0x4a>
+    case 2:
+        rc = 8;
+  40066c:	c7 45 fc 08 00 00 00 	movl   $0x8,-0x4(%rbp)
+        break;
+  400673:	eb 12                	jmp    400687 <func3+0x4a>
+    case 15:
+        printf("i == 15");
+  400675:	bf 3f 09 40 00       	mov    $0x40093f,%edi
+  40067a:	b8 00 00 00 00       	mov    $0x0,%eax
+  40067f:	e8 5c fe ff ff       	callq  4004e0 <printf@plt>
+        break;
+  400684:	eb 01                	jmp    400687 <func3+0x4a>
+    default:
+        break;
+  400686:	90                   	nop
+    }
+    return rc;
+  400687:	8b 45 fc             	mov    -0x4(%rbp),%eax
+}
+  40068a:	c9                   	leaveq 
+  40068b:	c3                   	retq   
+
+000000000040068c <func4>:
+
+
+//loop
+int func4(int bound)
+{
+  40068c:	55                   	push   %rbp
+  40068d:	48 89 e5             	mov    %rsp,%rbp
+  400690:	89 7d ec             	mov    %edi,-0x14(%rbp)
+    int i, sum = 0;
+  400693:	c7 45 f8 00 00 00 00 	movl   $0x0,-0x8(%rbp)
+
+    for (i = 0; i < bound; ++i) {
+  40069a:	c7 45 fc 00 00 00 00 	movl   $0x0,-0x4(%rbp)
+  4006a1:	eb 0a                	jmp    4006ad <func4+0x21>
+        sum += i;
+  4006a3:	8b 45 fc             	mov    -0x4(%rbp),%eax
+  4006a6:	01 45 f8             	add    %eax,-0x8(%rbp)
+    for (i = 0; i < bound; ++i) {
+  4006a9:	83 45 fc 01          	addl   $0x1,-0x4(%rbp)
+  4006ad:	8b 45 fc             	mov    -0x4(%rbp),%eax
+  4006b0:	3b 45 ec             	cmp    -0x14(%rbp),%eax
+  4006b3:	7c ee                	jl     4006a3 <func4+0x17>
+    }
+
+    return sum;
+  4006b5:	8b 45 f8             	mov    -0x8(%rbp),%eax
+}
+  4006b8:	5d                   	pop    %rbp
+  4006b9:	c3                   	retq   
+
+00000000004006ba <func5>:
+
+//不定参
+int func5(int count, ...)
+{
+  4006ba:	55                   	push   %rbp
+  4006bb:	48 89 e5             	mov    %rsp,%rbp
+  4006be:	48 83 ec 68          	sub    $0x68,%rsp
+  4006c2:	89 bd 2c ff ff ff    	mov    %edi,-0xd4(%rbp)
+  4006c8:	48 89 b5 58 ff ff ff 	mov    %rsi,-0xa8(%rbp)
+  4006cf:	48 89 95 60 ff ff ff 	mov    %rdx,-0xa0(%rbp)
+  4006d6:	48 89 8d 68 ff ff ff 	mov    %rcx,-0x98(%rbp)
+  4006dd:	4c 89 85 70 ff ff ff 	mov    %r8,-0x90(%rbp)
+  4006e4:	4c 89 8d 78 ff ff ff 	mov    %r9,-0x88(%rbp)
+  4006eb:	84 c0                	test   %al,%al
+  4006ed:	74 20                	je     40070f <func5+0x55>
+  4006ef:	0f 29 45 80          	movaps %xmm0,-0x80(%rbp)
+  4006f3:	0f 29 4d 90          	movaps %xmm1,-0x70(%rbp)
+  4006f7:	0f 29 55 a0          	movaps %xmm2,-0x60(%rbp)
+  4006fb:	0f 29 5d b0          	movaps %xmm3,-0x50(%rbp)
+  4006ff:	0f 29 65 c0          	movaps %xmm4,-0x40(%rbp)
+  400703:	0f 29 6d d0          	movaps %xmm5,-0x30(%rbp)
+  400707:	0f 29 75 e0          	movaps %xmm6,-0x20(%rbp)
+  40070b:	0f 29 7d f0          	movaps %xmm7,-0x10(%rbp)
+    va_list argp;
+    int i, sum = 0;
+  40070f:	c7 85 48 ff ff ff 00 	movl   $0x0,-0xb8(%rbp)
+  400716:	00 00 00 
+
+    va_start(argp, count);
+  400719:	c7 85 30 ff ff ff 08 	movl   $0x8,-0xd0(%rbp)
+  400720:	00 00 00 
+  400723:	c7 85 34 ff ff ff 30 	movl   $0x30,-0xcc(%rbp)
+  40072a:	00 00 00 
+  40072d:	48 8d 45 10          	lea    0x10(%rbp),%rax
+  400731:	48 89 85 38 ff ff ff 	mov    %rax,-0xc8(%rbp)
+  400738:	48 8d 85 50 ff ff ff 	lea    -0xb0(%rbp),%rax
+  40073f:	48 89 85 40 ff ff ff 	mov    %rax,-0xc0(%rbp)
+    for (i = 0; i < count; ++i) {
+  400746:	c7 85 4c ff ff ff 00 	movl   $0x0,-0xb4(%rbp)
+  40074d:	00 00 00 
+  400750:	eb 4f                	jmp    4007a1 <func5+0xe7>
+        sum += va_arg(argp, int);
+  400752:	8b 85 30 ff ff ff    	mov    -0xd0(%rbp),%eax
+  400758:	83 f8 2f             	cmp    $0x2f,%eax
+  40075b:	77 23                	ja     400780 <func5+0xc6>
+  40075d:	48 8b 85 40 ff ff ff 	mov    -0xc0(%rbp),%rax
+  400764:	8b 95 30 ff ff ff    	mov    -0xd0(%rbp),%edx
+  40076a:	89 d2                	mov    %edx,%edx
+  40076c:	48 01 d0             	add    %rdx,%rax
+  40076f:	8b 95 30 ff ff ff    	mov    -0xd0(%rbp),%edx
+  400775:	83 c2 08             	add    $0x8,%edx
+  400778:	89 95 30 ff ff ff    	mov    %edx,-0xd0(%rbp)
+  40077e:	eb 12                	jmp    400792 <func5+0xd8>
+  400780:	48 8b 85 38 ff ff ff 	mov    -0xc8(%rbp),%rax
+  400787:	48 8d 50 08          	lea    0x8(%rax),%rdx
+  40078b:	48 89 95 38 ff ff ff 	mov    %rdx,-0xc8(%rbp)
+  400792:	8b 00                	mov    (%rax),%eax
+  400794:	01 85 48 ff ff ff    	add    %eax,-0xb8(%rbp)
+    for (i = 0; i < count; ++i) {
+  40079a:	83 85 4c ff ff ff 01 	addl   $0x1,-0xb4(%rbp)
+  4007a1:	8b 85 4c ff ff ff    	mov    -0xb4(%rbp),%eax
+  4007a7:	3b 85 2c ff ff ff    	cmp    -0xd4(%rbp),%eax
+  4007ad:	7c a3                	jl     400752 <func5+0x98>
+    }
+    va_end(argp);
+    return sum;
+  4007af:	8b 85 48 ff ff ff    	mov    -0xb8(%rbp),%eax
+}
+  4007b5:	c9                   	leaveq 
+  4007b6:	c3                   	retq   
+
+00000000004007b7 <func6>:
+
+void func6(void)
+{
+  4007b7:	55                   	push   %rbp
+  4007b8:	48 89 e5             	mov    %rsp,%rbp
+    int i = 1;
+  4007bb:	c7 45 fc 01 00 00 00 	movl   $0x1,-0x4(%rbp)
+    int j = 1;
+  4007c2:	c7 45 f8 01 00 00 00 	movl   $0x1,-0x8(%rbp)
+    int k = 1;
+  4007c9:	c7 45 f4 01 00 00 00 	movl   $0x1,-0xc(%rbp)
+    int l = 1;
+  4007d0:	c7 45 f0 01 00 00 00 	movl   $0x1,-0x10(%rbp)
+    int m = 1;
+  4007d7:	c7 45 ec 01 00 00 00 	movl   $0x1,-0x14(%rbp)
+    int n = 1;
+  4007de:	c7 45 e8 01 00 00 00 	movl   $0x1,-0x18(%rbp)
+
+    return;
+  4007e5:	90                   	nop
+}
+  4007e6:	5d                   	pop    %rbp
+  4007e7:	c3                   	retq   
+
+00000000004007e8 <main>:
+
+int main(int argc, char *argv[])
+{
+  4007e8:	55                   	push   %rbp
+  4007e9:	48 89 e5             	mov    %rsp,%rbp
+  4007ec:	48 83 ec 30          	sub    $0x30,%rsp
+  4007f0:	89 7d dc             	mov    %edi,-0x24(%rbp)
+  4007f3:	48 89 75 d0          	mov    %rsi,-0x30(%rbp)
+    struct s1 s1 = {
+  4007f7:	c7 45 f4 01 00 00 00 	movl   $0x1,-0xc(%rbp)
+  4007fe:	c7 45 f8 02 00 00 00 	movl   $0x2,-0x8(%rbp)
+  400805:	c7 45 fc 03 00 00 00 	movl   $0x3,-0x4(%rbp)
+        .a = 1,
+        .b = 2,
+        .c = 3,
+    };
+
+    struct s2 s2 = {
+  40080c:	48 c7 45 e0 47 09 40 	movq   $0x400947,-0x20(%rbp)
+  400813:	00 
+  400814:	c7 45 e8 0f 00 00 00 	movl   $0xf,-0x18(%rbp)
+        .a = "hello",
+        .b = 15,
+    };
+
+    func1(argc, &s1, &s2);
+  40081b:	48 8d 55 e0          	lea    -0x20(%rbp),%rdx
+  40081f:	48 8d 4d f4          	lea    -0xc(%rbp),%rcx
+  400823:	8b 45 dc             	mov    -0x24(%rbp),%eax
+  400826:	48 89 ce             	mov    %rcx,%rsi
+  400829:	89 c7                	mov    %eax,%edi
+  40082b:	e8 a6 fd ff ff       	callq  4005d6 <func1>
+    func2(argc);
+  400830:	8b 45 dc             	mov    -0x24(%rbp),%eax
+  400833:	89 c7                	mov    %eax,%edi
+  400835:	e8 da fd ff ff       	callq  400614 <func2>
+    func3(argc);
+  40083a:	8b 45 dc             	mov    -0x24(%rbp),%eax
+  40083d:	89 c7                	mov    %eax,%edi
+  40083f:	e8 f9 fd ff ff       	callq  40063d <func3>
+    func4(argc);
+  400844:	8b 45 dc             	mov    -0x24(%rbp),%eax
+  400847:	89 c7                	mov    %eax,%edi
+  400849:	e8 3e fe ff ff       	callq  40068c <func4>
+    printf("%d\n", func5(5, 1, 2, 3, 4, 5));
+  40084e:	41 b9 05 00 00 00    	mov    $0x5,%r9d
+  400854:	41 b8 04 00 00 00    	mov    $0x4,%r8d
+  40085a:	b9 03 00 00 00       	mov    $0x3,%ecx
+  40085f:	ba 02 00 00 00       	mov    $0x2,%edx
+  400864:	be 01 00 00 00       	mov    $0x1,%esi
+  400869:	bf 05 00 00 00       	mov    $0x5,%edi
+  40086e:	b8 00 00 00 00       	mov    $0x0,%eax
+  400873:	e8 42 fe ff ff       	callq  4006ba <func5>
+  400878:	89 c6                	mov    %eax,%esi
+  40087a:	bf 4d 09 40 00       	mov    $0x40094d,%edi
+  40087f:	b8 00 00 00 00       	mov    $0x0,%eax
+  400884:	e8 57 fc ff ff       	callq  4004e0 <printf@plt>
+    func6();
+  400889:	e8 29 ff ff ff       	callq  4007b7 <func6>
+    return 0;
+  40088e:	b8 00 00 00 00       	mov    $0x0,%eax
+}
+  400893:	c9                   	leaveq 
+  400894:	c3                   	retq   
+  400895:	66 2e 0f 1f 84 00 00 	nopw   %cs:0x0(%rax,%rax,1)
+  40089c:	00 00 00 
+  40089f:	90                   	nop
 #+end_src

@@ -1,2 +1,0 @@
-* staruml - 类图
-* trello - TODO管理
