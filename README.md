@@ -12,17 +12,29 @@
 ![Hex.pm](https://img.shields.io/hexpm/l/apa)
 
 - [目录](#my-notebook)
-  * [硬件](#--)
-  * [软件](#--)
-  * [协议](#--)
-  * [[英语](./language/english/english.org)](#------language-english-englishorg-)
+  * [硬件](#硬件)
+  * [软件](#软件)
+  * [协议](#协议)
+  * [英语](#英语)
 
 ## 硬件
-* [高速信号及其应用](./books/High_Speed_Serdes_and_Applications.pdf)
-有关serdes结构的综述.
+* [电路](./books/electric_circuits.org)
+电路基本原理
 
 * [学以致用深入浅出数字信号处理](./books/deeply_understanding_digital_signal_processing.org)
 数字信号简介.
+
+* [通信原理](./books/comm_principle.org)
+信源信道脉冲等相关.
+
+* [电路原理图](./books/schematic.org)
+电路分析.
+
+* [高速信号及其应用](./books/High_Speed_Serdes_and_Applications.pdf)
+有关serdes结构的综述.
+
+* [信号完整性](./books/si.org)
+关注PCB走线对高速信号的影响.
 
 ## 软件
 * 操作系统
@@ -45,6 +57,15 @@
 
 ## 协议
 * [IEEE802.3](./protocol/IEEE802.3/ieee_note.pdf)
-IEEE802.3以太网物理层MAC/PCS/PMA/PMD协议
+IEEE802.3以太网物理层MAC/PCS/PMA/PMD协议.
+* [i2c](./protocol/i2c.pdf)
+I2C标准协议.
+* [smbus](./protocol/smbus.pdf)
+总线管理协议.
+* [pmbus](./protocol/pmbus)
+电源管理协议.
+* [sff](./protocol/sff)
+SFP光电模块协议.
+
 
 ## [英语](./language/english/english.org)

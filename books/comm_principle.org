@@ -1,0 +1,20 @@
+#+SETUPFILE: ~/.emacs.d/themes/org-html-themes/setup/theme-readtheorg.setup
+#+OPTIONS: \n:t
+#+OPTIONS: tex:t
+#+OPTIONS: tex:dvipng
+#+attr_html: :width 300px
+#+attr_latex: :width 300px
+#+ATTR_ORG: :width 300
+
+* 总章
+[[./comm_principle.img/1.jpeg]]
+* 信源源码
+[[./comm_principle.img/2.jpeg]]
+* 信道源码
+[[./comm_principle.img/3.jpeg]]
+* 脉冲成形
+[[./comm_principle.img/4.jpeg]]
+* 调制
+[[./comm_principle.img/5.jpeg]]
+* 通信性能
+[[./comm_principle.img/6.jpeg]]

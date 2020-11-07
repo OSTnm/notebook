@@ -1,0 +1,42 @@
+# -*- org-download-image-dir: \./schematic\.img/; -*-
+#+SETUPFILE: ~/.emacs.d/themes/org-html-themes/setup/theme-readtheorg.setup
+#+OPTIONS: \n:t
+#+OPTIONS: tex:t
+#+OPTIONS: tex:dvipng
+#+attr_html: :width 300px
+#+attr_latex: :width 300px
+#+ATTR_ORG: :width 300
+#+TITLE: schematic
+
+* 电路原件
+** 桥式全波整波器
+   [[./schematic.img/1.jpeg]]
+** 导线组
+   [[./schematic.img/2.jpeg]]
+   连线上3道小斜杠，表示有3条导线连接在一起，但导线之间并不连接
+
+* Tips
+  - 集成电路内部电路一般都很复杂，包含若干个单元电路和许多元器件，但在电路图中通常只将集成电路作为一个元器件来看待。
+  - 输入阻抗（input impedance)是指一个电路输入端的等效阻抗。在输入端上加上一个电压源U，测量输入端的电流I，则输入阻抗Rin就是U/I。你可以把输入端想象成一个电阻的两端，这个电阻的阻值，就是输入阻抗。
+  - 输出阻抗（output impedance) 含独立电源网络输出端口的等效电压源(戴维南等效电路）或等效电流源(诺顿等效电路）的内阻抗。其值等于独立电源置零时，从输出端口视入的输入阻抗。
+  - VCC、VDD、AVDD、VSS
+    - V*与AV*的区别是数字与模拟的区别
+    - CC与DD的区别是供电电压与工作电压的区别，通常VCC>VDD
+    - 数字电路供电VCC，模拟电路供电AVCC
+    - VDD是指工作电压，就是供电进芯片的
+    - AVDD是模拟电压或者叫模拟正电源，是从芯片向外供电的
+    - 对于数字电路来说，VCC是电路的供电电压，VDD是芯片的工作电压，通常Vcc>VddVSS是接地点
+    - 有些IC既有VDD引脚又有VCC引脚，说明这种器件自身带有电压转换功能
+    - 在场效应管（或COMS器件）中，VDD为漏极，VSS为源极，VDD和VSS指的是元件引脚，而不表示供电电压
+    - 一般来说VCC=模拟电源,VDD=数字电源,VSS=数字地,VEE=负电源
+    - 一般要求AVCC和VCC之间电压差不能超过一定数值，例如AVR单片机规定不能超过0.3V
+    - 应用时，VCC直接接系统电源，芯片外的其它数字逻辑器件也接VCC，芯片外的模拟电路的电源和AVCC相连。VCC和AVCC之间用一个低通滤波器连接。滤波器典型参数为：电感10μH，两边的电容0.1μF。
+  - 高阻态是一个数字电路里常见的术语，指的是电路的一种输出状态，既不是高电平也不是低电平，如果高阻态再输入下一级电路的话，对下级电路无任何影响，和没接一样，如果用万用表测的话有可能是高电平也有可能是低电平，随它后面接的东西定的。
+  - Uxx是芯片、Rxx是电阻、Cxx是电容、Lxx是电感、Jxx是connector
+  - 连线上小圆圈表示低电平有效
+  - 滤波电路
+    - 如下左边滤波电路是无法滤波的，因为相当于电容与电阻相并联，电容上电压即为电源电压，但实际电源相当于理想电源串联电阻，则频率越高，容抗越小，即可滤掉交流分量
+      - [[file:schematic.img/Tips/Untitled_2019-04-16_20-10-34.jpeg]]  [[file:schematic.img/Tips/Untitled_2019-04-16_20-08-21.jpeg]]
+    - 上面的电容接地，电源->电容->地->电源形成一个回路
+  - 
+
