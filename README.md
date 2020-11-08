@@ -55,6 +55,12 @@
   + [lua](./language/lua)
   lua范例程序.
 
+* 程序
+  + [occ编译器(ongoing)](./programming/occ.c)
+  自已的编译器.
+  + [elf32dump](./programming/elf32_dump.c)
+  为了熟悉elf格式写的小程序.
+
 ## 协议
 * [IEEE802.3](./protocol/IEEE802.3/ieee_note.pdf)
 IEEE802.3以太网物理层MAC/PCS/PMA/PMD协议.
@@ -66,6 +72,5 @@ I2C标准协议.
 电源管理协议.
 * [sff](./protocol/sff)
 SFP光电模块协议.
-
 
 ## [英语](./language/english/english.org)
