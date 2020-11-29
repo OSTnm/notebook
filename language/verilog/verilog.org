@@ -1,0 +1,1647 @@
+#+SETUPFILE: ~/.emacs.d/themes/org-html-themes/setup/theme-readtheorg.setup
+#+OPTIONS: \n:t
+#+OPTIONS: ^:nil
+#+OPTIONS: tex:t
+#+STARTUP: latexpreview
+#+OPTIONS: tex:dvipng
+#+HTML_MATHJAX: align: left indent: 5em tagside: left font: Neo-Euler
+#+attr_html: :width 300px
+#+attr_latex: :width 300px
+#+ATTR_ORG: :width 300
+
+#+TITLE: Verilog.org
+
+* 语法
+** Basics
+*** Wire
+
+含有一个输入和一个输出的模块可作为Wire
+Wire类型是一种 *信号* 类型, *assign left_side = right_side*是 continuous assignment,不是基于事件驱动
+
+[[file:语法/2020-11-09_23-21-06_Wire.png]]
+
+#+begin_src verilog
+module top_module( input in, output out );
+	assign out = in;
+endmodule
+#+end_src
+
+和编程语言不一样的是，多个assgin语句执行的顺序是随机的，因为它只描述了连接关系.
+
+[[file:语法/2020-11-09_23-26-26_Wire4.png]]
+
+#+begin_src verilog
+module top_module(input a, b, c, output w, x, y, z);
+	assign w = a;
+	assign x = b;
+	assign y = b;
+	assign z = c;
+endmodule
+#+end_src
+
+*** Not gate
+
+位非(~)和逻辑(!)和C语义基本一致.
+
+[[file:语法/2020-11-09_23-31-50_Notgate.png]]
+#+begin_src verilog
+module top_module(input in, output out);
+	assign in = ~out;
+endmodule
+#+end_src
+
+*** And gate
+
+一个wire信号不能同时被多个信号驱动，同时没有driver则为未定义值，综合时会被当作0
+
+[[file:语法/2020-11-09_23-37-01_Andgate.png]]
+#+begin_src verilog
+module top_module(
+    input a,
+    input b,
+    output out );
+	assign out = a & b;
+endmodule
+#+end_src
+
+*** Nor gate
+
+assign语句语法与C类似,右值可为一个复杂的逻辑表达式
+[[file:语法/2020-11-10_08-17-59_Norgate.png]]
+
+#+begin_src verilog
+module top_module(
+    input a,
+    input b,
+    output out );
+    assign out = ~(a | b);
+endmodule
+#+end_src
+
+*** Xnor gate
+
+[[file:语法/2020-11-10_08-29-45_Xnorgate.png]]
+
+#+begin_src verilog
+module top_module(
+    input a,
+    input b,
+    output out );
+    assign out = ~(a ^ b);
+endmodule
+#+end_src
+
+*** Declaring wires
+
+在模块内部使用wire，可用wire类型声明，注意wire和assign的特性，调整assign的顺序并不影响最后综合出来的电路
+[[file:语法/2020-11-10_08-36-47_Wiredecl1.png]]
+#+begin_src verilog
+module top_module (
+    input in,              // Declare an input wire named "in"
+    output out             // Declare an output wire named "out"
+);
+
+    wire not_in;           // Declare a wire named "not_in"
+
+    assign out = ~not_in;  // Assign a value to out (create a NOT gate).
+    assign not_in = ~in;   // Assign a value to not_in (create another NOT gate).
+
+endmodule   // End of module "top_module"
+#+end_src
+
+
+[[file:语法/2020-11-10_08-49-14_Wiredecl2.png]]
+
+#+begin_src verilog
+module top_module(
+    input a,
+    input b,
+    input c,
+    input d,
+    output out,
+    output out_n);
+	wire i, j, k;
+    assign i = a & b;
+    assign j = c & d;
+    assign k = i | j;
+    assign out = k;
+    assign out_n = ~k;
+endmodule
+#+end_src
+
+** Vectors
+
+一组信号可组成vectors, 形式为type [upper:lower] vector_name;
+#+begin_src verilog
+wire [7:0] w;         // 8-bit wire
+reg  [4:1] x;         // 4-bit reg
+output reg [0:0] y;   // 1-bit reg that is also an output port (this is still a vector)
+input wire [3:-2] z;  // 6-bit wire input (negative ranges are allowed)
+output [3:0] a;       // 4-bit output wire. Type is 'wire' unless specified otherwise.
+wire [0:7] b;         // 8-bit wire where b[0] is the most-significant bit.
+
+w[3:0]      // Only the lower 4 bits of w
+x[1]        // The lowest bit of x
+x[1:1]      // ...also the lowest bit of x
+z[-1:-2]    // Two lowest bits of z
+b[3:0]      // Illegal. Vector part-select must match the direction of the declaration.
+b[0:3]      // The *upper* 4 bits of b.
+assign w[3:0] = b[0:3];    // Assign upper 4 bits of b to lower 4 bits of w. w[3]=b[0], w[2]=b[1], etc.
+#+end_src
+
+小端 wire[7:0] 大端 wire[0:7]
+
+默认未定义的变量被认为是1bit wire，这样可能会造成隐含的问题
+#+begin_src verilog
+wire [2:0] a, c;   // Two vectors
+assign a = 3'b101;  // a = 101
+assign b = a;       // b =   1  implicitly-created wire
+assign c = b;       // c = 001  <-- bug
+my_module i1 (d,e); // d and e are implicitly one-bit wide if not declared.
+                    // This could be a bug if the port was intended to be a vector.
+#+end_src
+
+重定义default_nettype为none时未定义则会报错，降低产生bug的概率
+#+begin_src verilog
+`default_nettype none     // Disable implicit nets. Reduces some types of bugs.
+#+end_src
+
+| unpacked | []在变量后, reg mem2 [28:0];         // 29 unpacked elements, each of which is a 1-bit reg.                   |
+| packed   | []在变量前, reg [7:0] mem [255:0];   // 256 unpacked elements, each of which is a 8-bit packed vector of reg. |
+
+不同位宽的变量赋值时，不足补0，或者截断
+
+*** 位运算和逻辑运算
+[[file:语法/2020-11-10_12-51-12_Vectorgates.png]]
+
+#+begin_src verilog
+module top_module(
+    input [2:0] a,
+    input [2:0] b,
+    output [2:0] out_or_bitwise,
+    output out_or_logical,
+    output [5:0] out_not
+);
+	assign out_or_bitwise = a | b;
+    assign out_or_logical = a || b;
+    assign out_not[5:3] = ~b;
+    assign out_not[2:0] = ~a;
+endmodule
+#+end_src
+
+*** 部分选择
+
+#+begin_src verilog
+{3'b111, 3'b000} => 6'b111000
+{1'b1, 1'b0, 3'b101} => 5'b10101
+{4'ha, 4'd10} => 8'b10101010     // 4'ha and 4'd10 are both 4'b1010 in binary
+
+input [15:0] in;
+output [23:0] out;
+assign {out[7:0], out[15:8]} = in;         // Swap two bytes. Right side and left side are both 16-bit vectors.
+assign out[15:0] = {in[7:0], in[15:8]};    // This is the same thing.
+assign out = {in[7:0], in[15:8]};       // This is different. The 16-bit vector on the right is extended to
+                                        // match the 24-bit vector on the left, so out[23:16] are zero.
+                                        // In the first two examples, out[23:16] are not assigned.
+#+end_src
+
+
+[[file:语法/2020-11-10_19-12-51_Vector3.png]]
+#+begin_src verilog
+module top_module (
+    input [4:0] a, b, c, d, e, f,
+    output [7:0] w, x, y, z );//
+
+    // assign { ... } = { ... };
+    assign w = {a, b[4:2]};
+    assign x = {b[1:0], c, d[4]};
+    assign y = {d[3:0], e[4:1]};
+    assign z = {e[0], f, 2'b11};
+endmodule
+#+end_src
+
+*** 重复
+扩展同一个变量可用{num{vector}}，会生成num个vector
+#+begin_src verilog
+{5{1'b1}}           // 5'b11111 (or 5'd31 or 5'h1f)
+{2{a,b,c}}          // The same as {a,b,c,a,b,c}
+{3'd5, {2{3'd6}}}   // 9'b101_110_110. It's a concatenation of 101 with
+                    // the second vector, which is two copies of 3'b110.
+#+end_src
+
+将32位out用in做符号扩展
+#+begin_src verilog
+module top_module (
+    input [7:0] in,
+    output [31:0] out );//
+
+    // assign out = { replicate-sign-bit , the-input };
+    assign out = {{24{in[7]}}, in};
+endmodule
+#+end_src
+
+[[file:语法/2020-11-11_01-18-11_Vector5.png]]
+#+begin_src verilog
+module top_module (
+    input a, b, c, d, e,
+    output [24:0] out );//
+    // The output is XNOR of two vectors created by
+    // concatenating and replicating the five inputs.
+    // assign out = ~{ ... } ^ { ... };
+    assign out = ~({5{a, b, c, d, e}} ^ {{5{a}}, {5{b}}, {5{c}}, {5{d}}, {5{e}}});
+endmodule
+#+end_src
+
+** Modules
+类似C的函数，verilog使用module做为逻辑电路的封装，ports为形参，具体的值可为wire, vector
+模块中可以例化其他模块，但在模块中不允许再定义其他模块。这项语法规则类似于在 C 语言函数中可以调用其他函数，但不能定义其他函数.
+
+#+begin_src verilog
+module mod_a ( input in1, input in2, output out );
+    // Module body
+endmodule
+#+end_src
+
+实例化并绑定port有两种方法
+
+[[file:语法/2020-11-11_02-03-14_Module.png]]
+- 根据位置
+#+begin_src verilog
+module top_module ( input a, input b, output out );
+    mod_a instance1 ( a, b, out );
+endmodule
+#+end_src
+
+- 根据名字
+#+begin_src verilog
+#+begin_src verilog
+module top_module ( input a, input b, output out );
+    mod_a instance1 ( .in1(a), .in2(b), .out(out) );
+endmodule
+#+end_src
+
+下面为更复杂一点的情况
+
+[[file:语法/2020-11-11_02-37-04_Module_shift.png]]
+#+begin_src verilog
+module top_module ( input clk, input d, output q );
+    wire q1, q2;
+    my_dff(clk, d, q1);
+    my_dff(clk, q1, q2);
+    my_dff(clk, q2, q);
+endmodule
+#+end_src
+
+module的ports为vector时，如果长度不匹配，则会用0填充或者截断
+
+
+[[file:语法/2020-11-11_12-13-32_Module_shift8.png]]
+
+#+begin_src verilog
+module mux(input[7:0] d1, d2, d3, d4,
+           input [1:0] se,
+           output[7:0] dout);
+    always @  (d1 or d2 or d3 or d4 or se)
+     case(se)
+       2'b00 : dout=d1;
+       2'b01 : dout=d2;
+       2'b10 : dout=d3;
+       2'b11 : dout=d4;
+     endcase
+endmodule
+
+module top_module (
+    input clk,
+    input [7:0] d,
+    input [1:0] sel,
+    output [7:0] q
+);
+    wire[0:7] q1, q2, q3;
+    my_dff8 inst0(clk, d, q1);
+    my_dff8 inst1(clk, q1, q2);
+    my_dff8 inst2(clk, q2, q3);
+    mux inst3(d, q1, q2, q3, sel, q);
+endmodule
+#+end_src
+
+
+[[file:语法/2020-11-11_14-09-05_Module_add.png]]
+
+#+begin_src verilog
+module top_module(
+    input [31:0] a,
+    input [31:0] b,
+    output [31:0] sum
+);
+    wire cin, cout;
+    add16 inst0(a[15:0], b[15:0], 0, sum[15:0], cin);
+    add16 inst1(a[31:16], b[31:16], cin, sum[31:16], cout);
+endmodule
+#+end_src
+
+[[file:语法/2020-11-11_15-43-37_Module_fadd.png]]
+#+begin_src verilog
+module top_module (
+    input [31:0] a,
+    input [31:0] b,
+    output [31:0] sum
+);//
+    wire cin, cout;
+    add16 inst0(a[15:0], b[15:0], 0, sum[15:0], cin);
+    add16 inst1(a[31:16], b[31:16], cin, sum[31:16], cout);
+endmodule
+
+module add1 ( input a, input b, input cin,   output sum, output cout );
+	assign sum = a ^ b ^ cin;
+    assign cout = (~a & b & cin) | (a & ~b & cin) | (a & b & ~cin) | (a & b & cin);
+endmodule
+#+end_src
+
+上述全加器的缺点就是高bit位依赖低bit的结果，下面提高性能的方式
+
+[[file:语法/2020-11-11_16-48-22_Module_cseladd.png]]
+
+
+
+#+begin_src verilog
+module top_module(
+    input [31:0] a,
+    input [31:0] b,
+    output [31:0] sum
+);
+
+    wire carry;
+    wire [31:16] sum0;
+    wire [31:16] sum1;
+
+    add16 al(a[15:0],b[15:0],1'b0,sum[15:0],carry);
+    add16 ah0(a[31:16],b[31:16],1'b0,sum0[31:16],);
+    add16 ah1(a[31:16],b[31:16],1'b1,sum1[31:16],);
+
+    assign sum[31:16] = carry ? sum1 : sum0;
+
+endmodule
+#+end_src
+
+
+[[file:语法/2020-11-11_16-50-49_Module_addsub.png]]
+#+begin_src verilog
+module top_module(
+    input [31:0] a,
+    input [31:0] b,
+    input sub,
+    output [31:0] sum
+);
+    wire[31:0] c = {32{sub}} ^ b;
+    wire cout, cout2;
+    add16 inst0(a[15:0], c[15:0], sub, sum[15:0], cout);
+    add16 inst1(a[31:16], c[31:16], cout, sum[31:16], cout2);
+endmodule
+#+end_src
+** Procedures
+*** Always blocks
+#+begin_src verilog
+组合逻辑Combinational: always @(*)
+时序逻辑Clocked: always @(posedge clk)
+#+end_src
+
+组合逻辑和assgin语句一致，区分只在于语法不同
+[[file:语法/2020-11-12_08-58-28_Alwayscomb.png]]
+#+begin_src verilog
+assign out1 = a & b | c ^ d;
+always @(*) out2 = a & b | c ^ d;
+#+end_src
+
+always综合逻辑总是使用(*)，如果指定信号，但是有信号没写在sensitivity里，综合后虽然一样，但是仿真会不过
+
+*The left-hand-side of an assign statement must be a net type (e.g., wire), while the left-hand-side of a procedural assignment (in an always block) must be a variable type (e.g., reg). These types (wire vs. reg) have nothing to do with what hardware is synthesized, and is just syntax left over from Verilog's use as a hardware simulation language.*
+
+| assign x = y | 连续赋值，不能在always块中使用   |
+| x = y        | 阻塞性赋值，只在always块中使用   |
+| x <= y       | 非阻塞性赋值，只在always块中使用 |
+
+*在组合逻辑中用阻塞赋值，时序逻辑中用非阻塞赋值*
+
+*** always if
+[[file:语法/2020-11-12_15-19-04_Always_if_mux.png]]
+
+#+begin_src verilog
+always @(*) begin //相当于assign out = (condition) ? x : y;
+    if (condition) begin
+        out = x;
+    end
+    else begin
+        out = y;
+    end
+end
+#+end_src
+
+*** always if latches
+如果存在没指定的条件，verilog的解决方法是: *keep the output unchanged.*
+而保持状诚不变意味着当前状态需要被保存，这样便生成了锁存器
+
+如下例代码:
+没有指定cpu_overheated为0的情况，则保持shut_off_computer，生成锁存器
+没有指定arrived为1的情况，则保持keep_driving，生成锁存器
+
+#+begin_src verilog
+always @(*) begin
+    if (cpu_overheated)
+       shut_off_computer = 1;
+end
+
+always @(*) begin
+    if (~arrived)
+       keep_driving = ~gas_tank_empty;
+end
+#+end_src
+
+[[file:语法/2020-11-12_23-50-32_Always_if2.png]]
+
+*** always case
+- 没有switch
+- 没有break，一个case只含有一条语句，多语句需包启在begin ... end中
+- *可以有多个有交集的case，会选第一个匹配的*
+#+begin_src verilog
+always @(*) begin     // This is a combinational circuit
+    case (in)
+      1'b1: begin
+               out = 1'b1;  // begin-end if >1 statement
+            end
+      1'b0: out = 1'b0;
+      default: out = 1'bx;
+    endcase
+end
+#+end_src
+
+6选1多路选择器
+#+begin_src verilog
+// *Case statements are more convenient than if statements if there are a large number of cases. So, in this exercise, create a 6-to-1 multiplexer. When sel is between 0 and 5, choose the corresponding data input. Otherwise, output 0. The data inputs and outputs are all 4 bits wide.*
+module top_module (
+    input [2:0] sel,
+    input [3:0] data0,
+    input [3:0] data1,
+    input [3:0] data2,
+    input [3:0] data3,
+    input [3:0] data4,
+    input [3:0] data5,
+    output reg [3:0] out   );//
+
+    always@(*) begin  // This is a combinational circuit
+        case(sel)
+            3'b000: out = data0;
+            3'b001: out = data1;
+            3'b010: out = data2;
+            3'b011: out = data3;
+            3'b100: out = data4;
+            3'b101: out = data5;
+           	default: out = 0;
+        endcase
+    end
+#+end_src
+
+最低bit为1位判决，case如果有bit位不关心，可用 *casez* 和 *z* 表示某些位不关心
+- 同样的符号可用casex和x
+- ?也可用为z的代替
+#+begin_src verilog
+// synthesis verilog_input_version verilog_2001
+module top_module (
+    input [3:0] in,
+    output reg [1:0] pos  );
+    always @(*) begin
+    casez (in[3:0])
+        4'bzzz1: out = 0;   // in[3:1] can be anything
+        4'bzz1z: out = 1;
+        4'bz1zz: out = 2;
+        4'b1zzz: out = 3;
+        default: out = 0;
+    endcase
+    end
+endmodule
+#+end_src
+
+*** always avoid latches
+为了避免锁存器，可以对输出信号赋初值
+#+begin_src verilog
+always @(*) begin
+    up = 1'b0; down = 1'b0; left = 1'b0; right = 1'b0;
+    case (scancode)
+        ... // Set to 1 as necessary.
+    endcase
+end
+#+end_src
+
+** More features
+*** Conditional
+- 二元操作符，和c相同的语法
+- 非符号数字可用比较运算符
+#+begin_src verilog
+(0 ? 3 : 5)     // This is 5 because the condition is false.
+(sel ? b : a)   // A 2-to-1 multiplexer between a and b selected by sel.
+
+always @(posedge clk)         // A T-flip-flop.
+  q <= toggle ? ~q : q;
+
+always @(*)                   // State transition logic for a one-input FSM
+  case (state)
+    A: next = w ? B : A;
+    B: next = w ? A : B;
+  endcase
+
+assign out = ena ? q : 1'bz;  // A tri-state buffer
+
+((sel[1:0] == 2'h0) ? a :     // A 3-to-1 mux
+ (sel[1:0] == 2'h1) ? b :
+                      c )
+#+end_src
+
+#+begin_src verilog
+//Given four unsigned numbers, find the minimum. Unsigned numbers can be compared with standard comparison operators (a < b). Use the conditional operator to make two-way min circuits, then compose a few of them to create a 4-way min circuit. You'll probably want some wire vectors for the intermediate results.
+module top_module (
+    input [7:0] a, b, c, d,
+    output [7:0] min);//
+    // assign intermediate_result1 = compare? true: false;
+    wire[7:0] min1, min2;
+
+    assign min1 = a < b ? a : b;
+    assign min2 = c < d ? c : d;
+    assign min = min1 < min2 ? min1 : min2;
+endmodule
+#+end_src
+
+*** Reduction
+对一个vector里的元素做运算时，可以
+#+begin_src verilog
+& a[3:0]     // AND: a[3]&a[2]&a[1]&a[0]. Equivalent to (a[3:0] == 4'hf)
+| b[3:0]     // OR:  b[3]|b[2]|b[1]|b[0]. Equivalent to (b[3:0] != 4'h0)
+^ c[2:0]     // XOR: c[2]^c[1]^c[0]
+#+end_src
+
+奇偶校验
+#+begin_src verilog
+module top_module (
+    input [7:0] in,
+    output parity);
+    assign parity = ^ in;
+endmodule
+#+end_src
+*** for
+#+begin_src verilog
+for (int i = <init value>; i < <bound>; i+=1) begin
+//statement
+end
+#+end_src
+
+#+begin_src verilog
+module top_module(
+    input [99:0] in,
+    output [99:0] out
+);
+    always @(*) begin
+        for(int i = 0; i < 100; i++) begin
+            out[i] = in[99 - i];
+        end
+    end
+endmodule
+#+end_src
+
+verilog里面的加法，会综合成加法器
+
+*同一个信号不允许在多个进程中赋值，不然为多驱动；两个进程里都有同一个条件判断的话，会产生并行信号冲突的问题，进程的并行性决定了多进程不同能对同一个对象进行赋值。要想解决这类问题要在其程序中找出多个进程里同时对这个报错变量进行赋值的程序段进行修改。（说简单点就是：不能在两个以上always内对同一个变量赋值，或者不能在module里assign又在alwasy里赋值）*
+
+#+begin_src verilog
+module top_module(
+    input [254:0] in,
+    output [7:0] out );
+//    assign out = 8'b0000_0000;这里会出错
+    always @(*) begin
+        for(int i = 0; i < 255; i++) begin
+            out = out + in[i];
+        end
+    end
+endmodule
+#+end_src
+
+*** generate
+
+生成语句可以动态的生成verilog代码，当对矢量中的多个位进行重复操作时，或者当进行多个模块的实例引用的重复操作时，或者根据参数的定义来确定程序中是否应该包含某段Verilog代码的时候，使用生成语句能大大简化程序的编写过程。
+使用关键字generate 与 endgenerate来指定范围。generate语句有generate-for、generate-if、generate-case三种语句，本题中我们使用generate-for语句.
+
+generate-for语句：
+- 必须有genvar关键字定义for语句的变量.
+- for语句的内容必须加begin和end（即使就一句）.
+- for语句必须有个名字.
+
+#+begin_src verilog
+//用4位加法器实现400位加法
+module top_module(
+    input [399:0] a, b,
+    input cin,
+    output cout,
+    output [399:0] sum );
+
+	wire[100:0] ccin, ccout;
+
+    genvar i;
+
+    assign ccin[0] = cin;
+    generate
+        for(i = 0; i < 100; i++) begin : gen
+			bcd_fadd add_i(a[(i * 4) + 3 : i * 4], b[(i * 4) + 3 : i * 4], ccin[i], ccout[i], sum[(i * 4) + 3 : i * 4]);
+			assign ccin[i + 1] = ccout[i];
+        end
+    endgenerate
+
+    assign cout = ccout[99];
+endmodule
+#+end_src
+* 电路
+** Combinational logic
+*** Basic Gates
+**** Wire
+
+[[file:电路/2020-11-15_00-24-28_Exams_m2014q4h.png]]
+#+begin_src verilog
+module top_module (
+    input in,
+    output out);
+    assign out = in;
+endmodule
+#+end_src
+**** GND
+
+[[file:电路/2020-11-15_00-26-01_Exams_m2014q4i.png]]
+#+begin_src verilog
+module top_module (
+    input in,
+    output out);
+    assign out = 0;
+endmodule
+#+end_src
+
+**** NOR
+[[file:电路/2020-11-15_00-33-38_Exams_m2014q4e.png]]
+#+begin_src verilog
+module top_module (
+    input in1,
+    input in2,
+    output out);
+    assign out = ~(in1 | in2);
+endmodule
+#+end_src
+
+**** Another gate
+
+[[file:电路/2020-11-15_00-41-31_Exams_m2014q4f.png]]
+
+#+begin_src verilog
+module top_module (
+    input in1,
+    input in2,
+    output out);
+    assign out = in1 & (~in2);
+endmodule
+#+end_src
+
+**** Two gates
+[[file:电路/2020-11-15_00-51-35_Exams_m2014q4g.png]]
+#+begin_src verilog
+module top_module (
+    input in1,
+    input in2,
+    input in3,
+    output out);
+    assign out = (~(in1 ^ in2)) ^ in3;
+endmodule
+#+end_src
+
+**** 7420
+
+[[file:电路/2020-11-15_01-02-34_7420.png]]
+
+#+begin_src verilog
+module top_module (
+    input p1a, p1b, p1c, p1d,
+    output p1y,
+    input p2a, p2b, p2c, p2d,
+    output p2y );
+    assign p1y = ~(p1a & p1b & p1c & p1d);
+    assign p2y = ~(p2a & p2b & p2c & p2d);
+endmodule
+#+end_src
+
+**** simple circuit
+
+[[file:电路/2020-11-15_02-23-09_Mt2015_q4b.png]]
+
+| x | y | z |
+|---+---+---|
+| 0 | 0 | 1 |
+| 1 | 0 | 0 |
+| 0 | 1 | 0 |
+| 1 | 1 | 1 |
+
+#+begin_src verilog
+module top_module (
+    input x, y,
+    output z);
+    assign z = ~(x ^ y);
+endmodule
+#+end_src
+
+*** Multiplexers
+**** 2to1
+#+begin_src verilog
+module top_module(
+    input a, b, sel,
+    output out );
+	assign out = sel ? b : a;
+endmodule
+#+end_src
+
+**** 256-to-1
+
+- With this many options, a case statement isn't so useful.
+- Vector indices can be variable, as long as the synthesizer can figure out that the width of the bits being selected is constant. In particular, selecting one bit out of a vector using a variable index will work.
+
+#+begin_src verilog
+module top_module(
+    input [255:0] in,
+    input [7:0] sel,
+    output out );
+    assign out = in[sel];
+endmodule
+#+end_src
+
+**** 256-to-1 4 bit
+
+4-bit wide, 256-to-1 multiplexer. The 256 4-bit inputs are all packed into a single 1024-bit input vector. sel=0 should select bits in[3:0], sel=1 selects bits in[7:4], sel=2 selects bits in[11:8], etc.
+
+- assign out = in[ sel*4+3 : sel*4 ]，但是这样语法不对，但可以一次选一个
+- assign out = in[sel*4 +: 4];
+- assign out = in[sel*4+3 -: 4];
+
+#+begin_src verilog
+module top_module(
+    input [1023:0] in,
+    input [7:0] sel,
+    output [3:0] out );
+//{in[sel*4+3], in[sel*4+2], in[sel*4+1], in[sel*4+0]};这样也行
+    assign out = in[sel * 4 +: 3];
+endmodule
+#+end_src
+
+*** Arithmetic
+**** half add
+#+begin_src verilog
+module top_module(
+    input a, b,
+    output cout, sum );
+	assign cout = a & b;
+    assign sum = a ^ b;
+endmodule
+#+end_src
+**** full add
+| a | b | cin | sum | cout |
+|---+---+-----+-----+------|
+| 0 | 0 |   0 |   0 |    0 |
+| 0 | 0 |   1 |   1 |    0 |
+| 0 | 1 |   0 |   1 |    0 |
+| 1 | 0 |   0 |   1 |    0 |
+| 1 | 0 |   1 |   0 |    1 |
+| 1 | 1 |   0 |   0 |    1 |
+| 1 | 1 |   1 |   1 |    1 |
+#+begin_src verilog
+module top_module(
+    input a, b, cin,
+    output cout, sum );
+   assign sum = a ^ b ^ cin;
+   assign cout = (a & b) | (b & cin) | (a & cin);
+endmodule
+#+end_src
+**** adder
+
+[[file:电路/2020-11-15_15-34-50_Exams_m2014q4j.png]]
+#+begin_src verilog
+module top_module (
+	input [3:0] x,
+	input [3:0] y,
+	output [4:0] sum
+);
+
+	// This circuit is a 4-bit ripple-carry adder with carry-out.
+	assign sum = x+y;	// Verilog addition automatically produces the carry-out bit.
+
+	// Verilog quirk: Even though the value of (x+y) includes the carry-out, (x+y) is still considered to be a 4-bit number (The max width of the two operands).
+	// This is correct:
+	// assign sum = (x+y);
+	// But this is incorrect:
+	// assign sum = {x+y};	// Concatenation operator: This discards the carry-out
+endmodule
+#+end_src
+**** signed adder
+two 8-bit 2's complement numbers, a[7:0] and b[7:0]. These numbers are added to produce s[7:0]. Also compute whether a (signed) overflow has occurred.
+#+begin_src verilog
+module top_module (
+    input [7:0] a,
+    input [7:0] b,
+    output [7:0] s,
+    output overflow
+); //
+    assign s = a + b;
+    assign overflow = (a[7] & b[7] & ~s[7]) | (~a[7] & ~b[7] & s[7]);
+endmodule
+#+end_src
+**** 100bit adder
+#+begin_src verilog
+module top_module (
+	input [99:0] a,
+	input [99:0] b,
+	input cin,
+	output cout,
+	output [99:0] sum
+);
+
+	// The concatenation {cout, sum} is a 101-bit vector.
+	assign {cout, sum} = a+b+cin;
+
+endmodule
+#+end_src
+*** Karnaugh Map
+**** 3-var
+[[file:电路/2020-11-15_18-25-11_Kmap1.png]]
+
+#+begin_src verilog
+module top_module(
+	input a,
+	input b,
+	input c,
+	output out
+);
+	assign out = (a | b | c);
+endmodule
+#+end_src
+
+**** 4-var
+
+[[file:电路/2020-11-15_18-34-24_Kmap2.png]]
+
+#+begin_src verilog
+module top_module(
+    input a,
+    input b,
+    input c,
+    input d,
+    output out);
+    assign out = (~b & ~c) | (~d & ~a) | (c & d & a) | (~a & b & c & d);
+endmodule
+#+end_src
+
+
+[[file:电路/2020-11-15_23-52-58_Kmap4.png]]
+#+begin_src verilog
+module top_module(
+    input a,
+    input b,
+    input c,
+    input d,
+    output out  );
+    assign out = (~a & b & ~c & ~d) |
+        (a & ~b & ~c & ~d) |
+        (~a & ~b & ~c & d) |
+        (a & b & ~c & d) |
+        (~a & b & c & d) |
+        (a & ~b & c & d) |
+        (~a & ~b & c & ~d) |
+        (a & b & c & ~d);
+endmodule
+#+end_src
+** Sequential logic
+*** Latches and Flip-Flops
+**** D flip-flop
+[[file:电路/2020-11-16_12-28-57_Dff.png]]
+#+begin_src verilog
+module top_module (
+    input clk,    // Clocks are used in sequential circuits
+    input d,
+    output reg q );//
+
+    // Use a clocked always block
+    //   copy d to q at every positive edge of clk
+    //   Clocked always blocks should use non-blocking assignments
+    always @(posedge clk)
+        q <= d;
+endmodule
+#+end_src
+**** Dff with synchronous reset
+8 D flip-flops with active high synchronous reset. The flip-flops must be reset to 0x34 rather than zero. All DFFs should be triggered by the negative edge of clk.
+#+begin_src verilog
+module top_module (
+    input clk,
+    input reset,
+    input [7:0] d,
+    output [7:0] q
+);
+    always @(negedge clk) begin
+        q <= reset ? 8'h34 : d;
+    end
+endmodule
+#+end_src
+**** Dff with asynchronous reset
+#+begin_src verilog
+module top_module(
+	input clk,
+	input [7:0] d,
+	input areset,
+	output reg [7:0] q);
+
+	// The only difference in code compared to synchronous reset is in the sensitivity list.
+	always @(posedge clk, posedge areset)
+		if (areset)
+			q <= 0;
+		else
+			q <= d;
+
+
+	// In Verilog, the sensitivity list looks strange. The FF's reset is sensitive to the
+	// *level* of areset, so why does using "posedge areset" work?
+	// To see why it works, consider the truth table for all events that change the input
+	// signals, assuming clk and areset do not switch at precisely the same time:
+
+	//  clk		areset		output
+	//   x		 0->1		q <= 0; (because areset = 1)
+	//   x		 1->0		no change (always block not triggered)
+	//  0->1	   0		q <= d; (not resetting)
+	//  0->1	   1		q <= 0; (still resetting, q was 0 before too)
+	//  1->0	   x		no change (always block not triggered)
+endmodule
+#+end_src
+**** Dff with byte enable
+16 D flip-flops. It's sometimes useful to only modify parts of a group of flip-flops. The byte-enable inputs control whether each byte of the 16 registers should be written to on that cycle. byteena[1] controls the upper byte d[15:8], while byteena[0] controls the lower byte d[7:0].
+
+resetn is a synchronous, active-low reset.
+
+All DFFs should be triggered by the positive edge of clk.
+#+begin_src verilog
+module top_module (
+    input clk,
+    input resetn,
+    input [1:0] byteena,
+    input [15:0] d,
+    output reg [15:0] q
+);
+
+    always @(posedge clk) begin
+        if(~resetn)
+           q <= 16'd0;
+        else if(byteena[0] || byteena[1]) begin
+            if(byteena[1])
+                q[15:8] <= d[15:8];
+            if(byteena[0])
+                q[7:0] <= d[7:0];
+        end
+    end
+endmodule
+#+end_src
+
+**** D latch
+
+[[file:电路/2020-11-16_17-16-00_Exams_m2014q4a.png]]
+#+begin_src verilog
+module top_module (
+    input d,
+    input ena,
+    output q);
+    always @(*)
+    	if (ena) q = d;
+endmodule
+#+end_src
+
+**** DFF+gate
+
+[[file:电路/2020-11-16_20-38-43_Exams_m2014q4d.png]]
+#+begin_src verilog
+module top_module (
+    input clk,
+    input in,
+    output out);
+	reg back = 0;
+    always @(posedge clk) begin
+        out <= in ^ out;
+    end
+endmodule
+#+end_src
+
+**** Mux and DFF
+
+[[file:电路/2020-11-16_23-56-38_Exams_2014q4.png]]
+
+one stage of this circuit
+
+#+begin_src verilog
+module top_module (
+    input clk,
+    input w, R, E, L,
+    output Q
+);
+    always @(posedge clk) begin
+        Q <= L ? R : E ? w : Q;
+    end
+endmodule
+#+end_src
+
+**** DFFs and gates
+
+[[file:电路/2020-11-17_09-28-23_Ece241_2014_q4.png]]
+
+#+begin_src verilog
+module top_module (
+    input clk,
+    input x,
+    output z
+);
+    reg t1 = 0, t2 = 0, t3 = 0;
+
+    always @(posedge clk) begin
+        t1 <= x ^ t1;
+        t2 <= x & ~t2;
+        t3 <= x | ~t3;
+    end
+
+    assign z = ~(t1 | t2 | t3);
+endmodule
+#+end_src
+
+**** JK flip-flop
+
+#+begin_src verilog
+module top_module (
+    input clk,
+    input j,
+    input k,
+    output Q);
+    always @(posedge clk) begin
+        case({j, k})
+            2'b00 : Q <= Q;
+            2'b01 : Q <= 0;
+            2'b10 : Q <= 1;
+            2'b11 : Q <= ~Q;
+        endcase
+    end
+endmodule
+#+end_src
+
+**** Edge detect
+
+[[file:电路/2020-11-17_14-31-11_wavedrom.svg]]
+
+#+begin_src verilog
+module top_module (
+    input clk,
+    input [7:0] in,
+    output [7:0] pedge
+);
+    reg[7:0] t = 8'b00000000;
+    always @(posedge clk) begin
+        pedge <= ~t & in; //t保存了t-1的状态，所以上升沿判断就是t为0而in为1的时候
+        t <= in;
+    end
+endmodule
+#+end_src
+
+**** Dual edge detect
+
+[[file:电路/2020-11-18_22-40-28_wavedrom (1).svg]]
+
+#+begin_src verilog
+module top_module (
+    input clk,
+    input d,
+    output q
+);
+    reg q1, q2;
+
+    always @(posedge clk) begin
+        q1 <= d;
+    end
+    always @(negedge clk) begin
+        q2 <= d;
+    end
+
+    assign q = clk ? q1 : q2;
+endmodule
+#+end_src
+
+*** Counters
+**** Four-bit binary
+
+[[file:电路/2020-11-19_00-27-37_wavedrom (2).svg]]
+
+#+begin_src verilog
+module top_module (
+    input clk,
+    input reset,      // Synchronous active-high reset
+    output [3:0] q);
+
+    always @(posedge clk) begin
+        q <= reset ? 0 : q + 1;
+    end
+endmodule
+#+end_src
+
+**** Counter 1000
+
+From a 1000 Hz clock, derive a 1 Hz signal
+#+begin_src verilog
+module top_module (
+    input clk,
+    input reset,
+    output OneHertz,
+    output [2:0] c_enable
+); //
+    wire [3:0] q0, q1, q2;
+
+    assign c_enable = {q1 == 4'd9 && q0 == 4'd9, q0 == 4'd9, 1'b1};
+    assign OneHertz = {q2 == 4'd9 && q1 == 4'd9 && q0 == 4'd9};
+
+    bcdcount counter0 (clk, reset, c_enable[0], q0);
+    bcdcount counter1 (clk, reset, c_enable[1], q1);
+    bcdcount counter2 (clk, reset, c_enable[2], q2);
+endmodule
+#+end_src
+
+**** 4-digit decimal counter
+
+Each decimal digit is encoded using 4 bits: q[3:0] is the ones digit, q[7:4] is the tens digit, etc. For digits [3:1]
+[[file:电路/2020-11-23_15-06-01_wavedrom (3).svg]]
+
+#+begin_src verilog
+module top_module (
+    input clk,
+    input reset,   // Synchronous active-high reset
+    output [3:1] ena,
+    output [15:0] q);
+
+    assign ena[1] = q[3:0] == 9;
+    assign ena[2] = (q[7:4] == 9) && (q[3:0] == 9);
+    assign ena[3] = (q[11:8] == 9) && (q[7:4] == 9) && (q[3:0] == 9);
+    always @(posedge clk) begin
+        if (reset) q <= 0;
+        else begin
+            q[3:0] <= q[3:0] == 9 ? 0 : q[3:0] + 1;
+            if (ena[1]) begin
+            	q[7:4] <= q[7:4] == 9 ? 0 : q[7:4] + 1;
+            end
+            if (ena[2]) begin
+            	q[11:8] <= q[11:8] == 9 ? 0 : q[11:8] + 1;
+            end
+            if (ena[3]) begin
+            	q[15:12] <= q[15:12] == 9 ? 0 : q[15:12] + 1;
+            end
+        end
+    end
+endmodule
+#+end_src
+
+*** shift
+**** 4-bit shift
+
+#+begin_src verilog
+module top_module(
+    input clk,
+    input areset,  // async active-high reset to zero
+    input load,
+    input ena,
+    input [3:0] data,
+    output reg [3:0] q);
+    always @(posedge clk or posedge areset) begin
+        if (areset) q <= 0;
+        else begin
+            if (load) q <= data;
+            else if (ena) q <= q >> 1;
+        end
+    end
+endmodule
+#+end_src
+
+**** rotate 100
+
+- load: Loads shift register with data[99:0] instead of rotating.
+- ena[1:0]: Chooses whether and which direction to rotate.
+  2'b01 rotates right by one bit
+  2'b10 rotates left by one bit
+  2'b00 and 2'b11 do not rotate.
+- q: The contents of the rotator.
+#+begin_src verilog
+module top_module(
+    input clk,
+    input load,
+    input [1:0] ena,
+    input [99:0] data,
+    output reg [99:0] q);
+    always @(posedge clk) begin
+        if (load) q <= data;
+        else begin
+            if (ena == 2'b01)
+                q <= {q[0], q[99:1]};
+            else if (ena == 2'b10)
+                q <= {q[98:0], q[99]};
+        end
+    end
+endmodule
+#+end_src
+
+**** arithmetic shift
+- load: Loads shift register with data[63:0] instead of shifting.
+- ena: Chooses whether to shift.
+- amount: Chooses which direction and how much to shift.
+  2'b00: shift left by 1 bit.
+  2'b01: shift left by 8 bits.
+  2'b10: shift right by 1 bit.
+  2'b11: shift right by 8 bits.
+- q: The contents of the shifter.
+
+#+begin_src verilog
+module top_module(
+    input clk,
+    input load,
+    input ena,
+    input [1:0] amount,
+    input [63:0] data,
+    output reg [63:0] q);
+    always @(posedge clk) begin
+        if (load) q <= data;
+        else if (ena) begin
+            case (amount)
+                2'b00: q <= {q[62:0], 1'b0};
+                2'b01: q <= {q[55:0], 8'b0};
+                2'b10: q <= {q[63], q[63:1]};
+                2'b11: q <= {{8{q[63]}}, q[63:8]};
+            endcase
+        end
+    end
+endmodule
+#+end_src
+
+**** 5-bit LFSR
+
+线性反馈移位寄存器(LFSR)是通常带有几个XOR门来产生下一状态的移位寄存器
+[[file:电路/2020-11-25_01-50-13_Lfsr5.png]]
+
+#+begin_src verilog
+module top_module(
+    input clk,
+    input reset,    // Active-high synchronous reset to 5'h1
+    output [4:0] q
+);
+    always @(posedge clk) begin
+        if (reset) q <= 5'h1;
+        else begin
+            q[0] <= q[1];
+            q[1] <= q[2];
+            q[2] <= q[3] ^ q[0];
+            q[3] <= q[4];
+            q[4] <= q[0] ^ 0;
+        end
+    end
+endmodule
+#+end_src
+
+**** 3-bit LFSR
+
+[[file:电路/2020-11-25_14-09-09_Mt2015_muxdff.png]]
+
+
+#+begin_src verilog
+module sel(input clk, L, r, q,
+           output Q);
+    always @(posedge clk) begin
+        Q <= L ? r : q;
+    end
+endmodule
+
+module top_module (
+	input [2:0] SW,      // R
+	input [1:0] KEY,     // L and clk
+	output [2:0] LEDR);  // Q
+
+    sel sel1(KEY[0], KEY[1], SW[0], LEDR[2], LEDR[0]);
+    sel sel2(KEY[0], KEY[1], SW[1], LEDR[0], LEDR[1]);
+    sel sel3(KEY[0], KEY[1], SW[2], LEDR[1] ^ LEDR[2], LEDR[2]);
+endmodule
+#+end_src
+
+**** 32-bit LFSR
+
+32-bit Galois LFSR with taps at bit positions 32, 22, 2, and 1.
+
+#+begin_src verilog
+module top_module(
+    input clk,
+    input reset,    // Active-high synchronous reset to 32'h1
+    output [31:0] q
+);
+    reg[31:0] next;
+
+    always @(*) begin
+        next = q[31:1];
+        next[31] = q[0];
+        next[21] = q[22] ^ q[0];
+        next[1]  = q[2]  ^ q[0];
+        next[0]  = q[1]  ^ q[0];
+    end
+    always @(posedge clk) begin
+       	q <= reset ? 32'h1 : next;
+    end
+endmodule
+#+end_src
+
+**** shift register
+
+[[file:电路/2020-11-25_15-04-06_Exams_m2014q4k.png]]
+#+begin_src verilog
+module top_module (
+    input clk,
+    input resetn,   // synchronous reset
+    input in,
+    output out);
+
+    reg [3:0] shift = 0;
+    always @(posedge clk) begin
+        if (!resetn) begin
+            shift <= 0;
+            out <= 0;
+        end
+		else begin
+            shift <= {in, shift[3:1]};
+            out <= shift[0];
+        end
+    end
+endmodule
+#+end_src
+
+**** 3-input LUT
+
+#+begin_src verilog
+module top_module (
+    input clk,
+    input enable,
+    input S,
+    input A, B, C,
+    output Z );
+    reg[7:0] t;
+    always @(posedge clk) begin
+        if (enable) begin
+            t <= {t[6:0], S};
+        end
+    end
+    assign Z = t[{A, B, C}];
+endmodule
+#+end_src
+
+*** More Circuits
+
+**** rule90
+At each time step, the next state of each cell is the XOR of the cell's two current neighbours.
+
+#+begin_src verilog
+module top_module(
+    input clk,
+    input load,
+    input [511:0] data,
+    output [511:0] q );
+    always @(posedge clk) begin
+        if (load) q <= data;
+        else begin
+            q[0] <= q[1];
+            q[511] <= q[510];
+            for (int i = 1; i <= 510; i=i+1) begin
+                q[i] <= q[i - 1] ^ q[i + 1];
+            end
+        end
+    end
+endmodule
+#+end_src
+
+*** FSM
+**** FSM1 - async reset
+
+[[file:电路/2020-11-25_21-39-54_Fsm1.png]]
+
+三段式写法
+
+- 状态跳转逻辑
+- 状态触发器实现
+- 输出逻辑
+
+#+begin_src verilog
+module top_module (
+	input clk,
+	input in,
+	input areset,
+	output out
+);
+
+	// Give state names and assignments. I'm lazy, so I like to use decimal numbers.
+	// It doesn't really matter what assignment is used, as long as they're unique.
+	parameter A=0, B=1;
+	reg state;		// Ensure state and next are big enough to hold the state encoding.
+	reg next;
+
+
+    // A finite state machine is usually coded in three parts:
+    //   State transition logic
+    //   State flip-flops
+    //   Output logic
+    // It is sometimes possible to combine one or more of these blobs of code
+    // together, but be careful: Some blobs are combinational circuits, while some
+    // are clocked (DFFs).
+
+
+    // Combinational always block for state transition logic. Given the current state and inputs,
+    // what should be next state be?
+    // Combinational always block: Use blocking assignments.
+    always@(*) begin
+		case (state)
+			A: next = in ? A : B;
+			B: next = in ? B : A;
+		endcase
+    end
+
+
+
+    // Edge-triggered always block (DFFs) for state flip-flops. Asynchronous reset.
+    always @(posedge clk, posedge areset) begin
+		if (areset) state <= B;		// Reset to state B
+        else state <= next;			// Otherwise, cause the state to transition
+	end
+
+
+
+	// Combinational output logic. In this problem, an assign statement is the simplest.
+	// In more complex circuits, a combinational always block may be more suitable.
+	assign out = (state==B);
+
+
+endmodule
+#+end_src
+
+**** FSM1 - sync reset
+
+[[file:电路/2020-11-25_21-57-37_Fsm1s.png]]
+
+#+begin_src verilog
+module top_module (
+	input clk,
+	input in,
+	input areset,
+	output out
+);
+
+	// Give state names and assignments. I'm lazy, so I like to use decimal numbers.
+	// It doesn't really matter what assignment is used, as long as they're unique.
+	parameter A=0, B=1;
+	reg state;		// Ensure state and next are big enough to hold the state encoding.
+	reg next;
+
+
+    // A finite state machine is usually coded in three parts:
+    //   State transition logic
+    //   State flip-flops
+    //   Output logic
+    // It is sometimes possible to combine one or more of these blobs of code
+    // together, but be careful: Some blobs are combinational circuits, while some
+    // are clocked (DFFs).
+
+
+    // Combinational always block for state transition logic. Given the current state and inputs,
+    // what should be next state be?
+    // Combinational always block: Use blocking assignments.
+    always@(*) begin
+		case (state)
+			A: next = in ? A : B;
+			B: next = in ? B : A;
+		endcase
+    end
+
+
+
+    // Edge-triggered always block (DFFs) for state flip-flops. Asynchronous reset.
+    always @(posedge clk) begin
+		if (areset) state <= B;		// Reset to state B
+        else state <= next;			// Otherwise, cause the state to transition
+	end
+
+
+
+	// Combinational output logic. In this problem, an assign statement is the simplest.
+	// In more complex circuits, a combinational always block may be more suitable.
+	assign out = (state==B);
+
+
+endmodule
+#+end_src
+
+**** Lemmings
+
+[[file:电路/2020-11-26_16-29-05_wavedrom (1).svg]]
+
+#+begin_src verilog
+module top_module(
+    input clk,
+    input areset,    // Freshly brainwashed Lemmings walk left.
+    input bump_left,
+    input bump_right,
+    output walk_left,
+    output walk_right); //
+
+    parameter LEFT=0, RIGHT=1;
+    reg state, next_state;
+
+    always @(*) begin
+        case (state)
+            LEFT:  next_state = bump_left  ? RIGHT : LEFT;
+            RIGHT: next_state = bump_right ? LEFT  : RIGHT;
+        endcase
+    end
+
+    always @(posedge clk, posedge areset) begin
+        state <= areset ? LEFT : next_state;
+    end
+
+    // Output logic
+    assign walk_left = (state == LEFT);
+    assign walk_right = (state == RIGHT);
+endmodule
+#+end_src
+
+**** One-hot FSM
+独热码状态机仅使用单bit表示状态，是否处在某一状态仅跟一个bit有关，而下个状态的转移也仅与一个bit有关。与其他bit无关。独热码的好处就是生成状态机的逻辑是最简单的，但缺点就是，当偶然进入了一个不是该电路的状态的时候，除了复位以外是跳转不回去了。
+
+[[file:电路/2020-11-26_17-57-03_Fsmonehot.png]]
+
+#+begin_src verilog
+module top_module(
+    input in,
+    input [9:0] state,
+    output [9:0] next_state,
+    output out1,
+    output out2);
+
+    parameter s0 = 0, s1 = 1, s2 = 2, s3 = 3, s4 = 4, s5 = 5, s6 = 6, s7 = 7, s8 = 8, s9 = 9;
+
+    assign next_state [s0] = state [s0] & (~in) | state [s1] & (~in) | state [s2] & (~in) |
+                             state [s3] & (~in) | state [s4] & (~in) | state [s7] & (~in) |
+                             state [s8] & (~in) | state [s9] & (~in);
+    assign next_state [s1] = state [s0] & ( in) | state [s8] & ( in) | state [s9] & ( in);
+    assign next_state [s2] = state [s1] & ( in);
+    assign next_state [s3] = state [s2] & ( in);
+    assign next_state [s4] = state [s3] & ( in);
+    assign next_state [s5] = state [s4] & ( in);
+    assign next_state [s6] = state [s5] & ( in);
+    assign next_state [s7] = state [s6] & ( in) | state [s7] & ( in);
+    assign next_state [s8] = state [s5] & (~in);
+    assign next_state [s9] = state [s6] & (~in);
+
+    assign out1 = state [s8] | state [s9];
+    assign out2 = state [s7] | state [s9];
+
+endmodule
+#+end_src
+
+**** PS/2 packet parser
+
+[[file:电路/2020-11-26_21-58-49_wavedrom (2).svg]]
+
+[[file:电路/2020-11-26_21-59-02_wavedrom (3).svg]]
+
+#+begin_src verilog
+module top_module(
+    input clk,
+    input [7:0] in,
+    input reset,    // Synchronous reset
+    output done); //
+
+    parameter S0 = 0, S1 = 1, S2 = 2, S3 = 3;
+
+    reg[1:0] state, next;
+
+    // State transition logic (combinational)
+    always @(*) begin
+        case (state)
+            S0 : next = in[3] ? S1 : S0;
+            S1 : next = S2;
+            S2 : next = S3;
+            S3 : next = in[3] ? S1 : S0;
+        endcase
+    end
+    // State flip-flops (sequential)
+    always @(posedge clk) begin
+        state <= reset ? S0 : next;
+    end
+    // Output logic
+	assign done = state == S3;
+endmodule
+#+end_src
+
+

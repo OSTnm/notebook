@@ -21,6 +21,9 @@
 * [电路](./books/electric_circuits.org)
 电路基本原理
 
+* [verilog](./language/verilog/verilog.org)
+Verilog HDL.
+
 * [学以致用深入浅出数字信号处理](./books/deeply_understanding_digital_signal_processing.org)
 数字信号简介.
 

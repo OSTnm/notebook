@@ -1,0 +1,2756 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2020-11-29 日 16:21 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Verilog.org</title>
+<meta name="generator" content="Org mode" />
+<meta name="author" content="xuali2" />
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: visible;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { width: 90%; }
+  /*]]>*/-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://fniessen.github.io/org-html-themes/styles/readtheorg/css/htmlize.css"/>
+<link rel="stylesheet" type="text/css" href="https://fniessen.github.io/org-html-themes/styles/readtheorg/css/readtheorg.css"/>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="https://fniessen.github.io/org-html-themes/styles/lib/js/jquery.stickytableheaders.min.js"></script>
+<script type="text/javascript" src="https://fniessen.github.io/org-html-themes/styles/readtheorg/js/readtheorg.js"></script>
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2020 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+</head>
+<body>
+<div id="content">
+<h1 class="title">Verilog.org</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#org3975e7d">1. 语法</a>
+<ul>
+<li><a href="#orga15a6f8">1.1. Basics</a>
+<ul>
+<li><a href="#org92eb34a">1.1.1. Wire</a></li>
+<li><a href="#org482b042">1.1.2. Not gate</a></li>
+<li><a href="#org1809bc6">1.1.3. And gate</a></li>
+<li><a href="#orgad0d24d">1.1.4. Nor gate</a></li>
+<li><a href="#orgdf1de90">1.1.5. Xnor gate</a></li>
+<li><a href="#org8a23239">1.1.6. Declaring wires</a></li>
+</ul>
+</li>
+<li><a href="#org075684a">1.2. Vectors</a>
+<ul>
+<li><a href="#orgfbba309">1.2.1. 位运算和逻辑运算</a></li>
+<li><a href="#org0b3cfc2">1.2.2. 部分选择</a></li>
+<li><a href="#org945cb38">1.2.3. 重复</a></li>
+</ul>
+</li>
+<li><a href="#org3d8ce2e">1.3. Modules</a></li>
+<li><a href="#org94b5150">1.4. Procedures</a>
+<ul>
+<li><a href="#org48a2acf">1.4.1. Always blocks</a></li>
+<li><a href="#org8e2b1e2">1.4.2. always if</a></li>
+<li><a href="#org1a9bd96">1.4.3. always if latches</a></li>
+<li><a href="#org6717e8b">1.4.4. always case</a></li>
+<li><a href="#orgd55a7d4">1.4.5. always avoid latches</a></li>
+</ul>
+</li>
+<li><a href="#org464bb55">1.5. More features</a>
+<ul>
+<li><a href="#orgaef95ba">1.5.1. Conditional</a></li>
+<li><a href="#org72e9559">1.5.2. Reduction</a></li>
+<li><a href="#org203afd6">1.5.3. for</a></li>
+<li><a href="#org37b280c">1.5.4. generate</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#orga0f406c">2. 电路</a>
+<ul>
+<li><a href="#orga1333b3">2.1. Combinational logic</a>
+<ul>
+<li><a href="#org956d758">2.1.1. Basic Gates</a></li>
+<li><a href="#org1e6d8a2">2.1.2. Multiplexers</a></li>
+<li><a href="#org9d67f51">2.1.3. Arithmetic</a></li>
+<li><a href="#org83ca10a">2.1.4. Karnaugh Map</a></li>
+</ul>
+</li>
+<li><a href="#orgd89c8ef">2.2. Sequential logic</a>
+<ul>
+<li><a href="#org4039d57">2.2.1. Latches and Flip-Flops</a></li>
+<li><a href="#org6b09c94">2.2.2. Counters</a></li>
+<li><a href="#org5aae95b">2.2.3. shift</a></li>
+<li><a href="#orgd0a05c1">2.2.4. More Circuits</a></li>
+<li><a href="#org904ce52">2.2.5. FSM</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org3975e7d" class="outline-2">
+<h2 id="org3975e7d"><span class="section-number-2">1</span> 语法</h2>
+<div class="outline-text-2" id="text-1">
+</div>
+<div id="outline-container-orga15a6f8" class="outline-3">
+<h3 id="orga15a6f8"><span class="section-number-3">1.1</span> Basics</h3>
+<div class="outline-text-3" id="text-1-1">
+</div>
+<div id="outline-container-org92eb34a" class="outline-4">
+<h4 id="org92eb34a"><span class="section-number-4">1.1.1</span> Wire</h4>
+<div class="outline-text-4" id="text-1-1-1">
+<p>
+含有一个输入和一个输出的模块可作为Wire<br />
+Wire类型是一种 <b>信号</b> 类型, *assign left_side = right_side*是 continuous assignment,不是基于事件驱动<br />
+</p>
+
+
+<div class="figure">
+<p><img src="语法/2020-11-09_23-21-06_Wire.png" alt="2020-11-09_23-21-06_Wire.png" /><br />
+</p>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-verilog">module top_module( input in, output out );
+    assign out = in;
+endmodule
+</pre>
+</div>
+
+<p>
+和编程语言不一样的是，多个assgin语句执行的顺序是随机的，因为它只描述了连接关系.<br />
+</p>
+
+
+<div class="figure">
+<p><img src="语法/2020-11-09_23-26-26_Wire4.png" alt="2020-11-09_23-26-26_Wire4.png" /><br />
+</p>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-verilog">module top_module(input a, b, c, output w, x, y, z);
+    assign w = a;
+    assign x = b;
+    assign y = b;
+    assign z = c;
+endmodule
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org482b042" class="outline-4">
+<h4 id="org482b042"><span class="section-number-4">1.1.2</span> Not gate</h4>
+<div class="outline-text-4" id="text-1-1-2">
+<p>
+位非(~)和逻辑(!)和C语义基本一致.<br />
+</p>
+
+
+<div class="figure">
+<p><img src="语法/2020-11-09_23-31-50_Notgate.png" alt="2020-11-09_23-31-50_Notgate.png" /><br />
+</p>
+</div>
+<div class="org-src-container">
+<pre class="src src-verilog">module top_module(input in, output out);
+    assign in = ~out;
+endmodule
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org1809bc6" class="outline-4">
+<h4 id="org1809bc6"><span class="section-number-4">1.1.3</span> And gate</h4>
+<div class="outline-text-4" id="text-1-1-3">
+<p>
+一个wire信号不能同时被多个信号驱动，同时没有driver则为未定义值，综合时会被当作0<br />
+</p>
+
+
+<div class="figure">
+<p><img src="语法/2020-11-09_23-37-01_Andgate.png" alt="2020-11-09_23-37-01_Andgate.png" /><br />
+</p>
+</div>
+<div class="org-src-container">
+<pre class="src src-verilog">module top_module(
+    input a,
+    input b,
+    output out );
+    assign out = a &amp; b;
+endmodule
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgad0d24d" class="outline-4">
+<h4 id="orgad0d24d"><span class="section-number-4">1.1.4</span> Nor gate</h4>
+<div class="outline-text-4" id="text-1-1-4">
+<p>
+assign语句语法与C类似,右值可为一个复杂的逻辑表达式<br />
+<img src="语法/2020-11-10_08-17-59_Norgate.png" alt="2020-11-10_08-17-59_Norgate.png" /><br />
+</p>
+
+<div class="org-src-container">
+<pre class="src src-verilog">module top_module(
+    input a,
+    input b,
+    output out );
+    assign out = ~(a | b);
+endmodule
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgdf1de90" class="outline-4">
+<h4 id="orgdf1de90"><span class="section-number-4">1.1.5</span> Xnor gate</h4>
+<div class="outline-text-4" id="text-1-1-5">
+
+<div class="figure">
+<p><img src="语法/2020-11-10_08-29-45_Xnorgate.png" alt="2020-11-10_08-29-45_Xnorgate.png" /><br />
+</p>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-verilog">module top_module(
+    input a,
+    input b,
+    output out );
+    assign out = ~(a ^ b);
+endmodule
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org8a23239" class="outline-4">
+<h4 id="org8a23239"><span class="section-number-4">1.1.6</span> Declaring wires</h4>
+<div class="outline-text-4" id="text-1-1-6">
+<p>
+在模块内部使用wire，可用wire类型声明，注意wire和assign的特性，调整assign的顺序并不影响最后综合出来的电路<br />
+<img src="语法/2020-11-10_08-36-47_Wiredecl1.png" alt="2020-11-10_08-36-47_Wiredecl1.png" /><br />
+</p>
+<div class="org-src-container">
+<pre class="src src-verilog">module top_module (
+    input in,              // Declare an input wire named "in"
+    output out             // Declare an output wire named "out"
+);
+
+    wire not_in;           // Declare a wire named "not_in"
+
+    assign out = ~not_in;  // Assign a value to out (create a NOT gate).
+    assign not_in = ~in;   // Assign a value to not_in (create another NOT gate).
+
+endmodule   // End of module "top_module"
+</pre>
+</div>
+
+
+
+<div class="figure">
+<p><img src="语法/2020-11-10_08-49-14_Wiredecl2.png" alt="2020-11-10_08-49-14_Wiredecl2.png" /><br />
+</p>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-verilog">module top_module(
+    input a,
+    input b,
+    input c,
+    input d,
+    output out,
+    output out_n);
+    wire i, j, k;
+    assign i = a &amp; b;
+    assign j = c &amp; d;
+    assign k = i | j;
+    assign out = k;
+    assign out_n = ~k;
+endmodule
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org075684a" class="outline-3">
+<h3 id="org075684a"><span class="section-number-3">1.2</span> Vectors</h3>
+<div class="outline-text-3" id="text-1-2">
+<p>
+一组信号可组成vectors, 形式为type [upper:lower] vector_name;<br />
+</p>
+<div class="org-src-container">
+<pre class="src src-verilog">wire [7:0] w;         // 8-bit wire
+reg  [4:1] x;         // 4-bit reg
+output reg [0:0] y;   // 1-bit reg that is also an output port (this is still a vector)
+input wire [3:-2] z;  // 6-bit wire input (negative ranges are allowed)
+output [3:0] a;       // 4-bit output wire. Type is 'wire' unless specified otherwise.
+wire [0:7] b;         // 8-bit wire where b[0] is the most-significant bit.
+
+w[3:0]      // Only the lower 4 bits of w
+x[1]        // The lowest bit of x
+x[1:1]      // ...also the lowest bit of x
+z[-1:-2]    // Two lowest bits of z
+b[3:0]      // Illegal. Vector part-select must match the direction of the declaration.
+b[0:3]      // The *upper* 4 bits of b.
+assign w[3:0] = b[0:3];    // Assign upper 4 bits of b to lower 4 bits of w. w[3]=b[0], w[2]=b[1], etc.
+</pre>
+</div>
+
+<p>
+小端 wire[7:0] 大端 wire[0:7]<br />
+</p>
+
+<p>
+默认未定义的变量被认为是1bit wire，这样可能会造成隐含的问题<br />
+</p>
+<div class="org-src-container">
+<pre class="src src-verilog">wire [2:0] a, c;   // Two vectors
+assign a = 3'b101;  // a = 101
+assign b = a;       // b =   1  implicitly-created wire
+assign c = b;       // c = 001  &lt;-- bug
+my_module i1 (d,e); // d and e are implicitly one-bit wide if not declared.
+                    // This could be a bug if the port was intended to be a vector.
+</pre>
+</div>
+
+<p>
+重定义default_nettype为none时未定义则会报错，降低产生bug的概率<br />
+</p>
+<div class="org-src-container">
+<pre class="src src-verilog">`default_nettype none     // Disable implicit nets. Reduces some types of bugs.
+</pre>
+</div>
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="org-left">unpacked</td>
+<td class="org-left">[]在变量后, reg mem2 [28:0];         // 29 unpacked elements, each of which is a 1-bit reg.</td>
+</tr>
+
+<tr>
+<td class="org-left">packed</td>
+<td class="org-left">[]在变量前, reg [7:0] mem [255:0];   // 256 unpacked elements, each of which is a 8-bit packed vector of reg.</td>
+</tr>
+</tbody>
+</table>
+
+<p>
+不同位宽的变量赋值时，不足补0，或者截断<br />
+</p>
+</div>
+
+<div id="outline-container-orgfbba309" class="outline-4">
+<h4 id="orgfbba309"><span class="section-number-4">1.2.1</span> 位运算和逻辑运算</h4>
+<div class="outline-text-4" id="text-1-2-1">
+
+<div class="figure">
+<p><img src="语法/2020-11-10_12-51-12_Vectorgates.png" alt="2020-11-10_12-51-12_Vectorgates.png" /><br />
+</p>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-verilog">module top_module(
+    input [2:0] a,
+    input [2:0] b,
+    output [2:0] out_or_bitwise,
+    output out_or_logical,
+    output [5:0] out_not
+);
+    assign out_or_bitwise = a | b;
+    assign out_or_logical = a || b;
+    assign out_not[5:3] = ~b;
+    assign out_not[2:0] = ~a;
+endmodule
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org0b3cfc2" class="outline-4">
+<h4 id="org0b3cfc2"><span class="section-number-4">1.2.2</span> 部分选择</h4>
+<div class="outline-text-4" id="text-1-2-2">
+<div class="org-src-container">
+<pre class="src src-verilog">{3'b111, 3'b000} =&gt; 6'b111000
+{1'b1, 1'b0, 3'b101} =&gt; 5'b10101
+{4'ha, 4'd10} =&gt; 8'b10101010     // 4'ha and 4'd10 are both 4'b1010 in binary
+
+input [15:0] in;
+output [23:0] out;
+assign {out[7:0], out[15:8]} = in;         // Swap two bytes. Right side and left side are both 16-bit vectors.
+assign out[15:0] = {in[7:0], in[15:8]};    // This is the same thing.
+assign out = {in[7:0], in[15:8]};       // This is different. The 16-bit vector on the right is extended to
+                                        // match the 24-bit vector on the left, so out[23:16] are zero.
+                                        // In the first two examples, out[23:16] are not assigned.
+</pre>
+</div>
+
+
+
+<div class="figure">
+<p><img src="语法/2020-11-10_19-12-51_Vector3.png" alt="2020-11-10_19-12-51_Vector3.png" /><br />
+</p>
+</div>
+<div class="org-src-container">
+<pre class="src src-verilog">module top_module (
+    input [4:0] a, b, c, d, e, f,
+    output [7:0] w, x, y, z );//
+
+    // assign { ... } = { ... };
+    assign w = {a, b[4:2]};
+    assign x = {b[1:0], c, d[4]};
+    assign y = {d[3:0], e[4:1]};
+    assign z = {e[0], f, 2'b11};
+endmodule
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org945cb38" class="outline-4">
+<h4 id="org945cb38"><span class="section-number-4">1.2.3</span> 重复</h4>
+<div class="outline-text-4" id="text-1-2-3">
+<p>
+扩展同一个变量可用{num{vector}}，会生成num个vector<br />
+</p>
+<div class="org-src-container">
+<pre class="src src-verilog">{5{1'b1}}           // 5'b11111 (or 5'd31 or 5'h1f)
+{2{a,b,c}}          // The same as {a,b,c,a,b,c}
+{3'd5, {2{3'd6}}}   // 9'b101_110_110. It's a concatenation of 101 with
+                    // the second vector, which is two copies of 3'b110.
+</pre>
+</div>
+
+<p>
+将32位out用in做符号扩展<br />
+</p>
+<div class="org-src-container">
+<pre class="src src-verilog">module top_module (
+    input [7:0] in,
+    output [31:0] out );//
+
+    // assign out = { replicate-sign-bit , the-input };
+    assign out = {{24{in[7]}}, in};
+endmodule
+</pre>
+</div>
+
+
+<div class="figure">
+<p><img src="语法/2020-11-11_01-18-11_Vector5.png" alt="2020-11-11_01-18-11_Vector5.png" /><br />
+</p>
+</div>
+<div class="org-src-container">
+<pre class="src src-verilog">module top_module (
+    input a, b, c, d, e,
+    output [24:0] out );//
+    // The output is XNOR of two vectors created by
+    // concatenating and replicating the five inputs.
+    // assign out = ~{ ... } ^ { ... };
+    assign out = ~({5{a, b, c, d, e}} ^ {{5{a}}, {5{b}}, {5{c}}, {5{d}}, {5{e}}});
+endmodule
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org3d8ce2e" class="outline-3">
+<h3 id="org3d8ce2e"><span class="section-number-3">1.3</span> Modules</h3>
+<div class="outline-text-3" id="text-1-3">
+<p>
+类似C的函数，verilog使用module做为逻辑电路的封装，ports为形参，具体的值可为wire, vector<br />
+模块中可以例化其他模块，但在模块中不允许再定义其他模块。这项语法规则类似于在 C 语言函数中可以调用其他函数，但不能定义其他函数.<br />
+</p>
+
+<div class="org-src-container">
+<pre class="src src-verilog">module mod_a ( input in1, input in2, output out );
+    // Module body
+endmodule
+</pre>
+</div>
+
+<p>
+实例化并绑定port有两种方法<br />
+</p>
+
+
+<div class="figure">
+<p><img src="语法/2020-11-11_02-03-14_Module.png" alt="2020-11-11_02-03-14_Module.png" /><br />
+</p>
+</div>
+<ul class="org-ul">
+<li>根据位置<br /></li>
+</ul>
+<div class="org-src-container">
+<pre class="src src-verilog">module top_module ( input a, input b, output out );
+    mod_a instance1 ( a, b, out );
+endmodule
+</pre>
+</div>
+
+<ul class="org-ul">
+<li>根据名字<br /></li>
+</ul>
+<div class="org-src-container">
+<pre class="src src-verilog">#+begin_src verilog
+module top_module ( input a, input b, output out );
+    mod_a instance1 ( .in1(a), .in2(b), .out(out) );
+endmodule
+</pre>
+</div>
+
+<p>
+下面为更复杂一点的情况<br />
+</p>
+
+
+<div class="figure">
+<p><img src="语法/2020-11-11_02-37-04_Module_shift.png" alt="2020-11-11_02-37-04_Module_shift.png" /><br />
+</p>
+</div>
+<div class="org-src-container">
+<pre class="src src-verilog">module top_module ( input clk, input d, output q );
+    wire q1, q2;
+    my_dff(clk, d, q1);
+    my_dff(clk, q1, q2);
+    my_dff(clk, q2, q);
+endmodule
+</pre>
+</div>
+
+<p>
+module的ports为vector时，如果长度不匹配，则会用0填充或者截断<br />
+</p>
+
+
+
+<div class="figure">
+<p><img src="语法/2020-11-11_12-13-32_Module_shift8.png" alt="2020-11-11_12-13-32_Module_shift8.png" /><br />
+</p>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-verilog">module mux(input[7:0] d1, d2, d3, d4,
+           input [1:0] se,
+           output[7:0] dout);
+    always @  (d1 or d2 or d3 or d4 or se)
+     case(se)
+       2'b00 : dout=d1;
+       2'b01 : dout=d2;
+       2'b10 : dout=d3;
+       2'b11 : dout=d4;
+     endcase
+endmodule
+
+module top_module (
+    input clk,
+    input [7:0] d,
+    input [1:0] sel,
+    output [7:0] q
+);
+    wire[0:7] q1, q2, q3;
+    my_dff8 inst0(clk, d, q1);
+    my_dff8 inst1(clk, q1, q2);
+    my_dff8 inst2(clk, q2, q3);
+    mux inst3(d, q1, q2, q3, sel, q);
+endmodule
+</pre>
+</div>
+
+
+
+<div class="figure">
+<p><img src="语法/2020-11-11_14-09-05_Module_add.png" alt="2020-11-11_14-09-05_Module_add.png" /><br />
+</p>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-verilog">module top_module(
+    input [31:0] a,
+    input [31:0] b,
+    output [31:0] sum
+);
+    wire cin, cout;
+    add16 inst0(a[15:0], b[15:0], 0, sum[15:0], cin);
+    add16 inst1(a[31:16], b[31:16], cin, sum[31:16], cout);
+endmodule
+</pre>
+</div>
+
+
+<div class="figure">
+<p><img src="语法/2020-11-11_15-43-37_Module_fadd.png" alt="2020-11-11_15-43-37_Module_fadd.png" /><br />
+</p>
+</div>
+<div class="org-src-container">
+<pre class="src src-verilog">module top_module (
+    input [31:0] a,
+    input [31:0] b,
+    output [31:0] sum
+);//
+    wire cin, cout;
+    add16 inst0(a[15:0], b[15:0], 0, sum[15:0], cin);
+    add16 inst1(a[31:16], b[31:16], cin, sum[31:16], cout);
+endmodule
+
+module add1 ( input a, input b, input cin,   output sum, output cout );
+    assign sum = a ^ b ^ cin;
+    assign cout = (~a &amp; b &amp; cin) | (a &amp; ~b &amp; cin) | (a &amp; b &amp; ~cin) | (a &amp; b &amp; cin);
+endmodule
+</pre>
+</div>
+
+<p>
+上述全加器的缺点就是高bit位依赖低bit的结果，下面提高性能的方式<br />
+</p>
+
+
+<div class="figure">
+<p><img src="语法/2020-11-11_16-48-22_Module_cseladd.png" alt="2020-11-11_16-48-22_Module_cseladd.png" /><br />
+</p>
+</div>
+
+
+
+<div class="org-src-container">
+<pre class="src src-verilog">module top_module(
+    input [31:0] a,
+    input [31:0] b,
+    output [31:0] sum
+);
+
+    wire carry;
+    wire [31:16] sum0;
+    wire [31:16] sum1;
+
+    add16 al(a[15:0],b[15:0],1'b0,sum[15:0],carry);
+    add16 ah0(a[31:16],b[31:16],1'b0,sum0[31:16],);
+    add16 ah1(a[31:16],b[31:16],1'b1,sum1[31:16],);
+
+    assign sum[31:16] = carry ? sum1 : sum0;
+
+endmodule
+</pre>
+</div>
+
+
+
+<div class="figure">
+<p><img src="语法/2020-11-11_16-50-49_Module_addsub.png" alt="2020-11-11_16-50-49_Module_addsub.png" /><br />
+</p>
+</div>
+<div class="org-src-container">
+<pre class="src src-verilog">module top_module(
+    input [31:0] a,
+    input [31:0] b,
+    input sub,
+    output [31:0] sum
+);
+    wire[31:0] c = {32{sub}} ^ b;
+    wire cout, cout2;
+    add16 inst0(a[15:0], c[15:0], sub, sum[15:0], cout);
+    add16 inst1(a[31:16], c[31:16], cout, sum[31:16], cout2);
+endmodule
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org94b5150" class="outline-3">
+<h3 id="org94b5150"><span class="section-number-3">1.4</span> Procedures</h3>
+<div class="outline-text-3" id="text-1-4">
+</div>
+<div id="outline-container-org48a2acf" class="outline-4">
+<h4 id="org48a2acf"><span class="section-number-4">1.4.1</span> Always blocks</h4>
+<div class="outline-text-4" id="text-1-4-1">
+<div class="org-src-container">
+<pre class="src src-verilog">组合逻辑Combinational: always @(*)
+时序逻辑Clocked: always @(posedge clk)
+</pre>
+</div>
+
+<p>
+组合逻辑和assgin语句一致，区分只在于语法不同<br />
+<img src="语法/2020-11-12_08-58-28_Alwayscomb.png" alt="2020-11-12_08-58-28_Alwayscomb.png" /><br />
+</p>
+<div class="org-src-container">
+<pre class="src src-verilog">assign out1 = a &amp; b | c ^ d;
+always @(*) out2 = a &amp; b | c ^ d;
+</pre>
+</div>
+
+<p>
+always综合逻辑总是使用(*)，如果指定信号，但是有信号没写在sensitivity里，综合后虽然一样，但是仿真会不过<br />
+</p>
+
+<p>
+<b>The left-hand-side of an assign statement must be a net type (e.g., wire), while the left-hand-side of a procedural assignment (in an always block) must be a variable type (e.g., reg). These types (wire vs. reg) have nothing to do with what hardware is synthesized, and is just syntax left over from Verilog's use as a hardware simulation language.</b><br />
+</p>
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="org-left">assign x = y</td>
+<td class="org-left">连续赋值，不能在always块中使用</td>
+</tr>
+
+<tr>
+<td class="org-left">x = y</td>
+<td class="org-left">阻塞性赋值，只在always块中使用</td>
+</tr>
+
+<tr>
+<td class="org-left">x &lt;= y</td>
+<td class="org-left">非阻塞性赋值，只在always块中使用</td>
+</tr>
+</tbody>
+</table>
+
+<p>
+<b>在组合逻辑中用阻塞赋值，时序逻辑中用非阻塞赋值</b><br />
+</p>
+</div>
+</div>
+
+<div id="outline-container-org8e2b1e2" class="outline-4">
+<h4 id="org8e2b1e2"><span class="section-number-4">1.4.2</span> always if</h4>
+<div class="outline-text-4" id="text-1-4-2">
+
+<div class="figure">
+<p><img src="语法/2020-11-12_15-19-04_Always_if_mux.png" alt="2020-11-12_15-19-04_Always_if_mux.png" /><br />
+</p>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-verilog">always @(*) begin //相当于assign out = (condition) ? x : y;
+    if (condition) begin
+        out = x;
+    end
+    else begin
+        out = y;
+    end
+end
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org1a9bd96" class="outline-4">
+<h4 id="org1a9bd96"><span class="section-number-4">1.4.3</span> always if latches</h4>
+<div class="outline-text-4" id="text-1-4-3">
+<p>
+如果存在没指定的条件，verilog的解决方法是: <b>keep the output unchanged.</b><br />
+而保持状诚不变意味着当前状态需要被保存，这样便生成了锁存器<br />
+</p>
+
+<p>
+如下例代码:<br />
+没有指定cpu_overheated为0的情况，则保持shut_off_computer，生成锁存器<br />
+没有指定arrived为1的情况，则保持keep_driving，生成锁存器<br />
+</p>
+
+<div class="org-src-container">
+<pre class="src src-verilog">always @(*) begin
+    if (cpu_overheated)
+       shut_off_computer = 1;
+end
+
+always @(*) begin
+    if (~arrived)
+       keep_driving = ~gas_tank_empty;
+end
+</pre>
+</div>
+
+
+<div class="figure">
+<p><img src="语法/2020-11-12_23-50-32_Always_if2.png" alt="2020-11-12_23-50-32_Always_if2.png" /><br />
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org6717e8b" class="outline-4">
+<h4 id="org6717e8b"><span class="section-number-4">1.4.4</span> always case</h4>
+<div class="outline-text-4" id="text-1-4-4">
+<ul class="org-ul">
+<li>没有switch<br /></li>
+<li>没有break，一个case只含有一条语句，多语句需包启在begin &#x2026; end中<br /></li>
+<li><b>可以有多个有交集的case，会选第一个匹配的</b><br /></li>
+</ul>
+<div class="org-src-container">
+<pre class="src src-verilog">always @(*) begin     // This is a combinational circuit
+    case (in)
+      1'b1: begin
+               out = 1'b1;  // begin-end if &gt;1 statement
+            end
+      1'b0: out = 1'b0;
+      default: out = 1'bx;
+    endcase
+end
+</pre>
+</div>
+
+<p>
+6选1多路选择器<br />
+</p>
+<div class="org-src-container">
+<pre class="src src-verilog">// *Case statements are more convenient than if statements if there are a large number of cases. So, in this exercise, create a 6-to-1 multiplexer. When sel is between 0 and 5, choose the corresponding data input. Otherwise, output 0. The data inputs and outputs are all 4 bits wide.*
+module top_module (
+    input [2:0] sel,
+    input [3:0] data0,
+    input [3:0] data1,
+    input [3:0] data2,
+    input [3:0] data3,
+    input [3:0] data4,
+    input [3:0] data5,
+    output reg [3:0] out   );//
+
+    always@(*) begin  // This is a combinational circuit
+        case(sel)
+            3'b000: out = data0;
+            3'b001: out = data1;
+            3'b010: out = data2;
+            3'b011: out = data3;
+            3'b100: out = data4;
+            3'b101: out = data5;
+            default: out = 0;
+        endcase
+    end
+</pre>
+</div>
+
+<p>
+最低bit为1位判决，case如果有bit位不关心，可用 <b>casez</b> 和 <b>z</b> 表示某些位不关心<br />
+</p>
+<ul class="org-ul">
+<li>同样的符号可用casex和x<br /></li>
+<li>?也可用为z的代替<br /></li>
+</ul>
+<div class="org-src-container">
+<pre class="src src-verilog">// synthesis verilog_input_version verilog_2001
+module top_module (
+    input [3:0] in,
+    output reg [1:0] pos  );
+    always @(*) begin
+    casez (in[3:0])
+        4'bzzz1: out = 0;   // in[3:1] can be anything
+        4'bzz1z: out = 1;
+        4'bz1zz: out = 2;
+        4'b1zzz: out = 3;
+        default: out = 0;
+    endcase
+    end
+endmodule
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgd55a7d4" class="outline-4">
+<h4 id="orgd55a7d4"><span class="section-number-4">1.4.5</span> always avoid latches</h4>
+<div class="outline-text-4" id="text-1-4-5">
+<p>
+为了避免锁存器，可以对输出信号赋初值<br />
+</p>
+<div class="org-src-container">
+<pre class="src src-verilog">always @(*) begin
+    up = 1'b0; down = 1'b0; left = 1'b0; right = 1'b0;
+    case (scancode)
+        ... // Set to 1 as necessary.
+    endcase
+end
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org464bb55" class="outline-3">
+<h3 id="org464bb55"><span class="section-number-3">1.5</span> More features</h3>
+<div class="outline-text-3" id="text-1-5">
+</div>
+<div id="outline-container-orgaef95ba" class="outline-4">
+<h4 id="orgaef95ba"><span class="section-number-4">1.5.1</span> Conditional</h4>
+<div class="outline-text-4" id="text-1-5-1">
+<ul class="org-ul">
+<li>二元操作符，和c相同的语法<br /></li>
+<li>非符号数字可用比较运算符<br /></li>
+</ul>
+<div class="org-src-container">
+<pre class="src src-verilog">(0 ? 3 : 5)     // This is 5 because the condition is false.
+(sel ? b : a)   // A 2-to-1 multiplexer between a and b selected by sel.
+
+always @(posedge clk)         // A T-flip-flop.
+  q &lt;= toggle ? ~q : q;
+
+always @(*)                   // State transition logic for a one-input FSM
+  case (state)
+    A: next = w ? B : A;
+    B: next = w ? A : B;
+  endcase
+
+assign out = ena ? q : 1'bz;  // A tri-state buffer
+
+((sel[1:0] == 2'h0) ? a :     // A 3-to-1 mux
+ (sel[1:0] == 2'h1) ? b :
+                      c )
+</pre>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-verilog">//Given four unsigned numbers, find the minimum. Unsigned numbers can be compared with standard comparison operators (a &lt; b). Use the conditional operator to make two-way min circuits, then compose a few of them to create a 4-way min circuit. You'll probably want some wire vectors for the intermediate results.
+module top_module (
+    input [7:0] a, b, c, d,
+    output [7:0] min);//
+    // assign intermediate_result1 = compare? true: false;
+    wire[7:0] min1, min2;
+
+    assign min1 = a &lt; b ? a : b;
+    assign min2 = c &lt; d ? c : d;
+    assign min = min1 &lt; min2 ? min1 : min2;
+endmodule
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org72e9559" class="outline-4">
+<h4 id="org72e9559"><span class="section-number-4">1.5.2</span> Reduction</h4>
+<div class="outline-text-4" id="text-1-5-2">
+<p>
+对一个vector里的元素做运算时，可以<br />
+</p>
+<div class="org-src-container">
+<pre class="src src-verilog">&amp; a[3:0]     // AND: a[3]&amp;a[2]&amp;a[1]&amp;a[0]. Equivalent to (a[3:0] == 4'hf)
+| b[3:0]     // OR:  b[3]|b[2]|b[1]|b[0]. Equivalent to (b[3:0] != 4'h0)
+^ c[2:0]     // XOR: c[2]^c[1]^c[0]
+</pre>
+</div>
+
+<p>
+奇偶校验<br />
+</p>
+<div class="org-src-container">
+<pre class="src src-verilog">module top_module (
+    input [7:0] in,
+    output parity);
+    assign parity = ^ in;
+endmodule
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org203afd6" class="outline-4">
+<h4 id="org203afd6"><span class="section-number-4">1.5.3</span> for</h4>
+<div class="outline-text-4" id="text-1-5-3">
+<div class="org-src-container">
+<pre class="src src-verilog">for (int i = &lt;init value&gt;; i &lt; &lt;bound&gt;; i+=1) begin
+//statement
+end
+</pre>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-verilog">module top_module(
+    input [99:0] in,
+    output [99:0] out
+);
+    always @(*) begin
+        for(int i = 0; i &lt; 100; i++) begin
+            out[i] = in[99 - i];
+        end
+    end
+endmodule
+</pre>
+</div>
+
+<p>
+verilog里面的加法，会综合成加法器<br />
+</p>
+
+<p>
+<b>同一个信号不允许在多个进程中赋值，不然为多驱动；两个进程里都有同一个条件判断的话，会产生并行信号冲突的问题，进程的并行性决定了多进程不同能对同一个对象进行赋值。要想解决这类问题要在其程序中找出多个进程里同时对这个报错变量进行赋值的程序段进行修改。（说简单点就是：不能在两个以上always内对同一个变量赋值，或者不能在module里assign又在alwasy里赋值）</b><br />
+</p>
+
+<div class="org-src-container">
+<pre class="src src-verilog">module top_module(
+    input [254:0] in,
+    output [7:0] out );
+//    assign out = 8'b0000_0000;这里会出错
+    always @(*) begin
+        for(int i = 0; i &lt; 255; i++) begin
+            out = out + in[i];
+        end
+    end
+endmodule
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org37b280c" class="outline-4">
+<h4 id="org37b280c"><span class="section-number-4">1.5.4</span> generate</h4>
+<div class="outline-text-4" id="text-1-5-4">
+<p>
+生成语句可以动态的生成verilog代码，当对矢量中的多个位进行重复操作时，或者当进行多个模块的实例引用的重复操作时，或者根据参数的定义来确定程序中是否应该包含某段Verilog代码的时候，使用生成语句能大大简化程序的编写过程。<br />
+使用关键字generate 与 endgenerate来指定范围。generate语句有generate-for、generate-if、generate-case三种语句，本题中我们使用generate-for语句.<br />
+</p>
+
+<p>
+generate-for语句：<br />
+</p>
+<ul class="org-ul">
+<li>必须有genvar关键字定义for语句的变量.<br /></li>
+<li>for语句的内容必须加begin和end（即使就一句）.<br /></li>
+<li>for语句必须有个名字.<br /></li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-verilog">//用4位加法器实现400位加法
+module top_module(
+    input [399:0] a, b,
+    input cin,
+    output cout,
+    output [399:0] sum );
+
+    wire[100:0] ccin, ccout;
+
+    genvar i;
+
+    assign ccin[0] = cin;
+    generate
+        for(i = 0; i &lt; 100; i++) begin : gen
+            bcd_fadd add_i(a[(i * 4) + 3 : i * 4], b[(i * 4) + 3 : i * 4], ccin[i], ccout[i], sum[(i * 4) + 3 : i * 4]);
+            assign ccin[i + 1] = ccout[i];
+        end
+    endgenerate
+
+    assign cout = ccout[99];
+endmodule
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="outline-container-orga0f406c" class="outline-2">
+<h2 id="orga0f406c"><span class="section-number-2">2</span> 电路</h2>
+<div class="outline-text-2" id="text-2">
+</div>
+<div id="outline-container-orga1333b3" class="outline-3">
+<h3 id="orga1333b3"><span class="section-number-3">2.1</span> Combinational logic</h3>
+<div class="outline-text-3" id="text-2-1">
+</div>
+<div id="outline-container-org956d758" class="outline-4">
+<h4 id="org956d758"><span class="section-number-4">2.1.1</span> Basic Gates</h4>
+<div class="outline-text-4" id="text-2-1-1">
+</div>
+<ol class="org-ol">
+<li><a id="org51fd84d"></a>Wire<br />
+<div class="outline-text-5" id="text-2-1-1-1">
+
+<div class="figure">
+<p><img src="电路/2020-11-15_00-24-28_Exams_m2014q4h.png" alt="2020-11-15_00-24-28_Exams_m2014q4h.png" /><br />
+</p>
+</div>
+<div class="org-src-container">
+<pre class="src src-verilog">module top_module (
+    input in,
+    output out);
+    assign out = in;
+endmodule
+</pre>
+</div>
+</div>
+</li>
+<li><a id="orgb631f41"></a>GND<br />
+<div class="outline-text-5" id="text-2-1-1-2">
+
+<div class="figure">
+<p><img src="电路/2020-11-15_00-26-01_Exams_m2014q4i.png" alt="2020-11-15_00-26-01_Exams_m2014q4i.png" /><br />
+</p>
+</div>
+<div class="org-src-container">
+<pre class="src src-verilog">module top_module (
+    input in,
+    output out);
+    assign out = 0;
+endmodule
+</pre>
+</div>
+</div>
+</li>
+
+<li><a id="orgf259795"></a>NOR<br />
+<div class="outline-text-5" id="text-2-1-1-3">
+
+<div class="figure">
+<p><img src="电路/2020-11-15_00-33-38_Exams_m2014q4e.png" alt="2020-11-15_00-33-38_Exams_m2014q4e.png" /><br />
+</p>
+</div>
+<div class="org-src-container">
+<pre class="src src-verilog">module top_module (
+    input in1,
+    input in2,
+    output out);
+    assign out = ~(in1 | in2);
+endmodule
+</pre>
+</div>
+</div>
+</li>
+
+<li><a id="orgcd2f72b"></a>Another gate<br />
+<div class="outline-text-5" id="text-2-1-1-4">
+
+<div class="figure">
+<p><img src="电路/2020-11-15_00-41-31_Exams_m2014q4f.png" alt="2020-11-15_00-41-31_Exams_m2014q4f.png" /><br />
+</p>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-verilog">module top_module (
+    input in1,
+    input in2,
+    output out);
+    assign out = in1 &amp; (~in2);
+endmodule
+</pre>
+</div>
+</div>
+</li>
+
+<li><a id="org365e783"></a>Two gates<br />
+<div class="outline-text-5" id="text-2-1-1-5">
+
+<div class="figure">
+<p><img src="电路/2020-11-15_00-51-35_Exams_m2014q4g.png" alt="2020-11-15_00-51-35_Exams_m2014q4g.png" /><br />
+</p>
+</div>
+<div class="org-src-container">
+<pre class="src src-verilog">module top_module (
+    input in1,
+    input in2,
+    input in3,
+    output out);
+    assign out = (~(in1 ^ in2)) ^ in3;
+endmodule
+</pre>
+</div>
+</div>
+</li>
+
+<li><a id="org160167c"></a>7420<br />
+<div class="outline-text-5" id="text-2-1-1-6">
+
+<div class="figure">
+<p><img src="电路/2020-11-15_01-02-34_7420.png" alt="2020-11-15_01-02-34_7420.png" /><br />
+</p>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-verilog">module top_module (
+    input p1a, p1b, p1c, p1d,
+    output p1y,
+    input p2a, p2b, p2c, p2d,
+    output p2y );
+    assign p1y = ~(p1a &amp; p1b &amp; p1c &amp; p1d);
+    assign p2y = ~(p2a &amp; p2b &amp; p2c &amp; p2d);
+endmodule
+</pre>
+</div>
+</div>
+</li>
+
+<li><a id="org8114c28"></a>simple circuit<br />
+<div class="outline-text-5" id="text-2-1-1-7">
+
+<div class="figure">
+<p><img src="电路/2020-11-15_02-23-09_Mt2015_q4b.png" alt="2020-11-15_02-23-09_Mt2015_q4b.png" /><br />
+</p>
+</div>
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-right" />
+
+<col  class="org-right" />
+
+<col  class="org-right" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-right">x</th>
+<th scope="col" class="org-right">y</th>
+<th scope="col" class="org-right">z</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-right">0</td>
+<td class="org-right">0</td>
+<td class="org-right">1</td>
+</tr>
+
+<tr>
+<td class="org-right">1</td>
+<td class="org-right">0</td>
+<td class="org-right">0</td>
+</tr>
+
+<tr>
+<td class="org-right">0</td>
+<td class="org-right">1</td>
+<td class="org-right">0</td>
+</tr>
+
+<tr>
+<td class="org-right">1</td>
+<td class="org-right">1</td>
+<td class="org-right">1</td>
+</tr>
+</tbody>
+</table>
+
+<div class="org-src-container">
+<pre class="src src-verilog">module top_module (
+    input x, y,
+    output z);
+    assign z = ~(x ^ y);
+endmodule
+</pre>
+</div>
+</div>
+</li>
+</ol>
+</div>
+
+<div id="outline-container-org1e6d8a2" class="outline-4">
+<h4 id="org1e6d8a2"><span class="section-number-4">2.1.2</span> Multiplexers</h4>
+<div class="outline-text-4" id="text-2-1-2">
+</div>
+<ol class="org-ol">
+<li><a id="org9cf9181"></a>2to1<br />
+<div class="outline-text-5" id="text-2-1-2-1">
+<div class="org-src-container">
+<pre class="src src-verilog">module top_module(
+    input a, b, sel,
+    output out );
+    assign out = sel ? b : a;
+endmodule
+</pre>
+</div>
+</div>
+</li>
+
+<li><a id="org35a9acb"></a>256-to-1<br />
+<div class="outline-text-5" id="text-2-1-2-2">
+<ul class="org-ul">
+<li>With this many options, a case statement isn't so useful.<br /></li>
+<li>Vector indices can be variable, as long as the synthesizer can figure out that the width of the bits being selected is constant. In particular, selecting one bit out of a vector using a variable index will work.<br /></li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-verilog">module top_module(
+    input [255:0] in,
+    input [7:0] sel,
+    output out );
+    assign out = in[sel];
+endmodule
+</pre>
+</div>
+</div>
+</li>
+
+<li><a id="org70d1ec7"></a>256-to-1 4 bit<br />
+<div class="outline-text-5" id="text-2-1-2-3">
+<p>
+4-bit wide, 256-to-1 multiplexer. The 256 4-bit inputs are all packed into a single 1024-bit input vector. sel=0 should select bits in[3:0], sel=1 selects bits in[7:4], sel=2 selects bits in[11:8], etc.<br />
+</p>
+
+<ul class="org-ul">
+<li>assign out = in[ sel*4+3 : sel*4 ]，但是这样语法不对，但可以一次选一个<br /></li>
+<li>assign out = in[sel*4 +: 4];<br /></li>
+<li>assign out = in[sel*4+3 -: 4];<br /></li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-verilog">module top_module(
+    input [1023:0] in,
+    input [7:0] sel,
+    output [3:0] out );
+//{in[sel*4+3], in[sel*4+2], in[sel*4+1], in[sel*4+0]};这样也行
+    assign out = in[sel * 4 +: 3];
+endmodule
+</pre>
+</div>
+</div>
+</li>
+</ol>
+</div>
+
+<div id="outline-container-org9d67f51" class="outline-4">
+<h4 id="org9d67f51"><span class="section-number-4">2.1.3</span> Arithmetic</h4>
+<div class="outline-text-4" id="text-2-1-3">
+</div>
+<ol class="org-ol">
+<li><a id="orgfa0d184"></a>half add<br />
+<div class="outline-text-5" id="text-2-1-3-1">
+<div class="org-src-container">
+<pre class="src src-verilog">module top_module(
+    input a, b,
+    output cout, sum );
+    assign cout = a &amp; b;
+    assign sum = a ^ b;
+endmodule
+</pre>
+</div>
+</div>
+</li>
+<li><a id="org57fe515"></a>full add<br />
+<div class="outline-text-5" id="text-2-1-3-2">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-right" />
+
+<col  class="org-right" />
+
+<col  class="org-right" />
+
+<col  class="org-right" />
+
+<col  class="org-right" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-right">a</th>
+<th scope="col" class="org-right">b</th>
+<th scope="col" class="org-right">cin</th>
+<th scope="col" class="org-right">sum</th>
+<th scope="col" class="org-right">cout</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-right">0</td>
+<td class="org-right">0</td>
+<td class="org-right">0</td>
+<td class="org-right">0</td>
+<td class="org-right">0</td>
+</tr>
+
+<tr>
+<td class="org-right">0</td>
+<td class="org-right">0</td>
+<td class="org-right">1</td>
+<td class="org-right">1</td>
+<td class="org-right">0</td>
+</tr>
+
+<tr>
+<td class="org-right">0</td>
+<td class="org-right">1</td>
+<td class="org-right">0</td>
+<td class="org-right">1</td>
+<td class="org-right">0</td>
+</tr>
+
+<tr>
+<td class="org-right">1</td>
+<td class="org-right">0</td>
+<td class="org-right">0</td>
+<td class="org-right">1</td>
+<td class="org-right">0</td>
+</tr>
+
+<tr>
+<td class="org-right">1</td>
+<td class="org-right">0</td>
+<td class="org-right">1</td>
+<td class="org-right">0</td>
+<td class="org-right">1</td>
+</tr>
+
+<tr>
+<td class="org-right">1</td>
+<td class="org-right">1</td>
+<td class="org-right">0</td>
+<td class="org-right">0</td>
+<td class="org-right">1</td>
+</tr>
+
+<tr>
+<td class="org-right">1</td>
+<td class="org-right">1</td>
+<td class="org-right">1</td>
+<td class="org-right">1</td>
+<td class="org-right">1</td>
+</tr>
+</tbody>
+</table>
+<div class="org-src-container">
+<pre class="src src-verilog">module top_module(
+    input a, b, cin,
+    output cout, sum );
+   assign sum = a ^ b ^ cin;
+   assign cout = (a &amp; b) | (b &amp; cin) | (a &amp; cin);
+endmodule
+</pre>
+</div>
+</div>
+</li>
+<li><a id="org55b2da2"></a>adder<br />
+<div class="outline-text-5" id="text-2-1-3-3">
+
+<div class="figure">
+<p><img src="电路/2020-11-15_15-34-50_Exams_m2014q4j.png" alt="2020-11-15_15-34-50_Exams_m2014q4j.png" /><br />
+</p>
+</div>
+<div class="org-src-container">
+<pre class="src src-verilog">module top_module (
+    input [3:0] x,
+    input [3:0] y,
+    output [4:0] sum
+);
+
+    // This circuit is a 4-bit ripple-carry adder with carry-out.
+    assign sum = x+y;	// Verilog addition automatically produces the carry-out bit.
+
+    // Verilog quirk: Even though the value of (x+y) includes the carry-out, (x+y) is still considered to be a 4-bit number (The max width of the two operands).
+    // This is correct:
+    // assign sum = (x+y);
+    // But this is incorrect:
+    // assign sum = {x+y};	// Concatenation operator: This discards the carry-out
+endmodule
+</pre>
+</div>
+</div>
+</li>
+<li><a id="org40e043b"></a>signed adder<br />
+<div class="outline-text-5" id="text-2-1-3-4">
+<p>
+two 8-bit 2's complement numbers, a[7:0] and b[7:0]. These numbers are added to produce s[7:0]. Also compute whether a (signed) overflow has occurred.<br />
+</p>
+<div class="org-src-container">
+<pre class="src src-verilog">module top_module (
+    input [7:0] a,
+    input [7:0] b,
+    output [7:0] s,
+    output overflow
+); //
+    assign s = a + b;
+    assign overflow = (a[7] &amp; b[7] &amp; ~s[7]) | (~a[7] &amp; ~b[7] &amp; s[7]);
+endmodule
+</pre>
+</div>
+</div>
+</li>
+<li><a id="org6f489b4"></a>100bit adder<br />
+<div class="outline-text-5" id="text-2-1-3-5">
+<div class="org-src-container">
+<pre class="src src-verilog">module top_module (
+    input [99:0] a,
+    input [99:0] b,
+    input cin,
+    output cout,
+    output [99:0] sum
+);
+
+    // The concatenation {cout, sum} is a 101-bit vector.
+    assign {cout, sum} = a+b+cin;
+
+endmodule
+</pre>
+</div>
+</div>
+</li>
+</ol>
+</div>
+<div id="outline-container-org83ca10a" class="outline-4">
+<h4 id="org83ca10a"><span class="section-number-4">2.1.4</span> Karnaugh Map</h4>
+<div class="outline-text-4" id="text-2-1-4">
+</div>
+<ol class="org-ol">
+<li><a id="orgf2dac40"></a>3-var<br />
+<div class="outline-text-5" id="text-2-1-4-1">
+
+<div class="figure">
+<p><img src="电路/2020-11-15_18-25-11_Kmap1.png" alt="2020-11-15_18-25-11_Kmap1.png" /><br />
+</p>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-verilog">module top_module(
+    input a,
+    input b,
+    input c,
+    output out
+);
+    assign out = (a | b | c);
+endmodule
+</pre>
+</div>
+</div>
+</li>
+
+<li><a id="org348cbcc"></a>4-var<br />
+<div class="outline-text-5" id="text-2-1-4-2">
+
+<div class="figure">
+<p><img src="电路/2020-11-15_18-34-24_Kmap2.png" alt="2020-11-15_18-34-24_Kmap2.png" /><br />
+</p>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-verilog">module top_module(
+    input a,
+    input b,
+    input c,
+    input d,
+    output out);
+    assign out = (~b &amp; ~c) | (~d &amp; ~a) | (c &amp; d &amp; a) | (~a &amp; b &amp; c &amp; d);
+endmodule
+</pre>
+</div>
+
+
+
+<div class="figure">
+<p><img src="电路/2020-11-15_23-52-58_Kmap4.png" alt="2020-11-15_23-52-58_Kmap4.png" /><br />
+</p>
+</div>
+<div class="org-src-container">
+<pre class="src src-verilog">module top_module(
+    input a,
+    input b,
+    input c,
+    input d,
+    output out  );
+    assign out = (~a &amp; b &amp; ~c &amp; ~d) |
+        (a &amp; ~b &amp; ~c &amp; ~d) |
+        (~a &amp; ~b &amp; ~c &amp; d) |
+        (a &amp; b &amp; ~c &amp; d) |
+        (~a &amp; b &amp; c &amp; d) |
+        (a &amp; ~b &amp; c &amp; d) |
+        (~a &amp; ~b &amp; c &amp; ~d) |
+        (a &amp; b &amp; c &amp; ~d);
+endmodule
+</pre>
+</div>
+</div>
+</li>
+</ol>
+</div>
+</div>
+<div id="outline-container-orgd89c8ef" class="outline-3">
+<h3 id="orgd89c8ef"><span class="section-number-3">2.2</span> Sequential logic</h3>
+<div class="outline-text-3" id="text-2-2">
+</div>
+<div id="outline-container-org4039d57" class="outline-4">
+<h4 id="org4039d57"><span class="section-number-4">2.2.1</span> Latches and Flip-Flops</h4>
+<div class="outline-text-4" id="text-2-2-1">
+</div>
+<ol class="org-ol">
+<li><a id="orgff8785a"></a>D flip-flop<br />
+<div class="outline-text-5" id="text-2-2-1-1">
+
+<div class="figure">
+<p><img src="电路/2020-11-16_12-28-57_Dff.png" alt="2020-11-16_12-28-57_Dff.png" /><br />
+</p>
+</div>
+<div class="org-src-container">
+<pre class="src src-verilog">module top_module (
+    input clk,    // Clocks are used in sequential circuits
+    input d,
+    output reg q );//
+
+    // Use a clocked always block
+    //   copy d to q at every positive edge of clk
+    //   Clocked always blocks should use non-blocking assignments
+    always @(posedge clk)
+        q &lt;= d;
+endmodule
+</pre>
+</div>
+</div>
+</li>
+<li><a id="orgf084b27"></a>Dff with synchronous reset<br />
+<div class="outline-text-5" id="text-2-2-1-2">
+<p>
+8 D flip-flops with active high synchronous reset. The flip-flops must be reset to 0x34 rather than zero. All DFFs should be triggered by the negative edge of clk.<br />
+</p>
+<div class="org-src-container">
+<pre class="src src-verilog">module top_module (
+    input clk,
+    input reset,
+    input [7:0] d,
+    output [7:0] q
+);
+    always @(negedge clk) begin
+        q &lt;= reset ? 8'h34 : d;
+    end
+endmodule
+</pre>
+</div>
+</div>
+</li>
+<li><a id="org1953631"></a>Dff with asynchronous reset<br />
+<div class="outline-text-5" id="text-2-2-1-3">
+<div class="org-src-container">
+<pre class="src src-verilog">module top_module(
+    input clk,
+    input [7:0] d,
+    input areset,
+    output reg [7:0] q);
+
+    // The only difference in code compared to synchronous reset is in the sensitivity list.
+    always @(posedge clk, posedge areset)
+        if (areset)
+            q &lt;= 0;
+        else
+            q &lt;= d;
+
+
+    // In Verilog, the sensitivity list looks strange. The FF's reset is sensitive to the
+    // *level* of areset, so why does using "posedge areset" work?
+    // To see why it works, consider the truth table for all events that change the input
+    // signals, assuming clk and areset do not switch at precisely the same time:
+
+    //  clk		areset		output
+    //   x		 0-&gt;1		q &lt;= 0; (because areset = 1)
+    //   x		 1-&gt;0		no change (always block not triggered)
+    //  0-&gt;1	   0		q &lt;= d; (not resetting)
+    //  0-&gt;1	   1		q &lt;= 0; (still resetting, q was 0 before too)
+    //  1-&gt;0	   x		no change (always block not triggered)
+endmodule
+</pre>
+</div>
+</div>
+</li>
+<li><a id="org6ceac32"></a>Dff with byte enable<br />
+<div class="outline-text-5" id="text-2-2-1-4">
+<p>
+16 D flip-flops. It's sometimes useful to only modify parts of a group of flip-flops. The byte-enable inputs control whether each byte of the 16 registers should be written to on that cycle. byteena[1] controls the upper byte d[15:8], while byteena[0] controls the lower byte d[7:0].<br />
+</p>
+
+<p>
+resetn is a synchronous, active-low reset.<br />
+</p>
+
+<p>
+All DFFs should be triggered by the positive edge of clk.<br />
+</p>
+<div class="org-src-container">
+<pre class="src src-verilog">module top_module (
+    input clk,
+    input resetn,
+    input [1:0] byteena,
+    input [15:0] d,
+    output reg [15:0] q
+);
+
+    always @(posedge clk) begin
+        if(~resetn)
+           q &lt;= 16'd0;
+        else if(byteena[0] || byteena[1]) begin
+            if(byteena[1])
+                q[15:8] &lt;= d[15:8];
+            if(byteena[0])
+                q[7:0] &lt;= d[7:0];
+        end
+    end
+endmodule
+</pre>
+</div>
+</div>
+</li>
+
+<li><a id="orgc4e27c0"></a>D latch<br />
+<div class="outline-text-5" id="text-2-2-1-5">
+
+<div class="figure">
+<p><img src="电路/2020-11-16_17-16-00_Exams_m2014q4a.png" alt="2020-11-16_17-16-00_Exams_m2014q4a.png" /><br />
+</p>
+</div>
+<div class="org-src-container">
+<pre class="src src-verilog">module top_module (
+    input d,
+    input ena,
+    output q);
+    always @(*)
+        if (ena) q = d;
+endmodule
+</pre>
+</div>
+</div>
+</li>
+
+<li><a id="org09a33e5"></a>DFF+gate<br />
+<div class="outline-text-5" id="text-2-2-1-6">
+
+<div class="figure">
+<p><img src="电路/2020-11-16_20-38-43_Exams_m2014q4d.png" alt="2020-11-16_20-38-43_Exams_m2014q4d.png" /><br />
+</p>
+</div>
+<div class="org-src-container">
+<pre class="src src-verilog">module top_module (
+    input clk,
+    input in,
+    output out);
+    reg back = 0;
+    always @(posedge clk) begin
+        out &lt;= in ^ out;
+    end
+endmodule
+</pre>
+</div>
+</div>
+</li>
+
+<li><a id="org6a0edb1"></a>Mux and DFF<br />
+<div class="outline-text-5" id="text-2-2-1-7">
+
+<div class="figure">
+<p><img src="电路/2020-11-16_23-56-38_Exams_2014q4.png" alt="2020-11-16_23-56-38_Exams_2014q4.png" /><br />
+</p>
+</div>
+
+<p>
+one stage of this circuit<br />
+</p>
+
+<div class="org-src-container">
+<pre class="src src-verilog">module top_module (
+    input clk,
+    input w, R, E, L,
+    output Q
+);
+    always @(posedge clk) begin
+        Q &lt;= L ? R : E ? w : Q;
+    end
+endmodule
+</pre>
+</div>
+</div>
+</li>
+
+<li><a id="orgb35390b"></a>DFFs and gates<br />
+<div class="outline-text-5" id="text-2-2-1-8">
+
+<div class="figure">
+<p><img src="电路/2020-11-17_09-28-23_Ece241_2014_q4.png" alt="2020-11-17_09-28-23_Ece241_2014_q4.png" /><br />
+</p>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-verilog">module top_module (
+    input clk,
+    input x,
+    output z
+);
+    reg t1 = 0, t2 = 0, t3 = 0;
+
+    always @(posedge clk) begin
+        t1 &lt;= x ^ t1;
+        t2 &lt;= x &amp; ~t2;
+        t3 &lt;= x | ~t3;
+    end
+
+    assign z = ~(t1 | t2 | t3);
+endmodule
+</pre>
+</div>
+</div>
+</li>
+
+<li><a id="orgdc8e19a"></a>JK flip-flop<br />
+<div class="outline-text-5" id="text-2-2-1-9">
+<div class="org-src-container">
+<pre class="src src-verilog">module top_module (
+    input clk,
+    input j,
+    input k,
+    output Q);
+    always @(posedge clk) begin
+        case({j, k})
+            2'b00 : Q &lt;= Q;
+            2'b01 : Q &lt;= 0;
+            2'b10 : Q &lt;= 1;
+            2'b11 : Q &lt;= ~Q;
+        endcase
+    end
+endmodule
+</pre>
+</div>
+</div>
+</li>
+
+<li><a id="org466292e"></a>Edge detect<br />
+<div class="outline-text-5" id="text-2-2-1-10">
+
+<div class="figure">
+<p><object type="image/svg+xml" data="电路/2020-11-17_14-31-11_wavedrom.svg" class="org-svg">
+Sorry, your browser does not support SVG.</object><br />
+</p>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-verilog">module top_module (
+    input clk,
+    input [7:0] in,
+    output [7:0] pedge
+);
+    reg[7:0] t = 8'b00000000;
+    always @(posedge clk) begin
+        pedge &lt;= ~t &amp; in; //t保存了t-1的状态，所以上升沿判断就是t为0而in为1的时候
+        t &lt;= in;
+    end
+endmodule
+</pre>
+</div>
+</div>
+</li>
+
+<li><a id="org7840e15"></a>Dual edge detect<br />
+<div class="outline-text-5" id="text-2-2-1-11">
+
+<div class="figure">
+<p><object type="image/svg+xml" data="电路/2020-11-18_22-40-28_wavedrom (1).svg" class="org-svg">
+Sorry, your browser does not support SVG.</object><br />
+</p>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-verilog">module top_module (
+    input clk,
+    input d,
+    output q
+);
+    reg q1, q2;
+
+    always @(posedge clk) begin
+        q1 &lt;= d;
+    end
+    always @(negedge clk) begin
+        q2 &lt;= d;
+    end
+
+    assign q = clk ? q1 : q2;
+endmodule
+</pre>
+</div>
+</div>
+</li>
+</ol>
+</div>
+
+<div id="outline-container-org6b09c94" class="outline-4">
+<h4 id="org6b09c94"><span class="section-number-4">2.2.2</span> Counters</h4>
+<div class="outline-text-4" id="text-2-2-2">
+</div>
+<ol class="org-ol">
+<li><a id="orga5885a8"></a>Four-bit binary<br />
+<div class="outline-text-5" id="text-2-2-2-1">
+
+<div class="figure">
+<p><object type="image/svg+xml" data="电路/2020-11-19_00-27-37_wavedrom (2).svg" class="org-svg">
+Sorry, your browser does not support SVG.</object><br />
+</p>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-verilog">module top_module (
+    input clk,
+    input reset,      // Synchronous active-high reset
+    output [3:0] q);
+
+    always @(posedge clk) begin
+        q &lt;= reset ? 0 : q + 1;
+    end
+endmodule
+</pre>
+</div>
+</div>
+</li>
+
+<li><a id="org8580233"></a>Counter 1000<br />
+<div class="outline-text-5" id="text-2-2-2-2">
+<p>
+From a 1000 Hz clock, derive a 1 Hz signal<br />
+</p>
+<div class="org-src-container">
+<pre class="src src-verilog">module top_module (
+    input clk,
+    input reset,
+    output OneHertz,
+    output [2:0] c_enable
+); //
+    wire [3:0] q0, q1, q2;
+
+    assign c_enable = {q1 == 4'd9 &amp;&amp; q0 == 4'd9, q0 == 4'd9, 1'b1};
+    assign OneHertz = {q2 == 4'd9 &amp;&amp; q1 == 4'd9 &amp;&amp; q0 == 4'd9};
+
+    bcdcount counter0 (clk, reset, c_enable[0], q0);
+    bcdcount counter1 (clk, reset, c_enable[1], q1);
+    bcdcount counter2 (clk, reset, c_enable[2], q2);
+endmodule
+</pre>
+</div>
+</div>
+</li>
+
+<li><a id="orge740906"></a>4-digit decimal counter<br />
+<div class="outline-text-5" id="text-2-2-2-3">
+<p>
+Each decimal digit is encoded using 4 bits: q[3:0] is the ones digit, q[7:4] is the tens digit, etc. For digits [3:1]<br />
+<object type="image/svg+xml" data="电路/2020-11-23_15-06-01_wavedrom (3).svg" class="org-svg">
+Sorry, your browser does not support SVG.</object><br />
+</p>
+
+<div class="org-src-container">
+<pre class="src src-verilog">module top_module (
+    input clk,
+    input reset,   // Synchronous active-high reset
+    output [3:1] ena,
+    output [15:0] q);
+
+    assign ena[1] = q[3:0] == 9;
+    assign ena[2] = (q[7:4] == 9) &amp;&amp; (q[3:0] == 9);
+    assign ena[3] = (q[11:8] == 9) &amp;&amp; (q[7:4] == 9) &amp;&amp; (q[3:0] == 9);
+    always @(posedge clk) begin
+        if (reset) q &lt;= 0;
+        else begin
+            q[3:0] &lt;= q[3:0] == 9 ? 0 : q[3:0] + 1;
+            if (ena[1]) begin
+                q[7:4] &lt;= q[7:4] == 9 ? 0 : q[7:4] + 1;
+            end
+            if (ena[2]) begin
+                q[11:8] &lt;= q[11:8] == 9 ? 0 : q[11:8] + 1;
+            end
+            if (ena[3]) begin
+                q[15:12] &lt;= q[15:12] == 9 ? 0 : q[15:12] + 1;
+            end
+        end
+    end
+endmodule
+</pre>
+</div>
+</div>
+</li>
+</ol>
+</div>
+
+<div id="outline-container-org5aae95b" class="outline-4">
+<h4 id="org5aae95b"><span class="section-number-4">2.2.3</span> shift</h4>
+<div class="outline-text-4" id="text-2-2-3">
+</div>
+<ol class="org-ol">
+<li><a id="org318a88c"></a>4-bit shift<br />
+<div class="outline-text-5" id="text-2-2-3-1">
+<div class="org-src-container">
+<pre class="src src-verilog">module top_module(
+    input clk,
+    input areset,  // async active-high reset to zero
+    input load,
+    input ena,
+    input [3:0] data,
+    output reg [3:0] q);
+    always @(posedge clk or posedge areset) begin
+        if (areset) q &lt;= 0;
+        else begin
+            if (load) q &lt;= data;
+            else if (ena) q &lt;= q &gt;&gt; 1;
+        end
+    end
+endmodule
+</pre>
+</div>
+</div>
+</li>
+
+<li><a id="org8a06e55"></a>rotate 100<br />
+<div class="outline-text-5" id="text-2-2-3-2">
+<ul class="org-ul">
+<li>load: Loads shift register with data[99:0] instead of rotating.<br /></li>
+<li>ena[1:0]: Chooses whether and which direction to rotate.<br />
+2'b01 rotates right by one bit<br />
+2'b10 rotates left by one bit<br />
+2'b00 and 2'b11 do not rotate.<br /></li>
+<li>q: The contents of the rotator.<br /></li>
+</ul>
+<div class="org-src-container">
+<pre class="src src-verilog">module top_module(
+    input clk,
+    input load,
+    input [1:0] ena,
+    input [99:0] data,
+    output reg [99:0] q);
+    always @(posedge clk) begin
+        if (load) q &lt;= data;
+        else begin
+            if (ena == 2'b01)
+                q &lt;= {q[0], q[99:1]};
+            else if (ena == 2'b10)
+                q &lt;= {q[98:0], q[99]};
+        end
+    end
+endmodule
+</pre>
+</div>
+</div>
+</li>
+
+<li><a id="org59b671a"></a>arithmetic shift<br />
+<div class="outline-text-5" id="text-2-2-3-3">
+<ul class="org-ul">
+<li>load: Loads shift register with data[63:0] instead of shifting.<br /></li>
+<li>ena: Chooses whether to shift.<br /></li>
+<li>amount: Chooses which direction and how much to shift.<br />
+2'b00: shift left by 1 bit.<br />
+2'b01: shift left by 8 bits.<br />
+2'b10: shift right by 1 bit.<br />
+2'b11: shift right by 8 bits.<br /></li>
+<li>q: The contents of the shifter.<br /></li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-verilog">module top_module(
+    input clk,
+    input load,
+    input ena,
+    input [1:0] amount,
+    input [63:0] data,
+    output reg [63:0] q);
+    always @(posedge clk) begin
+        if (load) q &lt;= data;
+        else if (ena) begin
+            case (amount)
+                2'b00: q &lt;= {q[62:0], 1'b0};
+                2'b01: q &lt;= {q[55:0], 8'b0};
+                2'b10: q &lt;= {q[63], q[63:1]};
+                2'b11: q &lt;= {{8{q[63]}}, q[63:8]};
+            endcase
+        end
+    end
+endmodule
+</pre>
+</div>
+</div>
+</li>
+
+<li><a id="org11b3ef2"></a>5-bit LFSR<br />
+<div class="outline-text-5" id="text-2-2-3-4">
+<p>
+线性反馈移位寄存器(LFSR)是通常带有几个XOR门来产生下一状态的移位寄存器<br />
+<img src="电路/2020-11-25_01-50-13_Lfsr5.png" alt="2020-11-25_01-50-13_Lfsr5.png" /><br />
+</p>
+
+<div class="org-src-container">
+<pre class="src src-verilog">module top_module(
+    input clk,
+    input reset,    // Active-high synchronous reset to 5'h1
+    output [4:0] q
+);
+    always @(posedge clk) begin
+        if (reset) q &lt;= 5'h1;
+        else begin
+            q[0] &lt;= q[1];
+            q[1] &lt;= q[2];
+            q[2] &lt;= q[3] ^ q[0];
+            q[3] &lt;= q[4];
+            q[4] &lt;= q[0] ^ 0;
+        end
+    end
+endmodule
+</pre>
+</div>
+</div>
+</li>
+
+<li><a id="org203ee52"></a>3-bit LFSR<br />
+<div class="outline-text-5" id="text-2-2-3-5">
+
+<div class="figure">
+<p><img src="电路/2020-11-25_14-09-09_Mt2015_muxdff.png" alt="2020-11-25_14-09-09_Mt2015_muxdff.png" /><br />
+</p>
+</div>
+
+
+<div class="org-src-container">
+<pre class="src src-verilog">module sel(input clk, L, r, q,
+           output Q);
+    always @(posedge clk) begin
+        Q &lt;= L ? r : q;
+    end
+endmodule
+
+module top_module (
+    input [2:0] SW,      // R
+    input [1:0] KEY,     // L and clk
+    output [2:0] LEDR);  // Q
+
+    sel sel1(KEY[0], KEY[1], SW[0], LEDR[2], LEDR[0]);
+    sel sel2(KEY[0], KEY[1], SW[1], LEDR[0], LEDR[1]);
+    sel sel3(KEY[0], KEY[1], SW[2], LEDR[1] ^ LEDR[2], LEDR[2]);
+endmodule
+</pre>
+</div>
+</div>
+</li>
+
+<li><a id="org9f9c53f"></a>32-bit LFSR<br />
+<div class="outline-text-5" id="text-2-2-3-6">
+<p>
+32-bit Galois LFSR with taps at bit positions 32, 22, 2, and 1.<br />
+</p>
+
+<div class="org-src-container">
+<pre class="src src-verilog">module top_module(
+    input clk,
+    input reset,    // Active-high synchronous reset to 32'h1
+    output [31:0] q
+);
+    reg[31:0] next;
+
+    always @(*) begin
+        next = q[31:1];
+        next[31] = q[0];
+        next[21] = q[22] ^ q[0];
+        next[1]  = q[2]  ^ q[0];
+        next[0]  = q[1]  ^ q[0];
+    end
+    always @(posedge clk) begin
+        q &lt;= reset ? 32'h1 : next;
+    end
+endmodule
+</pre>
+</div>
+</div>
+</li>
+
+<li><a id="org54e4c7c"></a>shift register<br />
+<div class="outline-text-5" id="text-2-2-3-7">
+
+<div class="figure">
+<p><img src="电路/2020-11-25_15-04-06_Exams_m2014q4k.png" alt="2020-11-25_15-04-06_Exams_m2014q4k.png" /><br />
+</p>
+</div>
+<div class="org-src-container">
+<pre class="src src-verilog">module top_module (
+    input clk,
+    input resetn,   // synchronous reset
+    input in,
+    output out);
+
+    reg [3:0] shift = 0;
+    always @(posedge clk) begin
+        if (!resetn) begin
+            shift &lt;= 0;
+            out &lt;= 0;
+        end
+        else begin
+            shift &lt;= {in, shift[3:1]};
+            out &lt;= shift[0];
+        end
+    end
+endmodule
+</pre>
+</div>
+</div>
+</li>
+
+<li><a id="orga0998b5"></a>3-input LUT<br />
+<div class="outline-text-5" id="text-2-2-3-8">
+<div class="org-src-container">
+<pre class="src src-verilog">module top_module (
+    input clk,
+    input enable,
+    input S,
+    input A, B, C,
+    output Z );
+    reg[7:0] t;
+    always @(posedge clk) begin
+        if (enable) begin
+            t &lt;= {t[6:0], S};
+        end
+    end
+    assign Z = t[{A, B, C}];
+endmodule
+</pre>
+</div>
+</div>
+</li>
+</ol>
+</div>
+
+<div id="outline-container-orgd0a05c1" class="outline-4">
+<h4 id="orgd0a05c1"><span class="section-number-4">2.2.4</span> More Circuits</h4>
+<div class="outline-text-4" id="text-2-2-4">
+</div>
+<ol class="org-ol">
+<li><a id="org7518615"></a>rule90<br />
+<div class="outline-text-5" id="text-2-2-4-1">
+<p>
+At each time step, the next state of each cell is the XOR of the cell's two current neighbours.<br />
+</p>
+
+<div class="org-src-container">
+<pre class="src src-verilog">module top_module(
+    input clk,
+    input load,
+    input [511:0] data,
+    output [511:0] q );
+    always @(posedge clk) begin
+        if (load) q &lt;= data;
+        else begin
+            q[0] &lt;= q[1];
+            q[511] &lt;= q[510];
+            for (int i = 1; i &lt;= 510; i=i+1) begin
+                q[i] &lt;= q[i - 1] ^ q[i + 1];
+            end
+        end
+    end
+endmodule
+</pre>
+</div>
+</div>
+</li>
+</ol>
+</div>
+
+<div id="outline-container-org904ce52" class="outline-4">
+<h4 id="org904ce52"><span class="section-number-4">2.2.5</span> FSM</h4>
+<div class="outline-text-4" id="text-2-2-5">
+</div>
+<ol class="org-ol">
+<li><a id="orgb96191d"></a>FSM1 - async reset<br />
+<div class="outline-text-5" id="text-2-2-5-1">
+
+<div class="figure">
+<p><img src="电路/2020-11-25_21-39-54_Fsm1.png" alt="2020-11-25_21-39-54_Fsm1.png" /><br />
+</p>
+</div>
+
+<p>
+三段式写法<br />
+</p>
+
+<ul class="org-ul">
+<li>状态跳转逻辑<br /></li>
+<li>状态触发器实现<br /></li>
+<li>输出逻辑<br /></li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-verilog">module top_module (
+    input clk,
+    input in,
+    input areset,
+    output out
+);
+
+    // Give state names and assignments. I'm lazy, so I like to use decimal numbers.
+    // It doesn't really matter what assignment is used, as long as they're unique.
+    parameter A=0, B=1;
+    reg state;		// Ensure state and next are big enough to hold the state encoding.
+    reg next;
+
+
+    // A finite state machine is usually coded in three parts:
+    //   State transition logic
+    //   State flip-flops
+    //   Output logic
+    // It is sometimes possible to combine one or more of these blobs of code
+    // together, but be careful: Some blobs are combinational circuits, while some
+    // are clocked (DFFs).
+
+
+    // Combinational always block for state transition logic. Given the current state and inputs,
+    // what should be next state be?
+    // Combinational always block: Use blocking assignments.
+    always@(*) begin
+        case (state)
+            A: next = in ? A : B;
+            B: next = in ? B : A;
+        endcase
+    end
+
+
+
+    // Edge-triggered always block (DFFs) for state flip-flops. Asynchronous reset.
+    always @(posedge clk, posedge areset) begin
+        if (areset) state &lt;= B;		// Reset to state B
+        else state &lt;= next;			// Otherwise, cause the state to transition
+    end
+
+
+
+    // Combinational output logic. In this problem, an assign statement is the simplest.
+    // In more complex circuits, a combinational always block may be more suitable.
+    assign out = (state==B);
+
+
+endmodule
+</pre>
+</div>
+</div>
+</li>
+
+<li><a id="orgc13ef57"></a>FSM1 - sync reset<br />
+<div class="outline-text-5" id="text-2-2-5-2">
+
+<div class="figure">
+<p><img src="电路/2020-11-25_21-57-37_Fsm1s.png" alt="2020-11-25_21-57-37_Fsm1s.png" /><br />
+</p>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-verilog">module top_module (
+    input clk,
+    input in,
+    input areset,
+    output out
+);
+
+    // Give state names and assignments. I'm lazy, so I like to use decimal numbers.
+    // It doesn't really matter what assignment is used, as long as they're unique.
+    parameter A=0, B=1;
+    reg state;		// Ensure state and next are big enough to hold the state encoding.
+    reg next;
+
+
+    // A finite state machine is usually coded in three parts:
+    //   State transition logic
+    //   State flip-flops
+    //   Output logic
+    // It is sometimes possible to combine one or more of these blobs of code
+    // together, but be careful: Some blobs are combinational circuits, while some
+    // are clocked (DFFs).
+
+
+    // Combinational always block for state transition logic. Given the current state and inputs,
+    // what should be next state be?
+    // Combinational always block: Use blocking assignments.
+    always@(*) begin
+        case (state)
+            A: next = in ? A : B;
+            B: next = in ? B : A;
+        endcase
+    end
+
+
+
+    // Edge-triggered always block (DFFs) for state flip-flops. Asynchronous reset.
+    always @(posedge clk) begin
+        if (areset) state &lt;= B;		// Reset to state B
+        else state &lt;= next;			// Otherwise, cause the state to transition
+    end
+
+
+
+    // Combinational output logic. In this problem, an assign statement is the simplest.
+    // In more complex circuits, a combinational always block may be more suitable.
+    assign out = (state==B);
+
+
+endmodule
+</pre>
+</div>
+</div>
+</li>
+
+<li><a id="org8e4f816"></a>Lemmings<br />
+<div class="outline-text-5" id="text-2-2-5-3">
+
+<div class="figure">
+<p><object type="image/svg+xml" data="电路/2020-11-26_16-29-05_wavedrom (1).svg" class="org-svg">
+Sorry, your browser does not support SVG.</object><br />
+</p>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-verilog">module top_module(
+    input clk,
+    input areset,    // Freshly brainwashed Lemmings walk left.
+    input bump_left,
+    input bump_right,
+    output walk_left,
+    output walk_right); //
+
+    parameter LEFT=0, RIGHT=1;
+    reg state, next_state;
+
+    always @(*) begin
+        case (state)
+            LEFT:  next_state = bump_left  ? RIGHT : LEFT;
+            RIGHT: next_state = bump_right ? LEFT  : RIGHT;
+        endcase
+    end
+
+    always @(posedge clk, posedge areset) begin
+        state &lt;= areset ? LEFT : next_state;
+    end
+
+    // Output logic
+    assign walk_left = (state == LEFT);
+    assign walk_right = (state == RIGHT);
+endmodule
+</pre>
+</div>
+</div>
+</li>
+
+<li><a id="org159e396"></a>One-hot FSM<br />
+<div class="outline-text-5" id="text-2-2-5-4">
+<p>
+独热码状态机仅使用单bit表示状态，是否处在某一状态仅跟一个bit有关，而下个状态的转移也仅与一个bit有关。与其他bit无关。独热码的好处就是生成状态机的逻辑是最简单的，但缺点就是，当偶然进入了一个不是该电路的状态的时候，除了复位以外是跳转不回去了。<br />
+</p>
+
+
+<div class="figure">
+<p><img src="电路/2020-11-26_17-57-03_Fsmonehot.png" alt="2020-11-26_17-57-03_Fsmonehot.png" /><br />
+</p>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-verilog">module top_module(
+    input in,
+    input [9:0] state,
+    output [9:0] next_state,
+    output out1,
+    output out2);
+
+    parameter s0 = 0, s1 = 1, s2 = 2, s3 = 3, s4 = 4, s5 = 5, s6 = 6, s7 = 7, s8 = 8, s9 = 9;
+
+    assign next_state [s0] = state [s0] &amp; (~in) | state [s1] &amp; (~in) | state [s2] &amp; (~in) |
+                             state [s3] &amp; (~in) | state [s4] &amp; (~in) | state [s7] &amp; (~in) |
+                             state [s8] &amp; (~in) | state [s9] &amp; (~in);
+    assign next_state [s1] = state [s0] &amp; ( in) | state [s8] &amp; ( in) | state [s9] &amp; ( in);
+    assign next_state [s2] = state [s1] &amp; ( in);
+    assign next_state [s3] = state [s2] &amp; ( in);
+    assign next_state [s4] = state [s3] &amp; ( in);
+    assign next_state [s5] = state [s4] &amp; ( in);
+    assign next_state [s6] = state [s5] &amp; ( in);
+    assign next_state [s7] = state [s6] &amp; ( in) | state [s7] &amp; ( in);
+    assign next_state [s8] = state [s5] &amp; (~in);
+    assign next_state [s9] = state [s6] &amp; (~in);
+
+    assign out1 = state [s8] | state [s9];
+    assign out2 = state [s7] | state [s9];
+
+endmodule
+</pre>
+</div>
+</div>
+</li>
+
+<li><a id="orgf01032f"></a>PS/2 packet parser<br />
+<div class="outline-text-5" id="text-2-2-5-5">
+
+<div class="figure">
+<p><object type="image/svg+xml" data="电路/2020-11-26_21-58-49_wavedrom (2).svg" class="org-svg">
+Sorry, your browser does not support SVG.</object><br />
+</p>
+</div>
+
+
+<div class="figure">
+<p><object type="image/svg+xml" data="电路/2020-11-26_21-59-02_wavedrom (3).svg" class="org-svg">
+Sorry, your browser does not support SVG.</object><br />
+</p>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-verilog">module top_module(
+    input clk,
+    input [7:0] in,
+    input reset,    // Synchronous reset
+    output done); //
+
+    parameter S0 = 0, S1 = 1, S2 = 2, S3 = 3;
+
+    reg[1:0] state, next;
+
+    // State transition logic (combinational)
+    always @(*) begin
+        case (state)
+            S0 : next = in[3] ? S1 : S0;
+            S1 : next = S2;
+            S2 : next = S3;
+            S3 : next = in[3] ? S1 : S0;
+        endcase
+    end
+    // State flip-flops (sequential)
+    always @(posedge clk) begin
+        state &lt;= reset ? S0 : next;
+    end
+    // Output logic
+    assign done = state == S3;
+endmodule
+</pre>
+</div>
+</div>
+</li>
+</ol>
+</div>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: xuali2</p>
+<p class="date">Created: 2020-11-29 日 16:21</p>
+<p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
+</div>
+</body>
+</html>
