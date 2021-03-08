@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2020-11-29 日 16:21 -->
+<!-- 2021-01-13 Wed 10:19 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Verilog.org</title>
@@ -193,12 +193,12 @@
   .org-svg { width: 90%; }
   /*]]>*/-->
 </style>
-<link rel="stylesheet" type="text/css" href="https://fniessen.github.io/org-html-themes/styles/readtheorg/css/htmlize.css"/>
-<link rel="stylesheet" type="text/css" href="https://fniessen.github.io/org-html-themes/styles/readtheorg/css/readtheorg.css"/>
+<link rel="stylesheet" type="text/css" href="https://fniessen.github.io/org-html-themes/src/readtheorg_theme/css/htmlize.css"/>
+<link rel="stylesheet" type="text/css" href="https://fniessen.github.io/org-html-themes/src/readtheorg_theme/css/readtheorg.css"/>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
-<script type="text/javascript" src="https://fniessen.github.io/org-html-themes/styles/lib/js/jquery.stickytableheaders.min.js"></script>
-<script type="text/javascript" src="https://fniessen.github.io/org-html-themes/styles/readtheorg/js/readtheorg.js"></script>
+<script type="text/javascript" src="https://fniessen.github.io/org-html-themes/src/lib/js/jquery.stickytableheaders.min.js"></script>
+<script type="text/javascript" src="https://fniessen.github.io/org-html-themes/src/readtheorg_theme/js/readtheorg.js"></script>
 <script type="text/javascript">
 /*
 @licstart  The following is the entire license notice for the
@@ -253,62 +253,62 @@ for the JavaScript code in this tag.
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#org3975e7d">1. 语法</a>
+<li><a href="#orgd274929">1. 语法</a>
 <ul>
-<li><a href="#orga15a6f8">1.1. Basics</a>
+<li><a href="#orgc55a3a3">1.1. Basics</a>
 <ul>
-<li><a href="#org92eb34a">1.1.1. Wire</a></li>
-<li><a href="#org482b042">1.1.2. Not gate</a></li>
-<li><a href="#org1809bc6">1.1.3. And gate</a></li>
-<li><a href="#orgad0d24d">1.1.4. Nor gate</a></li>
-<li><a href="#orgdf1de90">1.1.5. Xnor gate</a></li>
-<li><a href="#org8a23239">1.1.6. Declaring wires</a></li>
+<li><a href="#orgfa75465">1.1.1. Wire</a></li>
+<li><a href="#org37ea985">1.1.2. Not gate</a></li>
+<li><a href="#org32f1bf2">1.1.3. And gate</a></li>
+<li><a href="#org9d20a22">1.1.4. Nor gate</a></li>
+<li><a href="#orgf165542">1.1.5. Xnor gate</a></li>
+<li><a href="#org44b7fa8">1.1.6. Declaring wires</a></li>
 </ul>
 </li>
-<li><a href="#org075684a">1.2. Vectors</a>
+<li><a href="#org1da23ee">1.2. Vectors</a>
 <ul>
-<li><a href="#orgfbba309">1.2.1. 位运算和逻辑运算</a></li>
-<li><a href="#org0b3cfc2">1.2.2. 部分选择</a></li>
-<li><a href="#org945cb38">1.2.3. 重复</a></li>
+<li><a href="#orgbdb0f5d">1.2.1. 位运算和逻辑运算</a></li>
+<li><a href="#org6054ca9">1.2.2. 部分选择</a></li>
+<li><a href="#org983a146">1.2.3. 重复</a></li>
 </ul>
 </li>
-<li><a href="#org3d8ce2e">1.3. Modules</a></li>
-<li><a href="#org94b5150">1.4. Procedures</a>
+<li><a href="#orgd36b380">1.3. Modules</a></li>
+<li><a href="#orgc573200">1.4. Procedures</a>
 <ul>
-<li><a href="#org48a2acf">1.4.1. Always blocks</a></li>
-<li><a href="#org8e2b1e2">1.4.2. always if</a></li>
-<li><a href="#org1a9bd96">1.4.3. always if latches</a></li>
-<li><a href="#org6717e8b">1.4.4. always case</a></li>
-<li><a href="#orgd55a7d4">1.4.5. always avoid latches</a></li>
+<li><a href="#orgf69d7ee">1.4.1. Always blocks</a></li>
+<li><a href="#orgaab9753">1.4.2. always if</a></li>
+<li><a href="#orgf636303">1.4.3. always if latches</a></li>
+<li><a href="#org83b0e99">1.4.4. always case</a></li>
+<li><a href="#org1084d79">1.4.5. always avoid latches</a></li>
 </ul>
 </li>
-<li><a href="#org464bb55">1.5. More features</a>
+<li><a href="#org0d79cb5">1.5. More features</a>
 <ul>
-<li><a href="#orgaef95ba">1.5.1. Conditional</a></li>
-<li><a href="#org72e9559">1.5.2. Reduction</a></li>
-<li><a href="#org203afd6">1.5.3. for</a></li>
-<li><a href="#org37b280c">1.5.4. generate</a></li>
+<li><a href="#orgcd322a8">1.5.1. Conditional</a></li>
+<li><a href="#org4293cc0">1.5.2. Reduction</a></li>
+<li><a href="#org3f0d050">1.5.3. for</a></li>
+<li><a href="#org60eeebf">1.5.4. generate</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li><a href="#orga0f406c">2. 电路</a>
+<li><a href="#orge5fb631">2. 电路</a>
 <ul>
-<li><a href="#orga1333b3">2.1. Combinational logic</a>
+<li><a href="#org50ccdaf">2.1. Combinational logic</a>
 <ul>
-<li><a href="#org956d758">2.1.1. Basic Gates</a></li>
-<li><a href="#org1e6d8a2">2.1.2. Multiplexers</a></li>
-<li><a href="#org9d67f51">2.1.3. Arithmetic</a></li>
-<li><a href="#org83ca10a">2.1.4. Karnaugh Map</a></li>
+<li><a href="#org8682bad">2.1.1. Basic Gates</a></li>
+<li><a href="#org91f02ef">2.1.2. Multiplexers</a></li>
+<li><a href="#org246d46a">2.1.3. Arithmetic</a></li>
+<li><a href="#orgebb3792">2.1.4. Karnaugh Map</a></li>
 </ul>
 </li>
-<li><a href="#orgd89c8ef">2.2. Sequential logic</a>
+<li><a href="#orgcab6b6e">2.2. Sequential logic</a>
 <ul>
-<li><a href="#org4039d57">2.2.1. Latches and Flip-Flops</a></li>
-<li><a href="#org6b09c94">2.2.2. Counters</a></li>
-<li><a href="#org5aae95b">2.2.3. shift</a></li>
-<li><a href="#orgd0a05c1">2.2.4. More Circuits</a></li>
-<li><a href="#org904ce52">2.2.5. FSM</a></li>
+<li><a href="#orgef97438">2.2.1. Latches and Flip-Flops</a></li>
+<li><a href="#org37c8cf1">2.2.2. Counters</a></li>
+<li><a href="#orgef9d1dd">2.2.3. shift</a></li>
+<li><a href="#orgba257b8">2.2.4. More Circuits</a></li>
+<li><a href="#org7580035">2.2.5. FSM</a></li>
 </ul>
 </li>
 </ul>
@@ -317,20 +317,20 @@ for the JavaScript code in this tag.
 </div>
 </div>
 
-<div id="outline-container-org3975e7d" class="outline-2">
-<h2 id="org3975e7d"><span class="section-number-2">1</span> 语法</h2>
+<div id="outline-container-orgd274929" class="outline-2">
+<h2 id="orgd274929"><span class="section-number-2">1</span> 语法</h2>
 <div class="outline-text-2" id="text-1">
 </div>
-<div id="outline-container-orga15a6f8" class="outline-3">
-<h3 id="orga15a6f8"><span class="section-number-3">1.1</span> Basics</h3>
+<div id="outline-container-orgc55a3a3" class="outline-3">
+<h3 id="orgc55a3a3"><span class="section-number-3">1.1</span> Basics</h3>
 <div class="outline-text-3" id="text-1-1">
 </div>
-<div id="outline-container-org92eb34a" class="outline-4">
-<h4 id="org92eb34a"><span class="section-number-4">1.1.1</span> Wire</h4>
+<div id="outline-container-orgfa75465" class="outline-4">
+<h4 id="orgfa75465"><span class="section-number-4">1.1.1</span> Wire</h4>
 <div class="outline-text-4" id="text-1-1-1">
 <p>
 含有一个输入和一个输出的模块可作为Wire<br />
-Wire类型是一种 <b>信号</b> 类型, *assign left_side = right_side*是 continuous assignment,不是基于事件驱动<br />
+Wire类型是一种 <b>信号</b> 类型, <b>assign left_side = right_side</b> 是 continuous assignment,不是基于事件驱动<br />
 </p>
 
 
@@ -368,8 +368,8 @@ endmodule
 </div>
 </div>
 
-<div id="outline-container-org482b042" class="outline-4">
-<h4 id="org482b042"><span class="section-number-4">1.1.2</span> Not gate</h4>
+<div id="outline-container-org37ea985" class="outline-4">
+<h4 id="org37ea985"><span class="section-number-4">1.1.2</span> Not gate</h4>
 <div class="outline-text-4" id="text-1-1-2">
 <p>
 位非(~)和逻辑(!)和C语义基本一致.<br />
@@ -389,8 +389,8 @@ endmodule
 </div>
 </div>
 
-<div id="outline-container-org1809bc6" class="outline-4">
-<h4 id="org1809bc6"><span class="section-number-4">1.1.3</span> And gate</h4>
+<div id="outline-container-org32f1bf2" class="outline-4">
+<h4 id="org32f1bf2"><span class="section-number-4">1.1.3</span> And gate</h4>
 <div class="outline-text-4" id="text-1-1-3">
 <p>
 一个wire信号不能同时被多个信号驱动，同时没有driver则为未定义值，综合时会被当作0<br />
@@ -413,8 +413,8 @@ endmodule
 </div>
 </div>
 
-<div id="outline-container-orgad0d24d" class="outline-4">
-<h4 id="orgad0d24d"><span class="section-number-4">1.1.4</span> Nor gate</h4>
+<div id="outline-container-org9d20a22" class="outline-4">
+<h4 id="org9d20a22"><span class="section-number-4">1.1.4</span> Nor gate</h4>
 <div class="outline-text-4" id="text-1-1-4">
 <p>
 assign语句语法与C类似,右值可为一个复杂的逻辑表达式<br />
@@ -433,8 +433,8 @@ endmodule
 </div>
 </div>
 
-<div id="outline-container-orgdf1de90" class="outline-4">
-<h4 id="orgdf1de90"><span class="section-number-4">1.1.5</span> Xnor gate</h4>
+<div id="outline-container-orgf165542" class="outline-4">
+<h4 id="orgf165542"><span class="section-number-4">1.1.5</span> Xnor gate</h4>
 <div class="outline-text-4" id="text-1-1-5">
 
 <div class="figure">
@@ -454,8 +454,8 @@ endmodule
 </div>
 </div>
 
-<div id="outline-container-org8a23239" class="outline-4">
-<h4 id="org8a23239"><span class="section-number-4">1.1.6</span> Declaring wires</h4>
+<div id="outline-container-org44b7fa8" class="outline-4">
+<h4 id="org44b7fa8"><span class="section-number-4">1.1.6</span> Declaring wires</h4>
 <div class="outline-text-4" id="text-1-1-6">
 <p>
 在模块内部使用wire，可用wire类型声明，注意wire和assign的特性，调整assign的顺序并不影响最后综合出来的电路<br />
@@ -504,8 +504,8 @@ endmodule
 </div>
 </div>
 
-<div id="outline-container-org075684a" class="outline-3">
-<h3 id="org075684a"><span class="section-number-3">1.2</span> Vectors</h3>
+<div id="outline-container-org1da23ee" class="outline-3">
+<h3 id="org1da23ee"><span class="section-number-3">1.2</span> Vectors</h3>
 <div class="outline-text-3" id="text-1-2">
 <p>
 一组信号可组成vectors, 形式为type [upper:lower] vector_name;<br />
@@ -579,8 +579,8 @@ my_module i1 (d,e); // d and e are implicitly one-bit wide if not declared.
 </p>
 </div>
 
-<div id="outline-container-orgfbba309" class="outline-4">
-<h4 id="orgfbba309"><span class="section-number-4">1.2.1</span> 位运算和逻辑运算</h4>
+<div id="outline-container-orgbdb0f5d" class="outline-4">
+<h4 id="orgbdb0f5d"><span class="section-number-4">1.2.1</span> 位运算和逻辑运算</h4>
 <div class="outline-text-4" id="text-1-2-1">
 
 <div class="figure">
@@ -606,8 +606,8 @@ endmodule
 </div>
 </div>
 
-<div id="outline-container-org0b3cfc2" class="outline-4">
-<h4 id="org0b3cfc2"><span class="section-number-4">1.2.2</span> 部分选择</h4>
+<div id="outline-container-org6054ca9" class="outline-4">
+<h4 id="org6054ca9"><span class="section-number-4">1.2.2</span> 部分选择</h4>
 <div class="outline-text-4" id="text-1-2-2">
 <div class="org-src-container">
 <pre class="src src-verilog">{3'b111, 3'b000} =&gt; 6'b111000
@@ -646,8 +646,8 @@ endmodule
 </div>
 </div>
 
-<div id="outline-container-org945cb38" class="outline-4">
-<h4 id="org945cb38"><span class="section-number-4">1.2.3</span> 重复</h4>
+<div id="outline-container-org983a146" class="outline-4">
+<h4 id="org983a146"><span class="section-number-4">1.2.3</span> 重复</h4>
 <div class="outline-text-4" id="text-1-2-3">
 <p>
 扩展同一个变量可用{num{vector}}，会生成num个vector<br />
@@ -694,8 +694,8 @@ endmodule
 </div>
 </div>
 
-<div id="outline-container-org3d8ce2e" class="outline-3">
-<h3 id="org3d8ce2e"><span class="section-number-3">1.3</span> Modules</h3>
+<div id="outline-container-orgd36b380" class="outline-3">
+<h3 id="orgd36b380"><span class="section-number-3">1.3</span> Modules</h3>
 <div class="outline-text-3" id="text-1-3">
 <p>
 类似C的函数，verilog使用module做为逻辑电路的封装，ports为形参，具体的值可为wire, vector<br />
@@ -895,12 +895,12 @@ endmodule
 </div>
 </div>
 </div>
-<div id="outline-container-org94b5150" class="outline-3">
-<h3 id="org94b5150"><span class="section-number-3">1.4</span> Procedures</h3>
+<div id="outline-container-orgc573200" class="outline-3">
+<h3 id="orgc573200"><span class="section-number-3">1.4</span> Procedures</h3>
 <div class="outline-text-3" id="text-1-4">
 </div>
-<div id="outline-container-org48a2acf" class="outline-4">
-<h4 id="org48a2acf"><span class="section-number-4">1.4.1</span> Always blocks</h4>
+<div id="outline-container-orgf69d7ee" class="outline-4">
+<h4 id="orgf69d7ee"><span class="section-number-4">1.4.1</span> Always blocks</h4>
 <div class="outline-text-4" id="text-1-4-1">
 <div class="org-src-container">
 <pre class="src src-verilog">组合逻辑Combinational: always @(*)
@@ -958,8 +958,8 @@ always综合逻辑总是使用(*)，如果指定信号，但是有信号没写�
 </div>
 </div>
 
-<div id="outline-container-org8e2b1e2" class="outline-4">
-<h4 id="org8e2b1e2"><span class="section-number-4">1.4.2</span> always if</h4>
+<div id="outline-container-orgaab9753" class="outline-4">
+<h4 id="orgaab9753"><span class="section-number-4">1.4.2</span> always if</h4>
 <div class="outline-text-4" id="text-1-4-2">
 
 <div class="figure">
@@ -981,8 +981,8 @@ end
 </div>
 </div>
 
-<div id="outline-container-org1a9bd96" class="outline-4">
-<h4 id="org1a9bd96"><span class="section-number-4">1.4.3</span> always if latches</h4>
+<div id="outline-container-orgf636303" class="outline-4">
+<h4 id="orgf636303"><span class="section-number-4">1.4.3</span> always if latches</h4>
 <div class="outline-text-4" id="text-1-4-3">
 <p>
 如果存在没指定的条件，verilog的解决方法是: <b>keep the output unchanged.</b><br />
@@ -1016,8 +1016,8 @@ end
 </div>
 </div>
 
-<div id="outline-container-org6717e8b" class="outline-4">
-<h4 id="org6717e8b"><span class="section-number-4">1.4.4</span> always case</h4>
+<div id="outline-container-org83b0e99" class="outline-4">
+<h4 id="org83b0e99"><span class="section-number-4">1.4.4</span> always case</h4>
 <div class="outline-text-4" id="text-1-4-4">
 <ul class="org-ul">
 <li>没有switch<br /></li>
@@ -1093,8 +1093,8 @@ endmodule
 </div>
 </div>
 
-<div id="outline-container-orgd55a7d4" class="outline-4">
-<h4 id="orgd55a7d4"><span class="section-number-4">1.4.5</span> always avoid latches</h4>
+<div id="outline-container-org1084d79" class="outline-4">
+<h4 id="org1084d79"><span class="section-number-4">1.4.5</span> always avoid latches</h4>
 <div class="outline-text-4" id="text-1-4-5">
 <p>
 为了避免锁存器，可以对输出信号赋初值<br />
@@ -1112,12 +1112,12 @@ end
 </div>
 </div>
 
-<div id="outline-container-org464bb55" class="outline-3">
-<h3 id="org464bb55"><span class="section-number-3">1.5</span> More features</h3>
+<div id="outline-container-org0d79cb5" class="outline-3">
+<h3 id="org0d79cb5"><span class="section-number-3">1.5</span> More features</h3>
 <div class="outline-text-3" id="text-1-5">
 </div>
-<div id="outline-container-orgaef95ba" class="outline-4">
-<h4 id="orgaef95ba"><span class="section-number-4">1.5.1</span> Conditional</h4>
+<div id="outline-container-orgcd322a8" class="outline-4">
+<h4 id="orgcd322a8"><span class="section-number-4">1.5.1</span> Conditional</h4>
 <div class="outline-text-4" id="text-1-5-1">
 <ul class="org-ul">
 <li>二元操作符，和c相同的语法<br /></li>
@@ -1161,8 +1161,8 @@ endmodule
 </div>
 </div>
 
-<div id="outline-container-org72e9559" class="outline-4">
-<h4 id="org72e9559"><span class="section-number-4">1.5.2</span> Reduction</h4>
+<div id="outline-container-org4293cc0" class="outline-4">
+<h4 id="org4293cc0"><span class="section-number-4">1.5.2</span> Reduction</h4>
 <div class="outline-text-4" id="text-1-5-2">
 <p>
 对一个vector里的元素做运算时，可以<br />
@@ -1187,8 +1187,8 @@ endmodule
 </div>
 </div>
 </div>
-<div id="outline-container-org203afd6" class="outline-4">
-<h4 id="org203afd6"><span class="section-number-4">1.5.3</span> for</h4>
+<div id="outline-container-org3f0d050" class="outline-4">
+<h4 id="org3f0d050"><span class="section-number-4">1.5.3</span> for</h4>
 <div class="outline-text-4" id="text-1-5-3">
 <div class="org-src-container">
 <pre class="src src-verilog">for (int i = &lt;init value&gt;; i &lt; &lt;bound&gt;; i+=1) begin
@@ -1235,8 +1235,8 @@ endmodule
 </div>
 </div>
 
-<div id="outline-container-org37b280c" class="outline-4">
-<h4 id="org37b280c"><span class="section-number-4">1.5.4</span> generate</h4>
+<div id="outline-container-org60eeebf" class="outline-4">
+<h4 id="org60eeebf"><span class="section-number-4">1.5.4</span> generate</h4>
 <div class="outline-text-4" id="text-1-5-4">
 <p>
 生成语句可以动态的生成verilog代码，当对矢量中的多个位进行重复操作时，或者当进行多个模块的实例引用的重复操作时，或者根据参数的定义来确定程序中是否应该包含某段Verilog代码的时候，使用生成语句能大大简化程序的编写过程。<br />
@@ -1280,20 +1280,20 @@ endmodule
 </div>
 </div>
 </div>
-<div id="outline-container-orga0f406c" class="outline-2">
-<h2 id="orga0f406c"><span class="section-number-2">2</span> 电路</h2>
+<div id="outline-container-orge5fb631" class="outline-2">
+<h2 id="orge5fb631"><span class="section-number-2">2</span> 电路</h2>
 <div class="outline-text-2" id="text-2">
 </div>
-<div id="outline-container-orga1333b3" class="outline-3">
-<h3 id="orga1333b3"><span class="section-number-3">2.1</span> Combinational logic</h3>
+<div id="outline-container-org50ccdaf" class="outline-3">
+<h3 id="org50ccdaf"><span class="section-number-3">2.1</span> Combinational logic</h3>
 <div class="outline-text-3" id="text-2-1">
 </div>
-<div id="outline-container-org956d758" class="outline-4">
-<h4 id="org956d758"><span class="section-number-4">2.1.1</span> Basic Gates</h4>
+<div id="outline-container-org8682bad" class="outline-4">
+<h4 id="org8682bad"><span class="section-number-4">2.1.1</span> Basic Gates</h4>
 <div class="outline-text-4" id="text-2-1-1">
 </div>
 <ol class="org-ol">
-<li><a id="org51fd84d"></a>Wire<br />
+<li><a id="org0f51143"></a>Wire<br />
 <div class="outline-text-5" id="text-2-1-1-1">
 
 <div class="figure">
@@ -1310,7 +1310,7 @@ endmodule
 </div>
 </div>
 </li>
-<li><a id="orgb631f41"></a>GND<br />
+<li><a id="org9484314"></a>GND<br />
 <div class="outline-text-5" id="text-2-1-1-2">
 
 <div class="figure">
@@ -1328,7 +1328,7 @@ endmodule
 </div>
 </li>
 
-<li><a id="orgf259795"></a>NOR<br />
+<li><a id="org7ef16db"></a>NOR<br />
 <div class="outline-text-5" id="text-2-1-1-3">
 
 <div class="figure">
@@ -1347,7 +1347,7 @@ endmodule
 </div>
 </li>
 
-<li><a id="orgcd2f72b"></a>Another gate<br />
+<li><a id="orged78355"></a>Another gate<br />
 <div class="outline-text-5" id="text-2-1-1-4">
 
 <div class="figure">
@@ -1367,7 +1367,7 @@ endmodule
 </div>
 </li>
 
-<li><a id="org365e783"></a>Two gates<br />
+<li><a id="org4880ac4"></a>Two gates<br />
 <div class="outline-text-5" id="text-2-1-1-5">
 
 <div class="figure">
@@ -1387,7 +1387,7 @@ endmodule
 </div>
 </li>
 
-<li><a id="org160167c"></a>7420<br />
+<li><a id="org6123407"></a>7420<br />
 <div class="outline-text-5" id="text-2-1-1-6">
 
 <div class="figure">
@@ -1409,7 +1409,7 @@ endmodule
 </div>
 </li>
 
-<li><a id="org8114c28"></a>simple circuit<br />
+<li><a id="org87a8505"></a>simple circuit<br />
 <div class="outline-text-5" id="text-2-1-1-7">
 
 <div class="figure">
@@ -1474,12 +1474,12 @@ endmodule
 </ol>
 </div>
 
-<div id="outline-container-org1e6d8a2" class="outline-4">
-<h4 id="org1e6d8a2"><span class="section-number-4">2.1.2</span> Multiplexers</h4>
+<div id="outline-container-org91f02ef" class="outline-4">
+<h4 id="org91f02ef"><span class="section-number-4">2.1.2</span> Multiplexers</h4>
 <div class="outline-text-4" id="text-2-1-2">
 </div>
 <ol class="org-ol">
-<li><a id="org9cf9181"></a>2to1<br />
+<li><a id="org16d92cd"></a>2to1<br />
 <div class="outline-text-5" id="text-2-1-2-1">
 <div class="org-src-container">
 <pre class="src src-verilog">module top_module(
@@ -1492,7 +1492,7 @@ endmodule
 </div>
 </li>
 
-<li><a id="org35a9acb"></a>256-to-1<br />
+<li><a id="org7c633eb"></a>256-to-1<br />
 <div class="outline-text-5" id="text-2-1-2-2">
 <ul class="org-ul">
 <li>With this many options, a case statement isn't so useful.<br /></li>
@@ -1511,7 +1511,7 @@ endmodule
 </div>
 </li>
 
-<li><a id="org70d1ec7"></a>256-to-1 4 bit<br />
+<li><a id="org93c928c"></a>256-to-1 4 bit<br />
 <div class="outline-text-5" id="text-2-1-2-3">
 <p>
 4-bit wide, 256-to-1 multiplexer. The 256 4-bit inputs are all packed into a single 1024-bit input vector. sel=0 should select bits in[3:0], sel=1 selects bits in[7:4], sel=2 selects bits in[11:8], etc.<br />
@@ -1538,12 +1538,12 @@ endmodule
 </ol>
 </div>
 
-<div id="outline-container-org9d67f51" class="outline-4">
-<h4 id="org9d67f51"><span class="section-number-4">2.1.3</span> Arithmetic</h4>
+<div id="outline-container-org246d46a" class="outline-4">
+<h4 id="org246d46a"><span class="section-number-4">2.1.3</span> Arithmetic</h4>
 <div class="outline-text-4" id="text-2-1-3">
 </div>
 <ol class="org-ol">
-<li><a id="orgfa0d184"></a>half add<br />
+<li><a id="org0dfbc40"></a>half add<br />
 <div class="outline-text-5" id="text-2-1-3-1">
 <div class="org-src-container">
 <pre class="src src-verilog">module top_module(
@@ -1556,7 +1556,7 @@ endmodule
 </div>
 </div>
 </li>
-<li><a id="org57fe515"></a>full add<br />
+<li><a id="orgfc892c7"></a>full add<br />
 <div class="outline-text-5" id="text-2-1-3-2">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
@@ -1650,7 +1650,7 @@ endmodule
 </div>
 </div>
 </li>
-<li><a id="org55b2da2"></a>adder<br />
+<li><a id="org15e7fed"></a>adder<br />
 <div class="outline-text-5" id="text-2-1-3-3">
 
 <div class="figure">
@@ -1677,7 +1677,7 @@ endmodule
 </div>
 </div>
 </li>
-<li><a id="org40e043b"></a>signed adder<br />
+<li><a id="orgf2ac97e"></a>signed adder<br />
 <div class="outline-text-5" id="text-2-1-3-4">
 <p>
 two 8-bit 2's complement numbers, a[7:0] and b[7:0]. These numbers are added to produce s[7:0]. Also compute whether a (signed) overflow has occurred.<br />
@@ -1696,7 +1696,7 @@ endmodule
 </div>
 </div>
 </li>
-<li><a id="org6f489b4"></a>100bit adder<br />
+<li><a id="org716c03f"></a>100bit adder<br />
 <div class="outline-text-5" id="text-2-1-3-5">
 <div class="org-src-container">
 <pre class="src src-verilog">module top_module (
@@ -1717,12 +1717,12 @@ endmodule
 </li>
 </ol>
 </div>
-<div id="outline-container-org83ca10a" class="outline-4">
-<h4 id="org83ca10a"><span class="section-number-4">2.1.4</span> Karnaugh Map</h4>
+<div id="outline-container-orgebb3792" class="outline-4">
+<h4 id="orgebb3792"><span class="section-number-4">2.1.4</span> Karnaugh Map</h4>
 <div class="outline-text-4" id="text-2-1-4">
 </div>
 <ol class="org-ol">
-<li><a id="orgf2dac40"></a>3-var<br />
+<li><a id="org4fabc7c"></a>3-var<br />
 <div class="outline-text-5" id="text-2-1-4-1">
 
 <div class="figure">
@@ -1744,7 +1744,7 @@ endmodule
 </div>
 </li>
 
-<li><a id="org348cbcc"></a>4-var<br />
+<li><a id="org7f231f7"></a>4-var<br />
 <div class="outline-text-5" id="text-2-1-4-2">
 
 <div class="figure">
@@ -1793,16 +1793,16 @@ endmodule
 </ol>
 </div>
 </div>
-<div id="outline-container-orgd89c8ef" class="outline-3">
-<h3 id="orgd89c8ef"><span class="section-number-3">2.2</span> Sequential logic</h3>
+<div id="outline-container-orgcab6b6e" class="outline-3">
+<h3 id="orgcab6b6e"><span class="section-number-3">2.2</span> Sequential logic</h3>
 <div class="outline-text-3" id="text-2-2">
 </div>
-<div id="outline-container-org4039d57" class="outline-4">
-<h4 id="org4039d57"><span class="section-number-4">2.2.1</span> Latches and Flip-Flops</h4>
+<div id="outline-container-orgef97438" class="outline-4">
+<h4 id="orgef97438"><span class="section-number-4">2.2.1</span> Latches and Flip-Flops</h4>
 <div class="outline-text-4" id="text-2-2-1">
 </div>
 <ol class="org-ol">
-<li><a id="orgff8785a"></a>D flip-flop<br />
+<li><a id="orgbefe23d"></a>D flip-flop<br />
 <div class="outline-text-5" id="text-2-2-1-1">
 
 <div class="figure">
@@ -1825,7 +1825,7 @@ endmodule
 </div>
 </div>
 </li>
-<li><a id="orgf084b27"></a>Dff with synchronous reset<br />
+<li><a id="org3e6ae22"></a>Dff with synchronous reset<br />
 <div class="outline-text-5" id="text-2-2-1-2">
 <p>
 8 D flip-flops with active high synchronous reset. The flip-flops must be reset to 0x34 rather than zero. All DFFs should be triggered by the negative edge of clk.<br />
@@ -1845,7 +1845,7 @@ endmodule
 </div>
 </div>
 </li>
-<li><a id="org1953631"></a>Dff with asynchronous reset<br />
+<li><a id="org8e3fda3"></a>Dff with asynchronous reset<br />
 <div class="outline-text-5" id="text-2-2-1-3">
 <div class="org-src-container">
 <pre class="src src-verilog">module top_module(
@@ -1878,7 +1878,7 @@ endmodule
 </div>
 </div>
 </li>
-<li><a id="org6ceac32"></a>Dff with byte enable<br />
+<li><a id="orgde8e53e"></a>Dff with byte enable<br />
 <div class="outline-text-5" id="text-2-2-1-4">
 <p>
 16 D flip-flops. It's sometimes useful to only modify parts of a group of flip-flops. The byte-enable inputs control whether each byte of the 16 registers should be written to on that cycle. byteena[1] controls the upper byte d[15:8], while byteena[0] controls the lower byte d[7:0].<br />
@@ -1916,7 +1916,7 @@ endmodule
 </div>
 </li>
 
-<li><a id="orgc4e27c0"></a>D latch<br />
+<li><a id="org6434190"></a>D latch<br />
 <div class="outline-text-5" id="text-2-2-1-5">
 
 <div class="figure">
@@ -1936,7 +1936,7 @@ endmodule
 </div>
 </li>
 
-<li><a id="org09a33e5"></a>DFF+gate<br />
+<li><a id="org4a659aa"></a>DFF+gate<br />
 <div class="outline-text-5" id="text-2-2-1-6">
 
 <div class="figure">
@@ -1958,7 +1958,7 @@ endmodule
 </div>
 </li>
 
-<li><a id="org6a0edb1"></a>Mux and DFF<br />
+<li><a id="org458b01e"></a>Mux and DFF<br />
 <div class="outline-text-5" id="text-2-2-1-7">
 
 <div class="figure">
@@ -1985,7 +1985,7 @@ endmodule
 </div>
 </li>
 
-<li><a id="orgb35390b"></a>DFFs and gates<br />
+<li><a id="org22bf5a6"></a>DFFs and gates<br />
 <div class="outline-text-5" id="text-2-2-1-8">
 
 <div class="figure">
@@ -2014,7 +2014,7 @@ endmodule
 </div>
 </li>
 
-<li><a id="orgdc8e19a"></a>JK flip-flop<br />
+<li><a id="org7d6ee15"></a>JK flip-flop<br />
 <div class="outline-text-5" id="text-2-2-1-9">
 <div class="org-src-container">
 <pre class="src src-verilog">module top_module (
@@ -2036,7 +2036,7 @@ endmodule
 </div>
 </li>
 
-<li><a id="org466292e"></a>Edge detect<br />
+<li><a id="orgdd14b36"></a>Edge detect<br />
 <div class="outline-text-5" id="text-2-2-1-10">
 
 <div class="figure">
@@ -2062,7 +2062,7 @@ endmodule
 </div>
 </li>
 
-<li><a id="org7840e15"></a>Dual edge detect<br />
+<li><a id="org3a286d8"></a>Dual edge detect<br />
 <div class="outline-text-5" id="text-2-2-1-11">
 
 <div class="figure">
@@ -2095,12 +2095,12 @@ endmodule
 </ol>
 </div>
 
-<div id="outline-container-org6b09c94" class="outline-4">
-<h4 id="org6b09c94"><span class="section-number-4">2.2.2</span> Counters</h4>
+<div id="outline-container-org37c8cf1" class="outline-4">
+<h4 id="org37c8cf1"><span class="section-number-4">2.2.2</span> Counters</h4>
 <div class="outline-text-4" id="text-2-2-2">
 </div>
 <ol class="org-ol">
-<li><a id="orga5885a8"></a>Four-bit binary<br />
+<li><a id="org486d038"></a>Four-bit binary<br />
 <div class="outline-text-5" id="text-2-2-2-1">
 
 <div class="figure">
@@ -2124,7 +2124,7 @@ endmodule
 </div>
 </li>
 
-<li><a id="org8580233"></a>Counter 1000<br />
+<li><a id="org42fe0b4"></a>Counter 1000<br />
 <div class="outline-text-5" id="text-2-2-2-2">
 <p>
 From a 1000 Hz clock, derive a 1 Hz signal<br />
@@ -2150,7 +2150,7 @@ endmodule
 </div>
 </li>
 
-<li><a id="orge740906"></a>4-digit decimal counter<br />
+<li><a id="org7990952"></a>4-digit decimal counter<br />
 <div class="outline-text-5" id="text-2-2-2-3">
 <p>
 Each decimal digit is encoded using 4 bits: q[3:0] is the ones digit, q[7:4] is the tens digit, etc. For digits [3:1]<br />
@@ -2191,12 +2191,12 @@ endmodule
 </ol>
 </div>
 
-<div id="outline-container-org5aae95b" class="outline-4">
-<h4 id="org5aae95b"><span class="section-number-4">2.2.3</span> shift</h4>
+<div id="outline-container-orgef9d1dd" class="outline-4">
+<h4 id="orgef9d1dd"><span class="section-number-4">2.2.3</span> shift</h4>
 <div class="outline-text-4" id="text-2-2-3">
 </div>
 <ol class="org-ol">
-<li><a id="org318a88c"></a>4-bit shift<br />
+<li><a id="org65ef041"></a>4-bit shift<br />
 <div class="outline-text-5" id="text-2-2-3-1">
 <div class="org-src-container">
 <pre class="src src-verilog">module top_module(
@@ -2219,7 +2219,7 @@ endmodule
 </div>
 </li>
 
-<li><a id="org8a06e55"></a>rotate 100<br />
+<li><a id="org8eae5e6"></a>rotate 100<br />
 <div class="outline-text-5" id="text-2-2-3-2">
 <ul class="org-ul">
 <li>load: Loads shift register with data[99:0] instead of rotating.<br /></li>
@@ -2251,7 +2251,7 @@ endmodule
 </div>
 </li>
 
-<li><a id="org59b671a"></a>arithmetic shift<br />
+<li><a id="org897c92b"></a>arithmetic shift<br />
 <div class="outline-text-5" id="text-2-2-3-3">
 <ul class="org-ul">
 <li>load: Loads shift register with data[63:0] instead of shifting.<br /></li>
@@ -2289,7 +2289,7 @@ endmodule
 </div>
 </li>
 
-<li><a id="org11b3ef2"></a>5-bit LFSR<br />
+<li><a id="org5065f86"></a>5-bit LFSR<br />
 <div class="outline-text-5" id="text-2-2-3-4">
 <p>
 线性反馈移位寄存器(LFSR)是通常带有几个XOR门来产生下一状态的移位寄存器<br />
@@ -2318,7 +2318,7 @@ endmodule
 </div>
 </li>
 
-<li><a id="org203ee52"></a>3-bit LFSR<br />
+<li><a id="orgbc4a464"></a>3-bit LFSR<br />
 <div class="outline-text-5" id="text-2-2-3-5">
 
 <div class="figure">
@@ -2349,7 +2349,7 @@ endmodule
 </div>
 </li>
 
-<li><a id="org9f9c53f"></a>32-bit LFSR<br />
+<li><a id="org4d0dccc"></a>32-bit LFSR<br />
 <div class="outline-text-5" id="text-2-2-3-6">
 <p>
 32-bit Galois LFSR with taps at bit positions 32, 22, 2, and 1.<br />
@@ -2379,7 +2379,7 @@ endmodule
 </div>
 </li>
 
-<li><a id="org54e4c7c"></a>shift register<br />
+<li><a id="orgb9ef702"></a>shift register<br />
 <div class="outline-text-5" id="text-2-2-3-7">
 
 <div class="figure">
@@ -2410,7 +2410,7 @@ endmodule
 </div>
 </li>
 
-<li><a id="orga0998b5"></a>3-input LUT<br />
+<li><a id="org245318b"></a>3-input LUT<br />
 <div class="outline-text-5" id="text-2-2-3-8">
 <div class="org-src-container">
 <pre class="src src-verilog">module top_module (
@@ -2434,12 +2434,12 @@ endmodule
 </ol>
 </div>
 
-<div id="outline-container-orgd0a05c1" class="outline-4">
-<h4 id="orgd0a05c1"><span class="section-number-4">2.2.4</span> More Circuits</h4>
+<div id="outline-container-orgba257b8" class="outline-4">
+<h4 id="orgba257b8"><span class="section-number-4">2.2.4</span> More Circuits</h4>
 <div class="outline-text-4" id="text-2-2-4">
 </div>
 <ol class="org-ol">
-<li><a id="org7518615"></a>rule90<br />
+<li><a id="orga265317"></a>rule90<br />
 <div class="outline-text-5" id="text-2-2-4-1">
 <p>
 At each time step, the next state of each cell is the XOR of the cell's two current neighbours.<br />
@@ -2469,12 +2469,12 @@ endmodule
 </ol>
 </div>
 
-<div id="outline-container-org904ce52" class="outline-4">
-<h4 id="org904ce52"><span class="section-number-4">2.2.5</span> FSM</h4>
+<div id="outline-container-org7580035" class="outline-4">
+<h4 id="org7580035"><span class="section-number-4">2.2.5</span> FSM</h4>
 <div class="outline-text-4" id="text-2-2-5">
 </div>
 <ol class="org-ol">
-<li><a id="orgb96191d"></a>FSM1 - async reset<br />
+<li><a id="org212c158"></a>FSM1 - async reset<br />
 <div class="outline-text-5" id="text-2-2-5-1">
 
 <div class="figure">
@@ -2547,7 +2547,7 @@ endmodule
 </div>
 </li>
 
-<li><a id="orgc13ef57"></a>FSM1 - sync reset<br />
+<li><a id="orgc267ba8"></a>FSM1 - sync reset<br />
 <div class="outline-text-5" id="text-2-2-5-2">
 
 <div class="figure">
@@ -2610,7 +2610,7 @@ endmodule
 </div>
 </li>
 
-<li><a id="org8e4f816"></a>Lemmings<br />
+<li><a id="org154c537"></a>Lemmings<br />
 <div class="outline-text-5" id="text-2-2-5-3">
 
 <div class="figure">
@@ -2651,7 +2651,7 @@ endmodule
 </div>
 </li>
 
-<li><a id="org159e396"></a>One-hot FSM<br />
+<li><a id="orgfe3c53f"></a>One-hot FSM<br />
 <div class="outline-text-5" id="text-2-2-5-4">
 <p>
 独热码状态机仅使用单bit表示状态，是否处在某一状态仅跟一个bit有关，而下个状态的转移也仅与一个bit有关。与其他bit无关。独热码的好处就是生成状态机的逻辑是最简单的，但缺点就是，当偶然进入了一个不是该电路的状态的时候，除了复位以外是跳转不回去了。<br />
@@ -2695,7 +2695,7 @@ endmodule
 </div>
 </li>
 
-<li><a id="orgf01032f"></a>PS/2 packet parser<br />
+<li><a id="orgb918b1a"></a>PS/2 packet parser<br />
 <div class="outline-text-5" id="text-2-2-5-5">
 
 <div class="figure">
@@ -2742,6 +2742,157 @@ endmodule
 </div>
 </div>
 </li>
+
+<li><a id="org462319c"></a>PS/2 packet parser and datapath<br />
+<div class="outline-text-5" id="text-2-2-5-6">
+
+<div class="figure">
+<p><object type="image/svg+xml" data="电路/2020-11-29_17-48-30_wavedrom (4).svg" class="org-svg">
+Sorry, your browser does not support SVG.</object><br />
+</p>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-verilog">module top_module(
+    input clk,
+    input [7:0] in,
+    input reset,    // Synchronous reset
+    output [23:0] out_bytes,
+    output done); //
+
+    // FSM from fsm_ps2
+    parameter S0 = 0, S1 = 1, S2 = 2, S3 = 3;
+
+    reg[1:0] state, next;
+
+    // State transition logic (combinational)
+    always @(*) begin
+        case (state)
+            S0 : next = in[3] ? S1 : S0;
+            S1 : next = S2;
+            S2 : next = S3;
+            S3 : next = in[3] ? S1 : S0;
+        endcase
+    end
+    // State flip-flops (sequential)
+    always @(posedge clk) begin
+        state &lt;= reset ? S0 : next;
+        out_bytes &lt;= {out_bytes[15:0], in};
+    end
+    // Output logic
+    assign done = state == S3;
+    // New: Datapath to store incoming bytes.
+
+endmodule
+</pre>
+</div>
+</div>
+</li>
+
+<li><a id="org9f1cf06"></a>Serial receiver<br />
+<div class="outline-text-5" id="text-2-2-5-7">
+
+<div class="figure">
+<p><object type="image/svg+xml" data="电路/2020-11-30_10-14-15_wavedrom.svg" class="org-svg">
+Sorry, your browser does not support SVG.</object><br />
+</p>
+</div>
+
+
+<div class="figure">
+<p><object type="image/svg+xml" data="电路/2020-11-30_10-14-34_wavedrom (1).svg" class="org-svg">
+Sorry, your browser does not support SVG.</object><br />
+</p>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-verilog">module top_module(
+    input clk,
+    input in,
+    input reset,    // Synchronous reset
+    output done
+);
+    localparam UNKNOWN = 0, START = 1, BYTE0 = 2, BYTE1 = 3, BYTE2 = 4, BYTE3 = 5, BYTE4 = 6, BYTE5 = 7, BYTE6 = 8;
+    localparam BYTE7 = 9, STOP = 10, ERR = 11;
+
+    reg[3:0] state, next;
+
+    always @(*) begin
+        case (state)
+            UNKNOWN: next = in ? UNKNOWN : START;
+            START : next = BYTE0;
+            BYTE0 : next = BYTE1;
+            BYTE1 : next = BYTE2;
+            BYTE2 : next = BYTE3;
+            BYTE3 : next = BYTE4;
+            BYTE4 : next = BYTE5;
+            BYTE5 : next = BYTE6;
+            BYTE6 : next = BYTE7;
+            BYTE7 : next = in ? STOP : ERR;
+            STOP  : next = in ? UNKNOWN : START;
+            ERR   : next = in ? UNKNOWN : ERR;
+        endcase
+    end
+
+    always @(posedge clk) begin
+        state &lt;= reset ? UNKNOWN : next;
+    end
+
+    assign done = state == STOP;
+endmodule
+</pre>
+</div>
+</div>
+</li>
+
+<li><a id="orgf76fae3"></a>Serial receiver and datapath<br />
+<div class="outline-text-5" id="text-2-2-5-8">
+
+<div class="figure">
+<p><object type="image/svg+xml" data="电路/2020-12-01_00-20-41_wavedrom (2).svg" class="org-svg">
+Sorry, your browser does not support SVG.</object><br />
+</p>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-verilog">module top_module(
+    input clk,
+    input in,
+    input reset,    // Synchronous reset
+    output done
+);
+    localparam UNKNOWN = 0, START = 1, BYTE0 = 2, BYTE1 = 3, BYTE2 = 4, BYTE3 = 5, BYTE4 = 6, BYTE5 = 7, BYTE6 = 8;
+    localparam BYTE7 = 9, STOP = 10, ERR = 11;
+
+    reg[3:0] state, next;
+
+    always @(*) begin
+        case (state)
+            UNKNOWN: next = in ? UNKNOWN : START;
+            START : next = BYTE0;
+            BYTE0 : next = BYTE1;
+            BYTE1 : next = BYTE2;
+            BYTE2 : next = BYTE3;
+            BYTE3 : next = BYTE4;
+            BYTE4 : next = BYTE5;
+            BYTE5 : next = BYTE6;
+            BYTE6 : next = BYTE7;
+            BYTE7 : next = in ? STOP : ERR;
+            STOP  : next = in ? UNKNOWN : START;
+            ERR   : next = in ? UNKNOWN : ERR;
+        endcase
+    end
+
+    always @(posedge clk) begin
+        state &lt;= reset ? UNKNOWN : next;
+    end
+
+    assign done = state == STOP;
+endmodule
+</pre>
+</div>
+</div>
+</li>
 </ol>
 </div>
 </div>
@@ -2749,7 +2900,7 @@ endmodule
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: xuali2</p>
-<p class="date">Created: 2020-11-29 日 16:21</p>
+<p class="date">Created: 2021-01-13 Wed 10:19</p>
 <p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>

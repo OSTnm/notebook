@@ -2395,3 +2395,34 @@
 *** neverthesless, not everyone gives their priority to charity. Instead, ...
 *** with regard to the former,...
 *** put topic sentence on first at main paragraph
+* EngVid
+** nice&beautiful
+- places
+| cute         | small,nice                           |
+| charming     | unique, pleasant, character, culture |
+| elegant      | sophisticate                         |
+| opulent      | expensive                            |
+| stunning     | nature, impressive, incredible       |
+| breathtaking | nature, large, beautiful             |
+| exquisite    | nature, rare, special                |
+
+- personality
+| effervescent | bubbly, fizzy               |
+| demure       | shy                         |
+| easy-going   | relaxed, patient            |
+| charming     | attractive, nice            |
+| open-minded  | willing to accept new ideas |
+| eonjoyable   |                             |
+| pleasant     |                             |
+| enlightening |                             |
+
+- people
+| cute         | a little more than attractive |
+| attractive   | bring attention               |
+| handsome     | usually reserve for man       |
+| good-looking |                               |
+| stunning     | above average                 |
+| breathtaking | above average, incredible     |
+| gorgeous     | above average                 |
+| sexy         |                               |
+| hot          |                               |

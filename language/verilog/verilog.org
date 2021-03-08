@@ -1,4 +1,4 @@
-#+SETUPFILE: ~/.emacs.d/themes/org-html-themes/setup/theme-readtheorg.setup
+#+SETUPFILE: ~/.emacs.d/themes/org-html-themes/org/theme-readtheorg.setup
 #+OPTIONS: \n:t
 #+OPTIONS: ^:nil
 #+OPTIONS: tex:t
@@ -16,7 +16,7 @@
 *** Wire
 
 含有一个输入和一个输出的模块可作为Wire
-Wire类型是一种 *信号* 类型, *assign left_side = right_side*是 continuous assignment,不是基于事件驱动
+Wire类型是一种 *信号* 类型, *assign left_side = right_side* 是 continuous assignment,不是基于事件驱动
 
 [[file:语法/2020-11-09_23-21-06_Wire.png]]
 
@@ -1644,4 +1644,124 @@ module top_module(
 endmodule
 #+end_src
 
+**** PS/2 packet parser and datapath
 
+[[file:电路/2020-11-29_17-48-30_wavedrom (4).svg]]
+
+#+begin_src verilog
+module top_module(
+    input clk,
+    input [7:0] in,
+    input reset,    // Synchronous reset
+    output [23:0] out_bytes,
+    output done); //
+
+    // FSM from fsm_ps2
+    parameter S0 = 0, S1 = 1, S2 = 2, S3 = 3;
+
+    reg[1:0] state, next;
+
+    // State transition logic (combinational)
+    always @(*) begin
+        case (state)
+            S0 : next = in[3] ? S1 : S0;
+            S1 : next = S2;
+            S2 : next = S3;
+            S3 : next = in[3] ? S1 : S0;
+        endcase
+    end
+    // State flip-flops (sequential)
+    always @(posedge clk) begin
+        state <= reset ? S0 : next;
+        out_bytes <= {out_bytes[15:0], in};
+    end
+    // Output logic
+	assign done = state == S3;
+    // New: Datapath to store incoming bytes.
+
+endmodule
+#+end_src
+
+**** Serial receiver
+
+[[file:电路/2020-11-30_10-14-15_wavedrom.svg]]
+
+[[file:电路/2020-11-30_10-14-34_wavedrom (1).svg]]
+
+#+begin_src verilog
+module top_module(
+    input clk,
+    input in,
+    input reset,    // Synchronous reset
+    output done
+);
+	localparam UNKNOWN = 0, START = 1, BYTE0 = 2, BYTE1 = 3, BYTE2 = 4, BYTE3 = 5, BYTE4 = 6, BYTE5 = 7, BYTE6 = 8;
+    localparam BYTE7 = 9, STOP = 10, ERR = 11;
+
+    reg[3:0] state, next;
+
+    always @(*) begin
+        case (state)
+            UNKNOWN: next = in ? UNKNOWN : START;
+            START : next = BYTE0;
+            BYTE0 : next = BYTE1;
+            BYTE1 : next = BYTE2;
+            BYTE2 : next = BYTE3;
+            BYTE3 : next = BYTE4;
+            BYTE4 : next = BYTE5;
+            BYTE5 : next = BYTE6;
+            BYTE6 : next = BYTE7;
+            BYTE7 : next = in ? STOP : ERR;
+            STOP  : next = in ? UNKNOWN : START;
+            ERR   : next = in ? UNKNOWN : ERR;
+        endcase
+    end
+
+    always @(posedge clk) begin
+        state <= reset ? UNKNOWN : next;
+    end
+
+    assign done = state == STOP;
+endmodule
+#+end_src
+
+**** Serial receiver and datapath
+
+[[file:电路/2020-12-01_00-20-41_wavedrom (2).svg]]
+
+#+begin_src verilog
+module top_module(
+    input clk,
+    input in,
+    input reset,    // Synchronous reset
+    output done
+);
+	localparam UNKNOWN = 0, START = 1, BYTE0 = 2, BYTE1 = 3, BYTE2 = 4, BYTE3 = 5, BYTE4 = 6, BYTE5 = 7, BYTE6 = 8;
+    localparam BYTE7 = 9, STOP = 10, ERR = 11;
+
+    reg[3:0] state, next;
+
+    always @(*) begin
+        case (state)
+            UNKNOWN: next = in ? UNKNOWN : START;
+            START : next = BYTE0;
+            BYTE0 : next = BYTE1;
+            BYTE1 : next = BYTE2;
+            BYTE2 : next = BYTE3;
+            BYTE3 : next = BYTE4;
+            BYTE4 : next = BYTE5;
+            BYTE5 : next = BYTE6;
+            BYTE6 : next = BYTE7;
+            BYTE7 : next = in ? STOP : ERR;
+            STOP  : next = in ? UNKNOWN : START;
+            ERR   : next = in ? UNKNOWN : ERR;
+        endcase
+    end
+
+    always @(posedge clk) begin
+        state <= reset ? UNKNOWN : next;
+    end
+
+    assign done = state == STOP;
+endmodule
+#+end_src

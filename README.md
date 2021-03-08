@@ -75,5 +75,7 @@ I2C标准协议.
 电源管理协议.
 * [sff](./protocol/sff)
 SFP光电模块协议.
+* [PS/2](./protocol/PS2_Keyboard.pdf)
+PS2键鼠协议
 
 ## [英语](./language/english/english.org)
