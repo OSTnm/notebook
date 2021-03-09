@@ -77,5 +77,7 @@ I2C标准协议.
 SFP光电模块协议.
 * [PS/2](./protocol/PS2_Keyboard.pdf)
 PS2键鼠协议
+* [Uart](./protocol/uart.pdf)
+Uart串口协议
 
 ## [英语](./language/english/english.org)
