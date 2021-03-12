@@ -39,6 +39,9 @@ Verilog HDL.
 * [信号完整性](./books/si.org)
 关注PCB走线对高速信号的影响.
 
+* [Flash](./protocol/flash/flash.org)
+Nand Flash和Nor Flash结构特性
+
 ## 软件
 * 操作系统
   + [linux内核设计与实现](./books/linux内核设计与实现.org)
@@ -78,6 +81,8 @@ SFP光电模块协议.
 * [PS/2](./protocol/PS2_Keyboard.pdf)
 PS2键鼠协议
 * [Uart](./protocol/uart.pdf)
-Uart串口协议
+Console串口协议
+* [Spi](./protocol/spi.pdf)
+串行外设接口协议
 
 ## [英语](./language/english/english.org)

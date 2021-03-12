@@ -1,0 +1,391 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2021-03-12 Fri 16:01 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Flash</title>
+<meta name="generator" content="Org mode" />
+<meta name="author" content="xuali2" />
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: visible;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { width: 90%; }
+  /*]]>*/-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://fniessen.github.io/org-html-themes/src/readtheorg_theme/css/htmlize.css"/>
+<link rel="stylesheet" type="text/css" href="https://fniessen.github.io/org-html-themes/src/readtheorg_theme/css/readtheorg.css"/>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="https://fniessen.github.io/org-html-themes/src/lib/js/jquery.stickytableheaders.min.js"></script>
+<script type="text/javascript" src="https://fniessen.github.io/org-html-themes/src/readtheorg_theme/js/readtheorg.js"></script>
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2020 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+</head>
+<body>
+<div id="content">
+<h1 class="title">Flash</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#org74af0ad">1. Memory Architecture</a></li>
+<li><a href="#org6829eeb">2. Erase, Read &amp; Write</a></li>
+<li><a href="#org5fe22a5">3. Power Consumption</a></li>
+<li><a href="#orgf43f440">4. Reliability</a></li>
+<li><a href="#orgc15987e">5. Addition</a>
+<ul>
+<li><a href="#orga745285">5.1. nor flash</a></li>
+<li><a href="#org1e3cf18">5.2. nand flash</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+
+<div class="figure">
+<p><img src="2021-03-12_15-40-04_flash_3.jpg" alt="2021-03-12_15-40-04_flash_3.jpg" /><br />
+</p>
+</div>
+
+<div id="outline-container-org74af0ad" class="outline-2">
+<h2 id="org74af0ad"><span class="section-number-2">1</span> Memory Architecture</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+Flash memories store information in memory cells made from floating gate transistors. The names of the technologies explain the way the memory cells are organized. In NOR Flash, one end of each memory cell is connected to the source line and the other end directly to a bit line resembling a NOR Gate. In NAND Flash, several memory cells (typically eight cells) are connected in series similar to a NAND gate.<br />
+</p>
+
+<p>
+<b>The NOR Flash architecture provides enough address lines to map the entire memory range. This gives the advantage of random access and short read times, which makes it ideal for code execution</b>. Another advantage is 100% known good bits for the life of the part. Disadvantages include larger cell size resulting in a higher cost per bit and slower write and erase speeds. For more details on how NOR Flash can be used in embedded systems, see An Overview of Parallel NOR Flash Memory.<br />
+</p>
+
+<p>
+NAND Flash, in contrast, has a much smaller cell size and much higher write and erase speeds compared to NOR Flash. Disadvantages include the slower read speed and an I/O mapped type or indirect interface, <b>which is more complicated and does not allow random access</b>. <b>It is important to note that code execution from NAND Flash is achieved by shadowing the contents to a RAM, which is different than code execution directly from NOR Flash.</b> Another major disadvantage is the presence of bad blocks. NAND Flash typically have 98% good bits when shipped with additional bit failure over the life of the part, thus requiring the need for error correcting code (ECC) functionality within the device.<br />
+</p>
+</div>
+</div>
+
+<div id="outline-container-org6829eeb" class="outline-2">
+<h2 id="org6829eeb"><span class="section-number-2">2</span> Erase, Read &amp; Write</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+In both NOR and NAND Flash,  <b>the memory is organized into erase blocks.</b>  This architecture helps maintain lower cost while maintaining performance. For example, a smaller block size enables faster erase cycles. The downside of smaller blocks, however, is an increase in die area and memory cost. Because of its lower cost per bit, NAND Flash can more cost-effectively support smaller erase blocks compared to NOR Flash. The typical block size available today ranges from 8KB to 32KB for NAND Flash and 64KB to 256KB for NOR Flash.<br />
+</p>
+
+<p>
+<b>Erase operations in NAND Flash are straightforward while in NOR Flash, each byte needs to be written with ‘0’ before it can be erased. This makes the erase operation for NOR Flash much slower than for NAND Flash.</b> For example, the S34ML04G2 Cypress NAND Flash requires 3.5ms to erase a 128KB block while the S70GL02GT Cypress NOR Flash requires ~520ms to erase a similar 128KB sector. This is a difference of nearly 150 times.<br />
+</p>
+
+<p>
+As mentioned earlier, NOR Flash memory has enough address and data lines to map the entire memory region, similar to how SRAM operates. For example, a 2-Gbit (256MB) NOR Flash with a 16-bit data bus will have 27 address lines, enabling random read access to any memory location. In NAND Flash, memory is accessed using a multiplexed address and data bus. Typical NAND Flash memories use an 8-bit or 16-bit multiplexed address/data bus with additional signals such as Chip Enable, Write Enable, Read Enable, Address Latch Enable, Command Latch Enable, and Ready/Busy. The NAND Flash needs to provide a command (read, write or erase), followed by the address and the data. These additional operations makes the random read for NAND Flash much slower. For example, the S34ML04G2 NAND Flash requires 30µS compared to 120ns for S70GL02GT NOR Flash. Thus the NAND is 250 times slower.<br />
+</p>
+
+<p>
+<b>To overcome or to reduce the limitations of slower read speeds, memory is often read as pages in NAND Flash,</b> with each page being a smaller sub-division of erase blocks.  The contents of one page is read sequentially with address and command cycles only at the beginning of each read cycle. <b>The sequential access duration for NAND Flash is normally lower than the random access duration in NOR Flash devices.</b> With the random access architecture of NOR Flash, address lines need to be toggled for each read cycle, thereby accumulating the random access for sequential read. As the size of block of data to read increases, the accumulated delay in NOR Flash becomes greater than NAND Flash. Thus, <b>NAND Flash can be faster for sequential reads</b>. However, due to the much higher initial read access duration for NAND Flash, the performance difference is evident only while transferring large data blocks, often for sizes above 1 KB.<br />
+</p>
+
+<p>
+<b>In both Flash technologies, data can be written to a block only if the block is empty.</b> The already slow erase operation of NOR Flash makes the write operation even slower. In NAND Flash, similar to read, data is often written or programmed in pages (typically 2KB). For example, a page write alone with S34ML04G2 NAND Flash takes 300µS.<br />
+</p>
+
+<p>
+<b>To speed up write operations, modern NOR Flashes also employ buffer programming similar to page writes.</b> The S70GL02GT NOR Flash, for example, supports buffer programming, which enables multibyte programming with similar write timeout for single word. For example, buffer programming for 512 bytes of data can achieve a throughput of 1.14MBps.<br />
+</p>
+</div>
+</div>
+
+<div id="outline-container-org5fe22a5" class="outline-2">
+<h2 id="org5fe22a5"><span class="section-number-2">3</span> Power Consumption</h2>
+<div class="outline-text-2" id="text-3">
+<p>
+NOR Flash memories typically require more current than NAND Flash during initial power on. However, standby current for NOR Flash is much lower than NAND Flash. Instantaneous active power is comparable for both Flash memories. The active power is thus decided by the time duration for which memory is active. <b>NOR Flash holds an advantage when it comes to random reads while NAND Flash consumes comparatively much lower power for erase, write, and sequential read operations.</b><br />
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgf43f440" class="outline-2">
+<h2 id="orgf43f440"><span class="section-number-2">4</span> Reliability</h2>
+<div class="outline-text-2" id="text-4">
+<p>
+The reliability of saved data is an important aspect for any memory device. Flash memories suffer from a phenomenon called bit-flipping, where some bits can get reversed. <b>This phenomenon is more common in NAND Flash than in NOR Flash.</b> NAND Flashes are shipped with bad blocks scattered randomly throughout, due to yield considerations. More memory cells go bad as erase and program cycles continue throughout the life cycle of NAND Flash. Bad block handling is therefore a mandatory capability for NAND Flash. NOR Flash, on the other hand, are shipped with zero bad blocks with very low bad block accumulation during the life span of the memory. Thus, when it comes to the reliability of stored data, NOR Flash has an advantage over NAND Flash.<br />
+</p>
+
+<p>
+Another aspect of reliability is data retention, where NOR Flash again holds an advantage. S70GL02GT NOR Flash offers 20 years of data retention for up to 1K Program/Erase Cycles. S34ML04G2 NAND Flash offers a typical data retention of 10 years.<br />
+</p>
+
+<p>
+The number of program and erase cycles used to be an important characteristic to consider. This is because NAND Flash memories used to offer 10 times better program and erase cycles compared to NOR Flash. With today’s technological advancements, this is no longer true as both memories are now comparable. For example, both the S70GL02GT NOR and S34ML04G2 NAND support 100,000 program-erase cycles. However, due to the smaller block size used in NAND Flash, a smaller area is erased for each operation. This results in a higher overall life span compared to NOR Flash.<br />
+</p>
+
+<p>
+<b>In general, NOR Flash memory makes an excellent choice for applications requiring lower capacity, fast random read access, and higher data reliability, such as is required for code execution. NAND Flash, for its part, is ideal for applications such as data storage where higher memory capacity and faster write and erase operations are required.</b><br />
+</p>
+
+
+
+<div class="figure">
+<p><img src="Reliability/2021-03-12_15-57-42_flash_comparsion.jpg" alt="2021-03-12_15-57-42_flash_comparsion.jpg" /><br />
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgc15987e" class="outline-2">
+<h2 id="orgc15987e"><span class="section-number-2">5</span> Addition</h2>
+<div class="outline-text-2" id="text-5">
+</div>
+<div id="outline-container-orga745285" class="outline-3">
+<h3 id="orga745285"><span class="section-number-3">5.1</span> nor flash</h3>
+<div class="outline-text-3" id="text-5-1">
+<ul class="org-ul">
+<li>基本存储单元的并联结构决定了金属导线占用很大的面积，因此NOR FLASH的存储密度较低，无法适用于需要大容量存储的应用场合，即适用于code-storage，不适用于data-storage.<br /></li>
+<li>基本存储单元的并联结构决定了NOR FLASH具有存储单元可独立寻址且读取效率高的特性，因此适用于code-storage，且程序可以直接在NOR 中运行.<br /></li>
+<li>NOR FLASH写入采用了热电子注入方式，效率较低，因此NOR写入速率较低，不适用于频繁擦除/写入场合.<br /></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org1e3cf18" class="outline-3">
+<h3 id="org1e3cf18"><span class="section-number-3">5.2</span> nand flash</h3>
+<div class="outline-text-3" id="text-5-2">
+<ul class="org-ul">
+<li>基本存储单元的串联结构减少了金属导线占用的面积，Die的利用率很高，因此NAND FLASH存储密度高，适用于需要大容量存储的应用场合，即适用于data-storage.<br /></li>
+<li>基本存储单元的串联结构决定了NAND FLASH无法进行位读取，也就无法实现存储单元的独立寻址，因此程序不可以直接在NAND 中运行,因此NAND是以Page为读取单位和写入单位，以Block为擦除单位.<br /></li>
+<li>NAND FLASH写入采用F-N隧道效应方式，效率较高，因此NAND擦除/写入速率很高，适用于频繁擦除/写入场合。同时NAND是以Page为单位进行读取的，因此读取速率也不算低（稍低于NOR.<br /></li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: xuali2</p>
+<p class="date">Created: 2021-03-12 Fri 16:01</p>
+<p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
+</div>
+</body>
+</html>
