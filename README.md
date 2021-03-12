@@ -33,6 +33,8 @@ Verilog HDL.
 * [电路原理图](./books/schematic.org)
 电路分析.
 
+* [serdes分类](./books/serdes_info.pdf)
+
 * [高速信号及其应用](./books/High_Speed_Serdes_and_Applications.pdf)
 有关serdes结构的综述.
 
@@ -78,11 +80,11 @@ I2C标准协议.
 电源管理协议.
 * [sff](./protocol/sff)
 SFP光电模块协议.
-* [PS/2](./protocol/PS2_Keyboard.pdf)
-PS2键鼠协议
-* [Uart](./protocol/uart.pdf)
-Console串口协议
-* [Spi](./protocol/spi.pdf)
+* [ps/2](./protocol/PS2_Keyboard.pdf)
+ps2键鼠协议
+* [uart](./protocol/uart.pdf)
+console串口协议
+* [spi](./protocol/spi.pdf)
 串行外设接口协议
 
 ## [英语](./language/english/english.org)
