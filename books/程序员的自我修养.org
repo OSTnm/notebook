@@ -1783,7 +1783,7 @@ int foo(int a)
      c:	89 45 fc             	mov    %eax,-0x4(%ebp) ; b = a - 1;
      f:	8b 45 fc             	mov    -0x4(%ebp),%eax ; 返回值eax
     12:	c9                   	leave                  ; 相当于mov ebp esp, pop ebp, 相对的有个指令是ENTER == push ebp, mov esp ebp
-    13:	c3                   	ret                    ; 退出 恢复 cs ip
+    13:	c3                   	ret                    ; 退出 恢复 eip
 #+end_src
 
 调用惯例
