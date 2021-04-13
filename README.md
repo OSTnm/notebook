@@ -72,6 +72,8 @@ Nand Flash和Nor Flash结构特性
 ## 协议
 * [IEEE802.3](./protocol/IEEE802.3/ieee_note.pdf)
 IEEE802.3以太网物理层MAC/PCS/PMA/PMD协议.
+* [PCIE](./protocol/pcie)
+一种高速串行计算机扩展总线标准
 * [i2c](./protocol/i2c.pdf)
 I2C标准协议.
 * [smbus](./protocol/smbus.pdf)
