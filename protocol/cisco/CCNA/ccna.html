@@ -1,0 +1,684 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2021-06-01 Tue 16:30 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>CCNA</title>
+<meta name="generator" content="Org mode" />
+<meta name="author" content="xuali2" />
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: visible;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { width: 90%; }
+  /*]]>*/-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://fniessen.github.io/org-html-themes/src/readtheorg_theme/css/htmlize.css"/>
+<link rel="stylesheet" type="text/css" href="https://fniessen.github.io/org-html-themes/src/readtheorg_theme/css/readtheorg.css"/>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="https://fniessen.github.io/org-html-themes/src/lib/js/jquery.stickytableheaders.min.js"></script>
+<script type="text/javascript" src="https://fniessen.github.io/org-html-themes/src/readtheorg_theme/js/readtheorg.js"></script>
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2020 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+</head>
+<body>
+<div id="content">
+<h1 class="title">CCNA</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#orgcbb5bf9">1. Exploring the Functions of Networking</a>
+<ul>
+<li><a href="#orgaca0f60">1.1. Network Devices</a></li>
+<li><a href="#orgcf80c1a">1.2. Characteristics of a Network</a></li>
+<li><a href="#orga58265a">1.3. Topology</a>
+<ul>
+<li><a href="#org45ec9a4">1.3.1. physical topology</a></li>
+<li><a href="#org85df2fb">1.3.2. logical topology</a></li>
+</ul>
+</li>
+<li><a href="#orged8035a">1.4. Qos</a></li>
+</ul>
+</li>
+<li><a href="#orgdcaca1c">2. The Host-To-Host Communications Model</a>
+<ul>
+<li><a href="#orgf4fc717">2.1. layered models</a></li>
+<li><a href="#org3d8ed4d">2.2. Encap and De-Encap</a></li>
+</ul>
+</li>
+<li><a href="#org1537660">3. Operating Cisco IOS Software</a></li>
+<li><a href="#org5da8449">4. Question bank</a>
+<ul>
+<li><a href="#orgce4853b">4.1. Which two statements about the Cisco IOS Software CLI are true? (Choose two.)</a></li>
+<li><a href="#orga852b5a">4.2. Which statement about the CLI operation modes is correct?</a></li>
+</ul>
+</li>
+<li><a href="#org713b166">5. Vocabulary</a></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-orgcbb5bf9" class="outline-2">
+<h2 id="orgcbb5bf9"><span class="section-number-2">1</span> Exploring the Functions of Networking</h2>
+<div class="outline-text-2" id="text-1">
+
+<div class="figure">
+<p><img src="Exploring_the_Functions_of_Networking/2021-05-31_16-29-54_Picture 1.png" alt="2021-05-31_16-29-54_Picture 1.png" /><br />
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgaca0f60" class="outline-3">
+<h3 id="orgaca0f60"><span class="section-number-3">1.1</span> Network Devices</h3>
+<div class="outline-text-3" id="text-1-1">
+<ul class="org-ul">
+<li>Endpoints<br /></li>
+<li>Intermediary devices<br /></li>
+</ul>
+<p>
+a. Switches - enable multiple endpoints such as PCs, file servers, printers, sensors, cameras, and manufacturing robots to connect to the network.<br />
+b. Routers - connect networks and intelligently choose the best paths between networks.<br />
+c. APs - allow wireless devices to connect to a wired network.<br />
+d. WLCs - used by network administrators or network operations centers to facilitate management of many APs.<br />
+e. Next-generation firewalls (NGFW) -  network security systems that monitor and control the incoming and outgoing network traffic based on predetermined security rules.<br />
+f. Intrusion Protection System (IPS) - a system that performs deep analysis of network traffic, searching for signs that behavior is suspicious or malicious.<br />
+g. Management Services -  A modern management service offers centralized management that facilitates designing, provisioning, and applying policies across a network.<br />
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgcf80c1a" class="outline-3">
+<h3 id="orgcf80c1a"><span class="section-number-3">1.2</span> Characteristics of a Network</h3>
+<div class="outline-text-3" id="text-1-2">
+<ul class="org-ul">
+<li>Topology<br /></li>
+<li>Bitrate or Bandwidth<br /></li>
+<li>Availability<br /></li>
+<li>Reliability<br /></li>
+<li>Scalability<br /></li>
+<li>Security<br /></li>
+<li>Quality of Service (QoS)<br /></li>
+<li>Cost<br /></li>
+<li>Virtualization<br /></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-orga58265a" class="outline-3">
+<h3 id="orga58265a"><span class="section-number-3">1.3</span> Topology</h3>
+<div class="outline-text-3" id="text-1-3">
+</div>
+<div id="outline-container-org45ec9a4" class="outline-4">
+<h4 id="org45ec9a4"><span class="section-number-4">1.3.1</span> physical topology</h4>
+<div class="outline-text-4" id="text-1-3-1">
+<ul class="org-ul">
+<li>Bus<br /></li>
+<li>Ring<br /></li>
+<li>Star<br /></li>
+<li>Mesh<br /></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org85df2fb" class="outline-4">
+<h4 id="org85df2fb"><span class="section-number-4">1.3.2</span> logical topology</h4>
+<div class="outline-text-4" id="text-1-3-2">
+<p>
+the path along which data travels from one point in the network to another.<br />
+For example, an Ethernet hub is a legacy device that functions as a central device to which other devices connect in a physical star. The characteristic of a hub is that it "copies" every signal received on one port to all other ports. So a signal sent from one node is received by all other nodes. This behavior is typical of a bus topology.<br />
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orged8035a" class="outline-3">
+<h3 id="orged8035a"><span class="section-number-3">1.4</span> Qos</h3>
+<div class="outline-text-3" id="text-1-4">
+<ul class="org-ul">
+<li>Interactivity<br /></li>
+<li>Real-time responsiveness<br /></li>
+<li>Amount of data generated<br /></li>
+<li>Burstiness<br /></li>
+<li>Drop sensitivity<br /></li>
+<li>Criticality to business<br /></li>
+</ul>
+
+
+<div class="figure">
+<p><img src="Exploring_the_Functions_of_Networking/2021-05-31_18-24-09_Picture 1.png" alt="2021-05-31_18-24-09_Picture 1.png" /><br />
+</p>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgdcaca1c" class="outline-2">
+<h2 id="orgdcaca1c"><span class="section-number-2">2</span> The Host-To-Host Communications Model</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+In a communication model, a layer does not define a single protocol&#x2013;it defines a data communication function that may be performed by any number of protocols. Because each layer defines a function, it can contain multiple protocols, each of which provides a service suitable to the function of that layer.<br />
+</p>
+</div>
+
+<div id="outline-container-orgf4fc717" class="outline-3">
+<h3 id="orgf4fc717"><span class="section-number-3">2.1</span> layered models</h3>
+<div class="outline-text-3" id="text-2-1">
+<ul class="org-ul">
+<li>Make complexity manageable by breaking communication tasks into smaller, simpler functional groups.<br /></li>
+<li>Define and specify communication tasks to provide the same basis for everyone to develop their own solutions.<br /></li>
+<li>Facilitate modular engineering, allowing different types of network hardware and software to communicate with one another.<br /></li>
+<li>Prevent changes in one layer from affecting the other layers.<br /></li>
+<li>Accelerate evolution, providing for effective updates and improvements to individual components without affecting other components or having to rewrite the entire protocol.<br /></li>
+<li>Simplify teaching and learning.<br /></li>
+</ul>
+
+<p>
+telephone networks were built using separate equipment and implemented a different set of protocols and standards. Over the years, computer networking evolved such that IP became a common data communications standard and the technology has been extended to also include other types of communication, such as voice conversations, and video.<br />
+</p>
+
+<p>
+Layers 5 to 7, or upper layers, are concerned with user interaction and the information that is communicated, its presentation and how the communication proceeds. Layers 1 to 4, the lower layers, are concerned with how this content is transferred over the network.<br />
+</p>
+
+
+<div class="figure">
+<p><img src="The_Host-To-Host_Communications_Model/2021-06-01_09-15-08_Picture 1.png" alt="2021-06-01_09-15-08_Picture 1.png" /><br />
+</p>
+</div>
+
+<ul class="org-ul">
+<li>Layer 1: The physical layer defines electrical, mechanical, procedural, and functional specifications for activating, maintaining, and deactivating the physical link between devices.<br /></li>
+<li>Layer 2: The data link layer defines how data is formatted for transmission and how access to physical media is controlled.<br /></li>
+<li>Layer 3: The network layer provides connectivity and path selection beyond the local segment, all the way from the source to the final destination.<br /></li>
+<li>Layer 4: The transport layer defines segmenting and reassembling of data belonging to multiple individual communications, defines the flow control, and defines the mechanisms for reliable transport, if required.<br /></li>
+<li>Layer 5: The session layer establishes, manages, and terminates sessions between two communicating hosts, to allow them to exchange data over a prolonged time period.<br /></li>
+<li>Layer 6: The presentation layer ensures that data sent by the application layer of one system is "readable" by the application layer of another system.<br /></li>
+<li>Layer 7: The application layer is the OSI layer that is closest to the user. It provides services to user applications that want to use the network.<br /></li>
+</ul>
+
+
+<div class="figure">
+<p><img src="The_Host-To-Host_Communications_Model/2021-06-01_09-37-29_Picture 1.png" alt="2021-06-01_09-37-29_Picture 1.png" /><br />
+</p>
+</div>
+
+<ul class="org-ul">
+<li>Link layer: This layer is also known as the media access layer. It defines protocols used to interface the directly connected network.<br /></li>
+<li>Internet layer: This layer routes data from the source to the destination, provides a means to obtain information on how to reach other networks, and deals with reporting of errors.<br /></li>
+<li>Transport layer: Along with the Internet layer, this layer is the core of the TCP/IP architecture. It is placed between so called "data mover" protocols of the Link and Internet layers and software-oriented protocols of the Application layer.<br /></li>
+<li>Application layer: The functions of this layer mainly deal with user interaction.<br /></li>
+</ul>
+
+<p>
+The data processing that happens as data traverses the protocol stack alters the initial data, which means that original application data is not the same as the data represented in the electromagnetic signal transmitted, the data received as the electromagnetic signal is different to the data that will be delivered to the application. But the data that the application sees is the same data that the sending application created.<br />
+</p>
+
+
+<div class="figure">
+<p><img src="The_Host-To-Host_Communications_Model/2021-06-01_10-09-50_Picture 1.png" alt="2021-06-01_10-09-50_Picture 1.png" /><br />
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org3d8ed4d" class="outline-3">
+<h3 id="org3d8ed4d"><span class="section-number-3">2.2</span> Encap and De-Encap</h3>
+<div class="outline-text-3" id="text-2-2">
+<p>
+Encapsulation increases the size of the PDU. The added information is required for the handling of the PDU and is called overhead to distinguish it from user data.<br />
+</p>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-org1537660" class="outline-2">
+<h2 id="org1537660"><span class="section-number-2">3</span> Operating Cisco IOS Software</h2>
+<div class="outline-text-2" id="text-3">
+<ul class="org-ul">
+<li>out-of-band (OOB) access<br /></li>
+</ul>
+<p>
+Accessing a device CLI through a console connection is also called out-of-band (OOB) access, emphasizing that no network bandwidth is consumed in the process.<br />
+</p>
+<ul class="org-ul">
+<li>in-band access<br /></li>
+</ul>
+<p>
+Because Network-based access connections(SSH&amp;Telnet) consume network bandwidth, they are also called in-band access.<br />
+</p>
+
+<p>
+Cisco IOS Software is designed as a modal operating system. The term modal describes a system that has various modes of operation. Each mode has its own set of commands, and command history, and is intended for usage for a specific group of tasks.<br />
+</p>
+
+
+<div class="figure">
+<p><img src="Operating_Cisco_IOS_Software/2021-06-01_15-38-59_Picture 1.png" alt="2021-06-01_15-38-59_Picture 1.png" /><br />
+</p>
+</div>
+
+<p>
+To access interface configuration commands, your full path through operation mode hierarchy would be: User EXEC Mode &gt; Privileged EXEC Mode &gt; Global Configuration Mode &gt; Interface Configuration Mode.<br />
+</p>
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">Mode</th>
+<th scope="col" class="org-left">Access Method</th>
+<th scope="col" class="org-left">Prompt Example</th>
+<th scope="col" class="org-left">Exit Method</th>
+<th scope="col" class="org-left">About This Mode</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left">User EXEC Mode</td>
+<td class="org-left">Begin a session with your device.</td>
+<td class="org-left">Switch&gt;</td>
+<td class="org-left">Enter logout, exit, or quit.</td>
+<td class="org-left">Use this mode to change terminal settings, perform basic connectivity tests, or display system information.</td>
+</tr>
+
+<tr>
+<td class="org-left">Privileged EXEC Mode</td>
+<td class="org-left">While in user EXEC mode, enter the enable command.</td>
+<td class="org-left">Switch#</td>
+<td class="org-left">Enter disable or exit.</td>
+<td class="org-left">Use this mode to verify commands that you have entered and to enter configuration modes. Use a password to protect access to this mode.</td>
+</tr>
+
+<tr>
+<td class="org-left">Global Configuration Mode</td>
+<td class="org-left">While in privileged EXEC mode, enter the configure terminal command.</td>
+<td class="org-left">Switch(config)#</td>
+<td class="org-left">To return to Privileged EXEC Mode, enter exit or end, or press Ctrl-Z.</td>
+<td class="org-left">Use this mode to configure parameters that apply to the entire device.</td>
+</tr>
+
+<tr>
+<td class="org-left">Interface Configuration Mode</td>
+<td class="org-left">While in global configuration mode, enter the interface command followed by interface label of the interface you wish to configure.</td>
+<td class="org-left">Switch(config-if)#</td>
+<td class="org-left">To return to the Global Configuration Mode, type exit. Then to return to the Privileged EXEC mode, press Ctrl-Z or type exit or end.</td>
+<td class="org-left">Use this mode to configure parameters for the device interfaces.</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+
+
+
+<div id="outline-container-org5da8449" class="outline-2">
+<h2 id="org5da8449"><span class="section-number-2">4</span> Question bank</h2>
+<div class="outline-text-2" id="text-4">
+</div>
+<div id="outline-container-orgce4853b" class="outline-3">
+<h3 id="orgce4853b"><span class="section-number-3">4.1</span> Which two statements about the Cisco IOS Software CLI are true? (Choose two.)</h3>
+<div class="outline-text-3" id="text-4-1">
+<p>
+You can always enter any command, regardless of the mode you are in.<br />
+<b>You can easily tell which command mode you are in because each mode has a distinctive prompt.</b><br />
+<b>When you finish typing in a command, you have to press Enter to execute it.</b><br />
+By default, every prompt begins with the name of the mode.<br />
+If you do not have authorization to access the Privileged EXEC Mode, the CLI will allow you to view the Privileged EXEC Mode commands, but not to execute them.<br />
+</p>
+</div>
+</div>
+
+<div id="outline-container-orga852b5a" class="outline-3">
+<h3 id="orga852b5a"><span class="section-number-3">4.2</span> Which statement about the CLI operation modes is correct?</h3>
+<div class="outline-text-3" id="text-4-2">
+<p>
+<b>To change from the Privileged EXEC Mode to the Interface Configuration Mode, you have to type the configure terminal command first and then type the interface command.</b><br />
+To change from the User EXEC Mode to the Interface Configuration Mode, you have to type interface command.<br />
+By typing the exit command, you leave the Interface Configuration Mode and go to the Privileged EXEC Mode.<br />
+By typing the end command, you leave the Interface Configuration Mode and go to the User EXEC Mode.<br />
+</p>
+</div>
+</div>
+</div>
+
+
+
+
+<div id="outline-container-org713b166" class="outline-2">
+<h2 id="org713b166"><span class="section-number-2">5</span> Vocabulary</h2>
+<div class="outline-text-2" id="text-5">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">Vocabulary</th>
+<th scope="col" class="org-left">含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left">revive</td>
+<td class="org-left">苏醒</td>
+</tr>
+
+<tr>
+<td class="org-left">resilient</td>
+<td class="org-left">有弹性的</td>
+</tr>
+
+<tr>
+<td class="org-left">tier</td>
+<td class="org-left">层</td>
+</tr>
+
+<tr>
+<td class="org-left">spine</td>
+<td class="org-left">主干</td>
+</tr>
+
+<tr>
+<td class="org-left">hierarchical</td>
+<td class="org-left">有等级的</td>
+</tr>
+
+<tr>
+<td class="org-left">integral</td>
+<td class="org-left">必需的</td>
+</tr>
+
+<tr>
+<td class="org-left">lease line</td>
+<td class="org-left">专线</td>
+</tr>
+
+<tr>
+<td class="org-left">satellite</td>
+<td class="org-left">卫星</td>
+</tr>
+
+<tr>
+<td class="org-left">dependability</td>
+<td class="org-left">可靠性</td>
+</tr>
+
+<tr>
+<td class="org-left">converged networking</td>
+<td class="org-left">融合网</td>
+</tr>
+
+<tr>
+<td class="org-left">exclusive</td>
+<td class="org-left">专有的</td>
+</tr>
+
+<tr>
+<td class="org-left">proprietary</td>
+<td class="org-left">专利的</td>
+</tr>
+
+<tr>
+<td class="org-left">inevitably</td>
+<td class="org-left">不可避免地</td>
+</tr>
+
+<tr>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: xuali2</p>
+<p class="date">Created: 2021-06-01 Tue 16:30</p>
+<p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
+</div>
+</body>
+</html>

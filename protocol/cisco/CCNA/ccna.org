@@ -1,0 +1,2118 @@
+#+SETUPFILE: ~/.emacs.d/themes/org-html-themes/org/theme-readtheorg.setup
+#+OPTIONS: \n:t
+#+OPTIONS: ^:nil
+#+OPTIONS: tex:t
+#+STARTUP: latexpreview
+#+OPTIONS: tex:dvipng
+#+HTML_MATHJAX: align: left indent: 5em tagside: left font: Neo-Euler
+#+attr_html: :width 300px
+#+attr_latex: :width 300px
+#+ATTR_ORG: :width 300
+
+#+TITLE: CCNA
+
+* Exploring the Functions of Networking
+
+  [[file:Exploring_the_Functions_of_Networking/2021-05-31_16-29-54_Picture 1.png]]
+
+** Network Devices
+   - Endpoints
+   - Intermediary devices
+   a. Switches - enable multiple endpoints such as PCs, file servers, printers, sensors, cameras, and manufacturing robots to connect to the network.
+   b. Routers - connect networks and intelligently choose the best paths between networks.
+   c. APs - allow wireless devices to connect to a wired network.
+   d. WLCs - used by network administrators or network operations centers to facilitate management of many APs.
+   e. Next-generation firewalls (NGFW) -  network security systems that monitor and control the incoming and outgoing network traffic based on predetermined security rules.
+   f. Intrusion Protection System (IPS) - a system that performs deep analysis of network traffic, searching for signs that behavior is suspicious or malicious.
+   g. Management Services -  A modern management service offers centralized management that facilitates designing, provisioning, and applying policies across a network.
+
+** Characteristics of a Network
+   - Topology
+   - Bitrate or Bandwidth
+   - Availability
+   - Reliability
+   - Scalability
+   - Security
+   - Quality of Service (QoS)
+   - Cost
+   - Virtualization
+
+** Topology
+*** physical topology
+    - Bus
+    - Ring
+    - Star
+    - Mesh
+
+*** logical topology
+    the path along which data travels from one point in the network to another.
+    For example, an Ethernet hub is a legacy device that functions as a central device to which other devices connect in a physical star. The characteristic of a hub is that it "copies" every signal received on one port to all other ports. So a signal sent from one node is received by all other nodes. This behavior is typical of a bus topology.
+
+** Qos
+   - Interactivity
+   - Real-time responsiveness
+   - Amount of data generated
+   - Burstiness
+   - Drop sensitivity
+   - Criticality to business
+
+   #+DOWNLOADED: file:/Users/xuali2/Home/Picture 1.png @ 2021-05-31 18:24:09
+   [[file:Exploring_the_Functions_of_Networking/2021-05-31_18-24-09_Picture 1.png]]
+
+* The Host-To-Host Communications Model
+
+  In a communication model, a layer does not define a single protocol--it defines a data communication function that may be performed by any number of protocols. Because each layer defines a function, it can contain multiple protocols, each of which provides a service suitable to the function of that layer.
+
+** layered models
+   - Make complexity manageable by breaking communication tasks into smaller, simpler functional groups.
+   - Define and specify communication tasks to provide the same basis for everyone to develop their own solutions.
+   - Facilitate modular engineering, allowing different types of network hardware and software to communicate with one another.
+   - Prevent changes in one layer from affecting the other layers.
+   - Accelerate evolution, providing for effective updates and improvements to individual components without affecting other components or having to rewrite the entire protocol.
+   - Simplify teaching and learning.
+
+   telephone networks were built using separate equipment and implemented a different set of protocols and standards. Over the years, computer networking evolved such that IP became a common data communications standard and the technology has been extended to also include other types of communication, such as voice conversations, and video.
+
+   Layers 5 to 7, or upper layers, are concerned with user interaction and the information that is communicated, its presentation and how the communication proceeds. Layers 1 to 4, the lower layers, are concerned with how this content is transferred over the network.
+
+   #+DOWNLOADED: file:/Users/xuali2/Home/Picture 1.png @ 2021-06-01 09:15:08
+   [[file:The_Host-To-Host_Communications_Model/2021-06-01_09-15-08_Picture 1.png]]
+
+   - Layer 1: The physical layer defines electrical, mechanical, procedural, and functional specifications for activating, maintaining, and deactivating the physical link between devices.
+   - Layer 2: The data link layer defines how data is formatted for transmission and how access to physical media is controlled.
+   - Layer 3: The network layer provides connectivity and path selection beyond the local segment, all the way from the source to the final destination.
+   - Layer 4: The transport layer defines segmenting and reassembling of data belonging to multiple individual communications, defines the flow control, and defines the mechanisms for reliable transport, if required.
+   - Layer 5: The session layer establishes, manages, and terminates sessions between two communicating hosts, to allow them to exchange data over a prolonged time period.
+   - Layer 6: The presentation layer ensures that data sent by the application layer of one system is "readable" by the application layer of another system.
+   - Layer 7: The application layer is the OSI layer that is closest to the user. It provides services to user applications that want to use the network.
+
+   #+DOWNLOADED: file:/Users/xuali2/Home/Picture 1.png @ 2021-06-01 09:37:29
+   [[file:The_Host-To-Host_Communications_Model/2021-06-01_09-37-29_Picture 1.png]]
+
+   - Link layer: This layer is also known as the media access layer. It defines protocols used to interface the directly connected network.
+   - Internet layer: This layer routes data from the source to the destination, provides a means to obtain information on how to reach other networks, and deals with reporting of errors.
+   - Transport layer: Along with the Internet layer, this layer is the core of the TCP/IP architecture. It is placed between so called "data mover" protocols of the Link and Internet layers and software-oriented protocols of the Application layer.
+   - Application layer: The functions of this layer mainly deal with user interaction.
+
+   The data processing that happens as data traverses the protocol stack alters the initial data, which means that original application data is not the same as the data represented in the electromagnetic signal transmitted, the data received as the electromagnetic signal is different to the data that will be delivered to the application. But the data that the application sees is the same data that the sending application created.
+
+   #+DOWNLOADED: file:/Users/xuali2/Home/Picture 1.png @ 2021-06-01 10:09:50
+   [[file:The_Host-To-Host_Communications_Model/2021-06-01_10-09-50_Picture 1.png]]
+
+** Encap and De-Encap
+
+   Encapsulation increases the size of the PDU. The added information is required for the handling of the PDU and is called overhead to distinguish it from user data.
+
+* Operating Cisco IOS Software
+  - out-of-band (OOB) access
+  Accessing a device CLI through a console connection is also called out-of-band (OOB) access, emphasizing that no network bandwidth is consumed in the process.
+  - in-band access
+  Because Network-based access connections(SSH&Telnet) consume network bandwidth, they are also called in-band access.
+
+  Cisco IOS Software is designed as a modal operating system. The term modal describes a system that has various modes of operation. Each mode has its own set of commands, and command history, and is intended for usage for a specific group of tasks.
+
+  #+DOWNLOADED: file:/Users/xuali2/Home/Picture 1.png @ 2021-06-01 15:38:59
+  [[file:Operating_Cisco_IOS_Software/2021-06-01_15-38-59_Picture 1.png]]
+
+  To access interface configuration commands, your full path through operation mode hierarchy would be: User EXEC Mode > Privileged EXEC Mode > Global Configuration Mode > Interface Configuration Mode.
+
+  | Mode                         | Access Method                                                                                                                       | Prompt Example     | Exit Method                                                                                                                          | About This Mode                                                                                                                         |
+  |------------------------------+-------------------------------------------------------------------------------------------------------------------------------------+--------------------+--------------------------------------------------------------------------------------------------------------------------------------+-----------------------------------------------------------------------------------------------------------------------------------------|
+  | User EXEC Mode               | Begin a session with your device.                                                                                                   | Switch>            | Enter logout, exit, or quit.                                                                                                         | Use this mode to change terminal settings, perform basic connectivity tests, or display system information.                             |
+  | Privileged EXEC Mode         | While in user EXEC mode, enter the enable command.                                                                                  | Switch#            | Enter disable or exit.                                                                                                               | Use this mode to verify commands that you have entered and to enter configuration modes. Use a password to protect access to this mode. |
+  | Global Configuration Mode    | While in privileged EXEC mode, enter the configure terminal command.                                                                | Switch(config)#    | To return to Privileged EXEC Mode, enter exit or end, or press Ctrl-Z.                                                               | Use this mode to configure parameters that apply to the entire device.                                                                  |
+  | Interface Configuration Mode | While in global configuration mode, enter the interface command followed by interface label of the interface you wish to configure. | Switch(config-if)# | To return to the Global Configuration Mode, type exit. Then to return to the Privileged EXEC mode, press Ctrl-Z or type exit or end. | Use this mode to configure parameters for the device interfaces.                                                                        |
+
+  How to use context-sensitive help?
+
+  - Command Words Help
+
+  To get help with command words, enter the sequence of characters that you know and follow it immediately by a question mark. Make sure not to include any spaces before the question mark. The Cisco IOS CLI displays a list of commands starting with the characters that you entered. For example, enter s? to get a list of commands that start with letter s.
+
+  - Command Syntax Help
+
+  To get help with command syntax, enter a question mark after the command word or words, where you would otherwise enter another keyword or an argument. Include a space before the question mark. For example, enter show ? to get a list of the command options and syntax for the show command. The Cisco IOS CLI displays a list of available command options. <cr> characters might appear in the list. They stand for carriage return and indicate that you should press Enter. You can access command syntax help after any word or command option to help you complete the command.
+
+  | Error Message                          | Meaning                                                                                | How to Get Help                                                                                                                                         |
+  |----------------------------------------+----------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------|
+  | % Ambiguous command                    | You did not enter enough characters for your device to uniquely recognize the command. | Repeat the entry, followed by the question mark ? Make sure there are no spaces.The CLI displays possible keywords that you can enter with the command. |
+  | % Incomplete command                   | You did not enter all keywords or values that are required by this command.            | Repeat the entry, followed by a space and the question mark ?.                                                                                          |
+  | % Invalid input detected at ‘^’ marker | You entered the command incorrectly. The ^ marks the first element with the error.     | Enter the question mark ? to display all commands or command options that you can use.                                                                  |
+  #+DOWNLOADED: file:/Users/xuali2/Home/Picture 1.png @ 2021-06-01 20:06:08
+  [[file:Operating_Cisco_IOS_Software/2021-06-01_20-06-08_Picture 1.png]]
+
+** Configuration
+
+   | Command                            | Function                                                                                                                                                                                                                            |
+   |------------------------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+   | show running-config                | Displays the current running configuration. You can also use filters. For example, you can use the show running-config interface GigabitEthernet0/1 command to display only the interface GigabitEthernet0/1 running configuration. |
+   | show startup-config                | Displays the startup configuration stored in NVRAM.                                                                                                                                                                                 |
+   | configure terminal                 | Enters the Global Configuration Mode, where you can interactively change the configuration in RAM (the running-config), using console or remote terminal access.                                                                    |
+   | copy running-config startup-config | Saves the running configuration to startup-config file in NVRAM.                                                                                                                                                                    |
+   | copy startup-config running-config | *Startup configuration from NVRAM is merged into the running configuration.*                                                                                                                                                        |
+   | erase startup-config               | Deletes the saved startup-config file in NVRAM.                                                                                                                                                                                     |
+
+   When you copy a configuration into RAM, regardless of the source, the copied configuration merges with the existing configuration in RAM. It does not overwrite it.
+
+** Filtering Parameters
+
+   | Parameter | Description                                                                          |
+   |-----------+--------------------------------------------------------------------------------------|
+   | begin     | Shows all output lines, starting with the line that matches the filtering expression |
+   | exclude   | Excludes all output lines that match the filtering expression                        |
+   | include   | Includes all output lines that match the filtering expression                        |
+   | section   | Shows the entire section that starts with the filtering expression                   |
+
+* Introducing LANs
+  A LAN is a network of endpoints and other components that are located relatively close together in a limited area.
+
+  a typical small office will include routers, switches, access points, servers, IP phones, mobile phones, PCs, and laptops.
+
+  #+DOWNLOADED: file:/Users/xuali2/Home/e16b8b27a4663f01c97ee0d120e85d3e.png @ 2021-06-02 09:31:36
+  [[file:Introducing_LANs/2021-06-02_09-31-36_e16b8b27a4663f01c97ee0d120e85d3e.png]]
+
+  A segment is a network connection that is made by a single unbroken network cable. Ethernet cables and segments can span only a limited physical distance.
+
+  Historically, when network devices had few network segments, endpoints shared the same media. Network segments that share the same media are known as collision domains, because frames may collide with each other.
+
+  Switches have these functions:
+  - Operate at the link layer of the TCP/IP protocol suite
+  - Selectively forward individual frames
+  - Have many ports to segment a large LAN into many smaller segments
+  - Have high speed and support various port speeds
+
+  And below key feature:
+  - Dedicated communication between devices
+  - Multiple simultaneous conversations
+  - Full-duplex communication
+  - Media-rate adaptation
+
+* Exploring the TCP/IP Link Layer
+  1000BASE-T denotes the following:
+  - 1000: Specifies a transmission speed of 1000 Megabits per second (Mbps) or 1 Gigabit per second (Gbps)
+  - BASE: Refers to baseband signaling (which means that only Ethernet signals are carried on the medium)
+  - T: Represents twisted-pair cabling.
+
+  Several categories of UTP cable exist:
+  - Category 5: Capable of transmitting data at speeds of up to 100 Mbps
+  - Category 5e: Used in networks running at speeds of up to 1000 Mbps (1 Gbps)
+  - Category 6: Comprises four pairs of 24-gauge copper wires, which can transmit data at speeds of up to 10 Gbps
+  - Category 6a: Used in networks running at speeds of up to 10 Gbps
+  - Category 7: Used in networks running at speeds of up to 10 Gbps
+  - Category 8: Used in networks running at speeds of up to 40 Gbps
+
+  *Power over Ethernet*
+  Power over Ethernet (PoE) describes systems which pass electric power along with data on Ethernet cabling. This action allows a single Ethernet cable to provide both data connection and electric power to devices such as wireless access points, Internet Protocol (IP) cameras, and Voice over IP (VoIP) phones, by utilizing all four pairs in the Category 5 cable or above.
+
+  Straight-through cables are primarily used for connecting electrically unlike devices, and crossover cables are used for connecting electrically like devices.
+
+  #+DOWNLOADED: file:/Users/xuali2/Home/491ea86f958344851031df716194be37.png @ 2021-06-03 11:20:20
+  [[file:Exploring_the_TCP/IP_Link_Layer/2021-06-03_11-20-20_491ea86f958344851031df716194be37.png]]
+
+  *SMF vs MMFS*
+  - The most significant physical difference is in the size of the core.
+  - For SMF, the possible ways for light to get through the fiber have been reduced to one—a "single mode." It is not exactly one, but it is a useful approximation.
+  - MMF supports multiple ways for the light from one source to travel through the fiber.
+
+  | MMF Characteristics             | SMF Characteristics               |
+  |---------------------------------+-----------------------------------|
+  | LED transmitter is usually used | Laser transmitter is usually used |
+  | Lower bandwidth and speed       | Higher bandwidth and speed        |
+  | Shorter distances               | Longer distances                  |
+  | Less expensive                  | More expensive                    |
+
+  #+DOWNLOADED: file:/Users/xuali2/Home/3eb84a4d640f1a42327ffab9ec5a533a.png @ 2021-06-03 11:22:43
+  [[file:Exploring_the_TCP/IP_Link_Layer/2021-06-03_11-22-43_3eb84a4d640f1a42327ffab9ec5a533a.png]]
+
+  #+DOWNLOADED: file:/Users/xuali2/Home/1773157495ebfbbe5f3e4de11e4d12bd.png @ 2021-06-03 12:55:52
+  [[file:Question_bank/2021-06-03_12-55-52_1773157495ebfbbe5f3e4de11e4d12bd.png]]
+
+  Broadcast or multicast bit: When the least significant bit in the first octet of the MAC address is 1, it indicates to the receiving interface that the frame is destined for all (broadcast) or a group of (multicast) end stations on the LAN segment. This bit is referred to as the Individual/Group (I/G) address bit.
+
+  Locally administered address bit: The second least significant bit of the first octet of the MAC address is referred as a universally or locally (U/L) administered address bit. Normally, the combination of the OUI and a 24-bit station address is universally unique. However, if the address is modified locally, this bit should be set to 1.
+
+  The switch builds and maintains a table, called the MAC address table, which matches the destination MAC address with the port that is used to connect to a node.
+
+  The MAC address table is stored in the content-addressable memory (CAM), which enables very fast lookups.
+
+  a switch learns the network topology by analyzing the source address of incoming frames from all attached networks.
+
+  #+DOWNLOADED: file:/Users/xuali2/Home/Picture 1.png @ 2021-06-03 11:35:29
+  [[file:Question_bank/2021-06-03_11-35-29_Picture 1.png]]
+
+
+  *Half Duplex*
+  - Unidirectional data flow
+  - Legacy connectivity
+  - Collisions may be an issue, CSMA/CD
+
+  *Full Duplex*
+  - Point-to-point only
+  - Attached to a dedicated switched port
+  - Requires full-duplex support on both ends
+
+  #+DOWNLOADED: file:/Users/xuali2/Home/354c034dd0b4dcd3f72dab98dca71b1e.png @ 2021-06-03 14:21:50
+  [[file:Exploring_the_TCP/IP_Link_Layer/2021-06-03_14-21-50_354c034dd0b4dcd3f72dab98dca71b1e.png]]
+
+  when autonegotiation fails, a Cisco Catalyst switch sets the corresponding switch port to half-duplex mode.
+
+* Starting a Switch
+  #+DOWNLOADED: file:/Users/xuali2/Home/Picture 1.png @ 2021-06-03 19:15:50
+  [[file:Starting_a_Switch/2021-06-03_19-15-50_Picture 1.png]]
+
+  *show interfaces Command*
+  - FastEthernet0/1 is up, line protocol is up (connected)
+  - Hardware is Fast Ethernet, address is 001e.147c.bd01
+  - Full-duplex, 100 Mbps
+  - 5-minute input rate, 31,000 bps
+
+  *show version Command*
+  - Cisco IOS Software version
+  - Switch uptime
+  - System image file
+  - Switch platform
+  - Processor board ID
+
+  *show running-config Command*
+  - displays the current running (active) configuration file of the switch
+
+
+  The VLAN 1 or Virtual Local Area Network (VLAN) 1 interface is assigned an IPv4 address. IP addresses are not required on the switch to forward Ethernet frames. Assigning an IP address allows the network administrator to remotely access, log into the switch over the network using SSH similar to logging into a server. This is a virtual interface on the switch, not a physical interface.
+
+  The default gateway on a switch is similar to the default gateway address on any end-device. The default gateway is the address of a router to which the switch will send packets when it is communicating with devices on other networks. In this example, the default gateway is R1’s IPv4 address.
+
+* Introducing the TCP/IP
+  *IP*
+  - operates at Layer 3
+  - a connectionless protocol
+  - packet is treated independently
+  - *hierarchical addressing*, in which the network identification (ID) is the equivalent of a street, and the host ID is the equivalent of a house or an office building on that street.
+  - provides service on a best-effort basis and does not guarantee packet delivery
+  - does not provide any special features that recover corrupted packets
+  - operates independently of the medium that is carrying the data
+
+  #+DOWNLOADED: file:/Users/xuali2/Home/41c3a29ddc475fc361eace169e2db7b7.png @ 2021-06-04 08:39:58
+  [[file:Introducing_the_TCP/IP/2021-06-04_08-39-58_41c3a29ddc475fc361eace169e2db7b7.png]]
+
+
+  #+DOWNLOADED: file:/Users/xuali2/Home/36ba5b5c403568f2f711d25c2b775fb3.png @ 2021-06-04 08:54:34
+  [[file:Introducing_the_TCP/IP/2021-06-04_08-54-34_36ba5b5c403568f2f711d25c2b775fb3.png]]
+
+  - Version: Describes the version of IP
+  - IHL: Internet Header Length (IHL) describes the length of the header
+  - Total Length: Describes the length of a packet, including header and data
+  - Identification: Used for unique fragment identification
+  - Flag: Sets various control flags regarding fragmentation
+  - Fragment Offset: Indicates where a specific fragment belongs
+  - Protocol: Indicates the upper-layer protocol that is used in the data portion of an IPv4 packet. For example, a protocol value of 6 indicates this packet carries a TCP segment.
+  - Header Checksum: Used for header error detection
+  - Options: Includes optional parameters
+  - Padding: Used to ensure that the header ends on a 32-bit boundary
+
+  *classful addressing*
+
+  #+DOWNLOADED: file:/Users/xuali2/Home/Picture 1.png @ 2021-06-04 14:25:28
+  [[file:Introducing_the_TCP/IP/2021-06-04_14-25-28_Picture 1.png]]
+
+  - Class D
+  multicast addresses are always the destination address and never the source.
+
+  - Class E
+  Class E (reserved) IPv4 addresses are reserved by the IANA as a block of experimental addresses. Class E IPv4 addresses should never be assigned to IPv4 hosts.
+
+  | IPv4 Address Class  | First Octet Binary Range | First Octet Decimal Range |
+  |---------------------+--------------------------+---------------------------|
+  | Class A             | 00000001 to 01111110     | 1–126                     |
+  | Class B             | 10000000 to 10111111     | 128–191                   |
+  | Class C             | 11000000 to 11011111     | 192–223                   |
+  | Class D (Multicast) | 11100000 to 11101111     | 224–239                   |
+  | Class E (Reserved)  | 11110000 to 11111111     | 240–255                   |
+
+  Class A addresses 127.0.0.0 to 127.255.255.255 cannot be used. This range is reserved for loopback and diagnostic functions.
+
+  You can use a formula to calculate the number of host addresses that are available when a given number of host bits are borrowed: Number of hosts = 2h – 2 (where h is the number of host bits that are remaining after bits are borrowed)
+
+  *VLSM*
+  In addition to providing a solution to the problem of wasted IP addresses, VLSM has another important benefit: support for route summarization, which is also called route aggregation.
+
+  | IPv4 Address Class | Private IPv4 Address Range |
+  |--------------------+----------------------------|
+  | A                  | 10.0.0.0/8                 |
+  | B                  | 172.16.0.0/12              |
+  | C                  | 192.168.0.0/16             |
+
+  *Broadcast*
+  Local Broadcast Address    - 255.255.255.255
+  Directed Broadcast Address - the bits in the host portion are all ones
+  Local Loopback Address     - 127.0.0.1
+
+  Automatic Private IP Addressing (APIPA)
+  When neither a statically nor a dynamically configured IPv4 address is found on startup, those hosts supporting IPv4 link-local addresses (RFC 3927) will generate an address in the 169.254.0.0/16 range.
+
+  All Zeros Address - indicates the host in "this" network and is used only as a source address.
+
+  Address blocks 198.51.100.0/24 and 203.0.113.0/24 are assigned for use in documentation and example code.
+
+* Explaining the TCP/IP Transport Layer and Application Layer
+
+  #+DOWNLOADED: file:/Users/xuali2/Home/1ce454539fa6af2d59c0bb085c243564.png @ 2021-06-05 12:20:39
+  [[file:Explaining_the_TCP/IP_Transport_Layer_and_Application_Layer/2021-06-05_12-20-39_1ce454539fa6af2d59c0bb085c243564.png]]
+
+
+  *Segmentation*
+  TCP takes variably sized data chunks from the Application layer and prepares them for transport onto the network. The application relies on TCP to ensure that each chunk is broken up into smaller segments that will fit the maximum transmission unit (MTU) of the underlying network layers. UDP does not provide segmentation services. UDP instead expects the application process to perform any necessary segmentation and supply it with data chunks that do not exceed the MTU of lower layers.
+
+  |                 | Reliable                                                    | Best-Effort                                                                                      |
+  |-----------------+-------------------------------------------------------------+--------------------------------------------------------------------------------------------------|
+  | Protocol        | TCP                                                         | UDP                                                                                              |
+  | Connection Type | Connection-oriented                                         | Connectionless                                                                                   |
+  | Sequencing      | Yes                                                         | No                                                                                               |
+  | Uses            | Email File Transfer Protocol (FTP) Web browsing Downloading | Voice streaming Dynamic Host Configuration Protocol (DHCP) Trivial File Transfer Protocol (TFTP) |
+  |                 |                                                             |                                                                                                  |
+
+  *TCP*
+  #+DOWNLOADED: file:/Users/xuali2/Home/ecd4d432bc7c70e18d4104bf6b91207c.png @ 2021-06-05 12:38:04
+  [[file:Explaining_the_TCP/IP_Transport_Layer_and_Application_Layer/2021-06-05_12-38-04_ecd4d432bc7c70e18d4104bf6b91207c.png]]
+
+  #+DOWNLOADED: file:/Users/xuali2/Home/f2da430ba934d2a9aeb3bbdb505dd211.png @ 2021-06-05 13:00:44
+  [[file:Question_bank/2021-06-05_13-00-44_f2da430ba934d2a9aeb3bbdb505dd211.png]]
+
+
+  *UDP*
+
+  #+DOWNLOADED: file:/Users/xuali2/Home/08ef1d453bfe29acfbc5560b09592418.png @ 2021-06-05 13:03:43
+  [[file:Explaining_the_TCP/IP_Transport_Layer_and_Application_Layer/2021-06-05_13-03-43_08ef1d453bfe29acfbc5560b09592418.png]]
+
+
+  #+DOWNLOADED: file:/Users/xuali2/Home/Picture 1.png @ 2021-06-05 13:05:46
+  [[file:Question_bank/2021-06-05_13-05-46_Picture 1.png]]
+
+  *DHCP*
+  #+DOWNLOADED: file:/Users/xuali2/Home/f889565f50142ab2c6ba92e37919fb67.png @ 2021-06-05 17:19:34
+  [[file:Explaining_the_TCP/IP_Transport_Layer_and_Application_Layer/2021-06-05_17-19-34_f889565f50142ab2c6ba92e37919fb67.png]]
+
+  *DHCP Pool*
+  Router(config)# ip dhcp excluded-address 10.1.50.1 10.1.50.50
+  Router(config)# ip dhcp pool Customer
+  Router(dhcp-config)# network 10.1.50.0 /24
+  Router(dhcp-config)# default-router 10.1.50.1
+  Router(dhcp-config)# dns-server 10.1.50.1
+  Router(dhcp-config)# domain-name cisco.com
+  Router(dhcp-config)# lease 0 12
+  Router(dhcp-config)# exit
+
+  DHCP relay
+  - Step 1: A DHCP client broadcasts a DHCP request
+  - Step 2: DHCP relay includes option 82 and sends the DHCP request as a unicast packet to the DHCP server. Option 82 includes remote ID and circuit ID.
+  - Step 3: The DHCP server responds to the DHCP relay
+  - Step 4: The DHCP relay strips-off option 82 and sends the response to the DHCP client
+
+  Router(config)# interface GigabitEthernet0/1
+  Router(config-if)# ip helper-address 10.0.0.1
+
+* Exploring the Functions of Routing
+  RAM: Random-access memory (RAM) is memory on the motherboard that stores data during CPU processing. It is a volatile type of memory in that its information is lost when power is switched off. RAM provides temporary memory, including for the running configuration of the router while the router is powered on.
+  NVRAM: Nonvolatile random-access memory (NVRAM) retains content when the router is powered down. NVRAM stores the startup configuration file for most router platforms. It also contains the software configuration register, which is used to determine which Cisco IOS image is used when booting the router.
+  ROM: Read-only memory (ROM) is read-only memory on the motherboard. The content of ROM is not lost when power is switched off. Data that is stored in ROM cannot be modified, or it can be modified only slowly or with difficulty. ROM sometimes contains a ROM monitor (ROMmon). ROM Monitor initializes the hardware and boots the Cisco IOS software when you power on or reload a router. You can use the ROM monitor to perform certain configuration tasks, such as recovering a lost password or downloading software over the console port. ROM also includes bootloader software (bootstrap), which helps the router boot when it cannot find a valid Cisco IOS image in the flash memory. During normal startup, the ROM Monitor initializes the router, and then control passes to the Cisco IOS software.
+  Flash: Flash memory is nonvolatile storage that can be electrically erased and reprogrammed. Flash memory stores the Cisco IOS image. On some platforms, it can also store configuration files or boot images.
+
+  #+begin_src bash
+    Router#show ip route
+    Codes: L - local, C - connected, S - static, R - RIP, M - mobile, B - BGP
+    D - EIGRP, EX - EIGRP external, O - OSPF, IA - OSPF inter area
+    N1 - OSPF NSSA external type 1, N2 - OSPF NSSA external type 2
+    E1 - OSPF external type 1, E2 - OSPF external type 2, E - EGP
+    i - IS-IS, L1 - IS-IS level-1, L2 - IS-IS level-2, ia - IS-IS inter area
+    ,* - candidate default, U - per-user static route, o - ODR
+    P - periodic downloaded static route
+
+    Gateway of last resort is not set
+
+    10.0.0.0/8 is variably subnetted, 2 subnets, 2 masks
+    C       10.1.50.0/24 is directly connected, GigabitEthernet0/0/0
+    L       10.1.50.1/32 is directly connected, GigabitEthernet0/0/0
+  #+end_src
+
+
+  #+DOWNLOADED: file:/Users/xuali2/Home/7cefc9be86fd019dda982b354495ecf3.png @ 2021-06-06 09:49:12
+  [[file:Exploring_the_Functions_of_Routing/2021-06-06_09-49-12_7cefc9be86fd019dda982b354495ecf3.png]]
+
+  C: Indicates directly connected networks; the first and seventh entries are directly connected networks.
+  L: Indicates local interfaces within connected networks; the second and eighth entries are local interfaces.
+  R: Indicates RIP; the third entry is RIP route.
+  O: Indicates OSPF; the fourth entry is an OSPF route.
+  D: Indicates EIGRP; the fifth entry is an EIGRP route. The letter D stands for Diffusing Update Algorithm (DUAL), which is the update algorithm that EIGRP uses. The code letter E was previously taken by the legacy exterior gateway protocol (EGP).
+  S: Indicates static routes; the sixth and ninth entries are static routes.
+  Asterisk (*): Indicates that this static route is a candidate for the default route.
+
+  Cisco IOS Software uses what is known as the administrative distance to determine the route to install into the IP routing table. The administrative distance represents the "trustworthiness" of the route;
+
+  Administrative distance is used as a tie breaker only when different sources offer the information for the same destination network, i.e. the same network address and subnet mask.
+
+  #+DOWNLOADED: file:/Users/xuali2/Home/Picture 1.png @ 2021-06-06 10:55:21
+  [[file:Exploring_the_Functions_of_Routing/2021-06-06_10-55-21_Picture 1.png]]
+
+* Configuring a Cisco Router
+  Routers use interface-identifiers to distinguish between interfaces of the same type.
+
+  #+begin_src bash
+Router(config)# interface loopback 0
+Router(config-if)# ip address 10.0.0.1 255.255.255.255
+#+end_src
+
+An IPv4 address with a mask of 255.255.255.255 (prefix /32, all bits set to binary 1) is called the host IPv4 address. The host IPv4 address indicates that only one IPv4 address is used in the subnet and is often used to address loopback interfaces.
+
+If no IP address is configured, even if the interface is in the "up/up" state, the router will not attempt to send and receive IP packets on the interface.
+
+* Exploring the Packet Delivery Process
+*Host-To-Host Packet Delivery by Router*
+- the host 192.168.3.1 needs to send arbitrary application data to the host 192.168.4.2, which is located on another subnet. The application does not need a reliable connection, so it uses User Datagram Protocol (UDP). Because it is not necessary to set up a session, the application can start sending data, using the UDP port numbers to establish the session and deliver the segment to the right application.
+- UDP prepends a UDP header (UDP HDR) and passes the segment to the IPv4 layer (Layer 3) with an instruction to send the segment to 192.168.4.2. IPv4 encapsulates the segment in a Layer 3 packet, setting the source address (SRC IP) of the packet to 192.168.3.1, while the destination address (DST IP) is set to 192.168.4.2.
+- When Host A analyzes the destination address, it finds that the destination address is on a different network. The host forwards any packet that is not destined for the local IPv4 network in a frame addressed to the default gateway. The default gateway is the address of the local router, which must be configured on hosts (PCs, servers, and so on). IPv4 passes the Layer 3 packet to Layer 2 with instructions to forward it to the default gateway. Host A must place the packet in its “parking lot” (on hold) until it has the MAC address of the default gateway.
+- To deliver the packet, the host needs the Layer 2 information of the next-hop device. The ARP table in the host does not have an entry and must resolve the Layer 2 address (MAC address) of the default gateway. The default gateway is the next hop for the packet. The packet waits while the host resolves the Layer 2 information.
+- Because the host does not know the default gateway’s Layer 2 address, the host uses the standard ARP process to obtain the mapping. The host sends a broadcast ARP request looking for the MAC address of its default gateway.
+- The host has previously been configured with 192.168.3.2 as the default gateway. The host 192.168.3.1 sends out the ARP request, and the router receives it. The ARP request contains information about the Host A. Notice that the first thing the router does is add this information to its own ARP table.
+- The router processes the ARP request like any other host would, and sends the ARP reply with its own information, directly to the host’s MAC address.
+- The host receives an ARP reply to its ARP request and enters the information in its local ARP table.
+- Now the Layer 2 frame with the application data can be sent to the default gateway. The pending frame is sent with the local host IPv4 address and MAC address as the source. However, the destination IPv4 address is that of the remote host, but the destination MAC address is that of the default gateway.
+When the router receives the frame, it recognizes its MAC address and processes the frame. At Layer 3, the router sees that the destination IPv4 address is not its address. A host Layer 3 device would discard the frame. However, because this device is a router, it passes all IPv4 packets that are not for the router itself to the routing process. The routing process determines where to send the packet.
+- When the router receives the frame, it recognizes its MAC address and processes the frame. At Layer 3, the router sees that the destination IPv4 address is not its address. A host Layer 3 device would discard the frame. However, because this device is a router, it passes all IPv4 packets that are not for the router itself to the routing process. The routing process determines where to send the packet.
+- The routing process checks for the longest prefix match of the destination IPv4 address in its routing table. In this example, the destination network is directly connected. Therefore, the routing process can pass the packet directly to Layer 2 for the appropriate interface.
+- Assuming that the router does not have the mapping to 192.168.4.2, Layer 2 uses the ARP process to obtain the mapping for the IPv4 address and the MAC address. The router asks for the Layer 2 information in the same way as the hosts. An ARP request for the destination MAC address is sent to the link.
+The destination host receives and processes the ARP request.
+- The destination host receives the frame that contains the ARP request and passes the request to the ARP process. The ARP process takes the information about the router from the ARP request and places the information in its local ARP table. The ARP process generates the ARP reply and sends it back to the router.
+The router receives the ARP reply, populates its local ARP table, and starts the packet-forwarding process.
+- The frame is forwarded to the destination. Note that the router changes Layer 2 address in frames as needed, but it will not change the Layer 3 address in packets.
+
+*Role of a Switch in Packet Deliver*
+a switch does not change the frame in any way. When a switch receives the frame, it forwards it out the proper port according to the MAC address table.
+
+* Troubleshooting a Simple Network
+#+DOWNLOADED: file:/Users/xuali2/Home/9fbaf8f8e95448fd4a6836e4cd6be8b5.png @ 2021-06-06 19:14:42
+[[file:Troubleshooting_a_Simple_Network/2021-06-06_19-14-42_9fbaf8f8e95448fd4a6836e4cd6be8b5.png]]
+
+#+DOWNLOADED: file:/Users/xuali2/Home/91a1e94e49973499aefe572f297131c2.png @ 2021-06-06 19:31:19
+[[file:Troubleshooting_a_Simple_Network/2021-06-06_19-31-19_91a1e94e49973499aefe572f297131c2.png]]
+
+- logging
+- ICMP
+ICMP messages are typically used for diagnostic or control purposes or generated in response to errors in IP operations. ICMP errors are directed to the source IP address of the originating packet. For example, every device (such as an intermediate router) forwarding an IP version 4 (IPv4) datagram first decrements the time-to-live (TTL) field in the IPv4 header by one. If the resulting TTL is 0, the packet is discarded and an ICMP time exceeded in transit message is sent to the packet’s source address.
+- Verification of End-To-End IPv4 Connectivity
+  1. ping
+  2. traceroute
+  3. show ip arp or show arp
+  4. show ip interface brief
+- Telnet and SSH
+- Verify IPv4 address information
+
+Fiber media issues
+- Microbend and macrobend losses
+1. Bending the fiber in too small of a radius causes light to escape.
+2. Light strikes the core or cladding at less than the critical angle.
+3. Total internal reflection no longer occurs, and light leaks out.
+- Splice losses
+- Dirty connectors
+
+*Speed and Duplex Settings for End-Device NIC and Switch Connections*
+| Configuration on end device NIC (Speed, Duplex) | Configuration on Switch (Speed, Duplex) | Resulting end device NIC (Speed, Duplex) | Resulting Switch (Speed, Duplex) | Comments                                                                                                                                                                                                                                                                 |
+|-------------------------------------------------+-----------------------------------------+------------------------------------------+----------------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| AUTO                                            | AUTO                                    | 1000 Mbps, full duplex                   | 1000 Mbps, full duplex           | Assuming that the maximum capability of a Cisco Catalyst switch and NIC is 1000 Mbps, full duplex.                                                                                                                                                                       |
+| 1000 Mbps, full duplex                          | AUTO                                    | 1000 Mbps, full duplex                   | 1000 Mbps, full duplex           | A link is established, but the switch does not see any autonegotiation information from the NIC. Because Cisco Catalyst switches support only a full-duplex operation with 1000 Mbps, they default to full duplex. This change happens only when operating at 1000 Mbps. |
+| AUTO                                            | 1000 Mbps, full duplex                  | 1000 Mbps, full duplex                   | 1000 Mbps, full duplex           | Assuming that the maximum capability of a NIC is 1000 Mbps, full duplex.                                                                                                                                                                                                 |
+| 1000 Mbps, full duplex                          | 1000 Mbps, full duplex                  | 1000 Mbps, full duplex                   | 1000 Mbps, full duplex           | Correct manual configuration.                                                                                                                                                                                                                                            |
+| 100 Mbps, full duplex                           | 1000 Mbps, full duplex                  | No link                                  | No link                          | Neither side establishes a link due to a speed mismatch.                                                                                                                                                                                                                 |
+| 100 Mbps, full duplex                           | AUTO (default 100 Mbps half duplex)     | 100 Mbps, full duplex                    | 100 Mbps, half duplex            | A duplex mismatch can result in performance issues, intermittent connectivity, and loss of communication.                                                                                                                                                                |
+| AUTO (default 100 Mbps half duplex)             | 100 Mbps, full duplex                   | 100 Mbps, half duplex                    | 100 Mbps, full duplex            | A duplex mismatch can result in performance issues, intermittent connectivity, and loss of communication.                                                                                                                                                                |
+| 100 Mbps, full duplex                           | 100 Mbps, full duplex                   | 100 Mbps, full duplex                    | 100 Mbps, full duplex            | Correct manual configuration.                                                                                                                                                                                                                                            |
+| 100 Mbps, half duplex                           | AUTO                                    | 100 Mbps, half duplex                    | 100 Mbps, half duplex            | A link is established, but the switch does not see any autonegotiation information from the NIC and defaults to half duplex when operating at 10/100 Mbps.                                                                                                               |
+| 10 Mbps, half duplex                            | AUTO                                    | 10 Mbps, half duplex                     | 10 Mbps, half duplex             | A link is established, but the switch does not see Fast Link Pulse (FLP). It defaults to 10 Mbps, half duplex.                                                                                                                                                           |
+| 10 Mbps, half duplex                            | 100 Mbps, half duplex                   | No link                                  | No link                          | Neither side establishes a link due to a speed mismatch.                                                                                                                                                                                                                 |
+| AUTO                                            | 100 Mbps, half duplex                   | 100 Mbps, half duplex                    | 100 Mbps, half duplex            | A link is established, but the NIC does not see any autonegotiation information. It defaults to 100 Mbps, half duplex.                                                                                                                                                   |
+| AUTO                                            | 10 Mbps, half duplex                    | 10 Mbps, half duplex                     | 10 Mbps, half duplex             | A link is established, but the NIC does not see FLP. It defaults to 10 Mbps, half duplex.                                                                                                                                                                                |
+
+
+#+DOWNLOADED: file:/Users/xuali2/Home/Picture 1.png @ 2021-06-06 23:39:34
+[[file:Troubleshooting_a_Simple_Network/2021-06-06_23-39-34_Picture 1.png]]
+
+*Common Problems Associated with IPv4 Addressing*
+- Verify the host IPv4 address and subnet mask.
+- Ping the loopback address.
+- Ping the IPv4 address of the local interface.
+- Ping the default gateway.
+- Ping the remote server.
+
+* Introducing Basic IPv6
+*IPV4 shortage*
+- Classless interdomain routing (CIDR)
+- Variable-length subnet masking (VLSM)
+- Network Address Translation (NAT)
+- Private IPv4 addresses space (Request for Comments [RFC] 1918)
+
+*IPV6*
+- Larger address space
+- Simpler header
+- Security and mobility
+- Transition richness
+
+*IPV6 Address Types*
+- Unicast
+
+#+DOWNLOADED: file:/Users/xuali2/Home/0a0b956dca3ca9794af5c289f094e22b.png @ 2021-06-08 10:15:16
+[[file:Introducing_Basic_IPv6/2021-06-08_10-15-16_0a0b956dca3ca9794af5c289f094e22b.png]]
+
+1. Link local address
+
+#+DOWNLOADED: file:/Users/xuali2/Home/4c6c8433c0a1336d3e8b206659c96cf3.png @ 2021-06-08 10:15:47
+[[file:Introducing_Basic_IPv6/2021-06-08_10-15-47_4c6c8433c0a1336d3e8b206659c96cf3.png]]
+
+
+#+DOWNLOADED: file:/Users/xuali2/Home/b60e4c421470e6dd243583c659dfd048.png @ 2021-06-08 14:00:02
+[[file:Introducing_Basic_IPv6/2021-06-08_14-00-02_b60e4c421470e6dd243583c659dfd048.png]]
+
+
+2. Global
+
+#+DOWNLOADED: file:/Users/xuali2/Home/b9f57d8807a4820f9d6663dbffa26d30.png @ 2021-06-08 10:16:30
+[[file:Introducing_Basic_IPv6/2021-06-08_10-16-30_b9f57d8807a4820f9d6663dbffa26d30.png]]
+
+3. Local
+analogous to private IPv4 addresses
+
+#+DOWNLOADED: file:/Users/xuali2/Home/52f3f08ce993862cb85648a7d43da280.png @ 2021-06-08 14:22:10
+[[file:Introducing_Basic_IPv6/2021-06-08_14-22-10_52f3f08ce993862cb85648a7d43da280.png]]
+
+4. Loopback
+::1
+
+5. Unspecified
+::
+
+| Address        | Value     | Description                                                                                                                                                                                                                                                     |
+|----------------+-----------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Global Unicast | 2000::/3  | Assigned by Internet Assigned Numbers Authority (IANA) and used on public networks. They are equivalent to IPv4 global (public) addresses. ISPs summarize these to provide scalability on the internet.                                                         |
+| Link-local     | fe80::/10 | An automatically configured IPv6 address on an interface, the scope is only on the physical link, and is required.                                                                                                                                              |
+| Unique-Local   | fc00::/7  | Unique local unicast addresses are analogous to private IPv4 addresses in that they are used for local communications. The scope is entire site or organization.                                                                                                |
+| Loopback       | ::1       | Like the 127.0.0.1 address in IPv4, 0:0:0:0:0:0:0:1, or ::1, is used for local testing functions. Unlike IPv4, which dedicates a complete A class block of addresses for local testing, IPv6 uses only one.                                                     |
+| Unspecified    | ::        | 0.0.0.0 in IPv4 means "unknown" address. In IPv6, this address is represented by 0:0:0:0:0:0:0:0 or ::, and it is typically used in the source address field of the packet when an interface does not have an address and is trying to acquire one dynamically. |
+
+- Multicast
+
+#+DOWNLOADED: file:/Users/xuali2/Home/0ef7fc77d2ec65cf36d8bdd5d119d8d2.png @ 2021-06-08 14:24:10
+[[file:Introducing_Basic_IPv6/2021-06-08_14-24-10_0ef7fc77d2ec65cf36d8bdd5d119d8d2.png]]
+
+
+#+DOWNLOADED: file:/Users/xuali2/Home/Picture 1.png @ 2021-06-08 15:20:44
+[[file:Introducing_Basic_IPv6/2021-06-08_15-20-44_Picture 1.png]]
+
+
+- Anycast
+
+Anycast addresses are available for both IPv4 and IPv6, initially defined in RFC 1546
+
+allocated from the unicast address space
+
+
+*IPV4 VS IPV6*
+
+#+DOWNLOADED: file:/Users/xuali2/Home/22547c842d8e1ab68379fe9ea5a90d0e.png @ 2021-06-08 20:18:13
+[[file:Introducing_Basic_IPv6/2021-06-08_20-18-13_22547c842d8e1ab68379fe9ea5a90d0e.png]]
+
+#+DOWNLOADED: file:/Users/xuali2/Home/2f76fa6649545b1fbdd39026aad7b14e.png @ 2021-06-08 20:27:01
+[[file:Introducing_Basic_IPv6/2021-06-08_20-27-01_2f76fa6649545b1fbdd39026aad7b14e.png]]
+
+| ICMPv6 Type Field | Description             |
+|-------------------+-------------------------|
+|                 1 | Destination Unreachable |
+|               128 | Echo Request            |
+|               129 | Echo Reply              |
+|               133 | Router Solicitation     |
+|               134 | Router Advertisement    |
+|               135 | Neighbor Solicitation   |
+|               136 | Neighbor Advertisement  |
+
+Neighbor solicitation messages are sent on the local link when a node wants to determine the data link layer address of another node on the same local link. After receiving the neighbor solicitation message, the destination node replies by sending a neighbor advertisement message which includes the data link layer address of the node sending the neighbor advertisement message. Hosts send router Solicitation messages to locate the routers on the local link and routers respond with router advertisements which enable autoconfiguration of the hosts.
+
+*IPv6 Address Allocation*
+- Static assignment using a manual interface ID
+- Static assignment using an EUI-64 interface ID
+- Stateless Address Autoconfiguration (SLAAC)
+based on the prefix being advertised on their connected interface
+- Stateful DHCPv6
+- Stateless DHCPv6
+
+*Router Advertisements*
+periodically send router advertisements on all their configured interfaces with ff02::1
+
+*Router Solicitation*
+ask routers that are connected to the local link to send an immediate router advertisement
+
+*NS Solicited-Node Multicast Address*
+
+#+DOWNLOADED: file:/Users/xuali2/Home/f240adf0d1fe2835965fbf8ddb10484e.png @ 2021-06-08 21:18:06
+[[file:Introducing_Basic_IPv6/2021-06-08_21-18-06_f240adf0d1fe2835965fbf8ddb10484e.png]]
+
+*IPv6 multicast address to mac address*
+A packet destined to a solicited-node multicast address is put in a frame destined to an associated multicast MAC address.
+
+#+DOWNLOADED: file:/Users/xuali2/Home/91bb67dce940edc2ee8299ceac66b1ce (1).png @ 2021-06-08 21:20:32
+[[file:Introducing_Basic_IPv6/2021-06-08_21-20-32_91bb67dce940edc2ee8299ceac66b1ce (1).png]]
+
+* Configuring Static Routing
+- Identify the destination of the packet
+- Identify the sources of routing information
+- Identify routes
+- Select routes
+- Maintain and verify routing information
+
+In these situations use static routes:
+- In a small network that requires only simple routing.
+- In a hub-and-spoke network topology.
+- When you want to create a quick ad hoc route.
+- Common use is a default static route.
+
+When configuring a static route, follow these steps as illustrated in the example in the figure for router A:
+Specify an IPv4 destination network (172.16.1.0 255.255.255.0).
+Use the IPv4 address of the next-hop router (172.16.2.1).
+Or, use the outbound interface of the local router (Serial0/0/0).
+
+A floating static route is a static route with administrative distance greater than 1.
+
+Router# configure terminal
+Router(config)# ipv6 unicast-routing
+Router(config)# ipv6 route 2001:0db8:beef::/32 fa1/0 fe80::2
+Router(config)# ipv6 route 2001:0db8:beef::/32 2001:0db8:feed::1
+* Implementing VLANs and Trunks
+The individual broadcast domains that are created by the switch are called VLANs. A VLAN is a group of devices on one or more LANs that are configured to communicate as if they were attached to the same wire, when in fact they are located on a number of different LAN segments.
+
+It is important to know that traffic cannot pass directly to another VLAN (between broadcast domains) within the switch or between two switches. To interconnect two different VLANs, you must use routers or Layer 3 switches. 
+
+The default Ethernet VLAN is VLAN 1 in Cisco Catalyst Series Switches
+
+VLANs 1 and 1002–1005 are automatically created by the switch, while the others have to be created manually.
+
+* Question bank
+** Operating Cisco IOS Software
+
+*** Which two statements about the Cisco IOS Software CLI are true? (Choose two.)
+
+You can always enter any command, regardless of the mode you are in.
+*You can easily tell which command mode you are in because each mode has a distinctive prompt.*
+*When you finish typing in a command, you have to press Enter to execute it.*
+By default, every prompt begins with the name of the mode.
+If you do not have authorization to access the Privileged EXEC Mode, the CLI will allow you to view the Privileged EXEC Mode commands, but not to execute them.
+
+*** Which statement about the CLI operation modes is correct?
+
+*To change from the Privileged EXEC Mode to the Interface Configuration Mode, you have to type the configure terminal command first and then type the interface command.*
+To change from the User EXEC Mode to the Interface Configuration Mode, you have to type interface command.
+By typing the exit command, you leave the Interface Configuration Mode and go to the Privileged EXEC Mode.
+By typing the end command, you leave the Interface Configuration Mode and go to the User EXEC Mode.
+
+*** Which command merges the configuration that is saved in NVRAM into the running configuration?
+
+*copy startup-config running-config*
+copy run start
+copy NVRAM running-config
+copy running-config NVRAM
+
+*** Which parameter is used with the show command output to display all output lines starting with the line that matches the filtering expression?
+*begin*
+exclude
+include
+section
+
+*** Which option is available to a network engineer to interact with a network device?
+A network engineer communicates directly with the device operating system using machine programming languages.
+*A shell program exposes operating system services and can be accessed via CLI or GUI.*
+A hardware input device, such as mouse, can be used to directly interact with the device.
+The operating system can only communicate with the user through light indicators present on the outside of the hardware.
+
+*** In Cisco IOS Software, what are the two EXEC access levels? (Choose two.)
+admin EXEC
+*user EXEC*
+*privileged EXEC*
+basic EXEC
+advanced EXEC
+
+*** Which Cisco IOS command do you use to change from User EXEC Mode into Privileged EXEC Mode?
+*enable*
+disable
+admin
+configure
+configure terminal
+
+*** Which three of the following commands can be used to exit the User EXEC Mode in a Cisco CLI session? (Choose three.)
+*exit*
+end
+disable
+*quit*
+*logout*
+escape
+
+*** While configuring a router, the network engineer typed the following sequence:
+
+R1# show ip access-list
+R1# show ip interface brief
+R1# configure terminal
+R1(config)# interface GigabitEthernet 0/2
+R1(config-if)# description Protected Access
+R1(config-if)# end
+R1#
+
+The engineer is using the terminal history help feature to recall previously used commands. The engineer used the Up Arrow key twice. Which command from the sequence did the engineer recall?
+show ip access-list
+description Protected Access
+interface GigabitEthernet 0/2
+configure terminal
+*show ip interface brief*
+
+*** What is the expected result of the show running-config | exclude ! command executed on the Cisco IOS device?
+CLI will display the negated versions of the commands in the running configuration file.
+*CLI will display the running configuration file but without any lines containing “!” in them*
+CLI will display only the lines copied from the external source.
+CLI will display only the lines different to the lines in the startup-config file.
+
+*** How does the Privileged EXEC Mode restrict the access to the configuration CLI commands?
+The Privileged EXEC Mode provides access security by adding an additional password when trying to reach the configuration modes.
+By default, the Privileged EXEC Mode asks users to enter passwords for entering the Global Configuration Mode.
+*Access to the Privileged EXEC Mode can be password-protected to allow only authorized users to execute the privileged set of commands*
+Commands entered in the Privileged EXEC Mode intentionally show false device information for unauthorized users.
+
+** Introducing LANs
+*** Regarding LANs, which statement is correct?
+LANs use facilities that an ISP or carrier provides.
+LANs span over a large geographical area.
+*LANs span over a small geographical area.*
+LANs consist of multiple WANs.
+*** Which two devices are responsible for forwarding data to endpoint devices based on network information? (Choose two.)
+mobile phone
+*switch*
+server
+*router*
+IP phone
+
+*** What is the main purpose of a switch?
+To forward IP packets.
+To expand local network across large geographic area.
+To be able to combine micro-segments into one large segment.
+*To forward frames as fast and as efficiently as possible on the connected segments that require them.*
+
+*** Which switch feature allows switches to operate at a high speed of 10 Gbps?
+full duplex
+half duplex
+large frame buffers
+*fast internal switching*
+
+*** Which switch characteristic can accommodate network designs that feature fewer users per segment?
+high port density
+large frame buffers
+port speed
+fast internal switching
+*low per-port cost*
+
+*** What are the three functions of a switch? (Choose three.)
+Switches have high speed and support single port speeds.
+*Switches operate at the link layer of the TCP/IP protocol suite.*
+Switches operate at the network layer of the TCP/IP protocol suite.
+*Switches selectively forward individual frames.*
+Switches selectively forward individual packets.
+*Switches have many full-duplex ports to segment a large LAN into many smaller segments.*
+
+*** What are the two defining characteristics of a LAN? (Choose two.)
+*higher data transfer rates in contrast to WAN*
+lower data transfer rates in contrast to WAN
+*smaller geographic area in contrast to WAN*
+larger geographic area in contrast to WAN
+need for leased telecommunication lines
+
+*** Which advantage does a switch bring to a LAN environment?
+combines segments together
+*breaks up segments*
+forces full-duplex on all ports
+allows only one way communication on a segment
+
+*** Which of the following provides a channel for data to travel from one point to another in the network?
+hosts
+*interconnections*
+network devices
+TCP
+
+*** What are the two typical hosts or endpoints on a LAN? (Choose two.)
+switches
+routers
+*servers*
+*laptops*
+firewalls
+
+*** Which statement regarding switch characteristics is correct?
+*A generic CPU is too slow for forwarding traffic in a switch.*
+A generic ASIC is too slow for forwarding traffic in a switch.
+A generic CPU is too fast for forwarding traffic in a switch.
+A switch has smaller frame buffers to avoid network congestion.
+
+** Exploring the TCP/IP Link Layer
+*** Which two connections were traditionally made using crossover cables? (Choose two.)
+switch-to-server
+switch-to-PC
+*switch-to-switch*
+*router-to-router*
+router-to-switch
+
+*** What is the name of the container into which the data payload is placed for transmission on an Ethernet network?
+*frame*
+packet
+PDU
+data
+
+*** What is a characteristic of multicast communication?
+*Information is sent to a specific group of devices.*
+Information is sent to all connected devices.
+Information is sent to one specific device.
+Information is always sent to two specific devices.
+
+*** How many hexadecimal numbers represent each MAC address?
+8
+6
+*12*
+20
+
+*** Where is the MAC table stored in a Cisco switch?
+*content-addressable memory (CAM)*
+network interface card (NIC)
+random access memory (RAM)
+read-only memory (ROM)
+
+*** What will the switch do if it determines that the destination MAC address of a received unicast frame resides on the same switch port as the source?
+drop the frame and will not forward
+forward the frame
+determine which port a frame must be sent out to reach its destination
+transmit the frame out all ports.
+
+*** Identify the missing step in the description of the standard switching process.
+
+1. The switch receives a broadcast frame.
+2. [Identify the step]
+3. The switch floods the frame out all ports.
+4. The destination devices reply to the broadcast.
+
+The switch enters the destination MAC address and switch port into its MAC table.
+The switch does not learn the MAC address.
+*The switch enters the source MAC address and switch port into its MAC table.*
+The switch enters only the source MAC address into its MAC table.
+
+*** Which two options are characteristics of a half-duplex operation? (Choose two.)
+*unidirectional data flow*
+point-to-point only
+*collision may be an issue*
+requires full-duplex support on both ends
+attached to a dedicated switched port
+
+*** Match the UTP cable category with its description.
+
+Category5  - capable of transmitting data at speeds of up to 100 Mbps
+Category5e - used in networks running at speeds of up to 1000 Mbps (1 Gbps)
+Category6a - used in networks running at speeds of up to 10 Gbps
+Category8  - used in networks running at speeds of up to 40 Gbps
+
+*** Which three characteristics are full-duplex operation characteristics? (Choose three.)
+unidirectional data flow
+*point-to-point only*
+legacy connectivity
+*attached to a dedicated switched port*
+collision may be an issue
+*requires full-duplex support on both ends*
+
+*** Which type of physical medium is no longer used for Ethernet?
+*coaxial*
+twisted pair copper
+fiber optic
+all three listed options are still used
+
+*** Which information will the switch read from the frame header and compare it to the list of addresses in the MAC table in order to forward a frame?
+*destination MAC address*
+source MAC address
+destination IP address
+source IP address
+
+*** Match the network communication type with its description.
+
+Unicast   - communication in which a frame is sent from one host and addressed to one specific destination
+Multicast - communication in which a frame is sent from one host to a specific group of devices or clients
+Broadcast - communication in which a frame is sent from one address to the broadcast address and thus to all other devices.
+
+*** Which bit in the MAC address is referred as the U/L bit?
+least significant bit in the first octet
+most significant bit in the first octet
+*second least significant bit in the first octet*
+second least significant bit in the second octet
+
+*** Which command displays the MAC address of the interface?
+*show interfaces*
+show running-config
+show ip interface
+show ip interface brief
+
+*** Which option is not a fiber-optic connector type?
+threaded
+bayonet
+push-pull
+*RJ-45*
+
+** Starting a Switch
+*** What is the correct sequence of tasks for the physical installation and startup of a Catalyst switch?
+- Verify the power and cooling requirements
+- Physically install the switch.
+- Verify the network cabling.
+- Attach the power cable plug to start the switch.
+- System startup routines perform POST and initiate the switch software.
+*** What are console port options on Cisco switches? (Choose two.)
+*USB*
+*RJ-45*
+RS-232
+RJ-54
+RS-233
+*** Match the Cisco switch LED status name with its description.
+SYST - represents the overall system status.
+RPS  - represents the status of the additional power supply.
+MODE - cycles the meaning of the LEDs through four states (STAT, DUPLX, SPEED, PoE).
+Port - has different meanings, depending on the port mode.
+
+*** Which command will display the switch uptime information?
+*show version*
+show interfaces
+show running-config
+show ip interface brief
+
+*** Which command is used to set 172.20.137.1 as the default gateway on SwitchX?
+*SwitchX(config)# ip default-gateway 172.20.137.1*
+SwitchX(config)# ip gateway 172.20.137.1 default
+SwitchX(config)# ip default-router 172.20.137.1
+SwitchX(config)# ip default-static 172.20.137.1
+
+*** Scenario
+
+A law firm contracted CCS to install a switch that supports an administration desktop AdminPC and a file server Fileserver.
+
+The contract requires you to configure the following:
+
+Hostname as "SW1" for the switch.
+
+Enable interface VLAN 1 and configure the switch management IPv4 address on this interface, with the correct subnet mask.
+
+The default gateway for the switch SW1 should be 172.16.130.3.
+
+The interface on the switch that is connected to AdminPC should be configured with description—Link to AdminPC.
+
+The interface on the switch that is connected to Fileserver should be configured with description—Link to Fileserver.
+
+You must complete the initial configuration of the switch to meet the requirements of the contract.
+
+**** What is the expected result, when you issue the show running-config | include hostname command on the SW1?
+*hostname SW1*
+SW1
+hostname switch SW1
+hostname Switch
+
+**** In which two ways would you verify that VLAN 1 on SW1 is configured with the correct IP address, and the status of the corresponding interface is not shut down? (Choose two.)
+*The show running-config interface vlan1 shows ip address 172.16.130.10 255.255.255.0*
+*A ping from SW1 to 172.16.130.5 and 172.16.130.6 is successful.*
+The show running-config interface vlan10 shows ip address 172.16.130.10 255.255.0.0
+Successful ping from SW1 to 172.16.130.1 and 172.16.130.10
+
+**** Which option correctly configures the default gateway address on the SW1 switch?
+*ip default-gateway 172.16.130.3*
+ip default-gateway 172.16.130.1
+ip gateway 172.16.130.3
+ip default route 172.16.130.1
+
+**** Which command displays the interface description as shown in the example?
+Port      Name               Status       Vlan       Duplex  Speed Type
+Et0/0                        connected    1            auto   auto unknown
+Et0/1                        connected    1            auto   auto unknown
+Et0/2     Link to AdminPC    connected    1            auto   auto unknown
+Et0/3     Link to Fileserver connected    1            auto   auto unknown
+
+*show interfaces status*
+show running-config
+show ip interface brief
+show interface
+
+*** On some simple Catalyst switches, the SYST LED will blink with which color when the switch POST process fails and Cisco IOS Software does not load?
+RED
+*AMBER*
+GREEN
+WHITE
+
+*** You have connected your PC through a console cable to a new Cisco switch and you plan to use HyperTerminal to perform initial configuration. Which HyperTerminal configuration setting should you use for the connection to the Cisco switch?
+Speed: 9600 bps, data bits: 8, parity: Even, stop bit: 1, and flow control: Hardware
+*Speed: 9600 bps, data bits: 8, parity: None, stop bit: 1, and flow control: None*
+Speed: 115200 bps, data bits: 8, parity: None, stop bit: 1, and flow control: Hardware
+Speed: 115200 bps, data bits: 8, parity: None, stop bit: 1, and flow control: None
+
+*** Which option happens first when a switch is powered on?
+Cisco IOS is booted up.
+Linux is booted up.
+*POST begins.*
+Command line appears.
+
+*** Cisco switches do not have a power OFF/ON button. How would you power on the switch?
+Press and hold the Mode button while plugging in the cable for the switch.
+*Connect the switch to the power source, and it will begin powering on.*
+Press and hold the Mode button for 5 seconds, and the switch will power on itself.
+Connect the RPC connector to the switch, and it will begin powering on.
+
+*** The console port on a Cisco device may look like which option?
+RJ-11 port
+*RJ-45 port*
+serial DB-9 port
+RPS connector port
+
+*** How many LEDs on each port of a Catalyst switch are used to show the status detail?
+Two LEDs are used on each port.
+Three LEDs are used on each port.
+Ports on the Cisco Catalyst switch do not have LEDs.
+*Each port on a Catalyst switch has only one LED.*
+
+*** Which command will display the interface traffic statistics for average input rate?
+show version
+*show interfaces*
+show running-config
+show ip interface brief
+
+*** Which option will help you connect to a Cisco device through the console port?
+*console cable*
+serial cable
+USB cable
+RJ-45 cable
+
+*** Which command can be used to verify the description on the Et0/0 interface?
+show version
+*show running-config | section 0/0*
+show running-config | exclude section 0/0
+show ip interface brief
+
+** Introducing the TCP/IP
+*** At which layer of the TCP/IP stack does IP operate?
+application layer
+transport layer
+*internet layer*
+link layer
+
+*** Which number system is the foundation of all computer operations?
+*binary*
+decimal
+ternary
+hexadecimal
+*** How many bits are contained in an IPv4 address?
+16 bits
+*32 bits*
+64 bits
+128 bits
+*** What does the TTL value (in the TTL field) represent?
+The TTL value describes the length of a packet.
+*The TTL value limits the lifetime of a packet.*
+The TTL value describes the length of the header.
+The TTL value indicates where a specific fragment belongs.
+
+*** Which IPv4 address class is dedicated for multicast?
+Class A
+Class B
+Class C
+*Class D*
+Class E
+*** You have a host 192.168.50.2/24. What is its network address?
+192.168.0.0
+*192.168.50.0*
+192.0.0.0
+255.255.255.0
+*** What is a possible problem within a broadcast domain?
+Larger amounts of broadcast traffic consume resources.
+It relies on IP addresses for packet delivery.
+Larger amounts of unicast traffic consume resources.
+Unicast communication is not possible.
+*** How many host addresses can be used in a network with a /24 mask that has not been subnetted?
+253
+*254*
+255
+256
+*** By borrowing three host bits, how many subnets are created?
+10
+*8*
+16
+32
+*** You have been assigned a /24 network address. A coworker has requested that you create 10 subnets that can support 10 hosts per network. Which subnet mask should you use?
+255.255.255.0
+255.255.255.224
+*255.255.255.240*
+255.255.255.248
+*** You have subnetted your 192.168.36.0 network address with a 255.255.255.224 mask. How many subnets are available?
+16
+*8*
+10
+32
+*** You have been assigned the network 172.16.0.0/16. You need to establish 13 subnets. What is the new subnet mask in the decimal form?
+*255.255.240.0*
+255.255.248.0
+255.255.224.0
+255.255.252.0
+*** A large company has a /8 network but needs to subnet it into 1000 subnets. Which subnet mask segments the /8 network and provides the maximum number of hosts per subnet?
+255.255.240.0.
+255.255.224.0.
+255.255.128.0.
+*255.255.192.0.*
+*** A company currently has a network range of 192.168.54.0/24. The company wants to subnet this range into 4 subnets, each supporting at least 30 users. Which subnet mask would you recommend?
+255.255.255.224
+255.255.255.128
+255.255.255.240
+*255.255.255.192*
+*** How many subnets and how many host addresses per subnet are created by borrowing 8 bits from a 172.16.0.0/16 network?
+255 subnets with 126 host addresses per subnet
+*256 subnets with 254 host addresses per subnet*
+128 subnets with 126 host addresses per subnet
+126 subnets with 512 host addresses per subnet
+*** How many valid host addresses are available for each subnet after subnetting network 172.16.0.0/16 by borrowing two host bits?
+62
+4094
+8190
+*16382*
+*** You have been assigned the network address 192.168.7.0/24. You assume that you need to establish 13 subnets, so you apply the subnet mask 255.255.255.240. What will be your second subnet address?
+192.168.7.8
+*192.168.7.16*
+192.168.16.0
+192.168.8.0
+*** You want to subnet your 10.0.0.0/8 network to create 31 subnets. You determine that you need to apply the subnet mask 255.248.0.0. What is the range of available host addresses for the first subnet?
+10.0.0.1 to 10.16.0.254
+10.0.0.1 to 10.16.255.254
+*10.0.0.1 to 10.7.255.254*
+10.0.0.1 to 10.7.255.255
+*** Which of these addresses is the assigned subnet address for the host address 192.168.3.50/27?
+192.168.3.0
+192.168.3.24
+*192.168.3.32*
+192.168.3.41
+
+*** You are designing an IPv4 addressing scheme for a branch office. The branch office is assigned to the 192.168.1.64/26 subnetwork, so you have one subnet (192.168.1.64) with 62 host addresses that are available to you. You need at least 4 subnets with 14 hosts each. Which subnet mask should you use to achieve the desired scheme?
+*255.255.255.240*
+255.255.255.128
+255.255.255.192
+255.255.255.224
+*** Refer to the figure. Which two subnet addresses should be used for Subnets 1 and 2? (Choose two.)
+#+DOWNLOADED: file:/Users/xuali2/Home/Picture 1.png @ 2021-06-04 18:55:30
+[[file:Question_bank/2021-06-04_18-55-30_Picture 1.png]]
+Subnet 1: 192.168.1.112/25
+Subnet 1: 192.168.1.112/26
+*Subnet 1: 192.168.1.128/25*
+Subnet 2: 192.168.1.10/30
+Subnet 2: 192.168.1.70/30
+*Subnet 2: 192.168.1.0/30*
+
+*** Determine which class the IPv4 address 172.32.11.7 belongs to and whether it belongs to the range of the public or private IPv4 addresses. Which option represents the correct description?
+public, Class A
+private, Class A
+public, Class B
+*private, Class B*
+public, Class C
+private, Class C
+public, Class D
+private, Class D
+
+*** Which type of reserved IPv4 address is 127.0.0.1?
+IPv4 directed broadcast
+IPv4 local broadcast
+autoconfiguration IPv4
+*loopback*
+
+*** Which CLI command should you use to verify the IPv4 address on a Windows computer?
+*ipconfig*
+ipcheck
+ifconfig
+ipverify
+
+*** Determine which class the IPv4 address 10.71.121.31 belongs to and whether it belongs to the range of the public or private IPv4 addresses. Which option represents the correct description?
+public, Class A
+*private, Class A*
+public, Class B
+private, Class B
+public, Class C
+private, Class C
+public, Class D
+private, Class D
+
+*** Which option correctly describes the network ID portion of the IPv4 address?
+*It identifies the network of which the host is a part.*
+It identifies the individual host.
+It is assigned by organizations to individual devices.
+It identifies the interface of the router.
+
+*** You have subnetted your 192.168.36.0 network address with a 255.255.255.240 mask. How many subnets and hosts per subnet are available?
+2 subnets and 126 hosts per subnet
+4 subnets and 62 hosts per subnet
+8 subnets and 30 hosts per subnet
+*16 subnets and 14 hosts per subnet*
+32 subnets and 6 hosts per subnet
+
+*** Which option correctly describes the service type field in the IPv4 header?
+*It provides information on the desired quality of service.*
+It describes the length of a packet, including header and data.
+It sets various control flags regarding fragmentation.
+It is used for header error detection.
+
+*** Which two aspects can present a problem with a flat network design? (Choose two.)
+*Larger amounts of broadcast traffic consume resources.*
+*All devices share the same broadcast domain.*
+The domain relies on IP addresses for packet delivery.
+Larger amounts of multicast traffic consume resources.
+All PCs share the same broadcast domain.
+
+*** At which layer of the OSI reference model does IP operate?
+link layer
+*network layer*
+transport layer
+session layer
+
+*** What advantage do subnetworks provide?
+*scalability*
+reachability
+redundancy
+load balancing
+
+*** Which two approaches should you use to verify the IPv4 address on Apple Mac computer? (Choose two.)
+Open the Terminal and use the ipconfig command.
+*Open the Terminal and use the ifconfig command.*
+*Choose System Preferences > Network and choose the desired connection.*
+Go to the Network and Sharing Center, choose your Network adapter and click Properties.
+Open the Terminal and use the man ifconfig command.
+
+*** Which option correctly defines the digits that are used in the binary number system?
+*1 and 0*
+1,2,3,4,5,6,7,8,9,0,A,B,C,D,E,F
+2 and 0
+1,2,3,4,5,6,7,8,9,0
+
+*** You are designing an IPv4 addressing scheme for a branch office. The branch office is assigned to the 172.16.32.0/25 subnetwork, so you have one subnet (172.16.32.0) with 126 host addresses that are available to you. However, from your design branch office topology you can see that the largest LAN will only require 11 host addresses. If you want to avoid wasting address space and allocate addresses efficiently you will need to subnet your subnetwork further, which means applying the VLSM. Which subnet mask should you use to achieve the desired scheme?
+255.255.255.128
+255.255.255.192
+*255.255.255.240*
+255.255.255.248
+
+*** What is the decimal representation of 01000000?
+*64*
+256
+32
+1
+
+*** Which two statements about a network that uses subnetworks are true? (Choose two.)
+It is more complex to apply network security policies.
+*Smaller networks are easier to manage.*
+Overall traffic is increased.
+Smaller networks are harder to manage.
+*Overall traffic is reduced.*
+
+*** What is the binary equivalent of the decimal number 192?
+11000001
+10101010
+11100000
+*11000000*
+
+*** Which two IPv4 address blocks are assigned for use in documentation and example code? (Choose two.)
+*203.0.113.0/24*
+*198.51.100.0/24*
+10.0.0.8/8
+172.16.0.0/16
+127.0.0.0/8
+
+*** Which two IPv4 address classes are considered as special cases, and are never assigned to hosts as source IPv4 addresses? (Choose two.)
+Class A
+Class B
+Class C
+*Class D*
+*Class E*
+
+*** How many valid host addresses are available for each subnet after subnetting network 192.168.0.0/24 by borrowing two host bits?
+*62*
+4094
+8190
+16382
+
+** Explaining the TCP/IP Transport Layer and Application Layer
+*** Which term is used to describe the application identifier for TCP and UDP applications?
+*port*
+IP address
+MAC address
+Organizationally Unique Identifier
+
+*** Which protocol is used to carry voice streaming?
+*UDP*
+TCP
+TCP and UDP
+FTP
+
+*** Which statement about TCP is correct?
+TCP is a connectionless protocol in which a one-way datagram is sent to a destination without advance notification to the destination device.
+*TCP is connection-oriented and requires that network devices set up a connection to exchange data.*
+TCP does not provide error checking
+TCP segments are not sequenced
+
+*** Which statement about UDP is correct?
+*UDP is a connectionless protocol in which a one-way datagram is sent to a destination without advance notification to the destination device.*
+A special feature of UDP recovers lost or corrupted packets.
+Because of its high overhead, UDP is ideal for applications like HTTPS and SSH.
+UDP is connection-oriented and requires that network devices set up a connection to exchange data.
+
+*** Which protocol and port number are used by TFTP?
+TCP/port 23
+*UDP/port 69*
+TCP/port 69
+TCP/port 443
+*** Which protocol and port number are used by HTTP?
+TCP/port 8000
+*TCP/port 80*
+TCP/port 69
+TCP/port 443
+*** Which Microsoft Windows command is used to resolve a domain name into IP address?
+*nslookup*
+dns lookup
+dns-lookup
+dns-resolve
+*** Which two DHCP allocations result in the DHCP client always being associated with the same IPv4 address? (Choose two.)
+DHCP dynamic allocation
+*DHCP automatic allocation*
+*DHCP static allocation*
+DHCP unlimited allocation
+DHCP uninterrupted allocation.
+*** Which protocol and port number are used by SSH?
+*TCP/port 22*
+UDP/port 161
+TCP/port 25
+TCP/port 443
+*** Which Cisco IOS command displays the services that are running by viewing its open ports?
+*show control-plane host open-ports*
+show services open-ports
+telnet open-ports
+ping open-ports
+*** What is a main characteristic of DNS?
+*converting human-readable names of IP end systems into machine-readable IP addresses*
+automatically assigning an IP address from an IP address pool that the administrator defines
+automatically assigning a domain name from a domain name pool that the administrator defines
+forwarding DHCP packets between clients and servers
+*** What is a major difference between TCP and UDP?
+*TCP can ensure that the data is delivered, while UDP does not.*
+UDP can ensure that the data is delivered, while TCP does not.
+TCP exists in the Transport layer of the TCP/IP model, while UDP exists in the Internet layer of the TCP/IP model.
+TCP exists in the Internet layer of the TCP/IP model, while UDP exists in the Transport layer of the TCP/IP model.
+*** What are the three main objectives of TCP reliability? (Choose three.)
+*detection and retransmission of dropped packets*
+*detection and remediation of duplicate or out-of-order data*
+*avoidance of congestion in the network*
+detection of dropped packets; the application does the retransmission
+detection of duplicate or out-of-order data; the application does the remediation
+avoidance of delay in the network
+*** Which three options are UDP benefits when compared to TCP? (Choose three.)
+*higher performance*
+*lower-overhead data communications between hosts*
+higher-overhead data communications between hosts
+*lower-latency data transmission*
+higher-latency data transmission
+*** Which Cisco IOS interface command specifies that the interface acquires an IPv4 address through DHCP?
+*ip address dhcp*
+dhcp address ip
+ip helper-address
+ip address request dhcp
+*** Which OSI stack layers match the Application layer of the TCP/IP stack?
+*application layer, presentation layer, and session layer*
+presentation layer, session layer, and transport layer
+application layer, presentation layer, session layer, and transport layer
+network layer and transport layer
+*** What is session multiplexing?
+*a process by which an IP host is able to support multiple sessions simultaneously and manage the individual traffic streams over a single link*
+a process by which an IP host is able to support multiple sessions simultaneously over multiple links
+a process that is used for congestion avoidance
+a process that is used for packet dropping
+*** Which three common applications use TCP? (Choose three.)
+SNMP
+*web browsers*
+*email*
+TFTP
+*FTP*
+VoIP
+*** Which three common applications use UDP? (Choose three.)
+network printing
+*TFTP*
+database transactions
+*DNS*
+FTP
+*VoIP*
+*** Which two characteristics describe HTTP? (Choose two.)
+*HTTP is a stateless protocol.*
+HTTP uses peer-to-peer model of communication.
+HTTP is using only UDP protocol.
+HTTP is a stateful protocol.
+*HTTP works on Application layer.*
+
+** Exploring the Functions of Routing
+*** You have just finished configuring your router and and saved running-config to startup-config. Which router component will store the router configuration even after the router powers down?
+RAM
+flash memory
+*NVRAM*
+ROM
+
+*** Which routing table element describes the IPv4 address of the successive neighboring device?
+network IPv4 address
+exit interface
+metric
+*next hop*
+
+*** Which statement about the administrative distance feature of Cisco routers is correct?
+Static routes have a default administrative distance of 1 and therefore pre-empt all other entries for that destination network.
+Routing protocols have an administrative distance of 4.
+The higher the administrative distance value, the more reliable the source.
+*Administrative distance represents the trustworthiness of the route source.*
+Administrative distance represents the number of router interfaces that a packet must travel through before reaching its destination.
+*** Which two statements describe key functions of a router? (Choose two.)
+*path determination*
+*packet forwarding*
+log collection
+frame switching
+signal regeneration
+*** According to the command output, how are packets that are bound for the network 192.168.2.0 forwarded?
+
+RouterX# show ip route
+D 192.168.1.0/24 [90/25789217] via 10.1.1.1
+R 192.168.2.0/24 [120/4] via 10.1.1.2
+O 192.168.3.0/24 [110/229840] via 10.1.1.3
+
+via 10.1.1.2, an IPv4 address on this router (RouterX)
+*via 10.1.1.2, an IPv4 address on a remote router*
+via 10.1.1.3 an IPv4 address on a remote router
+via 10.1.1.3, an IPv4 address on this router (RouterX)
+
+*** Which one of the following statements is false in regards to router path determination?
+A routing table may contain entries both for a destination network or for its subnet.
+The longest prefix match always wins among the routes that are installed in the routing table.
+*Static routes have a default administrative distance of 0.*
+When a router has the choice of a static route and an OSPF route, the static route takes precedence.
+
+*** What is the default administrative distance for OSPF?
+*110*
+115
+90 for internal route and 170 for external route
+170 for internal route and 90 for external route
+
+*** In a routing table, what is an optional entry that is used when no explicit path to a destination is found?
+static route
+directly connected route
+OSPF route
+*default route*
+
+*** What does the letter D that is associated with the following routing table entry represent?
+
+RouterA# show ip route
+D 192.168.20.0/24 [90/156160] via 10.1.1.1, 00:01:23, GigabitEthernet0/0
+<… output omitted …>
+
+The route is learned by OSPF.
+*The route is learned by EIGRP.*
+The route is static.
+The route is learned by DMVPN.
+
+*** Which statement correctly describes the role of a router?
+Routers are responsible only for reaching hosts that are in the local network.
+Routers use a MAC table to route between networks.
+*Routers are required to reach hosts that are not in the local network.*
+Routers use an ARP table to route between networks.
+
+*** Where is the running configuration of the router temporarily stored while the router is powered on?
+*RAM*
+Flash memory
+NVRAM
+ROM
+
+** Configuring a Cisco Router
+*** In which stage does the router load the Cisco IOS Software image?
+during POST
+*during the software loading stage*
+while loading the configuration file
+immediately after switching on the router
+*** Which is the type of router interface that is very useful because it will never go down, unless the entire router goes down?
+*loopback*
+GigabitEthernet
+Ethernet
+serial
+*** Which option represents the Cisco IOS Software command and the mode that is used to disable an interface?
+*Router(config-if)# shutdown*
+Router(config-if)# no shutdown
+Router(config)# no shutdown
+Router(config)# shutdown
+Router(config-if)# disable
+*** Which three options represent possible indicators to describe the state of the interface hardware? (Choose three.)
+*up*
+*down*
+*administratively down*
+administratively up
+passive
+active
+*** Which interface status indicates a Layer 2 problem?
+*Serial0/1/0 is "up," line protocol is "down."*
+Serial0/1/0 is "down," line protocol is "down."
+Serial0/1/0 is "up," line protocol is "up."
+Serial0/1/0 is "administratively down," line protocol is "down."
+*** In which three ways can you use Cisco Discovery Protocol? (Choose three.)
+*to determine the hardware platform of connected Cisco devices*
+*to allow a switch to discover the Cisco devices that are connected to its ports*
+*to determine the IPv4 addresses of connected Cisco devices*
+to determine the users that are connected to Cisco devices
+to determine the environmental parameters of the connected Cisco devices (temperature, humidity, and so on)
+to determine the system usage of the connected Cisco devices (memory, CPU, disk, and so on)
+*** Which option represents the Cisco IOS Software command and the mode that is used to disable Cisco Discovery Protocol on a single interface?
+*router(config-if)# no cdp enable*
+router(config)# no cdp enable
+router(config-if)# no cdp run
+router(config)# no cdp run
+*** Which Cisco IOS commands can be used to enable LLDP on an interface level? (Choose two.)
+*lldp transmit*
+*lldp receive*
+lldp run
+[no] lldp transmit
+[no] lldp receive
+*** Which two options represent details about the neighbor router that the show cdp neighbor detail command displays? (Choose two.)
+*device ID*
+routing protocol
+hello value in seconds
+*hardware platform*
+list of ports that are shut down
+*** Which command would you use to enable LLDP globally on a router?
+lldp transmit
+*lldp run*
+lldp receive
+cdp run
+cdp enable
+*** Which option does the show ip interface brief command display?
+The packets that are flowing in and out of the interface.
+The IPv4 address and subnet mask of a local interface.
+Brief details about an interface that is administratively down only.
+*A list of local interfaces and the IPv4 address and status of each interface.*
+*** If POST completes during a startup of a Cisco device and there is no configuration file, what does the router do?
+It reboots.
+*It initiates initial configuration through "setup."*
+It creates a configuration file with default settings and boots that file.
+It shuts down the router.
+*** What is a use of Cisco Discovery Protocol?
+*to determine the platform version of the neighboring Cisco devices*
+to display information about the routing protocol
+to display the MAC address and ARP information
+to share information about non-Cisco equipment, such as the operating system version and IPv4 address
+*** Which command configures IPv4 address 10.0.0.1/28 on a selected router interface?
+*Router(config-if)# ip address 10.0.0.1 255.255.255.240*
+Router(config-if)# ip address 10.0.0.1/28
+Router(config-if)# ip address 10.0.0.1 255.255.255.0
+Router(config-if)# ip address 10.0.0.0 255.255.255.240
+Router(config-if)# ip address 10.0.0.1/24
+*** Which command displays the IPv4 address of a neighboring device?
+show cdp neighbors
+show ip interface brief
+show interfaces
+*show cdp neighbors detail*
+*** What is the first action the router does after it is powered up?
+finds and loads IOS
+finds and applies the configuration statements
+*runs POST to test the hardware*
+displays command line prompt
+*** Match the correct description about the line and protocol status with the appropriate condition.
+Interface is in shutdown condition - administrative down, down
+Interface is in no shutdown condition but cable is not connected to the Ethernet interface - down, down
+Cable is connected to the interface and placed in no shutdown condition but encapsulation mismatch is encountered on the link - up, down
+Interface is functioning well with no issues. - up, up
+
+** Exploring the Packet Delivery Process
+*** Does a Layer 2 switch have a MAC address?
+*Yes, for remote access management*
+Yes, for frame forwarding
+Yes, for packet routing
+No
+*** Which device is at the local network boundary de-encapsulating frames?
+server
+switch
+*router*
+hub
+*** Which three statements about a default gateway are true? (Choose three.)
+*The default gateway and the host IPv4 addresses have the same network and subnet portions.*
+The default gateway serves to deliver packets within a local network.
+*You normally configure the default gateway as an address on a Layer 3 switch interface.*
+You normally configure the default gateway as an address on a Layer 2 switch interface.
+*You normally configure the default gateway as an address on a router.*
+*** On which OSI layer does ARP function?
+Layer 7
+Layer 3
+Layer 1
+*Layer 2*
+*** When a frame is forwarded to the destination by the router, what happens with Layer 2 and Layer 3 addresses in the frame?
+*The router changes Layer 2 addresses, while Layer 3 addresses remain the same.*
+The router changes Layer 2 and Layer 3 addresses.
+No addresses are changed by the router.
+The router changes Layer 3 addresses, while Layer 2 addresses remain the same.
+*** What device will de-encapsulate a frame, read the destination IPv4 address in the packet, forward a packet to outgoing interface and re-encapsulate packet in a different frame before sending?
+*router*
+switch
+hub
+server
+*** Which Cisco IOS command do you use to display the ARP table on a Cisco device?
+show arp table
+show -a
+*show ip arp*
+arp -a
+*** Host A with an IPv4 address 192.168.99.15/24 wants to send several packets to several destination IPv4 addresses listed here. Which address requires the use of a default gateway?
+192.168.99.17/24
+*192.168.40.39/24*
+192.168.99.39/24
+192.168.99.167/24
+*** What is used by a router to determine where to forward data?
+*routing table*
+ARP table
+MAC address table
+OSPF database
+*** Which three options are Layer 2 Ethernet characteristics? (Choose three.)
+*Ethernet uses MAC addresses.*
+*Layer 2 addressing identifies end devices in the LAN.*
+*Layer 2 enables the packet to be carried by the local media across each segment.*
+Ethernet uses IPv4 addresses.
+Layer 2 identifies applications in the LAN.
+*** Which command do you use to display the ARP table on Microsoft Windows?
+show arp table
+show arp
+show ip arp
+*arp -a*
+*** Which two statements regarding ARP are true? (Choose two.)
+A device can use ARP to assign the MAC addresses to dynamic NICs.
+ARP entries are permanent.
+*ARP entries are not permanent.*
+A device can use ARP to assign an IPv4 address to the requester.
+Devices can exchange entire ARP tables.
+*ARP tables are created and maintained dynamically.*
+*** When a frame is forwarded to the destination by a switch, what happens with Layer 2 and Layer 3 addresses in the frame?
+The switch changes Layer 2 addresses, while Layer 3 addresses remain the same.
+The switch changes Layer 3 addresses, while Layer 2 addresses remain the same.
+*No addresses are changed by the switch*
+The switch changes Layer 2 and Layer 3 addresses.
+*** Which two features does ARP provide? (Choose two.)
+mapping IPv4 addresses to applications on a network
+*mapping IPv4 addresses to MAC addresses on a network*
+locally storing DLCIs that are learned via ARP
+mapping MAC addresses to DLCIs on a network
+locally storing MAC addresses that are learned via ARP
+
+** Troubleshooting a Simple Network
+*** Which troubleshooting method works from the physical layer in the OSI model up to the application layer?
+*bottom-up*
+divide-and-conquer
+top-down
+perform comparison method
+*** Which of these methods is the most secure method of remotely accessing a network device?
+HTTP
+Telnet
+*SSH*
+SNMP
+*** What is a symptom for excessive noise?
+The number of CRC errors and the number of collisions are increasing.
+*The number of CRC errors is increasing and the number of collisions is constant.*
+Interface is flapping.
+Interface is in the "administratively down" state.
+*** What is the most likely cause of a high collision count in the output of the show interfaces command?
+wrong cable type
+*duplex mismatch*
+misconfigured ACLs
+duplicate routes
+*** Which command allows you to verify duplex settings on the switch port FastEthernet 0/1?
+*show interfaces fa0/1*
+show duplex fa0/1
+show settings fa0/1
+show port fa0/1
+*** Which command is used to check interface link status?
+show duplex
+*show interfaces*
+show interfaces speed
+show interfaces duplex
+
+*** Which troubleshooting step would you take to verify that your device is connected to the network?
+Ping the loopback address.
+Ping the local interface.
+*Ping the default gateway.*
+Ping the remote server.
+*** Which verification method would you typically use to verify that you have a bad cable?
+top-down method
+bottom-up method
+follow-the-path method
+divide-and-conquer method
+*swap-components method*
+*** Which troubleshooting step would you take if you wanted to check the connectivity to the local network?
+Ping the loopback address.
+Ping the local host.
+*Ping the default gateway.*
+Ping the remote server.
+*** What are the three basic purposes of a ping test? (Choose three.)
+*test reachability*
+*test RTT*
+*test packet loss*
+test MTU on the path
+test hops in the path
+test operation system running on each hop
+*** Which command allows you to verify speed settings on the switch port FastEthernet 0/1?
+*show interfaces fa0/1*
+show speed fa0/1
+show speed settings fa0/1
+show speed port fa0/1
+*** Which troubleshooting step would you take if you wanted to check the IPv4 stack on your own device?
+*Ping the loopback address.*
+Ping the local host.
+Ping the default gateway.
+Ping the remote server.
+*** Which are three common troubleshooting approaches? (Choose three.)
+elimination
+*divide and conquer*
+testing
+*top down*
+*bottom up*
+compilation
+*** Which option indicates errors, such as collisions, during the transmission of a frame?
+input queue drops
+output queue drops
+input errors
+*output errors*
+*** What are two possible sources of fiber media issues? (Choose two.)
+wiring becomes damaged
+*macrobend losses*
+new EMI sources are introduced
+traffic patterns change
+*splice losses*
+*** What is the ICMP type for the echo reply packets?
+1
+*0*
+2
+3
+
+** Introducing Basic IPv6
+*** In which mechanism can a device be configured with a private IPv4 address but communicate on the internet using a globally routable IPv4 address?
+*NAT*
+VLSM
+ARP
+multihoming
+*** Which feature does IPv6 support for securely connecting to networks?
+NAT
+VLSM
+*IPsec*
+multihoming
+*** In which type of IPv6 address does the sender send the traffic to the nearest of multiple nodes, all of which behave in the same way as other nodes that are identified by the same destination address?
+unicast
+*anycast*
+broadcast
+multicast
+loopback
+*** Which new field has a length of 20 bits and is used to mark individual traffic flows with unique values?
+*Flow Label*
+Version
+Traffic Class
+Payload Length
+*** Which two ICMPv6 types are used for neighbor discovery? (Choose two.)
+*ICMPv6 Type 135*
+*ICMPv6 Type 136*
+ICMPv6 Type 129
+ICMPv6 Type 133
+ICMPv6 Type 134
+*** Which protocol in IPv4 performs the same functions as neighbor discovery in IPv6?
+*ARP*
+ICMP
+DHCP
+RIP
+*** Which three statements about assigning IPv6 addresses to hosts are accurate? (Choose three.)
+The entire IPv6 address cannot be manually configured.
+The host identifier portion of the address cannot be computed automatically.
+*The host identifier portion of the address can be computed automatically using the EUI-64 interface ID.*
+*A node on a link can automatically configure its entire global IPv6 address by appending its interface identifier to a prefix that it learns from a router advertisement message.*
+Stateless DHCPv6 keeps a record of which addresses are assigned to which hosts.
+*Stateful DHCPv6 keeps a record of which addresses are assigned to which hosts.*
+*** Which two commands can you use on Cisco network device to test and troubleshoot IPv6 connectivity? (Choose two.)
+*ping*
+*traceroute*
+show arp
+show ip arp
+arp -a
+*** What are four benefits of IPv6 over IPv4? (Choose four.)
+*larger address space*
+smaller address space
+complex header
+*simpler header*
+*mobility*
+*transition richness*
+TCP and UDP included in the basic header
+*** Which field determines the type of information that follows the basic IPv6 header?
+Flow Label
+*Next Header*
+Traffic Class
+Payload Length
+*** What is the range for IPv6 multicast addresses?
+*ff00::/8*
+fc00::/7
+fe80/10
+fd00::/8
+*** Which two ICMPv6 types are used for testing IPv6 reachability? (Choose two.)
+ICMPv6 type 1
+*ICMPv6 type 128*
+*ICMPv6 type 129*
+ICMPv6 type 135
+ICMPv6 type 136
+*** Which command verifies end-to-end transport layer connectivity for HTTP from a PC over an IPv6 path?
+ping IPv6_address 80
+telnet IPv4_address 80
+*telnet IPv6_address 80*
+tracert IPv6_address
+*** Which address type is not supported in IPv6?
+unicast
+multicast
+anycast
+*broadcast*
+*** What are four problems with IPv4 addressing workarounds? (Choose four.)
+*NAT breaks the end-to-end model of IP.*
+DHCP breaks the end-to-end model of IP.
+*NAT inhibits end-to-end network security.*
+VLSM inhibits end-to-end network security.
+*Some applications are not NAT-friendly.*
+Some applications are NAT-friendly.
+*The merging of private networks is difficult if overlapping IPv4 address ranges are used.*
+*** Which three options are valid representations of the IPv6 address 2001:db8:2bc5:0000:0000:087c:0000:000a? (Choose three.)
+2001:db8:2bc5::087c::000a
+*2001:db8:2bc5::87c:0:a*
+*2001:db8:2bc5::087c:0000:000a*
+*2001:db8:2bc5:0:0:87c::a*
+2001:db8:2bc5::087c:a
+*** What is the solicited-node multicast IPv6 address for 2001:db8:1001:f:2c0:10ff:fe17:fc0f?
+*ff02:0000:0000:0000:0000:0001:ff17:fc0f*
+2001:0000:0000:0000:0000:0001:ff17:fc0f
+ff02:0000:0000:0000:0000:0001:fe17:fc0f
+ff02:0000:0000:0000:0000:10ff:fe17:fc0f
+*** Which three mechanisms are used to extend the lifetime and usefulness of IPv4? (Choose three.)
+*CIDR*
+*VLSM*
+*NAT*
+DNS
+IPv5
+IPv6
+*** Which Cisco IOS global configuration command is needed to enable IPv6 routing on routers?
+*ipv6 unicast-routing*
+ipv6 routing
+enable ipv6-routing
+ipv6 address
+*** Which statement is correct about the EUI-64 address format of the interface ID for stateless autoconfiguration that is used by Cisco?
+It is the MAC address plus the Site-Level Aggregator.
+It is the MAC address plus the ISO OUI.
+*It expands the 48-bit MAC address to 64 bits by inserting FFFE into the middle 16 bits and then inverting the 7th bit in the first octet.*
+It does not follow IEEE standards for uniqueness of the address.
+It is only used by Cisco.
+*** What is the corresponding MAC address for the solicited node multicast address ff02:0000:0000:0000:0000:0001:ff17:fc0f?
+33-33-33-17-fc-0f
+00-00-33-17-fc-0f
+*33-33-ff-17-fc-0f*
+ff-02-ff-17-fc-0f
+*** Which Cisco IOS interface command assigns a static IPv6 address using an EUI-64 interface ID?
+ipv6 address 2001:db8:2222:7272::72/64
+*ipv6 address 2001:0db8:0:1::/64 eui-64*
+eui-64 address 2001:0db8:0:1::/64
+ipv6 address 2001:0db8:0:1::0290:27ff:fe17:fc0f/64
+*** What is the range for IPv6 link-local addresses?
+*fe80::/10*
+fc00::/7
+fc00::/8
+fd00::/8
+*** How does the MAC address 00a1-6789-abcd translate into the right-most 64 bits of the IPv6 address when EUI-64 is used?
+01a1:67ff:fe89:abcd
+01a1:67ee:ee89:abcd
+02a1:67ff:ff89:abcd
+*02a1:67ff:fe89:abcd*
+
+** Configuring Static Routing
+*** How does a router learn routing information? (Choose three.)
+*from dynamic routing protocols*
+*from manually configured routes*
+from Cisco Discovery Protocol
+from File Transfer Protocol (FTP)
+*from directly connected routes*
+
+*** Which statement about static and dynamic routes is true?
+Dynamic routes are manually configured by a network administrator, whereas static routes are automatically learned and adjusted by a routing protocol.
+*Static routes are manually configured by a network administrator, whereas dynamic routes are automatically learned and adjusted by a routing protocol.*
+Static routes tell the router how to forward packets to networks that are not directly connected, whereas dynamic routes tell the router how to forward packets to networks that are directly connected.
+Dynamic routes tell the router how to forward packets to networks that are not directly connected, whereas static routes tell the router how to forward packets to networks that are directly connected.
+
+* Memory
+IPv4 IPv6 header
+IPv6 address
+ICMP code
+
+* Vocabulary
+| Vocabulary           | 含义       |
+|----------------------+------------|
+| revive               | 苏醒       |
+| resilient            | 有弹性的   |
+| tier                 | 层         |
+| spine                | 主干       |
+| hierarchical         | 有等级的   |
+| integral             | 必需的     |
+| lease line           | 专线       |
+| satellite            | 卫星       |
+| dependability        | 可靠性     |
+| converged networking | 融合网     |
+| exclusive            | 专有的     |
+| proprietary          | 专利的     |
+| inevitably           | 不可避免地 |
+| aggregate            | 合计       |
+| premises             | 房产       |
+| congestion           | 拥塞       |
+| coaxial              | 同轴电缆   |
+| malfunction          | 发生故障   |
+| cumbersome           | 笨重的     |
+| notation             | 标记       |
+| optimum              | 最佳的     |
+| circumvent           | 规避       |
+| colon                | 冒号       |
+| Successive           | 连续的     |
+| congested            | 拥挤的     |
+| substitute           | 代替       |
+
+* Recall
+- the default administrative distance of Router protocols
+| Direct        |   0 |
+| STATIC        |   1 |
+| EBGP          |  20 |
+| EIGRP         |  90 |
+| OSPF          | 110 |
+| ISIS          | 115 |
+| RIPv1, v2     | 120 |
+| Exernal EIGRP | 170 |
+| IBGP          | 200 |
+- OSPF State
+DOWN->INIT->Two-Way->Exstart->Exchange->Loading->Full
+- Ethernet channel
+ All the links in a port channel must be compatible. Among other requirements, they must use the same speed and operate in full-duplex mode.
+- ACL
+Standard: 1 to 99 or 1300 to 1999
+Extend:  100 to 199 or 2000 to 2699
+- Wireless
+A virtual MAC address is generated by the virtual router based on the virtual router ID. The virtual MAC address format is 00-00-5E-00-01-{VRID} (VRRP) and 00-00-5E-00-02-{VRID} (VRRP6).
+HSRP - 0000.0C07.ACXX and 0000.0C9F.FXXX
+- NAT
+pool source can be a acl list
+- Queue
+1. First-In, First-Out (FIFO) - single queue
+2. Priority Queuing (PQ) - 4 queues in strict-priority
+3. Custom Queueing (CQ) - 16 queues in round-robin, traffic guarantees
+4. Weighted Fair Queuing (WFQ) - good service for the real-time traffic, no guarantees for a particular flow
+5. CBWFQ - don't provide latency guarantees, only suit for data taffic
+6. LLQ - CBWFQ with strict priority, provdes latency&bandwidth guarantees
+
+CBWGQ - guaranteed bandwidth to a specified class
+CQ    - specified number of bytes in one queue
+FIFO  - store-forward
+PQ    - one of four priority-base
+WFQ   - mini-guaranteed
+
+- DSCP field
+- PHB
+- Control and Provisioning of Wireless Access Points (CAPWAP)
+- Ethernet channel
+- VRRP virtual addr
+- default type of OSFP network
+- Ansible: SSH YAML
+  CHEF: 10002 RuBY
+  Puppet: TCP8140 Manifest
+- WPA2-PSK minimum number 8
+- HSRP -> standby, VRRP -> master, backup
+- Improve web traffic performance - WSA
+- 2.4G 1,6,11
+-
+Codes: L - local, C - connected, S - static, R - RIP, M - mobile, B - BGP
+       D - EIGRP, EX - EIGRP external, O - OSPF, IA - OSPF inter area
+       N1 - OSPF NSSA external type 1, N2 - OSPF NSSA external type 2
+       E1 - OSPF external type 1, E2 - OSPF external type 2, E - EGP
+       i - IS-IS, L1 - IS-IS level-1, L2 - IS-IS level-2, ia - IS-IS inter area
+       * - candidate default, U - per-user static route, o - ODR
+       P - periodic downloaded static route
+
+- async routing + dual-home
+- band select
+- access: provide network access, represent the network edge
+  distribution: implements network access policy, establishes layer3 routing bound
+  core: high-speed, aggregator for all the campus blocks
+- clock set
+- enforcing routing policies
+- port-based authenication
+- SNMP
+  MIB - collection of variables
+  SNMP agent - responds to status
+  SNMP manager - resides on an NMS
+  SNMP trap - unsolicited message
+- 3 tier functions
+- traffic shaping to provide fair queuing for buffered flows
+- the cam table is empty until ingress traffic arrives at each port
+- scratch interface to actively attempt - dynamic desirable
+- minimum bandwidth for certain traffic - CBWFQ,WFQ
+- switch maintain DHCP snooping - binding database
+- QOS
+
+- SNMP
+show snmp host - SNMP recipient
+show snmp engineID - the IP address of the remote SNMMP device
+show snmpp group - security mode
+show snmp community - SNMPP access string
+show snmp chassis - server serial number
+- 802.11 frame type
+- accept appliction/json
+- T1 1.544Mbps
+- overlap - alternates 2.4&5
+- use the json lib to parse the data returned by the NETCONF server for the inf's conf
+- VTNs
+- DHCP default gateway - default-router
+- NMS software must be loaded with the MIB associiated with the trap
+- uplinkFast, establishes a network connection immediately when it is plugged in
+- 802.11
+|          |  freq | max speed |
+|----------+-------+-----------|
+| 802.11   |   2.4 |         2 |
+| 802.11a  |     5 |        54 |
+| 802.11b  |   2.4 |        11 |
+| 802.11g  |   2.4 |        54 |
+| 802.11n  | 2.4&5 |       600 |
+| 802.11ac |     5 |      3500 |
+
+- association request - 802.1x
+- DHCP snooping, propagates VLAN information
+- black hole VLAN
+- a device is added to Cisco DNA Center - Global site&Unmanaged state.
+- ISP uses third-party network device -> enable LLDP-MED
+- 802.11a used in place of 802.11b/g when many nonoverlapping channels are required
+- physical access control -> access to networking equipment and facilities
+- OEAP, allow remote uses to connect to the corporate network and have the same access as if they were at their desk
+  Client Band Select -> force to use 5G if possible
+- Automation improvements
+  1. artificial intelligence identifies and prevents potential design failures
+  2. proprietary cisco apis leverage multiple network management tools
+- distribution system connects to a switch to pass normal AP traffic
+- service-port interfaces - SSH, Telnet
+- out-of-band, console and service
+- restAPI ? - precedes the query parameters when performing a GET request
+- ?? hub-and-spoke provides direct connections btw subscribers
+- FHRP in a speicfic subnet, forwards multicast Hello messages btw routers
+- PQ > optimize voice traffic
+- trunk protocol - VTP, desirable + auto
+- lacp - active + passive
+- PAgp - desirable + auto
+- Console
+Speed: 9600 bps
+Data bits: 8
+Parity: None
+Stop bit: 1
+Flow control: None
+- service password-encryption
+- OSFP issue
+Other issues can that can prevent an adjacency are:
+a. Mismatched OSPF area number
+b. Mismatched OSPF area type
+c. Mismatched subnet and subnet mask
+d. Mismatched OSPF HELLO and dead timer values

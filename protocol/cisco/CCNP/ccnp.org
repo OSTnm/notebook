@@ -1,0 +1,313 @@
+#+SETUPFILE: ~/.emacs.d/themes/org-html-themes/org/theme-readtheorg.setup
+#+OPTIONS: \n:t
+#+OPTIONS: ^:nil
+#+OPTIONS: tex:t
+#+STARTUP: latexpreview
+#+OPTIONS: tex:dvipng
+#+HTML_MATHJAX: align: left indent: 5em tagside: left font: Neo-Euler
+#+attr_html: :width 300px
+#+attr_latex: :width 300px
+#+ATTR_ORG: :width 300
+
+#+TITLE: CCNP
+
+Version 1 is the default version of HSRP. HSRP version 2 uses the new IP multicast address 224.0. 0.102 to send hello packets instead of the multicast address of 224.0. ... HSRP version 2 permits an expanded group number range, 0 to 4095, and consequently uses a new MAC address range 0000.0C9F.
+
+vNIC virtual network interface card.
+OVA Open Virtualization Archive Open Virtual Appliance.
+VMX Virtual Machine Executable
+VMDK virtual machine disk. VM's disk file
+
+VSS
+combines exactly two devices
+supported on the Cisco 4500 and 6500 series
+supports device that are geographically separated
+provide a single point of management for improved efficiency
+
+IGMPv2 multicast gropup address query messages - 224.0.0.1
+
+action 1 syslog msg
+
+天线的辐射图
+
+implement Wi-Fi direct policy
+
+DMZ
+demilitarized zone.
+
+use the same mobility domain on all WLCs
+
+the device has not been assigned a workflow
+
+presence gather analytics
+
+NTP stratum - hops to reach the master time server
+
+Vmanage - software upgrades for WAN Edge, vSmart and vBond
+Single pane of glass for Day0, Day1, and Day2 operations
+Real-time alerting
+Centralized provisioning
+Configuration standardization
+Simplicity of deploying
+Simplicity of change
+Supports various Programmatic application programming interfaces (API)s
+
+Master controller mode - All new APs that join the WLAN are assigned to the master controller
+
+Configure a match-host type NAT pool
+
+Cisco SD-Access Fabric MTU 9100
+
+VM - live migration
+
+NetFlow
+Can track ingress and egress information
+Can be used to track multicast, MPLS, or bridged traffic
+
+RSSI - how strong a tireless signal is receded, measured in dBm
+
+VM long-standing contention issue - Adjust the resource reservation limits
+
+IPsec - secure control plane adjacencies
+
+BFD
+Bidirectional Forwarding Detection. A detection protocol that is designed to provide fast forwarding-path failure detection times for media types, encapsulations, topologies, and routing protocols.
+- supported by OSPF, EIGRP, BGP, IS-IS
+- detect link failures in less than one second
+- sub-second failure detection for lay1 and lay2 problems
+
+RF signals
+
+SD-Access wireless
+WLC
+- WLC is connected outside Fabric(optionally directly to Border)
+- WLC needs to reside in global routing table - to talk to CP
+- No need for inter-VRF leaking for AP to join the WLC
+- WLC can only belong to on FD, WLC talks to one CP (two for HA)
+
+PIM
+- unicast routing information to perform the multicast forwarding function
+- PIM-SM is based on an explicit pull model.
+
+RPF
+- implementing static mroutes
+- implementing MBGP
+
+DNA southbound interfaces, terminate at fabric underlay switches
+- ICMP: Discovery
+- UDP 162: SNMP
+
+DSW2 operates in Rapid PVST+ and the new switch operates in PVST+
+
+DNA lost connection
+- User connectivity is unaffected
+- Cisco DNA Center is unable to collect monitoring data in Assurance
+
+spanning tree enabled protocol ieee - PVST+
+
+Frequent channel change
+- Remove UNII-2 and Extended UNII-2 from 5Ghz
+- Disable DFS channels
+
+Para-vm allows the host hardware to be directly accessed
+
+VRRP3 - multivendor, IPv4&IPv6 hosts
+
+RSPAN destination remote vlan - inactive state
+
+load balance - GLBP MHSRP
+
+IGMPV2 is compatible only with IGMPV1
+
+| 200 OK                     | The request was successful. The result is contained in the response body.                                                                                                  |
+| 201 Created                | The POST/PUT request was fulfilled, and a new resource has been created. Information about the resource is in the response body                                            |
+| 202 Accepted               | The request was accepted for processing, but the processing has not been completed.                                                                                        |
+| 204 No Content             | The request was successful; however no content was returned.                                                                                                               |
+| 206 Partial Content        | The GET request included a Range Header, and the server responded with the partial content matching the range.                                                             |
+| 400 Bad Request            | The client made a request that the server could not understand (for example, the request syntax is incorrect).                                                             |
+| 401 Unauthorized           | The client's authentication credentials included with the request are missing or invalid.                                                                                  |
+| 403 Forbidden              | The server recognizes the authentication credentials, but the client is not authorized to perform this request.                                                            |
+| 404 Not Found              | The client made a request for a resource that does not exist.                                                                                                              |
+| 404 Method not allowd      |                                                                                                                                                                            |
+| 409 Conflict               | The target resource is in a conflicted state (for example, an edit conflict where a resource is being edited by multiple users). Retrying the request later might succeed. |
+| 415 Unsupported Media Type | The client sent a request body in a format that the server does not support (for example, XML to a server that only accepts JSON).                                         |
+| 500 Internal Server Error  | The server could not fulfill the request.                                                                                                                                  |
+| 501 Not Implemented        | The server has not implemented the functionality required to fulfill the request.                                                                                          |
+| 503 Service Unavailable    | The server is (temporarily) unavailable.                                                                                                                                   |
+| 504 Gateway Timeout        | The server did not respond within the time restrictions, so it timed out.                                                                                                  |
+
+AMP4E - ransomware email phishing
+
+VXLAN - VTEP to encap and decap, 16 million VXLAN segments
+
+STP priority 4096递增, 0-61440, default 32768 port priority 0-255，default 128, 16递增
+
+BGP Route Selection Process
+- Prefer highest weight attribute (local to router).
+- Prefer highest local preference attribute (global with AS).
+- Prefer route originated by the local router (next hop = 0.0.0.0).
+- Prefer shortest AS path (least number of autonomous systems in AS-Path attribute).
+- Prefer lowest origin attribute (IGP < EGP < incomplete).
+- Prefer lowest MED attribute (exchanged between autonomous systems).
+- Prefer an EBGP path over an IBGP path.
+- (IBGP route) Prefer path through the closest IGP neighbor (best IGP metric.)
+- (EBGP route) Prefer oldest EBGP path (neighbor with longest uptime.)
+- Prefer the path with the lowest neighbor BGP router ID.
+- Prefer the path with the lowest neighbor IP address (multiple paths to same neighbor).
+
+MSDP - advertise active source in a domain
+
+HSRP - local router 10.1.1.1
+
+CISCO-CAPWAP-CONTROLLER
+
+
+AP discrovery:
+- Verify that the AP is getting a DHCP IP address and is within the right subnet.
+- Verify that Option 43 is set properly (if used).
+- Verify that the DNS server is reachable and has the "CISCO-CAPWAP-CONTROLLER" entry (if used).
+- Verify that the Wireless LAN Controller management interface is reachable for Cisco AireOS (from APs).
+- Verify that the Cisco Wireless Control Module (WCM) management interface is reachable for Cisco IOS XE (from APs).
+
+
+EIRP = TX power + Anteena Gain - Loss, how much energy is actullay radiated from an antenna toward the main beam
+RSSI = how well a device can receive the signal
+SNR = RSSI noise
+  CHEF: 10002 RuBY
+
+| Ansible   | SSH YAML Python Playbooks Agentless |
+| Puppet    | TCP8140 Manifests Ruby Agent-based  |
+| Chef      | Ruby 10002 Cookbooks Agent-based    |
+| Saltstack | Python modules                      |
+
+fabric access point - local mode and connected to fabric edge switch
+
+GLBP - max uplink utilization and minimizes the amount of configuration
+
+EEM on demand or manually = event none
+
+authentication radio button under the Layer3 security option - local WLC
+
+JSON web token - header, payload, signature
+
+RESTCONF - get, patch, put, post, delete
+
+event snmp oid - read SNMP variable and exceeds 75%
+
+LISP to no-LISP internetworking - MR and PETR
+
+A NETCONF request was made for a data model that does not exist
+
+Type1 hypervisor - on phyical and its own operating system
+
+RP in PIM - send join messages toward a multicast source SPT
+
+有PREPEND的在R3上配 - 阻止
+
+router summarizes - area 1 252
+
+- use a virtual switch
+- a single trunk to layer2 switch
+
+- spanning tree mst1 root primary
+- spanning tree mst1 priority 4096
+
+FIB induces many route to a single dest, RIB is the best route to a single dest.
+
+intent API - northbound, business outcome
+
+IGMP querier - lowest IP addr
+
+fabric control plane - comprehensive database that tracks endpoints
+
+event track 10 state down
+
+ansible push, chef pull
+
+CEF uses a FIB to make IP dest prefix-based switching
+
+- EIGRP load balance if feasible
+- EIGRP 6 unequal-cost
+
+EIGRP OTP - dynamic multipoint tunneling
+
+IP SLA
+- active traffic
+- layer 2 transport-independent
+
+second export - specify a VRF
+
+tunnel IP on the HQ - 10.111.111.1
+
+mobility MAC on the 9800 WLC
+
+recursive - best path to the tunnel dest is itself
+
+simplify IPSEC configuration
+- Remove all configuration
+- Create IPsec profle, associate the transform-set
+
+only G0/0
+
+ansible - use playbooks, prodedural
+puppet - use a pull, declarative
+
+R2# standy 100 preempt
+
+- configure switchport mode trunk on SW2
+- configure switchport nonegotiate on SW2
+
+implement Wi-Fi direct policy
+
+use the same mobility domain on all WLCs
+
+The VRRP version 3 (v3) Protocol Support feature provides the capability to support IPv4 and IPv6 addresses while VRRP version 2 (v2) only supports IPv4 addresses. 
+
+HSRP Version 1 is the default version of HSRP. HSRP version 2 uses the new IP multicast address 224.0. 0.102 to send hello packets instead of the multicast address of 224.0. ... HSRP version 2 permits an expanded group number range, 0 to 4095, and consequently uses a new MAC address range 0000.0C9F.
+
+再看下Qos和extend ACL
+
+default preference 100
+
+Emergency (severity 0)
+Alert (severity 1)
+Critical (severity 2)
+Error (severity 3)
+Warning (severity 4)
+Notification (severity 5)
+Informational (severity 6)
+Debugging (severity 7)
+
+HTTP Basic Auth - Username and Password
+Token Based Auth - Authorization through Identity Provider
+Secure Vault - Public API Resources
+OAuth - API Dependent Secret
+
+Add the autocommand keyword to the username command
+
+direct policy
+
+NOTE
+
+For each interface and routing process, Cisco IOS permits the following:
+
+One incoming global distribute list
+One outgoing global distribute list
+One incoming interface distribute list
+One outgoing interface distribute list
+One outgoing redistribution distribute list
+CAUTION
+
+Route filters have no effect on LSAs or the LSDB. A basic requirement of link-state routing protocols is that routers in an area must have identical LSDBs.
+
+NOTE
+
+OSPF routes cannot be filtered from entering the OSPF database. The distribute-list in command filters routes only from entering the routing table, but it doesn’t prevent link-state packets (LSP) from being propagated.
+
+The command distribute-list out works only on the routes being redistributed by the ASBR into OSPF. It can be applied to external type 2 and external type 1 routes but not to intra-area and interarea routes.
+
+To prevent routing loops in multipoint redistribution scenarios, you should consider the following recommendations during configuration:
+- Insert only internal routes from routing protocol A to B and vice versa.
+- Tag routes in redistribution points, and filter that is based on tags when doing redistribution.
+- Propagate metrics from routing protocol A to routing protocol B properly (though this solution is not enough to prevent loops).
+- Use default routes to avoid two-way redistribution.
