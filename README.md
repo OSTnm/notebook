@@ -35,13 +35,13 @@ Verilog HDL.
 Nand Flash和Nor Flash结构特性
 * [ram-like](./protocol/ram-like.pdf)
 内存类硬件接口
-* [lcd](./protocol/lcd.pdf)
+* [lcd](./protocol/LCD.pdf)
 一种液晶屏
 
 ### 高速串行信号
 * [serdes分类](./books/serdes/serdes_info.pdf)
 * [serdes概述](./books/serdes/serdes_summary.org)
-* [高速信号及其应用](./books/High_Speed_Serdes_and_Applications.pdf)
+* [高速信号及其应用](./books/serdes/High_Speed_Serdes_and_Applications.pdf)
 有关serdes结构的综述.
 * [信号完整性](./books/serdes/si.org)
 关注PCB走线对高速信号的影响.
