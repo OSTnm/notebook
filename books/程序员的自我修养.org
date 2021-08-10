@@ -139,7 +139,7 @@ int main(int argc, char *argv[])
 #+begin_src bash
 readelf -h 2.o
 ELF Header:
-  Magic:   7f 45 4c 46 01 01 01 00 00 00 00 00 00 00 00 00 
+  Magic:   7f 45 4c 46 01 01 01 00 00 00 00 00 00 00 00 00
   Class:                             ELF32
   Data:                              2's complement, little endian
   Version:                           1 (current)
@@ -187,17 +187,17 @@ readelf -s 2.o
 
 Symbol table '.symtab' contains 16 entries:
    Num:    Value  Size Type    Bind   Vis      Ndx Name
-     0: 00000000     0 NOTYPE  LOCAL  DEFAULT  UND 
+     0: 00000000     0 NOTYPE  LOCAL  DEFAULT  UND
      1: 00000000     0 FILE    LOCAL  DEFAULT  ABS 2.c
-     2: 00000000     0 SECTION LOCAL  DEFAULT    1 
-     3: 00000000     0 SECTION LOCAL  DEFAULT    3 
-     4: 00000000     0 SECTION LOCAL  DEFAULT    4 
-     5: 00000000     0 SECTION LOCAL  DEFAULT    5 
+     2: 00000000     0 SECTION LOCAL  DEFAULT    1
+     3: 00000000     0 SECTION LOCAL  DEFAULT    3
+     4: 00000000     0 SECTION LOCAL  DEFAULT    4
+     5: 00000000     0 SECTION LOCAL  DEFAULT    5
      6: 00000004     4 OBJECT  LOCAL  DEFAULT    3 static_var.1907
      7: 00000000     4 OBJECT  LOCAL  DEFAULT    4 static_var2.1908
-     8: 00000000     0 SECTION LOCAL  DEFAULT    7 
-     9: 00000000     0 SECTION LOCAL  DEFAULT    8 
-    10: 00000000     0 SECTION LOCAL  DEFAULT    6 
+     8: 00000000     0 SECTION LOCAL  DEFAULT    7
+     9: 00000000     0 SECTION LOCAL  DEFAULT    8
+    10: 00000000     0 SECTION LOCAL  DEFAULT    6
     11: 00000000     4 OBJECT  GLOBAL DEFAULT    3 global_init_var
     12: 00000004     4 OBJECT  GLOBAL DEFAULT  COM global_uninit_var
     13: 00000000    28 FUNC    GLOBAL DEFAULT    1 func1
@@ -215,15 +215,15 @@ Contents of section .text:
  0030 01000000 8b150400 0000a100 00000001  ................
  0040 c28b45f4 01c28b45 f001d083 ec0c50e8  ..E....E......P.
  0050 fcffffff 83c410b8 00000000 8b4dfcc9  .............M..
- 0060 8d61fcc3                             .a..            
+ 0060 8d61fcc3                             .a..
 Contents of section .data:
- 0000 54000000 55000000                    T...U...        
+ 0000 54000000 55000000                    T...U...
 Contents of section .rodata:
- 0000 25640a00                             %d..            
+ 0000 25640a00                             %d..
 Contents of section .comment:
  0000 00474343 3a202847 4e552920 382e332e  .GCC: (GNU) 8.3.
- 0010 31203230 31393035 30372028 52656420  1 20190507 (Red 
- 0020 48617420 382e332e 312d3429 00        Hat 8.3.1-4).   
+ 0010 31203230 31393035 30372028 52656420  1 20190507 (Red
+ 0020 48617420 382e332e 312d3429 00        Hat 8.3.1-4).
 Contents of section .eh_frame:
  0000 14000000 00000000 017a5200 017c0801  .........zR..|..
  0010 1b0c0404 88010000 1c000000 1c000000  ................
@@ -231,7 +231,7 @@ Contents of section .eh_frame:
  0030 0558c50c 04040000 28000000 3c000000  .X......(...<...
  0040 1c000000 48000000 00440c01 00471005  ....H....D...G..
  0050 02750043 0f03757c 06750c01 0041c543  .u.C..u|.u...A.C
- 0060 0c040400                             ....            
+ 0060 0c040400                             ....
 
 Disassembly of section .text:
 
@@ -245,8 +245,8 @@ Disassembly of section .text:
   11:	e8 fc ff ff ff       	call   12 <func1+0x12>
   16:	83 c4 10             	add    $0x10,%esp
   19:	90                   	nop
-  1a:	c9                   	leave  
-  1b:	c3                   	ret    
+  1a:	c9                   	leave
+  1b:	c3                   	ret
 
 0000001c <main>:
   1c:	8d 4c 24 04          	lea    0x4(%esp),%ecx
@@ -314,7 +314,7 @@ SYMBOL TABLE:
 
 readelf -h 11.o
 ELF Header:
-  Magic:   7f 45 4c 46 01 01 01 00 00 00 00 00 00 00 00 00 
+  Magic:   7f 45 4c 46 01 01 01 00 00 00 00 00 00 00 00 00
   Class:                             ELF32
   Data:                              2's complement, little endian
   Version:                           1 (current)
@@ -353,8 +353,8 @@ Key to Flags:
 
 Symbol table '.symtab' contains 5 entries:
    Num:    Value  Size Type    Bind   Vis      Ndx Name
-     0: 00000000     0 NOTYPE  LOCAL  DEFAULT  UND 
-     1: 00000000     0 SECTION LOCAL  DEFAULT    1 
+     0: 00000000     0 NOTYPE  LOCAL  DEFAULT  UND
+     1: 00000000     0 SECTION LOCAL  DEFAULT    1
      2: 00000000     0 NOTYPE  GLOBAL DEFAULT    1 _binary_1_o_start
      3: 00000534     0 NOTYPE  GLOBAL DEFAULT    1 _binary_1_o_end
      4: 00000534     0 NOTYPE  GLOBAL DEFAULT  ABS _binary_1_o_size
@@ -605,9 +605,9 @@ Disassembly of section .text:
   29:	83 c4 10             	add    $0x10,%esp
   2c:	b8 00 00 00 00       	mov    $0x0,%eax
   31:	8b 4d fc             	mov    -0x4(%ebp),%ecx
-  34:	c9                   	leave  
+  34:	c9                   	leave
   35:	8d 61 fc             	lea    -0x4(%ecx),%esp
-  38:	c3                   	ret 
+  38:	c3                   	ret
 #+end_src
 
 - 68 *00 00 00 00*, 这个是shared的地址，重定位前是0
@@ -638,9 +638,9 @@ Disassembly of section .text:
  80480bd:	83 c4 10             	add    $0x10,%esp
  80480c0:	b8 00 00 00 00       	mov    $0x0,%eax
  80480c5:	8b 4d fc             	mov    -0x4(%ebp),%ecx
- 80480c8:	c9                   	leave  
+ 80480c8:	c9                   	leave
  80480c9:	8d 61 fc             	lea    -0x4(%ecx),%esp
- 80480cc:	c3                   	ret   
+ 80480cc:	c3                   	ret
 
 
 080480cd <swap>:
@@ -725,7 +725,7 @@ gcc --verbose 打印详细信息
 #+begin_src bash
 readelf -h tiny
 ELF Header:
-  Magic:   7f 45 4c 46 01 01 01 00 00 00 00 00 00 00 00 00 
+  Magic:   7f 45 4c 46 01 01 01 00 00 00 00 00 00 00 00 00
   Class:                             ELF32
   Data:                              2's complement, little endian
   Version:                           1 (current)
@@ -773,9 +773,9 @@ Contents of section .text:
  80480a4 bb000000 00b80400 0000cd80 905b5dc3  .............[].
  80480b4 5589e5bb 2a000000 b8010000 00cd8090  U...*...........
  80480c4 5dc35589 e5e8c6ff ffffe8e1 ffffff90  ].U.............
- 80480d4 5dc3                                 ].              
+ 80480d4 5dc3                                 ].
 Contents of section .rodata:
- 80480d6 48656c6c 6f20776f 726c6421 0a00      Hello world!..  
+ 80480d6 48656c6c 6f20776f 726c6421 0a00      Hello world!..
 Contents of section .eh_frame:
  80480e4 14000000 00000000 017a5200 017c0801  .........zR..|..
  80480f4 1b0c0404 88010000 20000000 1c000000  ........ .......
@@ -784,13 +784,13 @@ Contents of section .eh_frame:
  8048124 40000000 8cffffff 12000000 00410e08  @............A..
  8048134 8502420d 054ec50c 04040000 1c000000  ..B..N..........
  8048144 60000000 7effffff 10000000 00410e08  `...~........A..
- 8048154 8502420d 054cc50c 04040000           ..B..L......    
+ 8048154 8502420d 054cc50c 04040000           ..B..L......
 Contents of section .data:
- 804a000 d6800408                             ....            
+ 804a000 d6800408                             ....
 Contents of section .comment:
  0000 4743433a 2028474e 55292038 2e332e31  GCC: (GNU) 8.3.1
  0010 20323031 39303530 37202852 65642048   20190507 (Red H
- 0020 61742038 2e332e31 2d342900           at 8.3.1-4).    
+ 0020 61742038 2e332e31 2d342900           at 8.3.1-4).
 
 Disassembly of section .text:
 
@@ -807,7 +807,7 @@ Disassembly of section .text:
  80480b0:	90                   	nop
  80480b1:	5b                   	pop    %ebx
  80480b2:	5d                   	pop    %ebp
- 80480b3:	c3                   	ret    
+ 80480b3:	c3                   	ret
 
 080480b4 <exit>:
  80480b4:	55                   	push   %ebp
@@ -817,7 +817,7 @@ Disassembly of section .text:
  80480c1:	cd 80                	int    $0x80
  80480c3:	90                   	nop
  80480c4:	5d                   	pop    %ebp
- 80480c5:	c3                   	ret    
+ 80480c5:	c3                   	ret
 
 080480c6 <nomain>:
  80480c6:	55                   	push   %ebp
@@ -826,7 +826,7 @@ Disassembly of section .text:
  80480ce:	e8 e1 ff ff ff       	call   80480b4 <exit>
  80480d3:	90                   	nop
  80480d4:	5d                   	pop    %ebp
- 80480d5:	c3                   	ret   
+ 80480d5:	c3                   	ret
 #+end_src
 
 使用链接脚本
@@ -853,7 +853,7 @@ Disassembly of section .text:
 #+begin_src bash
 readelf -h tiny
 ELF Header:
-  Magic:   7f 45 4c 46 01 01 01 00 00 00 00 00 00 00 00 00 
+  Magic:   7f 45 4c 46 01 01 01 00 00 00 00 00 00 00 00 00
   Class:                             ELF32
   Data:                              2's complement, little endian
   Version:                           1 (current)
@@ -1097,20 +1097,20 @@ Program Headers:
 
  Section to Segment mapping:
   Segment Sections...
-   00     
-   01     .interp 
-   02     .interp .note.ABI-tag .note.gnu.build-id .gnu.hash .dynsym .dynstr .gnu.version .gnu.version_r .rel.dyn .rel.plt .init .plt .text .fini .rodata .eh_frame_hdr .eh_frame 
-   03     .init_array .fini_array .dynamic .got .got.plt .data .bss 
-   04     .dynamic 
-   05     .note.ABI-tag .note.gnu.build-id 
-   06     .eh_frame_hdr 
-   07     
+   00
+   01     .interp
+   02     .interp .note.ABI-tag .note.gnu.build-id .gnu.hash .dynsym .dynstr .gnu.version .gnu.version_r .rel.dyn .rel.plt .init .plt .text .fini .rodata .eh_frame_hdr .eh_frame
+   03     .init_array .fini_array .dynamic .got .got.plt .data .bss
+   04     .dynamic
+   05     .note.ABI-tag .note.gnu.build-id
+   06     .eh_frame_hdr
+   07
    08     .init_array .fini_array .dynamic .got
 
 ./a.out &
 [1] 22024
 cat /proc/22024/map
-map_files/ maps       
+map_files/ maps
 [xuali2@sha-isbu-ed15n xuali2]$cat /proc/22024/maps
 08048000-08049000 r-xp 00000000 00:41 94267115                           /auto/isbu_crdc_sw1/offlinediag/users/xuali2/a.out
 08049000-0804a000 r--p 00000000 00:41 94267115                           /auto/isbu_crdc_sw1/offlinediag/users/xuali2/a.out
@@ -1119,7 +1119,7 @@ f7d75000-f7f16000 r-xp 00000000 fd:00 8820257                            /usr/li
 f7f16000-f7f17000 ---p 001a1000 fd:00 8820257                            /usr/lib/libc-2.28.so
 f7f17000-f7f19000 r--p 001a1000 fd:00 8820257                            /usr/lib/libc-2.28.so
 f7f19000-f7f1a000 rw-p 001a3000 fd:00 8820257                            /usr/lib/libc-2.28.so
-f7f1a000-f7f1f000 rw-p 00000000 00:00 0 
+f7f1a000-f7f1f000 rw-p 00000000 00:00 0
 f7f39000-f7f3c000 r--p 00000000 00:00 0                                  [vvar]
 f7f3c000-f7f3e000 r-xp 00000000 00:00 0                                  [vdso]
 f7f3e000-f7f66000 r-xp 00000000 fd:00 8820250                            /usr/lib/ld-2.28.so
@@ -1201,7 +1201,7 @@ int main(int argc, char *argv[])
 
 so的最终装载地址在编译时不确定
 #+begin_src bash
-readelf -l lib.so 
+readelf -l lib.so
 
 Elf file type is DYN (Shared object file)
 Entry point 0x390
@@ -1219,12 +1219,12 @@ Program Headers:
 
  Section to Segment mapping:
   Segment Sections...
-   00     .note.gnu.build-id .gnu.hash .dynsym .dynstr .gnu.version .gnu.version_r .rel.dyn .rel.plt .init .plt .text .fini .rodata .eh_frame_hdr .eh_frame 
-   01     .init_array .fini_array .data.rel.ro .dynamic .got .got.plt .bss 
-   02     .dynamic 
-   03     .note.gnu.build-id 
-   04     .eh_frame_hdr 
-   05     
+   00     .note.gnu.build-id .gnu.hash .dynsym .dynstr .gnu.version .gnu.version_r .rel.dyn .rel.plt .init .plt .text .fini .rodata .eh_frame_hdr .eh_frame
+   01     .init_array .fini_array .data.rel.ro .dynamic .got .got.plt .bss
+   02     .dynamic
+   03     .note.gnu.build-id
+   04     .eh_frame_hdr
+   05
    06     .init_array .fini_array .data.rel.ro .dynamic .got
 #+end_src
 
@@ -1262,12 +1262,12 @@ Program Headers:
  480:	e8 41 00 00 00       	call   4c6 <__x86.get_pc_thunk.ax>
  485:	05 7b 1b 00 00       	add    $0x1b7b,%eax
  48a:	c7 80 18 00 00 00 01 	movl   $0x1,0x18(%eax) ;;模块内数据访问
- 491:	00 00 00 
+ 491:	00 00 00
  494:	8b 80 f0 ff ff ff    	mov    -0x10(%eax),%eax
  49a:	c7 00 02 00 00 00    	movl   $0x2,(%eax)  ;;模块间数据访问
  4a0:	90                   	nop
  4a1:	5d                   	pop    %ebp
- 4a2:	c3                   	ret    
+ 4a2:	c3                   	ret
 
 000004a3 <foo>:
  4a3:	55                   	push   %ebp
@@ -1328,10 +1328,10 @@ readelf -r lib.so
 
 Relocation section '.rel.dyn' at offset 0x2f8 contains 9 entries:
  Offset     Info    Type            Sym.Value  Sym. Name
-00001f00  00000008 R_386_RELATIVE   
-00001f04  00000008 R_386_RELATIVE   
-00001f08  00000008 R_386_RELATIVE   
-00002018  00000008 R_386_RELATIVE   
+00001f00  00000008 R_386_RELATIVE
+00001f04  00000008 R_386_RELATIVE
+00001f08  00000008 R_386_RELATIVE
+00002018  00000008 R_386_RELATIVE
 
 [xuali2@sha-isbu-ed15n xuali2]$readelf -s lib.so |grep p
    Num:    Value  Size Type    Bind   Vis      Ndx Name
@@ -1380,7 +1380,7 @@ Disassembly of section .plt:
 
 Contents of section .got.plt:
  2000 0c1f0000 00000000 00000000 66030000  ............f...
- 2010 76030000                             v... 
+ 2010 76030000                             v...
 
 Relocation section '.rel.plt' at offset 0x31c contains 2 entries:
  Offset     Info    Type            Sym.Value  Sym. Name
@@ -1416,7 +1416,7 @@ Dump of assembler code for function foo:
    0xf7f564c0 <+29>:	add    $0x4,%esp
    0xf7f564c3 <+32>:	pop    %ebx
    0xf7f564c4 <+33>:	pop    %ebp
-   0xf7f564c5 <+34>:	ret    
+   0xf7f564c5 <+34>:	ret
 End of assembler dump.
 (gdb) p/x ((unsigned int *)0xf7f58000)[0]
 $12 = 0x1f0c
@@ -1458,7 +1458,7 @@ Dump of assembler code for function ext:
    0x0804857e <+1>:	mov    %esp,%ebp
    0x08048580 <+3>:	mov    $0x0,%eax
    0x08048585 <+8>:	pop    %ebp
-   0x08048586 <+9>:	ret    
+   0x08048586 <+9>:	ret
 End of assembler dump.
 
 (gdb) x/64xb 0xf7f56350
@@ -1470,13 +1470,13 @@ End of assembler dump.
 
 .interp段存放动态链接器的路径
 #+begin_src bash
-objdump -s a.out 
+objdump -s a.out
 
 a.out:     file format elf32-i386
 
 Contents of section .interp:
  8048154 2f6c6962 2f6c642d 6c696e75 782e736f  /lib/ld-linux.so
- 8048164 2e3200                               .2. 
+ 8048164 2e3200                               .2.
 
 readelf -l a.out  |grep interpreter
       [Requesting program interpreter: /lib/ld-linux.so.2]
@@ -1528,7 +1528,7 @@ ldd a.out
 .dynstr - 动态链接符号字符串表
 
 #+begin_src bash
-readelf -sD lib.so 
+readelf -sD lib.so
 
 Symbol table of `.gnu.hash' for image:
   Num Buc:    Value  Size   Type   Bind Vis      Ndx Name
@@ -1545,13 +1545,13 @@ R_386_GLOB_DAT,R_386_JUMP_SLOT  - 直接填入符号地址
 R_386_RELATIVE                  - 基址重置
 
 #+begin_src bash
-readelf -r lib.so 
+readelf -r lib.so
 
 Relocation section '.rel.dyn' at offset 0x2dc contains 8 entries:
  Offset     Info    Type            Sym.Value  Sym. Name
-00001f00  00000008 R_386_RELATIVE   
-00001f04  00000008 R_386_RELATIVE   
-00001f08  00000008 R_386_RELATIVE   
+00001f00  00000008 R_386_RELATIVE
+00001f04  00000008 R_386_RELATIVE
+00001f08  00000008 R_386_RELATIVE
 00001fec  00000106 R_386_GLOB_DAT    00000000   _ITM_deregisterTMClone
 00001ff0  00000206 R_386_GLOB_DAT    00000000   b
 00001ff4  00000306 R_386_GLOB_DAT    00000000   __cxa_finalize@GLIBC_2.1.3
@@ -1575,10 +1575,10 @@ readelf -r lib2.so
 
 Relocation section '.rel.dyn' at offset 0x2dc contains 10 entries:
  Offset     Info    Type            Sym.Value  Sym. Name
-00000482  00000008 R_386_RELATIVE   
-00001efc  00000008 R_386_RELATIVE   
-00001f00  00000008 R_386_RELATIVE   
-00001f04  00000008 R_386_RELATIVE   
+00000482  00000008 R_386_RELATIVE
+00001efc  00000008 R_386_RELATIVE
+00001f00  00000008 R_386_RELATIVE
+00001f04  00000008 R_386_RELATIVE
 0000048c  00000201 R_386_32          00000000   b
 000004a3  00000502 R_386_PC32        00000000   ext
 00001ff0  00000106 R_386_GLOB_DAT    00000000   _ITM_deregisterTMClone
@@ -1688,7 +1688,7 @@ Dynamic section at offset 0xef4 contains 27 entries:
 #+end_src
 链接名则更为简单，gcc -lXXX 相当于gcc libXXX.so.x
 #+begin_src bash
-ls -ll /lib/libc.so.6 
+ls -ll /lib/libc.so.6
 lrwxrwxrwx. 1 root root 12 Jul 23  2019 /lib/libc.so.6 -> libc-2.28.so
 #+end_src
 基于符号的版本机制，用于解决SONAME次版本号交会问题
@@ -1725,7 +1725,7 @@ VERS_1.1 {
 此外，也可ld -rpath链接时指定路径，这样会在.dynamic里生成RPATH这个变量
 #+begin_src bash
 ld -rpath /auto/isbu_crdc/offlinediag/users/xuali2 1.o ./lib.so -m32 -m elf_i386
-readelf -d a.out 
+readelf -d a.out
 
 Dynamic section at offset 0xf50 contains 17 entries:
   Tag        Type                         Name/Value
@@ -1736,19 +1736,19 @@ Dynamic section at offset 0xf50 contains 17 entries:
 环境变量LD\under{}PRELOAD可以预加载共享库，无论是否有依赖
 环境变量LD\under{}DEBUG用来debug
 #+begin_src bash
-LD_DEBUG=files ./a.out 
-     11762:	
+LD_DEBUG=files ./a.out
+     11762:
      11762:	file=./lib.so [0];  needed by ./a.out [0]
      11762:	file=./lib.so [0];  generating link map
      11762:	  dynamic: 0xf7f51efc  base: 0xf7f50000   size: 0x0000201c
      11762:	    entry: 0xf7f50380  phdr: 0xf7f50034  phnum:          7
-     11762:	
-     11762:	
+     11762:
+     11762:
      11762:	file=libc.so.6 [0];  needed by ./a.out [0]
      11762:	file=libc.so.6 [0];  generating link map
      11762:	  dynamic: 0xf7f31d6c  base: 0xf7d8e000   size: 0x001a7780
      11762:	    entry: 0xf7da8650  phdr: 0xf7d8e034  phnum:         10
-     11762:	
+     11762:
      11762:	./lib.so: error: version lookup error: version `VERS_1.2' not found (required by ./a.out) (continued)
 ./a.out: ./lib.so: version `VERS_1.2' not found (required by ./a.out)
 #+end_src
@@ -1806,8 +1806,8 @@ void call_foo(void)
     24:	e8 fc ff ff ff       	call   25 <call_foo+0x11> ;调用foo 相当于 push eip, jmp foo
     29:	83 c4 04             	add    $0x4,%esp          ;将参数出栈
     2c:	90                   	nop
-    2d:	c9                   	leave  
-    2e:	c3                   	ret 
+    2d:	c9                   	leave
+    2e:	c3                   	ret
 #+end_src
 
 | 调用惯例 | 实参出栈方 | 参数传递                       |
@@ -1878,8 +1878,8 @@ struct big foo(void)
     5e:	50                   	push   %eax
     5f:	e8 fc ff ff ff       	call   60 <call_foo+0xb>
     64:	90                   	nop
-    65:	c9                   	leave  
-    66:	c3                   	ret  
+    65:	c9                   	leave
+    66:	c3                   	ret
 #+end_src
 
 ** 堆与内存管理
@@ -2044,9 +2044,9 @@ Disassembly of section .text:
   2c:	50                   	push   %eax
   2d:	e8 fc ff ff ff       	call   2e <_start+0x2e>
 			2e: R_386_PLT32	__libc_start_main
-  32:	f4                   	hlt    
+  32:	f4                   	hlt
   33:	8b 1c 24             	mov    (%esp),%ebx
-  36:	c3                   	ret    
+  36:	c3                   	ret
   37:	66 90                	xchg   %ax,%ax
   39:	66 90                	xchg   %ax,%ax
   3b:	66 90                	xchg   %ax,%ax
@@ -2054,7 +2054,7 @@ Disassembly of section .text:
   3f:	90                   	nop
 
 00000040 <_dl_relocate_static_pie>:
-  40:	c3                   	ret 
+  40:	c3                   	ret
 #+end_src
 
 - crti.o
@@ -2083,7 +2083,7 @@ Disassembly of section .gnu.linkonce.t.__x86.get_pc_thunk.bx:
 
 00000000 <__x86.get_pc_thunk.bx>:
    0:	8b 1c 24             	mov    (%esp),%ebx
-   3:	c3                   	ret    
+   3:	c3                   	ret
 
 Disassembly of section .fini:
 
@@ -2108,14 +2108,14 @@ Disassembly of section .init:
 00000000 <.init>:
    0:	83 c4 08             	add    $0x8,%esp
    3:	5b                   	pop    %ebx
-   4:	c3                   	ret    
+   4:	c3                   	ret
 
 Disassembly of section .fini:
 
 00000000 <.fini>:
    0:	83 c4 08             	add    $0x8,%esp
    3:	5b                   	pop    %ebx
-   4:	c3                   	ret  
+   4:	c3                   	ret
 #+end_src
 
 - crtbeginT.o 和 crtend.o，C++全局构造和析构
@@ -2172,3 +2172,143 @@ f77d1000-f77d3000 r-xp 00000000 00:00 0                                  [vdso]
 
 * 第十三章 运行库实现
 MiniCRT,略
+
+* Summary
+1. 温故而知新
+	高速北桥，低速南桥
+	虚拟层 加在 硬件层和操作系统层之间
+	硬盘使用LBA技术，从0编号扇区，硬盘电子设备转换为实际的盘面，磁道
+
+2. 编译和连接
+	gcc -E -> cc1
+	gcc -S -> cc1
+	gcc -c -> as
+	词法分析 语法分析 语义分析
+	中间代码的生成结构分为前后端，前端与机器结构无关，后端生成对应目标机器代码3. 目标文件里有什么
+	objdump -h 查看各个段
+	objdump -s//将段的内容16进制打印 -d 指令段反汇编
+	objdump -I binary -O elf32-i386 -B i386 image.jpg image.o
+
+3.　静态链接
+	变量名存在符号表里，其值为地址
+	变量名的值存在.data段中，.data规定了变量加载至内存的地址
+	nm可查看符号表
+	elf头指名段表及段表字符串表，从而分析出各个段
+	目标文件中:符号值(非COMMON)为所在段中的偏移，COMMON值为该符号对齐属性 size:函数占空间的大小，数据字节数的多少
+	编译时符号加下划线，“-fno-fleading-underscore"
+	c++filt可解析符号对应源码的定义　如_ZN1N1C4FuncEi == N::C::Func(int i)
+	弱符号引用失败默认为0或特殊值
+	objdump -r 查看重定位表，有两处调同一函数，则有两项
+	未初始化的全局变量在COM段里，是弱引用
+	全局对象构造函数在main前执行 - init段
+	析构在main后 - finit段
+	ar -t 查看静态库中的文件
+	   -x 解压
+	objdump -t 查静态库符号表
+	gcc --verbose 查看详细结果
+	链接脚本默认脚本在/usr/lib/ldscripts/
+	自已指定脚本ld -T link.script
+	$0 立即数 %0 内联汇编
+	链接脚本的命令语句及赋值语句
+
+4.  进程虚拟地址空间
+	覆盖装入及页映射
+	装载虚拟地址及对应文件所处位置是一个数据结构，存在操作系统管理结构里
+	由通过页错误不断的加载程序
+	ELF - segment概念，包含一个/多个属性相同的section
+	readelf -l 查看 segment
+	section是链接视图 segment是执行视图
+	LMA常等于VMA，但程序中存于ROM时，需要重新Reload至内存成为VMA
+	vdso是一个内核的模块，通过访问这个vma来跟内核进行一些通信
+	/proc/x/maps中倒数第二例为文件节点
+	.rodata 存只读字符串
+	对于一个可装载的segment，它的p_vaddr除以对齐属性 ＝＝ p_offset除以对齐属性
+	elf加载: 检查可靠有效性
+			.interp段－>设置链接路径
+			根据elf表，映射对应段
+			初始化运行环境
+			eip == 入口点 如果是静态链接，为elf文件的e_entry地址，动态链接则为动态链接器入口
+
+5. 动态链接
+	plugin - 运行时动态地选择加载各种程序模块
+	消除平台间依赖的差异性
+	动态链接时将符号的引用标记为一个动态链接的符号
+	共享对象的最终装载地址在编译时是不确定的
+	动态库中可修改数据部分对于不同的进程来说有多个副本(装载重定位)，但对于共享的代码段不行，只用-shared不能实现代码共享
+	动态对象主要处理四种情况：模块内调用，模块外调用，模块内数据引用，模块外数据引用
+	同一模块不同文件均当作外部的调用或引用，因为编译时不在文件内不是static 不能确定是否符号决议后是模块内的，但可用--declspec(dlimport)扩展
+	获取当前pc值方法 调函数，此函数返回(RA或LR)的值赋值给ecx或r3 r4什么的，调函数从中取值
+	同模块均可用相对编移，因为数据都是虚拟地址，同一虚拟地址映射到不同物理地址中
+	不同模块间数据，在数据段里面建立一个GOT全局编移表，编译时确定GOT相对于当前指令的偏移
+	PLT延迟绑定
+		第一次调用函数时，会进入 lookup(n, module)，其中n为.rel.plt中的下标
+		got  --- 全局变量引用的地址
+		got.plt --- 函数引的地址：第一项 .dynamic 第二项 本模块id 第三项 _dl_runtime_resolve地址，其后则为各个重定位符号
+		a.编译时函数调用 call 绝对地址
+		b.链接时，如果为本模块，直接重定位，否则jmp got.plt中的值
+	操作系统映射动态链接器->控制移交给动态链接器->可执行文件入口地址
+	.interp段:动态链接器的路径，readelf -l a.out中显示
+	.dynamic段：动态链接文件的文件头
+	linux_gate.so.1: 内核核虚拟共享对象
+	got实际上是数据段的一部分
+	{
+		rel.text          代码
+		rel.data  为静态  数据  重定位表
+ 	}
+	{
+		rel.plt           代码
+		rel.dyn   为动态  数据  重定位表
+	}
+	相对地址需要重定位的原因为合并段后相对偏移不确定
+	动态链接执行时步骤：  自举，装载共享对象－生成全局符号表，确定符号的优先级，执行共享对象中的.init段，可执行文件中的init将程序初始化部分代码负责执行
+	编译时用-Xlinker -rpath,表示共享库在当前路径下寻找
+	readelf -d lib.so查看.dynamic中的内容
+	如果同名符号已存在，则后加入的符号会被忽略
+	用static函数时，编译器确定为内部符号引用，否则当作外部模块调用处理
+	dlopen查找顺序 LD_LIBRARY_PATH /etc/ld.so.cache /lib /usr/lib
+	dlsym(在libdl库中)作用：查找符号
+补充一下.plt.got段，只有DYN文件才有值
+
+
+6. 共享库的组织
+	SONAME -- 舍弃共享库的次版本和发布版本号
+	-Xlinker --verison-script lib.ver
+	lib.ver->
+			VERS_1.2{
+				global:
+					func;
+				local:
+					*;
+			}
+
+	动态库查找：/et/ld.so.cache -> /lib -> /usr/lib -> /etc/ld.so.conf配置
+	环境变量： LD_LIBRARY_PATH LD_PRELOAD
+	ld时-rpath可指定动态库搜索路径
+
+7. 内存
+	cdecl C默认ABI，函数调用方出栈
+	stdcal fastcall pascal 函数本身出栈
+	mmap时，会在内存+交换空间中预留地址，所以不能超过其总和
+
+8. 运行库
+	glibc启动文件
+	crtl.o 入口函数 _start
+	/usr/lib/crti.o /usr/lib/crtn.o 为 init和finit的前半和后半
+	X86 assembly Enter == push ebp, mov ebp, esp
+			     Leave == mov esp, ebp pop ebp
+push的意思是先把参数压到堆栈里面然后esp再减四，pop指令是先加四再弹出esp里面的内容
+
+	crti.o crtn.o 中的.init和.finit提供在main()之前和之后代码，而crtbeginT.o和crtend.o实现c++的全局和析构
+	TLS: 隐式 __thread __declspec(thread) 显式 pthread_key_create()
+	c++每个文件会生成ctor段，每个存有该文件全局构造的指针
+	atexit策略： 先注册后调用
+	collect2是ld的一个包装
+
+9. 系统调用和API
+	linux 0x80     win 0x2e
+	内核栈切换由硬件完成
+	dd if=/proc/进程号/mem of=生成文件 bs=4096 skip=跳过的bs个数 count=输出bs的个数
+	SDK：导出函数的头文件，导出库，相关文件和工具
+
+
+kernel -> read elf32 file -> if ld exist -> load ld and make ld load elf32 file -> elf32 file entry point

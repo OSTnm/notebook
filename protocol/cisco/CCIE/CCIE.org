@@ -1,0 +1,117 @@
+#+SETUPFILE: ~/.emacs.d/themes/org-html-themes/org/theme-readtheorg.setup
+#+OPTIONS: \n:t
+#+OPTIONS: ^:nil
+#+OPTIONS: tex:t
+#+STARTUP: latexpreview
+#+OPTIONS: tex:dvipng
+#+HTML_MATHJAX: align: left indent: 5em tagside: left font: Neo-Euler
+#+attr_html: :width 300px
+#+attr_latex: :width 300px
+#+ATTR_ORG: :width 300
+
+#+TITLE: CCIE
+
+* SDN
+CTS，Cisco Trust SEC
+SGT, Security Group Tag
+
+ISE - authentication, authorization
+ISE <-> AD
+
+ISE <-> DNAC, by PxGrid
+- 预共享密钥不能用cisco, admin
+- PxGrid自动审核
+- DNAC的名字不能有空格
+
+** DNAC设置
+*** Design
+- Network hierarchy
+- Network settings
+  - Network, DNS,AAA,NTP,Syslog等服务器
+  - Device Credentials, CLI, SNMPV2CRead&Write, HTTPs Read&Write
+  - IP Address Pools
+    - underlay
+    - overlay
+    - 在左边站点site处保留地址
+    - total: underlay, vn1, vn2, l2 handout, l3 handout
+    - 选中圆圈保存
+*** Policy
+- Group-base ACL
+  - Scability group -> ISE->Work Centers -> TrustSec 定义标签, SGT扩展组标签(数字)
+  - Group-base ACL policy,托拽source group,destination group
+  - Virtual Network, overlay,创建并托拽Scability group至VN
+
+*** 需手动配置的设备
+Fusion - border和DNAC等之间通信的传统设备
+Border设备 - 半自动，vtp transparent, 路由通告给外部L3, 开启ISIS，配置与DNAC通信的接口地址
+
+*** 发现设备
+主页 find new device, 用ip range
+
+*** ISE
+administration -> idenitfiy management -> 创建login和enable密码，替换管理设备的login local
+
+*** Provision 发现与部署
+**** border provision
+1. provision -> devices -> inventory -> action -> assign to site
+2. provision -> devices -> inventory -> action -> provision -> deploy，结束后ISE在admin->network resources->network device里看到此设备,同时在被管理设备(border)看到下发的配置
+
+**** underlay provision
+推荐用ISIS
+1. provision -> devices -> inventory -> LAN Automation
+2. 此时EDGE设备，必须处于对话状态，“请问需要初始化配置”
+3. complete后，edge会enable vlan1 ip address及配ISIS
+4. 点stop, ISIS邻居关系会从vlan1到no switchport变成L3接口， edge进入invertory
+5. devices -> inventory -> action -> assign -> Provision -> deploy, 结束后ISE在admin->network resources->network device里看到此设备,同时在被管理设备(border)看到下发的配置
+
+**** fabric
+***** fabrics
+创建fabric
+***** transits 多个VN之间的通信
+- 两个SD-Access Fabric通信用SD-Access类型
+- SD-Access和传统IP选IP类型,只有BGP协议可选<--只有BGP可承载VRF，选对面的as号
+***** 将设备分配至fabric
+- edge -> add to fabric
+- border,进出fabriic的数据流量的入口和出口-> CP + border
+1. rest of company, 只在内部使用，内部路由, *将内部ip导出*
+2. outside world, 外部未知网络的路由, *不导入未知路由,所有的edge未知目的都会发至external border*
+3. *anywhere, 既可做内部路由，也可做外部路由*
+选类型，transits类型，VN个数，出口，保存，deploy
+结束生成BGP，对端的GW根据border自动生成的BGP配置configure自已的ip address
+***** host onboarding
+Provision->Fabric->host onboarding
+选择认证模板->save->deploy
+VN关连地址池(SG是可选)
+Assign edge port(select port assignment),关连VN和Group，认证类型->save->deploy
+
+_anycast gw_
+- edge配置vlan里的ip address
+
+overlay分为L2和L3，命令里用service ipv4和service ethernet
+
+edge用户访问外网,丢给anycast gw,到border再去向外网
+
+control-plane based on LISP
+data-plane based on VXLAN->为了支持L2 ARP
+
+VXLAN里包含了SGT和VNI(lisp instance)
+
+不同VN间通信用ip transit,如果是l3报文出到对面，再回来，类似单臂路由
+
+***** Qos
+Policy -> Application
+
+应用级,cisco validated design-> 业务相关(高优先低延时)、默认、业务无关(低优先高延时)
+- Application sets 应用集
+- Application 详细的每条class
+- Queueing Profile 具体的策略
+- Application policies Qos部署下发
+
+* BGP
+* IGP - OSPF
+* MPLS - VPN
+* Multicast
+* IPSEC - VPN
+
+
+

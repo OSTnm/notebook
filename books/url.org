@@ -1,0 +1,22 @@
+#+SETUPFILE: ~/.emacs.d/themes/org-html-themes/setup/theme-readtheorg.setup
+#+OPTIONS: \n:t
+#+OPTIONS: ^:nil
+#+OPTIONS: tex:t
+#+STARTUP: latexpreview
+#+OPTIONS: tex:dvipng
+#+HTML_MATHJAX: align: left indent: 5em tagside: left font: Neo-Euler
+#+attr_html: :width 300px
+#+attr_latex: :width 300px
+#+ATTR_ORG: :width 300
+
+#+TITLE: URL
+
+- [[https://www.thegeekdiary.com/how-to-configure-and-manage-network-connections-using-nmcli][nmcli]]
+- [[https://www.kernel.org/pub/tools/crosstool/][linux kernel cross tool]]
+- [[http://www.goldsborough.me/emacs,/java/2016/02/24/22-54-16-setting_up_emacs_for_java_development/][emacs for java]]
+- [[https://www.eetimes.com/asics-vs-net-processors-understanding-the-true-costs/#][NP vs ASIC]]
+- [[https://stackoverflow.com/questions/866721/how-to-generate-gcc-debug-symbol-outside-the-build-target][gcc debug symbol outside build target]]
+- [[http://byteliu.com/2019/05/21/What-is-the-major-difference-between-the-buffer-cache-and-the-page-cache-Why-were-they-separate-entities-in-older-kernels-Why-were-they-merged-later-on/][buffer cache vs page cache]]
+- [[https://blog.csdn.net/universsky2015/article/details/109349094][fork join]]
+- [[https://www.sohu.com/a/168927499_202311][超线程到底有啥用]]
+- [[https://www.runoob.com/mysql/mysql-tutorial.html][MySQL简明教程]]

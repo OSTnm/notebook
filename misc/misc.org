@@ -15,3 +15,443 @@
 - key-value
 用在所有数据库访问均通过主键（primary key）来操作
 - wide column
+* solving conflict shortcut between windows and emacs
+- Go to Start > Type in regedit and start it
+- Navigate to HKEY_CURRENT_USER/Control Panel/Input Method/Hot Keys
+- Select the key named:
+00000070 for the Chinese (Traditional) IME - Ime/NonIme Toggle hotkey
+00000010 for the Chinese (Simplified) IME - Ime/NonIme Toggle hotkey
+- In the right sub-window, there are three subkeys.
+Key Modifiers designate Alt/Ctrl/Shift/etc and is set to Ctrl (02c00000).
+Virtual Key designates the finishing key and is set to Space (20000000).
+- Change the first byte in Key Modifiers from 02 to 00
+- Change the first byte in Virtual Key from 20 to FF
+- Log off and log back on. I don't think it's necessary to restart.
+- Do not change the Hot keys for input languages in Control Panel, unless you want to do this all over again.
+- Notes: Symptoms
+Each registry key (thing that looks like a folder) is for each specific hotkey setting that you would normally find in Control Panel > Region and Language > Keyboards and Languages > Change keyboards... > Advanced Key Settings > Hot keys for input languages. The recurring bug is the hotkey being automatically reset to Ctrl+space even if changed via the GUI.
+I can personally confirm this for Windows 7 64-bit and Windows 8.1, though from my research, it looks like it may work for XP and Vista as well.
+* Makefile path
+在执行make命令的时候，根据makefile执行步骤，首先读入所有的makefile文件，那么
+VPATH = include：src       //指定了makefile的搜索路径
+或者
+vpath %.h include    //指定.h类型文件的搜索路径是include
+vpath %.cpp src      //指定.cpp类型文件的搜索路径是src
+这仅仅是对于makefile来说搜索目标和依赖文件的路径，但是对于命令行来说是无效的，也就是说
+在执行g++或者gcc时不会自动从VPATH 或者vpath中自动搜索要包含的头文件等信息文件
+此时要用到了 -I 或者--incude +路径
+* 终端颜色
+使用\033[01;04;32;41m之类的配色方案在需要输出显示的文本之前，可以改变应用程序输出文本的颜色或者背景颜色。
+
+#+begin_src c
+#include <stdio.h>
+
+int main()
+{
+    printf("\033[01;34m Hello World\033[0m\n");
+    return 0;
+}
+#+end_src
+
+上面的01表示加粗，34表示是蓝色，后面\033[0m表示恢复所有的属性为原来的默认值。更多关于颜色的参考，这篇文章有非常详细的叙述。也可以把上述的\033字符用\e替换。可以采用多种配色方案，比如上面提到的\033[01;04;32;41m，04表示下划线，32表示前景色是绿色，然后41表示背景色是红色。
+由于使用的是Linux系统为终端提供的配色方案，所以该程序不具备移植性。可以看到，该程序在Windows会打印一些奇怪的符号。
+* Gcc编译
+#+begin_src shell
+% wget https://ftp.gnu.org/gnu/gcc/gcc-4.8.2/gcc-4.8.2.tar.bz2
+% wget https://ftp.gnu.org/gnu/gcc/gcc-4.8.2/gcc-4.8.2.tar.bz2.sig
+% wget https://ftp.gnu.org/gnu/gnu-keyring.gpg
+%signature_invalid=`gpg --verify --no-default-keyring --keyring ./gnu-keyring.gpg gcc-4.8.2.tar.bz2.sig`%if[$signature_invalid]; then echo"Invalid signature" ; exit 1 ; fi%tar -xvjf gcc-4.8.2.tar.bz2
+%cd gcc-4.8.2
+% ./contrib/download_prerequisites
+%cd ..
+% mkdir gcc-4.8.2-build
+%cd gcc-4.8.2-build
+%$PWD/../gcc-4.8.2/configure --prefix=$HOME/toolchains --enable-languages=c,c++
+% make -j$(nproc)% make install
+#+end_src
+
+当不小心删除程序所需动态库（软链接），可直接在运行程序前加入动态库全路径（包括动态库本身）来运行程序
+* Vim
+普通模式
+o: 新开一行
+$: 行尾
+0: 行首
+(n)x: 删除字符
+(n)dd:删除行
+dG: 到文件尾
+D：到行尾
+:90,100d   删除90-100行
+r: 替换一个
+R: 一直替换直到ESC按键
+:set ic  忽略大小写
+%s全文替换
+起始行,终止行s
+:r ~/.vimrc  导入文件内容至光标
+:!  ls             不退出vim执行shell命令
+:r !date       执行结果导入当前vim中
+12,15s/^/\/\/g   12-15开头插入// 全文%s
+
+vim -u NONE -n 纯净启动
+
+. 重复上次命令
+;  find操作后的下一个匹配
+\*  查找光标所在的所有单词
+cw 删除光标到单词尾
+
+
+修改二进制文件：
+ 1. vim -b 文件名
+ 2. set display=uhex
+ 3. :%!xxd
+ 4. 修改
+ 5. :%!xxd -r
+ 6. 保存退出
+* Delay, Skew, Slack, Slew
+** Delay
+ASIC或者FPGA中发生的延迟（delay）由下面等式组成
+Delay= CELL delay + Net delay
+这里所说的CELL指的是AND， OR，D-Flipflop等cell，NET是指连接这些cell的线。CELL delay与电子的移动速度有关。CELL delay可以由下图的的洗脸台来举例。
+
+#+DOWNLOADED: file:/Users/xuali2/Downloads/614580332F0B.gif @ 2021-08-10 15:25:01
+[[file:Delay,_Skew,_Slack,_Slew/2021-08-10_15-25-01_614580332F0B.gif]]
+此洗脸台就是CELL，根据水位来输出cell值。若是现在洗脸台里没有水，则输出值为0. 打开水龙头，让水灌满洗脸台直到输出1为止所需要的时间则叫做 Rise delay。 此时若是把底部排水口打开让水流出，到输出0所需要的时间则叫 Fall delay。同理，把水换成电子，cell根据电子的多少输出0,1所花费的时间则是各种cell delay了。
+** Skew
+
+#+DOWNLOADED: file:/Users/xuali2/Downloads/61458033548E.gif @ 2021-08-10 15:25:47
+[[file:Delay,_Skew,_Slack,_Slew/2021-08-10_15-25-47_61458033548E.gif]]
+虚线内部为chip内部，通过pad连接了一个外部时钟。chip内部有8个D-flipflop。RTL编写的时候只使用了CLK。合成(Synthesis)的时候则分为了两个时钟： CLK' 驱动上部分3个FF，CLK''驱动下部分的5个FF。CLK_PCB的时钟上升沿到达目的地的时间则是主要关心的内容。
+时钟到达的foo和bar两个FF的时间肯定有些不同。由第一个洗脸台的例子能够理解。CLK'这个水龙头驱动三个洗脸台，而CLK''这个水龙头则需要驱动5个洗脸台，所以驱动5个洗脸台的CLK''多少会有些延迟。
+由下图可以看出CLK之间的关系
+
+#+DOWNLOADED: file:/Users/xuali2/Downloads/Picture 1.png @ 2021-08-10 15:26:56
+[[file:Delay,_Skew,_Slack,_Slew/2021-08-10_15-26-56_Picture 1.png]]
+
+若是T1=2ns而T2=2.5ns，则PCB_CLK到达foo的delay为2ns而到达bar的CLK delay为2.5ns。
+此时则可以说CLK的skew是0.5ns，即，skew不是时钟的delay而是“最快到达的时钟和最慢到达时钟的差值”
+
+** Slack
+还是以上的回路举例，若是时钟为100MHz，则周期为10ns。
+简化T1=T2=0ns，且无视setup和hold time。foo和bar之间有个AND gate。假定AND gate的CELL delay=7ns
+时钟周期为10ns，delay若是超过10ns则不允许。10-7=3ns。这里的3ns则称为Slack。
+Slack可以理解为剩余空闲。
+若是foo和bar之间的AND gate的CELL delay=15ns，则会出现timing violation的情况。若是观察timing report则会看到Slack=-5ns。”负slack“是我们想要的时钟条件没有满足的意思。
+
+** Slew
+SLEW是pad的特定值。SLEW的意思是倾斜度。通过上面洗脸台的例子来看，rise delay和fall delay的统称则叫slew。通常来看，充满水槽的时间越短越好。但是事实上越快的不一定越好。即，slew（倾斜度）高的不一定好。
+
+* MCU vs SOC
+A microcontroller is a processor that has its program and data memory built in. These chips are intended for small embedded control applications, so leaving the pins for I/O and not requiring a external memory bus is very useful. Some microcontrollers have as little as 6 pins, and can do useful things. Contrast that to a general purpose computing processor intended for a PC. Those things have 100s of pins in a array and require extensive external circuitry.
+As for system on a chip, that is a less well defined term. Cyprus calls some of their parts PSOC (Programmable System on Chip). These are basically a microcontroller with small FPGA on the same chip. Instead of having built in peripherals, you can make whatever you want within the available resources of the FPGA.
+In general, I think a system on a chip is a microcontroller with some supposedly system-level logic integrated with it. Of course the further you try to go into the system, the less likely any one set of extra hardware is going to be useful, so some kind of configurability is very useful. However, for now "system on chip" is more of a marketing term than anything real.
+
+* PIN vs PAD
+PIN指芯片封装好后的管脚，即用户看到的管脚；
+PAD是硅片的管脚，是封装在芯片内部的，用户看不到。
+PAD到PIN之间还有一段导线连接的。
+
+* SSC
+扩频时钟，时钟输出频率在一个很小的范围进行有规律的变化，比如输出6G时钟，下扩频300k，则输出频率会在6G-300k,6G之间变化，变化的周期便是调制的周期，扩频时钟主要是为了减小emi辐射。
+抖动是一个随机的概念，由于PLL内部的非理想效应产生，是不希望发生的。
+应该说，如果支持扩频时钟，那在相同输出频率下有扩频抖动会大于没有扩频的时钟的抖动。
+
+* PLL vs DLL
+DLL是基于数字抽样方式，在输入时钟和反馈时钟之间插入延迟，使输入时钟和反馈时钟的上升沿一致来实现的。又称数字锁相环。
+PLL使用了电压控制延迟，用VCO来实现和DLL中类试的延迟功能。又称模拟锁相环
+。功能上都可以实现倍频、分频、占空比调整，但是PLL调节范围更大，比如说：XILINX使用DLL，只能够2、4倍频；ALTERA的PLL可以实现的倍频范围就更大毕竟一个是模拟的、一个是数字的。两者之间的对比：对于PLL，用的晶振存在不稳定性，而且会累加相位错误，而DLL在这点上做的好一些，抗噪声的能力强些；但PLL在时钟的综合方面做得更好些。总的来说PLL的应用多,DLL则在jitter
+power precision等方面优于PLL。
+目前大多数FPGA厂商都在FPGA内部集成了硬的DLL（Delay-Locked Loop）或者PLL（Phase-Locked Loop），用以完成时钟的高精度、低抖动的倍频、分频、占空比调整移相等。目前高端FPGA产品集成的DLL和PLL资源越来越丰富，功能越来越复杂，精度越来越高（一般在ps的数量级）。Xilinx芯片主要集成的是DLL，而Altera芯片集成的是PLL。Xilinx芯片DLL的模块名称为CLKDLL，在高端FPGA中，CLKDLL的增强型模块为DCM（Digital Clock Manager）。
+Altera芯片的PLL模块也分为增强型PLL（Enhanced PLL）和高速（Fast PLL）等。这些时钟模块的生成和配置方法一般分为两种，一种是在HDL代码和原理图中直接实例化，另一种方法是在IP核生成器中配置相关参数，自动生成IP。Xilinx的IP核生成器叫Core Generator，另外在Xilinx ISE 5.x版本中通过Archetecture Wizard生成DCM模块。Altera的IP核生成器叫做MegaWizard。另外可以通过在综合、实现步骤的约束文件中编写约束属性完成时钟模块的约束
+
+* The Linux MM System
+
+The Linux MM System: Initialization
+
+Turning On Paging (i386)
+The kernel code is loaded at physical address 0x100000 (1MB), which is then remapped to PAGE_OFFSET+0x100000 when paging is turned on. This is done using compiled-in page tables (in arch/i386/kernel/head.S) that map physical range 0-8MB to itself and to PAGE_OFFSET...PAGE_OFFSET+8MB. Then we jump to start_kernel() in init/main.c, which is located at PAGE_OFFSET+some_address. This is a bit tricky: it is critical that the code that turns on paging in head.S do so in such a way that the address space it is executing out of remains valid; hence the 0-4MB identity mapping. start_kernel() is not called until paging is turned on, and assumes it is running at PAGE_OFFSET+whatever. Thus the page tables in head.S must also map the addresses used by the kernel code for the jump to start_kernel() to succeed; hence the PAGE_OFFSET mapping.
+There is some magical code right after paging is enabled in head.S:
+#+begin_src asm
+/*
+ * Enable paging
+ */
+3:
+	movl $swapper_pg_dir-__PAGE_OFFSET,%eax
+	movl %eax,%cr3		/* set the page table pointer.. */
+	movl %cr0,%eax
+	orl $0x80000000,%eax
+	movl %eax,%cr0		/* ..and set paging (PG) bit */
+	jmp 1f			/* flush the prefetch-queue */
+1:
+	movl $1f,%eax
+	jmp *%eax		/* make sure eip is relocated */
+1:
+#+end_src
+
+The code between the two 1: labels loads the address of the second label 1: into EAX and jumps there. At this point the instruction pointer EIP is pointing to physical location 1MB+something. The labels are all in kernel virtual space (PAGE_OFFSET+something), so this code effectively relocates the instruction pointer from physical to virtual space.
+The start_kernel() function initializes all kernel data and then starts the "init" kernel thread. One of the first things that happens in start_kernel() is a call to setup_arch(), an architecture-specific setup function which handles low-level initialization details. For x86 platforms, that function lives in arch/i386/kernel/setup.c.
+The first memory-related thing setup_arch() does is compute the number of low-memory and high-memory pages available; the highest page numbers in each memory type get stored in the global variables highstart_pfn and highend_pfn, respectively. High memory is memory not directly mappable into kernel VM; this is discussed further below.
+Next, setup_arch() calles init_bootmem() to initialize the boot-time memory allocator. The bootmem allocator is used only during boot, to allocate pages for permanent kernel data. We will not be too much concerned with it henceforth. The important thing to remember is that the bootmem allocator provides pages for kernel initialization, and those pages are permanently reserved for kernel purposes, almost as if they were loaded with the kernel image; they do not participate in any MM activity after boot.
+--------------------------------------------------------------------------------
+Turning On Paging (x86_64)
+The kernel code is loaded at physical address 0x100000 (1MB), which is then remapped to __START_KERNEL_map+0x100000 when paging is turned on. This is done using compiled-in page tables (in arch/x86_64/kernel/head.S) that map physical range 0-8MB to itself and to PAGE_OFFSET...PAGE_OFFSET+8MB. 
+#+begin_src shell
+$ cat  /proc/kallsyms | more
+ffffffff80100f18 T _stext
+ffffffff80100f18 T stext
+ffffffff80101000 T init_level4_pgt
+ffffffff80102000 T level3_ident_pgt
+ffffffff80103000 T level3_kernel_pgt
+ffffffff80104000 T level2_ident_pgt
+ffffffff801040a0 T temp_boot_pmds
+ffffffff80105000 T level2_kernel_pgt
+ffffffff80106000 T empty_zero_page
+ffffffff80107000 T empty_bad_page
+ffffffff80108000 T empty_bad_pte_table
+ffffffff80109000 T empty_bad_pmd_table
+ffffffff8010a000 T level3_physmem_pgt
+ffffffff8010b000 T wakeup_level4_pgt
+ffffffff8010c000 T boot_level4_pgt
+ffffffff8010d000 t run_init_process
+
+/* include/asm-x86_64/page.h#L79 */
+ 79 #define __PHYSICAL_START        ((unsigned long)CONFIG_PHYSICAL_START)
+/* arch/x86_64/defconfig?a=x86_64#L123 */
+123 CONFIG_PHYSICAL_START=0x100000
+/* include/asm-x86_64/page.h */
+81  #define __START_KERNEL_map      0xffffffff80000000UL
+82  #define __PAGE_OFFSET           0xffff810000000000UL
+#+end_src
+
+Kernel Symbols
+Then we jump to start_kernel() in init/main.c, which is located at PAGE_OFFSET+some_address. This is a bit tricky: it is critical that the code that turns on paging in head.S do so in such a way that the address space it is executing out of remains valid; hence the 0-4MB identity mapping. start_kernel() is not called until paging is turned on, and assumes it is running at PAGE_OFFSET+whatever. Thus the page tables in head.S must also map the addresses used by the kernel code for the jump to start_kernel() to succeed; hence the PAGE_OFFSET mapping.
+#+begin_src c
+/* arch/x86_64/kernel/head.S?a=x86_64#L198 */
+198         .quad   x86_64_start_kernel
+/* arch/x86_64/kernel/head64.c?a=x86_64#L79 */
+ 79 void __init x86_64_start_kernel(char * real_mode_data)
+/*     At line 117, calling  */
+117    start_kernel();
+/* init/main.c?a=x86_64#L445 */
+445 asmlinkage void __init start_kernel(void)
+#+end_src
+
+There is some magical code right after paging is enabled in head.S:
+
+#+begin_src asm
+/* arch/x86_64/kernel/head.S?a=x86_64
+ * Enable paging
+ */
+ 88     btsl    $31, %eax     /* Enable paging and in turn activate Long Mode */
+ 89     btsl    $0, %eax      /* Enable protected mode */
+ 90     /* Make changes effective */
+ 91     movl    %eax, %cr0
+ 92     /*
+ 93      * At this point we're in long mode but in 32bit compatibility mode
+ 94      * with EFER.LME = 1, CS.L = 0, CS.D = 1 (and in turn
+ 95      * EFER.LMA = 1). Now we want to jump in 64bit mode, to do that we 
+ 96      * use the new gdt/idt that has __KERNEL_CS with CS.L = 1.
+ 97      */
+ 98     ljmp    $__KERNEL_CS, $(startup_64 - __START_KERNEL_map)
+ 99 
+100     .code64
+101     .org 0x100      
+102     .globl startup_64
+103 startup_64:
+#+end_src
+
+
+The code between the two 1: labels loads the address of the second label 1: into EAX and jumps there. At this point the instruction pointer EIP is pointing to physical location 1MB+something. The labels are all in kernel virtual space (PAGE_OFFSET+something), so this code effectively relocates the instruction pointer from physical to virtual space.
+The start_kernel() function initializes all kernel data and then starts the "init" kernel thread. One of the first things that happens in start_kernel() is a call to setup_arch(), an architecture-specific setup function which handles low-level initialization details. For x86_64 platforms, that function lives in arch/x86_64/kernel/setup.c.
+The first memory-related thing setup_arch() does is setup_memory_region compute the number of low-memory and high-memory pages available; the highest page numbers in each memory type get stored in the global variables highstart_pfn and highend_pfn, respectively. High memory is memory not directly mappable into kernel VM; this is discussed further below.
+
+#+begin_src c
+
+ /* include/asm-x86_64/e820.h */
+ 25 #define HIGH_MEMORY     (1024*1024)
+ 26 
+ 27 #define LOWMEMSIZE()    (0x9f000)
+ /* arch/x86_64/kernel/init_task.c */
+ 17 struct mm_struct init_mm = INIT_MM(init_mm);
+ /* arch/x86_64/kernel/setup.c */
+ 136 struct resource data_resource = {
+ 137         .name = "Kernel data",
+ 138         .start = 0,
+ 139         .end = 0,
+ 140         .flags = IORESOURCE_RAM,
+ 141 };
+ 142 struct resource code_resource = {
+ 143         .name = "Kernel code",
+ 144         .start = 0,
+ 145         .end = 0,
+ 146         .flags = IORESOURCE_RAM,
+ 147 };
+#+end_src
+
+After setup_arch(), setup_per_cpu_areas() is called and inside setup_per_cpu_areas(), alloc_bootmem() is invoked to initialize the boot-time memory. The bootmem allocator is used only during boot, to allocate pages for permanent kernel data. We will not be too much concerned with it henceforth. The important thing to remember is that the bootmem allocator provides pages for kernel initialization, and those pages are permanently reserved for kernel purposes, almost as if they were loaded with the kernel image; they do not participate in any MM activity after boot.
+--------------------------------------------------------------------------------
+Initializing the Kernel Page Tables
+Thereafter, setup_arch() calls paging_init() defined in arch/i386/mm/init.c On x86_64 architecture, there are two versions of (x86_64, NUMA)paging_init() and (x86_64, non-NUMA)paging_init(). This function does several things. First, it calls pagetable_init() to map the entire physical memory, or as much of it as will fit between PAGE_OFFSET and 4GB, starting at PAGE_OFFSET.
+In pagetable_init(), we actually build the kernel page tables in swapper_pg_dir that map the entire physical memory range to PAGE_OFFSET. This is simply a matter of doing the arithmetic and stuffing the correct values into the page directory and page tables. This mapping is created in swapper_pg_dir, the kernel page directory; this is also the page directory used to initiate paging. (Virtual addresses up to the next 4MB boundary past the end of memory are actually mapped here when using 4MB page tables, but "that's OK as we won't use that memory anyway"). If there is physical memory left unmapped here - that is, memory with physical address greater than 4GB-PAGE_OFFSET - that memory is unusable unless the CONFIG_HIGHMEM option is set.
+Near the end of pagetable_init() we call fixrange_init() to reserve pagetables (but not populate them) for compile-time-fixed virtual-memory mappings. These tables map virtual addresses that are hard-coded into the kernel, but which are not part of the loaded kernel data. The fixmap tables are mapped to physical pages allocated at run time, using the set_fixmap() call.
+After initializing the fixmaps, if CONFIG_HIGHMEM is set, we also allocate some pagetables for the kmap() allocator. kmap() allows the kernel to map any page of physical memory into the kernel virtual address space for temporary use. It's used, for example, to provide mappings on an as-needed basis for physical pages that aren't directly mappable during pagetable_init().
+The fixmap and kmap pagetables occupy a portion of the top of kernel virtual space - addresses which therefore cannot be used to permanently map physical pages in the PAGE_OFFSET mapping. For this reason, 128MB at the top of kernel VM is reserved (the vmalloc allocator also uses addresses in this range). Any physical pages that would otherwise be mapped into the PAGE_OFFSET mapping in the 4GB-128MB range are instead (if CONFIG_HIGHMEM is specified) included in the high memory zone, accessible to the kernel only via kmap(). If CONFIG_HIGMEM is not true, those pages are completely unusable. This becomes an issue only on machines with a large amount of RAM (900-odd MB or more). For example, if PAGE_OFFSET==3GB and the machine has 2GB of RAM, only the first physical 1GB-128MB can be mapped between PAGE_OFFSET and the beginning of the fixmap/kmap address range. The remaining pages are still usable - in fact for user-process mappings they act the same as direct-mapped pages - but the kernel cannot access them directly.
+Back in paging_init(), we possibly initialize the kmap() system further by calling kmap_init(), which simply caches the first kmap pagetable [in the TLB?]. Then, we initialize the zone allocator by computing the zone sizes and calling free_area_init() to build the mem_map and initialize the freelists. All freelists are initialized empty and all pages are marked "reserved" (not accessible to the VM system); this situation is rectified later.
+When paging_init() completes, we have in physical memory [note - this is not quite right for 2.4]:
+0x00000000: 0-page
+0x00100000: kernel-text
+0x????????: kernel_data
+0x????????=_end: whole-mem pagetables
+0x????????: fixmap pagetables
+0x????????: zone data (mem_map, zone_structs, freelists &c)
+0x????????=start_mem: free pages
+
+This chunk of memory is mapped by swapper_pg_dir and the whole-mem-pagetables to address PAGE_OFFSET.
+--------------------------------------------------------------------------------
+Further VM Subsytem Initialization Tasks 
+Here we are back in start_kernel(). After paging_init() completes, we do some additional setup of other kernel subsystems, some of which allocate additional kernel memory using the bootmem allocator. Important among these, from the MM point of view, is kmem_cache_init(), which initializes the slab allocator data.
+Shortly after kmem_cache_init() is called, we call mem_init(). This function completes the freelist initialization begun in free_area_init() by clearing the PG_RESERVED bit in the zone data for free physical pages; clearing the PG_DMA bit for pages that can't be used for DMA; and freeing all usable pages into their respective zones. That last step, done in free_all_bootmem_core() in bootmem.c, is interesting: it builds the buddy bitmaps and freelists describing all existing non-reserved pages by simply freeing them and letting free_pages_ok() do the right thing. Once mem_init() is called, the bootmem allocator is no longer usable, since all its pages have been freed into the zone allocator's world.
+Segmentation
+Segments are just used to carve up the linear address space into arbitrary chunks. The linear space is what's managed by the VM subsystem. The x86 architecture supports segmentation in hardware: you can specify addresses as offsets into a particular segment, where a segment is defined as a range of linear (virtual) addresses with particular characteristics such as protection. In fact, you must use the segmentation mechanism on x86 machines; so we set up four segments:
+A kernel text segment from 0 to 4GB.
+A kernel data segment from 0 to 4GB.
+A user text segment from 0 to 4GB.
+A user data segment from 0 to 4GB.
+Thus, we effectively allow access to the entire virtual address space using any of the available segment selectors.
+Questions:
+Where are the segments set up?
+Answer: the Global Descriptor Table is defined in head.S at line 450. The GDT register is loaded to point at the GDT on line 250.
+Why separate kernel and user segments, if they both permit access to the entire 4GB range?
+Answer: the properties of the kernel and user segments differ:
+.quad 0x00cf9a000000ffff        /* 0x10 kernel 4GB code at 0x00000000 */
+.quad 0x00cf92000000ffff        /* 0x18 kernel 4GB data at 0x00000000 */
+.quad 0x00cffa000000ffff        /* 0x23 user   4GB code at 0x00000000 */
+.quad 0x00cff2000000ffff        /* 0x2B user   4GB data at 0x00000000 */
+
+The segment registers (CS, DS, etc.) contain a 13-bit index into the descriptor table; the descriptor at that index tells the CPU the properties of the selected segment. The 3 low-order bits of a segment selector are not used to index the descriptor table; rather, they contain the descriptor-type (global or local) and the requested privilege level. Thus the kernel segment selectors 0x10 and 0x18 use RPL 0, while the user selectors 0x23 and 0x2B use RPL 3, the least-privileged level.
+Also notice that the high nibble of the third high-order byte differs in the kernel and user cases: in the kernel case, the Descriptor Privilege Level is 0 (most privileged), while the user segment descriptors' DPL is 3 (least privileged). If you read the Intel documentation, you will be able to figure out exactly what all this means, but since x86 segment protection does not figure much in the Linux kernel, I won't discuss it any further here.
+Thanks to Andrea Russo for clearing up this Intel segmentation business.
+--------------------------------------------------------------------------------
+Linux MM OutlinePhysical Memory
+--------------------------------------------------------------------------------
+Questions and comments to Joe Knapka
+The LXR links in this page were produced by lxrreplace.tcl, which is available for free.
+
+* Switch_to
+switch_to(prev, next, prev) == prev = switch(prev, next) x86环境下用eax存储prev, 当进程执行完__switch_to后，prev是前面执行切换进程的进程task_struct
+
+* GDT
+一、引入
+保护模式下的段寄存器 由 16位的选择器 与 64位的段描述符寄存器 构成
+段描述符寄存器： 存储段描述符
+选择器：存储段描述符的索引
+
+#+DOWNLOADED: file:/Users/xuali2/Downloads/ter-300x148.jpeg @ 2021-08-10 17:23:28
+[[file:GDT/2021-08-10_17-23-28_ter-300x148.jpeg]]
+
+段寄存器
+PS：原先实模式下的各个段寄存器作为保护模式下的段选择器，80486中有6个(即CS,SS,DS,ES,FS,GS)80位的段寄存器。由选择器CS对应表示的段仍为代码段，选择器SS对应表示的段仍为堆栈段。
+二、详解
+先说明一下概念
+（1）全局描述符表GDT（Global Descriptor Table）在整个系统中，全局描述符表GDT只有一张(一个处理器对应一个GDT)，GDT可以被放在内存的任何位置，但CPU必须知道GDT的入口，也就是基地址放在哪里，Intel的设计者门提供了一个寄存器GDTR用来存放GDT的入口地址，程序员将GDT设定在内存中某个位置之后，可以通过LGDT指令将GDT的入口地址装入此寄存器，从此以后，CPU就根据此寄存器中的内容作为GDT的入口来访问GDT了。GDTR中存放的是GDT在内存中的基地址和其表长界限。
+基地址指定GDT表中字节0在线性地址空间中的地址，表长度指明GDT表的字节长度值。指令LGDT和SGDT分别用于加载和保存GDTR寄存器的内容。在机器刚加电或处理器复位后，基地址被默认地设置为0，而长度值被设置成0xFFFF。在保护模式初始化过程中必须给GDTR加载一个新值。
+
+#+DOWNLOADED: file:/Users/xuali2/Downloads/DTR-300x103.jpeg @ 2021-08-10 17:23:49
+[[file:GDT/2021-08-10_17-23-49_DTR-300x103.jpeg]]
+
+GDTR
+（2）段选择子（Selector）由GDTR访问全局描述符表是通过“段选择子”（实模式下的段寄存器）来完成的。段选择子是一个16位的寄存器（同实模式下的段寄存器相同）
+
+#+DOWNLOADED: file:/Users/xuali2/Downloads/Selector.jpeg @ 2021-08-10 17:24:03
+[[file:GDT/2021-08-10_17-24-03_Selector.jpeg]]
+
+段选择子
+段选择子包括三部分：描述符索引（index）、TI、请求特权级（RPL）。他的index（描述符索引）部分表示所需要的段的描述符在描述符表的位置，由这个位置再根据在GDTR中存储的描述符表基址就可以找到相应的描述符。然后用描述符表中的段基址加上逻辑地址（SEL:OFFSET）的OFFSET就可以转换成线性地址，段选择子中的TI值只有一位0或1，0代表选择子是在GDT选择，1代表选择子是在LDT选择。请求特权级（RPL）则代表选择子的特权级，共有4个特权级（0级、1级、2级、3级）。
+关于特权级的说明：任务中的每一个段都有一个特定的级别。每当一个程序试图访问某一个段时，就将该程序所拥有的特权级与要访问的特权级进行比较，以决定能否访问该段。系统约定，CPU只能访问同一特权级或级别较低特权级的段。
+例如给出逻辑地址：21h:12345678h转换为线性地址
+a. 选择子SEL=21h=0000000000100 0 01b 他代表的意思是：选择子的index=4即100b选择GDT中的第4个描述符；TI=0代表选择子是在GDT选择；左后的01b代表特权级RPL=1
+b. OFFSET=12345678h若此时GDT第四个描述符中描述的段基址（Base）为11111111h，则线性地址=11111111h+12345678h=23456789h
+（3）局部描述符表LDT（Local Descriptor Table）局部描述符表可以有若干张，每个任务可以有一张。我们可以这样理解GDT和LDT：GDT为一级描述符表，LDT为二级描述符表。如图
+
+#+DOWNLOADED: file:/Users/xuali2/Downloads/LDT-300x223.jpeg @ 2021-08-10 17:24:20
+[[file:GDT/2021-08-10_17-24-20_LDT-300x223.jpeg]]
+
+局部描述符表LDT
+LDT和GDT从本质上说是相同的，只是LDT嵌套在GDT之中。LDTR记录局部描述符表的起始位置，与GDTR不同，LDTR的内容是一个段选择子。由于LDT本身同样是一段内存，也是一个段，所以它也有个描述符描述它，这个描述符就存储在GDT中，对应这个表述符也会有一个选择子，LDTR装载的就是这样一个选择子。LDTR可以在程序中随时改变，通过使用lldt指令。如上图，如果装载的是Selector 2则LDTR指向的是表LDT2。举个例子：如果我们想在表LDT2中选择第三个描述符所描述的段的地址12345678h。
+1. 首先需要装载LDTR使它指向LDT2 使用指令lldt将Select2装载到LDTR
+2. 通过逻辑地址（SEL:OFFSET）访问时SEL的index=3代表选择第三个描述符；TI=1代表选择子是在LDT选择，此时LDTR指向的是LDT2,所以是在LDT2中选择，此时的SEL值为1Ch(二进制为11 1 00b)。OFFSET=12345678h。逻辑地址为1C:12345678h
+3. 由SEL选择出描述符，由描述符中的基址（Base）加上OFFSET可得到线性地址，例如基址是11111111h，则线性地址=11111111h+12345678h=23456789h
+4. 此时若再想访问LDT1中的第三个描述符，只要使用lldt指令将选择子Selector 1装入再执行2、3两步就可以了（因为此时LDTR又指向了LDT1）
+由于每个进程都有自己的一套程序段、数据段、堆栈段，有了局部描述符表则可以将每个进程的程序段、数据段、堆栈段封装在一起，只要改变LDTR就可以实现对不同进程的段进行访问。
+当进行任务切换时，处理器会把新任务LDT的段选择符和段描述符自动地加载进LDTR中。在机器加电或处理器复位后，段选择符和基地址被默认地设置为0，而段长度被设置成0xFFFF。
+三、实例（对理解非常有用）
+1：访问GDT
+
+#+DOWNLOADED: file:/Users/xuali2/Downloads/EMO-300x137.jpeg @ 2021-08-10 17:24:34
+[[file:GDT/2021-08-10_17-24-34_EMO-300x137.jpeg]]
+
+段描述符在GDT中
+当TI=0时表示段描述符在GDT中，如上图所示：
+①先从GDTR寄存器中获得GDT基址。
+②然后再GDT中以段选择器高13位位置索引值得到段描述符。
+③段描述符符包含段的基址、限长、优先级等各种属性，这就得到了段的起始地址（基址），再以基址加上偏移地址yyyyyyyy才得到最后的线性地址。
+2：访问LDT
+
+#+DOWNLOADED: file:/Users/xuali2/Downloads/EMO-300x133.jpeg @ 2021-08-10 17:24:47
+[[file:GDT/2021-08-10_17-24-47_EMO-300x133.jpeg]]
+
+段描述符在LDT中
+当TI=1时表示段描述符在LDT中，如上图所示：
+①还是先从GDTR寄存器中获得GDT基址。
+②从LDTR寄存器中获取LDT所在段的位置索引(LDTR高13位)。
+③以这个位置索引在GDT中得到LDT段描述符从而得到LDT段基址。
+④用段选择器高13位位置索引值从LDT段中得到段描述符。
+⑤段描述符符包含段的基址、限长、优先级等各种属性，这就得到了段的起始地址（基址），再以基址加上偏移地址yyyyyyyy才得到最后的线性地址。
+扩展
+除了GDTR、LDTR外还有IDTR和TR
+- 中断描述符表寄存器IDTR 
+与GDTR的作用类似，IDTR寄存器用于存放中断描述符表IDT的32位线性基地址和16位表长度值。指令LIDT和SIDT分别用于加载和保存IDTR寄存器的内容。在机器刚加电或处理器复位后，基地址被默认地设置为0，而长度值被设置成0xFFFF。
+- 任务寄存器TR
+TR用于寻址一个特殊的任务状态段（Task State Segment，TSS）。TSS中包含着当前执行任务的重要信息。
+TR寄存器用于存放当前任务TSS段的16位段选择符、32位基地址、16位段长度和描述符属性值。它引用GDT表中的一个TSS类型的描述符。指令LTR和STR分别用于加载和保存TR寄存器的段选择符部分。当使用LTR指令把选择符加载进任务寄存器时，TSS描述符中的段基地址、段限长度以及描述符属性会被自动加载到任务寄存器中。当执行任务切换时，处理器会把新任务的TSS的段选择符和段描述符自动加载进任务寄存器TR中。
+
+* XML类图画法
+一、继承
+
+#+DOWNLOADED: file:/Users/xuali2/Downloads/F0EB98B5F005499EAE0E2B25A10D9C55.jpg @ 2021-08-10 17:38:23
+[[file:XML类图画法/2021-08-10_17-38-23_F0EB98B5F005499EAE0E2B25A10D9C55.jpg]]
+
+
+二、实现接口
+
+#+DOWNLOADED: file:/Users/xuali2/Downloads/77F659C4409542DFAEA505EB07DCD435.jpg @ 2021-08-10 17:38:50
+[[file:XML类图画法/2021-08-10_17-38-50_77F659C4409542DFAEA505EB07DCD435.jpg]]
+
+三、关联关系
+
+
+#+DOWNLOADED: file:/Users/xuali2/Downloads/283A2C86A86D4B2881ACD9A645F12E0C.jpg @ 2021-08-10 17:39:10
+[[file:XML类图画法/2021-08-10_17-39-10_283A2C86A86D4B2881ACD9A645F12E0C.jpg]]
+
+四、聚合关系
+
+
+#+DOWNLOADED: file:/Users/xuali2/Downloads/C65777B12595410C879E40DC5B185E8D.jpg @ 2021-08-10 17:39:30
+[[file:XML类图画法/2021-08-10_17-39-30_C65777B12595410C879E40DC5B185E8D.jpg]]
+
+
+#+DOWNLOADED: file:/Users/xuali2/Downloads/ECE9F89B01584DA2A792D93CB3D3A3A6.jpg @ 2021-08-10 17:39:42
+[[file:XML类图画法/2021-08-10_17-39-42_ECE9F89B01584DA2A792D93CB3D3A3A6.jpg]]
+
+五、合成关系
+
+
+#+DOWNLOADED: file:/Users/xuali2/Downloads/5562043CD79D4AD7A591309660186FFD.jpg @ 2021-08-10 17:39:58
+[[file:XML类图画法/2021-08-10_17-39-58_5562043CD79D4AD7A591309660186FFD.jpg]]
+
+六、依赖关系
+
+#+DOWNLOADED: file:/Users/xuali2/Downloads/AF93E184CD3F4A0FA4EA36C893795FEA.jpg @ 2021-08-10 17:40:20
+[[file:XML类图画法/2021-08-10_17-40-20_AF93E184CD3F4A0FA4EA36C893795FEA.jpg]]
+
+#+DOWNLOADED: file:/Users/xuali2/Downloads/5B2315E0375C4543BF6893814138F106.jpg @ 2021-08-10 17:40:31
+[[file:XML类图画法/2021-08-10_17-40-31_5B2315E0375C4543BF6893814138F106.jpg]]
+
