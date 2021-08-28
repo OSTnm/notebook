@@ -1,0 +1,39 @@
+#+SETUPFILE: ~/.emacs.d/themes/org-html-themes/org/theme-readtheorg.setup
+#+OPTIONS: \n:t
+#+OPTIONS: ^:nil
+#+OPTIONS: tex:t
+#+STARTUP: latexpreview
+#+OPTIONS: tex:dvipng
+#+HTML_MATHJAX: align: left indent: 5em tagside: left font: Neo-Euler
+#+attr_html: :width 300px
+#+attr_latex: :width 300px
+#+ATTR_ORG: :width 300
+
+#+TITLE: Wireless
+
+* 基本概念
+** SSID
+- mac address + network name
+- 0字节表示广播
+- BSSID 基本SSID
+
+** Wifi alliance
+原因是wifi比较复杂，各厂商统一标准
+
+** 国家标准
+频谱信道、无线增益、调制技术等，各国家不一致
+
+** 穿墙
+| 穿透力     | 5G>2.4G   |
+| 反射、衍射 | 2.4G > 5G |
+
+** 发射功率
+决定振幅
+
+** RSSI和SNR
+- RSSI 接收信号强度，为负值，越接近0越好
+- SNR 信噪比
+- dbm  0dbm = 10 log 1mv / 1mv, -30~-40算好信号，-80dbm基本无信号
+
+* Course
+- [[https://cisco.udemy.com/course/certified-wireless-network-administrator-cwna/learn/lecture/9737860#overview][CWNA]]

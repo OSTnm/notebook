@@ -1,0 +1,39 @@
+QCIE:
+1.(Cisco)SD-ACCESS(DNAC)
+2.BGP协议
+3.MPLS V（HW~域间MPLS V）
+4.IPSEC V （HW不涉及）
+5.（Cisco）SD-WAN（软件定义广域网）~VIPTELA
+6.组播技术
+7.QoS（服务质量）
+招聘，技术：SDN、VXLAN、LISP
+SDN（软件定义网络），理念：转、控分离！
+有了SDN更能体现经典技术的价值（OSPF、BGP、IS-IS）
+
+排障，是肯定能排出来？不是100%
+不用学编程吗？至少SDN不需要编程
+==================================
+新技术：SDN（25%）+自动化基础（15%~SDN有关联）
+转控分离：MPLS
+Overlay（Fabric）、Underlay（底层网络~不需要手工配置）
+DNA（数字网络架构）
+Border node（边界节点）~核心交换机
+Control-plane node（控制平面节点）
+Edge node（边缘节点）~接入交换机/分布层交换机
+60%经典技术+25%SDN
+VN~VRF~BGP，虚拟网络
+控制
+数据
+===============================
+军哥，防火墙为什么不适合核心网骨干网？加大延时VS快速路由
+军哥好，请问准备LAB 那PC内存要32G，是吗？no
+园区网逐步换代9200上DNAC的话对于原有的2960X之类的设备有解决方案吗？Fabric如何和传统（不支持DNAC管理）的网络联动~L2handoff！
+CTS，Cisco Trust SEC
+vn=vrf嘛
+5大功能：
+1）设计
+2）策略
+3）部署
+4）保障
+5）平台
+预告：明天上课（19:00）！部署DNAC：完成设计和部分策略

@@ -11,6 +11,17 @@
 
 #+TITLE: CCIE
 
+军哥上课视频链接：https://pan.baidu.com/s/1m0Rc6vpsIMiaqgsmee8t3Q
+提取码：209l
+达叔上课网盘链接：https://pan.baidu.com/s/1yruDl3o4-Vjur2_CMBzOuQ
+提取码：u3z9
+网络可编程性及自动化专题课
+链接：https://pan.baidu.com/s/13lzut4rsDDvOwSUmSCyNmg
+提取码：et9i
+QCIE课前资料 链接：https://pan.baidu.com/s/12MmdwBBzu86yhHsr9IVPGg 提取码：8l0k
+笔记链接：MPLS笔记.note
+链接：http://note.youdao.com/noteshare?id=62170abf8fbfbc10f32a595598ca3430&sub=57D0260CC886437E8B8316C71CE358AA
+
 * SDN
 CTS，Cisco Trust SEC
 SGT, Security Group Tag
@@ -23,8 +34,25 @@ ISE <-> DNAC, by PxGrid
 - PxGrid自动审核
 - DNAC的名字不能有空格
 
-** DNAC设置
-*** Design
+#+DOWNLOADED: file:/Users/xuali2/Downloads/0-EI CCIE+HCIE视频/1-思科DNAC_仅思科学习/1-DNAC1.txt @ 2021-08-11 20:51:04
+[[file:SDN/2021-08-11_20-51-04_1-DNAC1.txt]]
+
+#+DOWNLOADED: file:/Users/xuali2/Downloads/0-EI CCIE+HCIE视频/1-思科DNAC_仅思科学习/2-服务关联和设计.txt @ 2021-08-11 20:51:13
+[[file:SDN/2021-08-11_20-51-13_2-服务关联和设计.txt]]
+
+#+DOWNLOADED: file:/Users/xuali2/Downloads/0-EI CCIE+HCIE视频/1-思科DNAC_仅思科学习/3-DNAC3.txt @ 2021-08-11 20:51:13
+[[file:SDN/2021-08-11_20-51-13_3-DNAC3.txt]]
+
+#+DOWNLOADED: file:/Users/xuali2/Downloads/0-EI CCIE+HCIE视频/1-思科DNAC_仅思科学习/4-部署Farbic和主机上线.txt @ 2021-08-11 20:51:13
+[[file:SDN/2021-08-11_20-51-13_4-部署Farbic和主机上线.txt]]
+
+#+DOWNLOADED: file:/Users/xuali2/Downloads/0-EI CCIE+HCIE视频/1-思科DNAC_仅思科学习/5-lisp和vxlan理论和多VN、L2handoff部署.txt @ 2021-08-11 20:51:13
+[[file:SDN/2021-08-11_20-51-13_5-lisp和vxlan理论和多VN、L2handoff部署.txt]]
+
+#+DOWNLOADED: file:/Users/xuali2/Downloads/0-EI CCIE+HCIE视频/1-思科DNAC_仅思科学习/6-DNAC的保障-QOS部署和其他.txt @ 2021-08-11 20:51:13
+[[file:SDN/2021-08-11_20-51-13_6-DNAC的保障-QOS部署和其他.txt]]
+
+** Design
 - Network hierarchy
 - Network settings
   - Network, DNS,AAA,NTP,Syslog等服务器
@@ -33,30 +61,30 @@ ISE <-> DNAC, by PxGrid
     - underlay
     - overlay
     - 在左边站点site处保留地址
-    - total: underlay, vn1, vn2, l2 handout, l3 handout
+    - total: underlay, vn1, vn2, l2 handoff, l3 handoff
     - 选中圆圈保存
-*** Policy
+** Policy
 - Group-base ACL
   - Scability group -> ISE->Work Centers -> TrustSec 定义标签, SGT扩展组标签(数字)
   - Group-base ACL policy,托拽source group,destination group
   - Virtual Network, overlay,创建并托拽Scability group至VN
 
-*** 需手动配置的设备
+** 需手动配置的设备
 Fusion - border和DNAC等之间通信的传统设备
 Border设备 - 半自动，vtp transparent, 路由通告给外部L3, 开启ISIS，配置与DNAC通信的接口地址
 
-*** 发现设备
+** 发现设备
 主页 find new device, 用ip range
 
-*** ISE
+** ISE
 administration -> idenitfiy management -> 创建login和enable密码，替换管理设备的login local
 
-*** Provision 发现与部署
-**** border provision
+** Provision 发现与部署
+*** border provision
 1. provision -> devices -> inventory -> action -> assign to site
 2. provision -> devices -> inventory -> action -> provision -> deploy，结束后ISE在admin->network resources->network device里看到此设备,同时在被管理设备(border)看到下发的配置
 
-**** underlay provision
+*** underlay provision
 推荐用ISIS
 1. provision -> devices -> inventory -> LAN Automation
 2. 此时EDGE设备，必须处于对话状态，“请问需要初始化配置”
@@ -64,13 +92,13 @@ administration -> idenitfiy management -> 创建login和enable密码，替换管
 4. 点stop, ISIS邻居关系会从vlan1到no switchport变成L3接口， edge进入invertory
 5. devices -> inventory -> action -> assign -> Provision -> deploy, 结束后ISE在admin->network resources->network device里看到此设备,同时在被管理设备(border)看到下发的配置
 
-**** fabric
-***** fabrics
+*** fabric
+**** fabrics
 创建fabric
-***** transits 多个VN之间的通信
+**** transits 多个VN之间的通信
 - 两个SD-Access Fabric通信用SD-Access类型
 - SD-Access和传统IP选IP类型,只有BGP协议可选<--只有BGP可承载VRF，选对面的as号
-***** 将设备分配至fabric
+**** 将设备分配至fabric
 - edge -> add to fabric
 - border,进出fabriic的数据流量的入口和出口-> CP + border
 1. rest of company, 只在内部使用，内部路由, *将内部ip导出*
@@ -78,7 +106,7 @@ administration -> idenitfiy management -> 创建login和enable密码，替换管
 3. *anywhere, 既可做内部路由，也可做外部路由*
 选类型，transits类型，VN个数，出口，保存，deploy
 结束生成BGP，对端的GW根据border自动生成的BGP配置configure自已的ip address
-***** host onboarding
+**** host onboarding
 Provision->Fabric->host onboarding
 选择认证模板->save->deploy
 VN关连地址池(SG是可选)
@@ -98,7 +126,7 @@ VXLAN里包含了SGT和VNI(lisp instance)
 
 不同VN间通信用ip transit,如果是l3报文出到对面，再回来，类似单臂路由
 
-***** Qos
+**** Qos
 Policy -> Application
 
 应用级,cisco validated design-> 业务相关(高优先低延时)、默认、业务无关(低优先高延时)
@@ -107,11 +135,406 @@ Policy -> Application
 - Queueing Profile 具体的策略
 - Application policies Qos部署下发
 
+**** 扩展结点
+pnp，trunk连接,配edge的接口时指定extended node, 需要在默认的INFRA_VN里分配地址池
+**** Server结点
+trunk连接
+
+*** 镜像管理
+DESIGN->Image Repository
+
+** Assurance
+
+** 802.1X
+EAPOL,EAP TLS, EAP fast, PEAP
+MAC认证旁路 - 静态mac认证，用于不支持802.1x的设备
+
+ISE -> policy -> policy elements -> results -> MS-CHAP2等认证
+ISE -> policy -> policy sets -> authen policy -> 类似ACL的匹配策略
+Provision -> Fabric -> endpoint -> closed authentication
+
+edge -> show access-session interface * detail验证
+
 * BGP
+EBGP AS号码不同
+IBGP AS号码相同,因为实现对AS内部路由传递的操控，内部的设备要外部的路由，内部由BGP协议去承载大量路由
+
+TCP - 179, TLV类型
+BGP - 单播
+
+AS by AS
+
+** 基本概念
+
+- 邻居关系
+  [[file:BGP/2021-08-12_08-08-02_bgp_neighbor.pcapng]]
+
+- 断链重建，ping
+  BGP会通告的路由必须是在路由表里存在的路由
+  BGP redistribute的route-map不存在则默认permit
+  #+DOWNLOADED: file:/Users/xuali2/Home/bgp_neighbor.pcapng @ 2021-08-12 08:18:19
+  [[file:BGP/2021-08-12_08-18-19_bgp_neighbor.pcapng]]
+
+- 防环
+  同一个AS在一个通告路由中不能超过N(默认是1)次
+
+- 报文
+  1. open          - 建立邻居关系
+  2. keepalive     - 保活
+  3. update        - 更新路由
+  4. notification
+  5. routerefresh  - clear ip bgp * soft  in 触发，让对方发送路由信息
+     #+DOWNLOADED: file:/Users/xuali2/Home/bgp_route_refresh.pcapng @ 2021-08-12 13:12:09
+     [[file:BGP/2021-08-12_13-12-09_bgp_route_refresh.pcapng]]
+
+- 状态机
+  | IDLE        | 空                    |
+  | Connect     | tcping                |
+  | Active      | tcp失败               |
+  | Opensent    | 发open packet         |
+  | Openconfirm | 收open packet  and OK |
+  | Establish   | Done                  |
+
+- 路由下发
+  #+DOWNLOADED: file:/Users/xuali2/Home/Picture 1.png @ 2021-08-12 21:06:22
+  [[file:BGP/2021-08-12_21-06-22_Picture 1.png]]
+
+
+#+DOWNLOADED: file:/Users/xuali2/Downloads/0-EI CCIE+HCIE视频/1-BGP.png @ 2021-08-15 09:34:04
+[[file:BGP/2021-08-15_09-34-04_1-BGP.png]]
+
+
+- 使用Loopback做更新源
+  1. 配置静态路由使得loopback可达
+  2. neighbor 6.6.6.6 update-source Loopback 1
+  3. set ttl - neighbor 2.2.2.2 ebgp-multihop 2
+  4. 如果不能用3,可用neighbor 6.6.6.6 disable-connected-check，不检查直连发到本机loopback的TTL
+
+- BGP load balance
+  BGP在本路由器可能会将多条同一个目的路由放入全局路由表中，但通告给别人时只给最优的一条路由，同时路由为精准路由
+
+- 通告
+  从EBGP收到的路由更新给EBGP和IBGP邻居
+  从IBGP收到的路由不更新给IBGP邻居 -> 防环
+  iBGP很多时候使用环回接口作为更新源，所以iBGP邻居需要IGP的支撑
+
+- IBGP路由不可达
+  EBPG路由在更新给IBGP的时候默认会保持原有的下一跳,下一跳可达是BGP最优路由的基本条件
+  R4收到ibgp路由，同时此ibgp路由从EBGP更新而来，则下一跳为EBGP对面as的路由地址
+#+begin_src shell
+R4#show ip bgp
+BGP table version is 3, local router ID is 44.1.1.1
+Status codes: s suppressed, d damped, h history, * valid, > best, i - internal,
+              r RIB-failure, S Stale, m multipath, b backup-path, f RT-Filter,
+              x best-external, a additional-path, c RIB-compressed,
+Origin codes: i - IGP, e - EGP, ? - incomplete
+RPKI validation codes: V valid, I invalid, N Not found
+
+     Network          Next Hop            Metric LocPrf Weight Path
+ *>i 1.1.1.1/32       11.1.1.1                 0    100      0 i
+ *>  4.4.4.4/32       0.0.0.0                  0         32768 i
+ * i 5.5.5.5/32       10.1.15.5                0    100      0 200 i
+ * i 7.7.7.7/32       10.1.15.5                0    100      0 200 i
+#+end_src
+  ASBR对IBGP邻居使用 *neighbor 77.1.1.1 next-hop-self* 可使得BGP next-hop为ASBR的地址
+
+  7.7.7.7不能ping4.4.4.4，因为R3没有4.4.4.4的路由，IP转发是逐跳查找路由，没有BGP的R3，不知道如果转发4.4.4.4
+  BGP路由黑洞(某些设备没有运行BGP，导致该设备无法通过BGP得到路由)
+
+- 路由redistribute
+  默认情况只能把EBGP路由引入IGP，不能把IBGP路由引进来，基于防环
+
+- *不再使用* 的路由同步 - 从IBGP对等体获得的路由信息不会通告给EBGP邻居，除非该路由也可以从IGP中获得
+  命令是no sync
+
+- 路由通告
+  只能通告路由表里存在的路由
+  ?表示路由从其他路由协议而来(引入)，i表示路由从BGP来
+  只通告最优路由给BGP对等体
+  iBGP一定依赖IGP
+
+- next hop
+  IBGP 更新源地址为下一跳
+  EBGP 下一跳为EBGP邻居关系地址
+  多点接入NH - 类似FA,会优化为同网段的最短路径
+
+- 对等体组和动态邻居
+  简化配置
+#+begin_src shell
+  - peer-group
+    neighbor XL peer-group
+    neighbor XL remote-as 100
+    neighbor XL update-source Loopback0
+    neighbor XL next-hop-self
+    neighbor 11.1.1.1 peer-group XL
+    neighbor 33.1.1.1 peer-group XL
+    neighbor 44.1.1.1 peer-group XL
+  - bgp listen range, 如下所有和本路由建邻居关系都会应用peer-group
+    bgp listen range 0.0.0.0/0 peer-group XL
+#+end_src
+
+- 连接模式neighbor 22.1.1.1 transport connection-mode
+- AS欺骗 neighbor 10.1.15.5 local-as 65535
+- 移除私有AS
+  私有AS 64512-65534
+  公有路由不能存在私有AS，所以从内网过来的AS path里包含的私有AS要被移除
+  1. 移除 neighbor 10.1.1.1 remove-private-as all -> 通告给公网的路由path中私有AS被移除
+  2. 替换 neighbor 10.1.1.1 remove-private-as all replace-as -> 通告给公网的路由path中私有AS被替换为本地AS
+
+** 路由聚合
+  1. 自动聚合: ?的BGP路由,结果汇总为主类网络,命令为auto-summary -> *几乎没有人用*
+#+begin_src shell
+    R1(config-router)#do show ip bgp
+    BGP table version is 33, local router ID is 11.1.1.1
+    Status codes: s suppressed, d damped, h history, * valid, > best, i - internal,
+                  r RIB-failure, S Stale, m multipath, b backup-path, f RT-Filter,
+                  x best-external, a additional-path, c RIB-compressed,
+    Origin codes: i - IGP, e - EGP, ? - incomplete
+    RPKI validation codes: V valid, I invalid, N Not found
+
+         Network          Next Hop            Metric LocPrf Weight Path
+     ,*>  1.1.1.1/32       0.0.0.0                  0         32768 i
+     ,*>  1.1.1.2/32       0.0.0.0                  0         32768 ?
+     ,*>  1.1.1.3/32       0.0.0.0                  0         32768 ?
+     ,*>  1.1.1.4/32       0.0.0.0                  0         32768 ?
+     ,*>i 2.2.2.2/32       22.1.1.1                 0    100      0 i
+     ,*>i 4.4.4.4/32       44.1.1.1                 0    100      0 i
+     ,*>  5.5.5.5/32       10.1.15.5                0             0 65535 200 i
+     ,*>  7.7.7.7/32       10.1.15.5                              0 65535 200 i
+     ,*>  10.1.12.0/24     0.0.0.0                  0         32768 ?
+     ,*>  10.1.13.0/24     0.0.0.0                  0         32768 ?
+     ,*>  10.1.14.0/24     0.0.0.0                  0         32768 ?
+     ,*>  10.1.15.0/24     0.0.0.0                  0         32768 ?
+     ,*>  11.1.1.1/32      0.0.0.0                  0         32768 ?
+     ,*>  77.1.1.1/32      10.1.15.5                              0 65535 200 i
+
+  R1(config-router)#auto-summary
+  R1(config-router)#do show ip bgp
+  BGP table version is 44, local router ID is 11.1.1.1
+  Status codes: s suppressed, d damped, h history, * valid, > best, i - internal,
+                r RIB-failure, S Stale, m multipath, b backup-path, f RT-Filter,
+                x best-external, a additional-path, c RIB-compressed,
+  Origin codes: i - IGP, e - EGP, ? - incomplete
+  RPKI validation codes: V valid, I invalid, N Not found
+
+       Network          Next Hop            Metric LocPrf Weight Path
+   ,*>  1.0.0.0          0.0.0.0                  0         32768 ?
+   ,*>  1.1.1.1/32       0.0.0.0                  0         32768 i
+   ,*>i 2.2.2.2/32       22.1.1.1                 0    100      0 i
+   ,*>i 4.4.4.4/32       44.1.1.1                 0    100      0 i
+   ,*>  5.5.5.5/32       10.1.15.5                0             0 65535 200 i
+   ,*>  7.7.7.7/32       10.1.15.5                              0 65535 200 i
+   ,*>  10.0.0.0         0.0.0.0                  0         32768 ?
+   ,*>  11.0.0.0         0.0.0.0                  0         32768 ?
+   ,*>  77.1.1.1/32      10.1.15.5                              0 65535 200 i
+#+end_src
+  2. 汇总静态路由 ip route 1.1.1.0 255.255.255.252 Null0 -> 此命令同时可做 路由清洗
+  3. 汇总BGP本地路由
+     aggregate-address 1.1.1.0 255.255.255.252
+     aggregate-address 1.1.1.0 255.255.255.252 summary-only //只通告汇总路由
+     aggregate-address 1.1.1.0 255.255.255.252 suppress-map xxx //抑制xxx命中的路由
+  4. 原子聚合 - 聚合的过程丢失了一些路径信息
+     聚合者   - AS number + router-id
+  5. AS-SET
+     保留被聚合路由的原有AS
+  6. 修改聚合属性
+#+begin_src shell
+R1(config)#route-map ORIGIN
+R1(config-route-map)#set origin incomplete
+R1(config-route-map)#exit
+R1(config)#router bgp 100
+R1(config-router)#aggregate-address 1.1.1.0 255.255.255.252 summary-only attribute-map ORIGIN
+R1(config-router)#$.1.0 255.255.255.252 summary-only attribute-map ORIGIN
+#+end_src
+
+** 路由反射
+一种更新iBGP路由的机制，对比全连接更简单
+
+- 角色
+RR 客户端 非客户端
+- 原则
+1. 非客户机IBGP对等体学到的路由，发布给此RR的所有客户机
+2  从客户端学到的路由，发布给RR的所有非客户端和客户端(*包含该客户端*) <= 我觉得应该是版本实现可能不一样
+- 命令
+#+begin_src shell
+  neighbor 33.1.1.1 route-reflector-client //在配好邻居的基础上，指定任意client即变成RR
+  neighbor 44.1.1.1 shutdown //强制关闭邻居
+#+end_src
+
+- cluster
+1. 一个cluster可以包括一个或多少RR
+2. 一个client可以同时属于多少cluster
+3. Originator_ID用于防环，由RR产生，携带本地AS内部路由发起者的Router ID(注意， Originator_ID和ORIGIN不是一个东西)
+4. Cluster_List用于RR防环，如果Cluster_List中已经本地Cluster_ID，丢弃该路由，否则将其加入Cluster_List，并反射(客户端也可配cluster，如果一致也会丢弃)
+#+DOWNLOADED: file:/Users/xuali2/Home/originator_id.pcapng @ 2021-08-18 20:58:30
+[[file:BGP/2021-08-18_20-58-30_originator_id.pcapng]]
+
+- 联邦(不常用)
+  分而治之，缺点是要取消之前的bgp配置，联邦内inherit AS的属性: 下一跳、MED值、本地优先级
+#+begin_src shell
+  bgp confederation identifier 200
+  bgp confederation peers 2067
+#+end_src
+
+- 团体属性
+  应用方式: 更新邻居，收邻居路由，产生路由
+  有过滤属性的well-known团体属性
+  NO-EXPORT(不更新出eBGP邻居)
+  Local-AS/No-export-subconfed(不更新出本地AS或者 *子联邦AS* )
+  No-advertise(不更新)
+
+#+begin_src shell
+  route-map Comm permit 10
+    set community no-export
+    set community 100:3 //自定义属性
+  network 1.1.1.1 mask 255.255.255.255 route-map Comm
+  neighbor 33.1.1.1 send-community //默认不发送团体属性
+  ip community-list xx //和prefix list或access list类似
+#+end_src
+
+#+DOWNLOADED: file:/Users/xuali2/Home/no_export.pcapng @ 2021-08-19 20:12:07
+[[file:BGP/2021-08-19_20-12-07_no_export.pcapng]]
+
+** 路由选择
+  | 公认必遵   | AS-path, next-hop, origin |
+  | 公认任意   | local preference(ibgp)    |
+  | 可选过渡   | 团体属性                  |
+  | 可选非进渡 | 起源ID，MED, Cluster      |
+  | 其他       | weight，不在报文中体现    |
+
+  优先级
+  | Weight(大优先)                                               |
+  | Local_Pref(大优先)                                           |
+  | 同一条本地路由 手动聚合->自动聚合->network引入->import-route |
+  | AS-path 最短                                                 |
+  | Origin IGP -> EGP -> Incomplete                              |
+  | 来自同一AS的路由，MED最低                                    |
+  | EBGP->IBGP->local cross->remote cross                        |
+  | load balance                                                 |
+  | O 时间更新的EBGP                                             |
+  | R RID/起源id                                                 |
+  | cluster id                                                   |
+
+  前提
+  下一跳可达
+
+  1. weight 本地，本地路由默认32768，在route-map里配
+  2. local perference, local as内传递, 用于ASBR引导流量到内部设备然后去往其他AS， *在route-map里配ebgp邻居的route-map in*
+  3. 本地生成的路由
+  4. as-path
+  5. MED
+     a. 缺省为0，如果通告IGP，则继承IGP的cost作为MED
+     b. 越小越优先
+     c. 相邻两个AS之间传递
+     d. 影响从相邻AS到本AS
+     e. 只有第一个as号相同时才比MED
+     f. 来自IBGP的路由MED只在AS内传，即不是ASBR的路由产生network设定metric只在内部
+     g. *配置时一般在ASBR上配出方向的route-map*
+  6. next hop metric 越小越优先
+  7. 开启loadbalance,结果看路由表
+#+begin_src shell
+  show ip protocols | s bgp //显示
+  R7(config-router)#maximum-paths 6 //最大load balance路径
+#+end_src
+  8. as过滤
+#+begin_src shell
+  ip as-path access-list 1 //as-path过滤,正则表达式
+  neighbor 10.1.15.1 filter-list 1 out //应用filter
+#+end_src
+
+** 其他特性
+*** 认证
+tcp报文中
+#+DOWNLOADED: file:/Users/xuali2/Home/md5.pcapng @ 2021-08-21 20:22:12
+[[file:BGP/2021-08-21_20-22-12_md5.pcapng]]
+
+*** 默认路由
+- network 0.0.0.0
+- neighbor 11.1.1.1 default-originate
+
+*** MP-BGP
+#+begin_src shell
+  router bgp 100
+   bgp log-neighbor-changes
+   neighbor 10.1.15.5 remote-as 200
+   neighbor 10.1.15.5 local-as 65535
+   neighbor 10.1.15.5 password cisco
+   neighbor 22.1.1.1 remote-as 100
+   neighbor 22.1.1.1 update-source Loopback0
+   neighbor 2015::5 remote-as 200
+   neighbor 33.1.1.1 remote-as 100
+   neighbor 33.1.1.1 update-source Loopback0
+   neighbor 44.1.1.1 remote-as 100
+   neighbor 44.1.1.1 update-source Loopback0
+   !
+   address-family ipv4
+    network 1.1.1.1 mask 255.255.255.255 route-map 1
+    network 44.1.1.1 mask 255.255.255.255
+    neighbor 10.1.15.5 activate
+    neighbor 22.1.1.1 activate
+    neighbor 22.1.1.1 next-hop-self
+    no neighbor 2015::5 activate
+    neighbor 33.1.1.1 activate
+    neighbor 33.1.1.1 send-community
+    neighbor 33.1.1.1 route-reflector-client
+    neighbor 33.1.1.1 next-hop-self
+    neighbor 44.1.1.1 activate
+    neighbor 44.1.1.1 route-reflector-client
+    neighbor 44.1.1.1 next-hop-self
+   exit-address-family
+   !
+   address-family ipv6
+    network 1::/64
+    neighbor 2015::5 activate
+   exit-address-family
+
+R1#show bgp ipv6 unicast  summary
+BGP router identifier 11.1.1.1, local AS number 100
+BGP table version is 2, main routing table version 2
+1 network entries using 164 bytes of memory
+1 path entries using 104 bytes of memory
+1/1 BGP path/bestpath attribute entries using 144 bytes of memory
+2 BGP rrinfo entries using 48 bytes of memory
+2 BGP AS-PATH entries using 48 bytes of memory
+0 BGP route-map cache entries using 0 bytes of memory
+0 BGP filter-list cache entries using 0 bytes of memory
+BGP using 508 total bytes of memory
+BGP activity 180/170 prefixes, 262/248 paths, scan interval 60 secs
+
+Neighbor        V           AS MsgRcvd MsgSent   TblVer  InQ OutQ Up/Down  State/PfxRcd
+2015::5         4          200       4       5        2    0    0 00:00:50        0
+R1#
+R1#show bgp ipv6 unicast
+BGP table version is 2, local router ID is 11.1.1.1
+Status codes: s suppressed, d damped, h history, * valid, > best, i - internal,
+              r RIB-failure, S Stale, m multipath, b backup-path, f RT-Filter,
+              x best-external, a additional-path, c RIB-compressed,
+Origin codes: i - IGP, e - EGP, ? - incomplete
+RPKI validation codes: V valid, I invalid, N Not found
+
+     Network          Next Hop            Metric LocPrf Weight Path
+ *>  1::/64           ::                       0         32768 i
+#+end_src
+
+#+DOWNLOADED: file:/Users/xuali2/Home/mpbgp.pcapng @ 2021-08-21 23:03:39
+[[file:BGP/2021-08-21_23-03-39_mpbgp.pcapng]]
+
+** 其他命令
+#+begin_src shell
+  set weight //set weigth
+  set local-preference //set local-preference
+  set as-path prepend //route-map里append一个as number
+#+end_src
+
 * IGP - OSPF
 * MPLS - VPN
+LDP  - 分发标签(为IGP)
+RSVP - MPLS 流量工程
+MP-BGP - 分发标签(为BGP单播路由
+
+| 控制平面                         | 转发平面  |
+|----------------------------------+-----------|
+| 路由协议，标签分发协议、RIB, LIB | FIB, LFIB |
+
 * Multicast
 * IPSEC - VPN
-
-
-

@@ -1,0 +1,51 @@
+课前测试：
+1.SDN的核心理念是什么？
+A.转控分离
+B.多网络、多厂商融合
+C.用软件代替硬件
+答案：
+2.思科DNAC的5大功能有：design、policy、___、Assurance和Platform。
+A.Appliance
+B.ISE
+C.Provision
+答案：C（VLAN1--3层交换口）
+3.DNAC中Fabric的角色包含___、CP和Edge。
+A.AD服务器
+B.DNS
+C.Border
+答案：C
+
+特别小心：
+多种服务的联动
+1.ISE和AD的联动
+EI-ISE/admin# ping qytei.com
+PING qytei.com (10.1.1.203) 56(84) bytes of data.
+64 bytes from 10.1.1.203: icmp_seq=1 ttl=128 time=0.372 ms
+64 bytes from 10.1.1.203: icmp_seq=2 ttl=128 time=0.743 ms
+AD的服务器
+2.DNAC和ISE的联动
+maglev~Cisc0123
+PxGrid~推荐设置自动审批
+ei-ise.qytei.com
+representation state transfer
+===========================
+绝大部分密码：Cisc0123
+=====================================
+实施DNAC
+设计（design）
+你们可以做实验！
+设置设备凭证：
+1）CLI凭证 选中圆圈保存
+2）SNMP凭证 只读选中圆圈保存。可写选中圆圈保存
+3）HTTP凭证（无线有关）
+
+enable password qytang 
+之前那个CLI凭证需要自己去交换机配吗？
+关键到时候设备如何只能的自己站队拿资源啊
+可以自定义添加应用吗？可以
+IMAGE--Cisco server？是！
+下节课周六（19:00）
+
+
+
+
