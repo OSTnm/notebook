@@ -1,0 +1,16 @@
+• Layer 3 CAPWAP discovery—You can enable this feature on different subnets from the access
+point. This feature uses IP addresses and UDP packets rather the MAC addresses used by Layer 2
+discovery.
+• Locally stored controller IP address discovery—If the access point was previously associated to a
+controller, the IP addresses of the primary, secondary, and tertiary controllers are stored in the access
+point’s nonvolatile memory. This process of storing controller IP addresses on an access point for
+later deployment is called priming the access point.
+• DHCP server discovery—This feature uses DHCP option 43 to provide controller IP addresses to
+the access points. Cisco switches support a DHCP server option that is typically used for this
+capability.
+• DNS discovery—The access point can discover controllers through your domain name server (DNS).
+You must configure your DNS to return controller IP addresses in response to
+CISCO-CAPWAP-CONTROLLER.localdomain, where localdomain is the access point domain
+name. When an access point receives an IP address and DNS information from a DHCP server, it
+contacts the DNS to resolve CISCO-CAPWAP-CONTROLLER.localdomain. When the DNS sends
+a list of controller IP addresses, the access point sends discovery requests to the controllers.

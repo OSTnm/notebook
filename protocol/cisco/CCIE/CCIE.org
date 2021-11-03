@@ -11,18 +11,7 @@
 
 #+TITLE: CCIE
 
-军哥上课视频链接：https://pan.baidu.com/s/1m0Rc6vpsIMiaqgsmee8t3Q
-提取码：209l
-达叔上课网盘链接：https://pan.baidu.com/s/1yruDl3o4-Vjur2_CMBzOuQ
-提取码：u3z9
-网络可编程性及自动化专题课
-链接：https://pan.baidu.com/s/13lzut4rsDDvOwSUmSCyNmg
-提取码：et9i
-QCIE课前资料 链接：https://pan.baidu.com/s/12MmdwBBzu86yhHsr9IVPGg 提取码：8l0k
-笔记链接：MPLS笔记.note
-链接：http://note.youdao.com/noteshare?id=62170abf8fbfbc10f32a595598ca3430&sub=57D0260CC886437E8B8316C71CE358AA
-
-* SDN
+* SDN-Access(first)
 CTS，Cisco Trust SEC
 SGT, Security Group Tag
 
@@ -33,24 +22,6 @@ ISE <-> DNAC, by PxGrid
 - 预共享密钥不能用cisco, admin
 - PxGrid自动审核
 - DNAC的名字不能有空格
-
-#+DOWNLOADED: file:/Users/xuali2/Downloads/0-EI CCIE+HCIE视频/1-思科DNAC_仅思科学习/1-DNAC1.txt @ 2021-08-11 20:51:04
-[[file:SDN/2021-08-11_20-51-04_1-DNAC1.txt]]
-
-#+DOWNLOADED: file:/Users/xuali2/Downloads/0-EI CCIE+HCIE视频/1-思科DNAC_仅思科学习/2-服务关联和设计.txt @ 2021-08-11 20:51:13
-[[file:SDN/2021-08-11_20-51-13_2-服务关联和设计.txt]]
-
-#+DOWNLOADED: file:/Users/xuali2/Downloads/0-EI CCIE+HCIE视频/1-思科DNAC_仅思科学习/3-DNAC3.txt @ 2021-08-11 20:51:13
-[[file:SDN/2021-08-11_20-51-13_3-DNAC3.txt]]
-
-#+DOWNLOADED: file:/Users/xuali2/Downloads/0-EI CCIE+HCIE视频/1-思科DNAC_仅思科学习/4-部署Farbic和主机上线.txt @ 2021-08-11 20:51:13
-[[file:SDN/2021-08-11_20-51-13_4-部署Farbic和主机上线.txt]]
-
-#+DOWNLOADED: file:/Users/xuali2/Downloads/0-EI CCIE+HCIE视频/1-思科DNAC_仅思科学习/5-lisp和vxlan理论和多VN、L2handoff部署.txt @ 2021-08-11 20:51:13
-[[file:SDN/2021-08-11_20-51-13_5-lisp和vxlan理论和多VN、L2handoff部署.txt]]
-
-#+DOWNLOADED: file:/Users/xuali2/Downloads/0-EI CCIE+HCIE视频/1-思科DNAC_仅思科学习/6-DNAC的保障-QOS部署和其他.txt @ 2021-08-11 20:51:13
-[[file:SDN/2021-08-11_20-51-13_6-DNAC的保障-QOS部署和其他.txt]]
 
 ** Design
 - Network hierarchy
@@ -63,6 +34,7 @@ ISE <-> DNAC, by PxGrid
     - 在左边站点site处保留地址
     - total: underlay, vn1, vn2, l2 handoff, l3 handoff
     - 选中圆圈保存
+
 ** Policy
 - Group-base ACL
   - Scability group -> ISE->Work Centers -> TrustSec 定义标签, SGT扩展组标签(数字)
@@ -520,21 +492,1030 @@ RPKI validation codes: V valid, I invalid, N Not found
 [[file:BGP/2021-08-21_23-03-39_mpbgp.pcapng]]
 
 ** 其他命令
-#+begin_src shell
+#+begin_src shello
   set weight //set weigth
   set local-preference //set local-preference
   set as-path prepend //route-map里append一个as number
 #+end_src
 
 * IGP - OSPF
+
+#+DOWNLOADED: file:/Users/xuali2/Home/ospf.pcapng @ 2021-09-04 09:20:02
+[[file:IGP_-_OSPF/2021-09-04_09-20-02_ospf.pcapng]]
+
+- network wildard指定的是接口地址范围，在里面的interface都被发布出去
+- 虚连接作用
+  在连接虚连接的同一个area0的ABR间建virtual link
+  1. 连接不直接area0的area
+  2. 连接多个area0
+  3. backup
+- 不同ospf不兼容
+- 同一个area传递链路信息，不同area传递路由信息
+- 必须有area0,其他area只和area0通信
+- OSPF使能网段时会将接口上匹配该网段的所有网段路由与主机路由都通过LSA发布，但有些时候主机路由或网段路由是不希望被发布的。通过前缀抑制配置，可以减少LSA中携带不需要的前缀，即不发布某些网段路由和主机路由，从而提高网络安全性，加快路由收敛。
+当使能前缀抑制时，具体情况如下：
+- P2P或P2MP类型网络：Type-1 LSA中不发布接口的主地址，即Type-1 LSA中链路类型为3的Stub链路被抑制，不生成接口路由，但其他路由信息可以正常计算，不会影响流量转发。
+- 广播类型或者NBMA网络：DR发布的Type-2 LSA的掩码字段会填成32位，即不生成网段路由，但其他路由信息可以正常计算，不会影响流量转发。另外，如果没有邻居，发布的Type-1 LSA中也不发布接口的主地址，即Type-1 LSA中链路类型为3的Stub链路被抑制。
+
+** LSA
+- LS type
+| Type | Description                                                                  | Link State ID            |
+|------+------------------------------------------------------------------------------+--------------------------|
+|    1 | Router-LSA, 描述路由器端口链路,同一个area通告                                | 生成LSA路由器的Router-ID |
+|    2 | Network-LSA, DR生成该网络上所连接路由的列表, 同一个area通告                  | DR端口ip                 |
+|    3 | Network-Summary-LSA, ABR产生，到外部某一网段的路由信息，本area向其他area通告 | 目的网段地址             |
+|    4 | ASBR-Summary-LSA, ABR产生，为5生成，在非ASBR内通告                           | ASBR的Router-ID          |
+|    5 | AS-external-LSA, ASBR产生，外部某一网段的路由信息，在整个AS内通告            | 目的网段地址             |
+
+1和2计算路由
+
+- Link State ID
+- Advertising Router
+- LS sequence number
+  标识更新的LSA
+- Hello报文校验
+  Network mask掩码要一样
+  HelloIntervel一致
+  Options匹配
+  DeadInterval一样
+- 状态机
+  down(attempt)->init->two-way->exstart->exchange->loading->full
+
+Router-LSA中重要字段
+| Type     | Link ID                | Data                     |
+|----------+------------------------+--------------------------|
+| PPP      | 邻居的RouterID         | 该网段本地接口的IP       |
+| TransNet | DR的接口IP地址         | 该网段本地接口的IP       |
+| StubNet  | 该Stub网段的IP网络地址 | 该Stub网段的网络掩码     |
+| Virtual  | 虚连邻居的RouterID     | 去该虚连邻居的本地IP地址 |
+
+** 路由汇总
+当前想汇总area的ABR
+
+- 明细存在，汇总存在
+- 所有明细消失，汇总才消失
+
+** ASBR
+type 1, ospf as计算开销
+type 2, ospf as内不增加开销
+
+*forwarding address防止次优路径* - 如果引入外部路由时下一跳为area0内部，则设置forwarding adress直接为下一跳地址
+
+** Stub区域
+不接受4 5类LSA, ABR产生默认路由，为了减少性能差的路由器上的资源占用
+
+- 完全Stub, 不接受3, 4, 5
+
+** NSSA
+类型7，适用于不想引入3,4,5但想引入处部路由的场景
+
+NSSA路由传入正常area时，会将7转5，同时保留7的forwarding addr，用于正常area计算cost
+
+** 额外特性
+- 通告stub路由器，可使更少的流量经过stub路由器
+- ASBR通告默认路由，常用于连接互联网的边界设备，配置后ASBR向AS域内通告默认路由(5类)
+
 * MPLS - VPN
 LDP  - 分发标签(为IGP)
 RSVP - MPLS 流量工程
-MP-BGP - 分发标签(为BGP单播路由
+MP-BGP - 分发标签(为BGP单播路由)
 
 | 控制平面                         | 转发平面  |
 |----------------------------------+-----------|
 | 路由协议，标签分发协议、RIB, LIB | FIB, LFIB |
 
+- ldp配置
+#+DOWNLOADED: file:/Users/xuali2/Home/ldp.pcapng @ 2021-08-29 16:54:58
+[[file:MPLS_-_VPN/2021-08-29_16-54-58_ldp.pcapng]]
+
+#+begin_src shell
+  ip cef
+  (config-if) mpls ip
+#+end_src
+
+- 帧格式
+ Label(20bits), TC: Traffic Class (QoS and ECN)(3bits),  S: Bottom-of-Stack(1bit),  TTL: Time-to-Liv(8bits)
+
+0-15: 特殊标签
+16-1023: 静态LSP和静态CR-LSP
+1024以上: LDP、RSVP-TE、MP-BGP
+
+#+DOWNLOADED: file:/Users/xuali2/Home/ping_mpls.pcapng @ 2021-08-29 18:27:49
+[[file:MPLS_-_VPN/2021-08-29_18-27-49_ping_mpls.pcapng]]
+
+- 改变地址
+mpls ldp discovery transport-address interface
+
+- 验证
+mpls ldp neighbor 1.1.1.1 password xuan
+
+- show mpls ip binding
+in use为ip路由表里生效的路由对应生成的mpls label
+路由的loadbalance会使得mpls的loadbalance
+
+- php次末跳出(默认开启)
+为了不让最后一跳既pop标签又查fib，在倒数第二跳节点将标签pop出，则最后一跳只需查fib
+实现为设备会为自身的直连路由向上游设备分配隐式空标签
+如要改为显式空,mpls ldp explicit-null
+
+- 下一跳非直达路由(?)
+#+DOWNLOADED: file:/Users/xuali2/Home/1.1.1.1.pcapng @ 2021-08-31 08:51:15
+[[file:MPLS_-_VPN/2021-08-31_08-51-15_1.1.1.1.pcapng]]
+
+BGP doesn't advertise lable for internal routes unless you use BGP -LU family.
+
+When we use LDP on Cisco IOS, we locally generate a label for each prefix that we can find in the RIB, except for BGP prefixes. This information is then added to the LIB (Label Information Base).
+
+
+#+DOWNLOADED: file:/Users/xuali2/Home/xfib-lfib-cisco.png.pagespeed.ic.ceKHN1yir8.webp @ 2021-08-31 18:33:32
+[[file:MPLS_-_VPN/2021-08-31_18-33-32_xfib-lfib-cisco.png]]
+
+#+begin_src shell
+R4#show ip cef 11.1.1.1
+11.1.1.1/32
+  nexthop 10.1.34.3 Ethernet0/2 label 307
+R4#
+R4#show ip cef 1.1.1.1
+1.1.1.1/32
+  nexthop 10.1.34.3 Ethernet0/2 label 307
+R4#
+R4#show ip route
+Codes: L - local, C - connected, S - static, R - RIP, M - mobile, B - BGP
+       D - EIGRP, EX - EIGRP external, O - OSPF, IA - OSPF inter area
+       N1 - OSPF NSSA external type 1, N2 - OSPF NSSA external type 2
+       E1 - OSPF external type 1, E2 - OSPF external type 2
+       i - IS-IS, su - IS-IS summary, L1 - IS-IS level-1, L2 - IS-IS level-2
+       ia - IS-IS inter area, * - candidate default, U - per-user static route
+       o - ODR, P - periodic downloaded static route, H - NHRP, l - LISP
+       a - application route
+       + - replicated route, % - next hop override
+
+Gateway of last resort is not set
+
+      1.0.0.0/32 is subnetted, 1 subnets
+B        1.1.1.1 [200/0] via 11.1.1.1, 00:48:09
+      4.0.0.0/32 is subnetted, 1 subnets
+C        4.4.4.4 is directly connected, Loopback1
+      10.0.0.0/8 is variably subnetted, 9 subnets, 2 masks
+O        10.1.12.0/24 [110/30] via 10.1.34.3, 00:18:05, Ethernet0/2
+O        10.1.13.0/24 [110/20] via 10.1.34.3, 00:18:05, Ethernet0/2
+C        10.1.14.0/24 is directly connected, Serial1/0
+L        10.1.14.4/32 is directly connected, Serial1/0
+O        10.1.23.0/24 [110/20] via 10.1.34.3, 00:18:05, Ethernet0/2
+C        10.1.24.0/24 is directly connected, Serial1/1
+L        10.1.24.4/32 is directly connected, Serial1/1
+C        10.1.34.0/24 is directly connected, Ethernet0/2
+L        10.1.34.4/32 is directly connected, Ethernet0/2
+      11.0.0.0/32 is subnetted, 1 subnets
+O        11.1.1.1 [110/21] via 10.1.34.3, 00:18:05, Ethernet0/2
+      22.0.0.0/32 is subnetted, 1 subnets
+O        22.1.1.1 [110/21] via 10.1.34.3, 00:18:05, Ethernet0/2
+      33.0.0.0/32 is subnetted, 1 subnets
+O        33.1.1.1 [110/11] via 10.1.34.3, 00:18:05, Ethernet0/2
+      44.0.0.0/8 is variably subnetted, 2 subnets, 2 masks
+C        44.1.1.0/24 is directly connected, Loopback0
+L        44.1.1.1/32 is directly connected, Loopback0
+R4#
+R4#show mpls ip bin
+R4#show mpls ip binding
+  1.1.1.1/32
+	out label:    imp-null  lsr: 11.1.1.1:0
+  2.2.2.2/32
+	out label:    imp-null  lsr: 22.1.1.1:0
+  3.3.3.3/32
+	out label:    imp-null  lsr: 33.1.1.1:0
+  4.4.4.4/32
+	in label:     imp-null
+  10.1.12.0/24
+	in label:     400
+	out label:    310       lsr: 33.1.1.1:0       inuse
+	out label:    imp-null  lsr: 11.1.1.1:0
+	out label:    imp-null  lsr: 22.1.1.1:0
+  10.1.13.0/24
+	in label:     401
+	out label:    imp-null  lsr: 33.1.1.1:0       inuse
+	out label:    imp-null  lsr: 11.1.1.1:0
+	out label:    200       lsr: 22.1.1.1:0
+  10.1.14.0/24
+	in label:     imp-null
+	out label:    309       lsr: 33.1.1.1:0
+	out label:    imp-null  lsr: 11.1.1.1:0       inuse
+	out label:    201       lsr: 22.1.1.1:0
+  10.1.15.0/24
+	out label:    imp-null  lsr: 11.1.1.1:0
+  10.1.23.0/24
+	in label:     402
+	out label:    imp-null  lsr: 33.1.1.1:0       inuse
+	out label:    100       lsr: 11.1.1.1:0
+	out label:    imp-null  lsr: 22.1.1.1:0
+  10.1.24.0/24
+	in label:     imp-null
+	out label:    308       lsr: 33.1.1.1:0
+	out label:    104       lsr: 11.1.1.1:0
+	out label:    imp-null  lsr: 22.1.1.1:0       inuse
+  10.1.34.0/24
+	in label:     imp-null
+	out label:    imp-null  lsr: 33.1.1.1:0
+	out label:    102       lsr: 11.1.1.1:0
+	out label:    202       lsr: 22.1.1.1:0
+  11.1.1.1/32
+	in label:     403
+	out label:    307       lsr: 33.1.1.1:0       inuse
+	out label:    imp-null  lsr: 11.1.1.1:0
+	out label:    203       lsr: 22.1.1.1:0
+  22.1.1.1/32
+        in label:     404
+	out label:    306       lsr: 33.1.1.1:0       inuse
+	out label:    105       lsr: 11.1.1.1:0
+	out label:    imp-null  lsr: 22.1.1.1:0
+  33.1.1.1/32
+	in label:     405
+	out label:    imp-null  lsr: 33.1.1.1:0       inuse
+	out label:    103       lsr: 11.1.1.1:0
+	out label:    204       lsr: 22.1.1.1:0
+  44.1.1.0/24
+	in label:     imp-null
+  44.1.1.1/32
+	out label:    311       lsr: 33.1.1.1:0
+	out label:    101       lsr: 11.1.1.1:0
+	out label:    205       lsr: 22.1.1.1:0
+#+end_src
+** vrf
+RD值建议全网per客户唯一 -> PE间同步路由以RD为前缀, 和RT一致时方便配置
+
+#+begin_src shell
+  interface Ethernet0/0
+   ip vrf forwarding xuan
+   ip address 10.1.49.4 255.255.255.0
+  !
+
+R4#show ip route vrf xuan
+
+Routing Table: xuan
+Codes: L - local, C - connected, S - static, R - RIP, M - mobile, B - BGP
+       D - EIGRP, EX - EIGRP external, O - OSPF, IA - OSPF inter area
+       N1 - OSPF NSSA external type 1, N2 - OSPF NSSA external type 2
+       E1 - OSPF external type 1, E2 - OSPF external type 2
+       i - IS-IS, su - IS-IS summary, L1 - IS-IS level-1, L2 - IS-IS level-2
+       ia - IS-IS inter area, * - candidate default, U - per-user static route
+       o - ODR, P - periodic downloaded static route, H - NHRP, l - LISP
+       a - application route
+       + - replicated route, % - next hop override
+
+Gateway of last resort is not set
+
+      10.0.0.0/8 is variably subnetted, 2 subnets, 2 masks
+C        10.1.49.0/24 is directly connected, Ethernet0/0
+L        10.1.49.4/32 is directly connected, Ethernet0/0
+#+end_src
+
+- RD 和 BGP
+私有路由通告时，RD值区分不同客户的相同私有地址，所有vrf路由进入vpnv4邻居
+如果两个PE配置不同的rd值(RT相同)，那么每个PE会生成同一个路由的两个BGP VPNv4的RD路由
+
+#+begin_src shell
+R4#show ip bgp vpnv4 all
+BGP table version is 12, local router ID is 44.1.1.1
+Status codes: s suppressed, d damped, h history, * valid, > best, i - internal,
+              r RIB-failure, S Stale, m multipath, b backup-path, f RT-Filter,
+              x best-external, a additional-path, c RIB-compressed,
+Origin codes: i - IGP, e - EGP, ? - incomplete
+RPKI validation codes: V valid, I invalid, N Not found
+
+     Network          Next Hop            Metric LocPrf Weight Path
+Route Distinguisher: 1:1 (default for vrf xuan)
+ *>i 10.1.10.0/24     11.1.1.1                 0    100      0 i
+ *>  10.1.49.0/24     0.0.0.0                  0         32768 i
+Route Distinguisher: 100:14
+ *>i 10.1.10.0/24     11.1.1.1                 0    100      0 i
+R4#
+#+end_src
+
+如下抓包，没有配RT时
+#+DOWNLOADED: file:/Users/xuali2/Home/no_rt.pcapng @ 2021-08-31 21:08:47
+[[file:MPLS_-_VPN/2021-08-31_21-08-47_no_rt.pcapng]]
+
+- RT -> BGP扩展团体属性
+控制收发VPNv4路由及把VPNv4路由放入vrf路由表
+
+#+begin_src shell
+  address-family vpnv4
+   neighbor 44.1.1.1 activate
+   neighbor 44.1.1.1 send-community extended
+  exit-address-family
+
+R4(config)#do show run | s vrf
+ip vrf xuan
+ rd 100:14
+ route-target export 100:14
+ route-target export 1:1
+ route-target import 100:14
+ ip vrf forwarding xuan
+ address-family ipv4 vrf xuan
+  network 10.1.49.0 mask 255.255.255.0
+#+end_src
+
+#+DOWNLOADED: file:/Users/xuali2/Home/rt_configured.pcapng @ 2021-08-31 21:17:05
+[[file:MPLS_-_VPN/2021-08-31_21-17-05_rt_configured.pcapng]]
+
+*配了RT值后报文中会多Path Attribute - EXTENDED_COMMUNITIES的属性*
+
+- PE间的MP-BGP
+全互联或者RR
+
+** PE和CE间
+
+CE一般配IGP或者静态路由
+PE将路由导入至BGP vrf，通过bgp vpn4通告给对端PE
+
+*PE的下一跳为BGP更新源，使用ldp分配的外层标签push，发至mpls next-hop*
+
+|          | 协议        | 分配的对象                  | 标签的变化                              |
+|----------+-------------+-----------------------------+-----------------------------------------|
+| 内层标签 | BGP自动分配 | VPNv4路由的标签             | 每个私网(vrf)路由都有自已的标签         |
+| 外层标签 | LDP自动分配 | 到达VPNv4路由的下一跳的标签 | 多个私网(vrf)相同下一跳，则外层标签相同 |
+
+#+DOWNLOADED: file:/Users/xuali2/Home/ping_mpls_vpn.pcapng @ 2021-09-01 23:19:14
+[[file:MPLS_-_VPN/2021-09-01_23-19-14_ping_mpls_vpn.pcapng]]
+
+#+DOWNLOADED: file:/Users/xuali2/Home/ce_trace.pcapng @ 2021-09-02 08:51:08
+[[file:MPLS_-_VPN/2021-09-02_08-51-08_ce_trace.pcapng]]
+
+配置CE PE间的IGP，然后在PE端做双向引入
+#+begin_src shell
+R4#show run | s eigrp
+router eigrp 100
+ !
+ address-family ipv4 vrf xuan autonomous-system 90
+  redistribute bgp 100 metric 1000 10 255 1 1500
+  network 10.1.49.4 0.0.0.0
+ exit-address-family
+  redistribute eigrp 90
+R4#show run | s bgp
+  redistribute bgp 100 metric 1000 10 255 1 1500
+router bgp 100
+ bgp log-neighbor-changes
+ network 4.4.4.4 mask 255.255.255.255
+ neighbor 11.1.1.1 remote-as 100
+ neighbor 11.1.1.1 update-source Loopback0
+ !
+ address-family vpnv4
+  neighbor 11.1.1.1 activate
+  neighbor 11.1.1.1 send-community extended
+ exit-address-family
+ !
+ address-family ipv4 vrf xuan
+  network 10.1.49.0 mask 255.255.255.0
+  redistribute eigrp 90
+ exit-address-family
+#+end_src
+
+*CISCO、华为的路由器默认情况下均不允许将ibgp路由直接重分布到ospf中，如果确认需要将ibgp路由协议重分发到ospf中，需要增加额外的配置。* - 在bgp进程下增加一条命令：bgp redistribute-internal
+
+** MPLS对TTL的处理
+- Uniform
+PE上把IP的TTL和标签的TTL相互拷贝，即IP->MPLS将TTL copy至MPLS，反之一样
+
+- Pipe
+MPLS作为一个设备处理, IP->MPLS TTL=-1, 后面MPLS里的IP TTL不变
+
+防止相互拷贝
+#+begin_src shell
+no mpls ip propagate-ttl forwarded
+#+end_src
+
+** CE<->PE EIGRP
+
+EIGRP引入BGP有POI,是BGP的一个团体属性,优先于所有常规的BGP选路原则
+
+- 防环 SOO
+  双出口环境，SOO在PE的一个口收到后打上SOO，然后不会更新到SOO值相同的另外一个口上
+
+#+begin_src shell
+R4#show run | s SOO
+ ip vrf sitemap SOO
+route-map SOO permit 10
+ set extcommunity soo 100:14
+#+end_src
+
+** CE<->PE OSPF
+- PE路由器是一个ABR
+- BGP重分布至OSPF，以type3&5
+- 一个站点的area0到另外一个area0，以OIA形式体现
+- BGP扩展属性用于承载&通告OSPF的路由类型，COST拷贝至MED
+- domain-id，不同的domain-id导致3类路由变为5类路由，在bgp扩展属性里面
+- 3类LSA防环, MBGP引入时自动增加DN(down) bit位，其他PE检测到DOWN，拒绝OSPF引入回BGP
+- 5类LSA防环，MBGP引入外部路由增加tag位65016，其他PE收到tag为65016时拒绝(3489661028)
+- MBGP默认不引入ospf外部路由
+
+*** Shamlink
+类似于虚链路, 当CE是存在备份链路时，OSPF优先选LSA1 2不走MPLS了
+
+#+begin_src shell
+interface Loopback1
+ ip vrf forwarding xuan
+ ip address 1.1.1.1 255.255.255.255
+area 0 sham-link 1.1.1.1 3.3.3.3
+#+end_src
+
+
+*** MCE&Vrf-lite
+多VPN实例的CE，减少用户网络设备的设入
+
+#+begin_src shell
+capability vrf-lite
+#+end_src
+
+** CE<->PE BGP
+BGP从CE->PE再回到另外的CE，路由不会被接受(AS一样)
+
+- 主动方案
+替换CE的AS number,PE上配
+#+begin_src shell
+//在vrf下
+  neighbor 10.1.10.10 as-override
+#+end_src
+- 被动方案
+CE上配
+#+begin_src shell
+neighbor 10.1.10.1 allowas-in 2
+#+end_src
+
+防环
+- 和eigrp一样加SOO
+
 * Multicast
+
+组播IP为1110开头的地址
+
+IGMP用于主机和路由器
+PIM 用于路由之间
+组播路由器关心流量往哪个接口转发，但不关心存在多少需要流量的主要
+
+组播分发树
+- 叶路由器 - 最靠近接收者的路由器
+- 第一跳路由器 - 最靠近组播源的路由器
+- 组播路由器 - 中间路由器
+
+组播流量分类
+- SSM 特定源组播, 接受特定源IP的组播流量
+- ASM 任意源组播, 接收者不挑组播源
+- SFM 源过滤组播，即不是所有源，也不是某一个源
+
+永久组地址 224.0.0.0 - 224.0.0.255
+
+224.0.0.1 所有组播节点都侦听
+224.0.0.2 所有组播路由器
+
+组播IP->组播MAC  (24bits)01005E + (25bit)0 + (23bit)组播IP后23bit，但是组播IP去(1110)为28位，所以部署组播组时要保证后23bit不一样
+
+协议
+- IGMP 主机<->叶路由器
+- PIM  路由器之间
+- MBGP
+- MSDP 组播源发现，任意播RP及域间组播
+
+SPT 源路径路，组播源为root，每一个接收者最短路径结合
+RPT RP与叶路由器间最短路径
+
+二层交换机接受到组播mac时 - igmp snooping, 检测igmp流量，确定某些接口有组播需求从而转发
+IP组播，从源决定了目标MAC，源MAC在每一跳重写
+
+组播转发
+收到帧sqgu验后，判断目标MAC地址是否应该由本设备处理，在拆除二层头部，检查三层头部，数据做出转发决策之前，必须要经过RPF检查
+
+RPF
+路由器收到组播流，确认组播报文从自身接到组播源的接口上收到，才可以进行转发
+RPF规则:
+默认采用优先级/管理距离来进行RPF检查
+可选项，可配置为使用最长匹配，如果相同 组播静态、组播BGP、单播
+
+上游接口 收到组播流的接口
+下游接口 发组播流的接口
+
+组播转发表
+- 组播组地址
+- 出接口列表 OIF list
+- 入接口 IIF，用作RPF检查
+- RPF邻居，上游接口的对端设备
+- 源IP地址(RPT, RPF检查RP)
+
+IGMP
+query  路由发送，查询特定网段上是否存在组播组成员
+report 由主机发送，响应或加入组播组时发送
+
+** IGMP
+
+IGMPv1 未定义离组消息，路由器通过周期query确定超时(3查询周期)
+#+DOWNLOADED: file:/Users/xuali2/Home/igmpv1.pcapng @ 2021-09-20 11:25:16
+[[file:Multicast/2021-09-20_11-25-16_igmpv1.pcapng]]
+
+#+begin_src shell
+ip multicast-routing
+interface Ethernet0/0
+ ip pim dense-mode
+ ip igmp version 1
+end
+show ip igmp membership
+show ip mroute
+#+end_src
+
+IGMP查询器 - 多个叶路由有选举机制，依靠PIM
+IGMP报告抑制机制 - 多个相同group的主机只用发一份report(其他主机收到会取消发送，但通常来说没什么用，因为延时基本都是同时发送)
+
+#+DOWNLOADED: file:/Users/xuali2/Home/igmpv2.pcapng @ 2021-09-20 15:57:25
+[[file:Multicast/2021-09-20_15-57-25_igmpv2.pcapng]]
+
+IGMPv2
+- 普遍组查询以及特定组查询
+- 新增离组消息(离组消息触发特定组查询)
+- 随机定时器
+- 查询器相对IGMPv1有自已的选举规则，竞争选举
+- 兼容IGMPv1
+  1. IGMPv2主机->IGMPv1路由器，则发送IGMPv1 report消息，并有400s的定时器
+  2. IGMPv2路由->IGMPv1主机，query兼容v1
+  3. IGMPv1、IGMPv2路由共存时，强制都配成v1才可以工作
+
+** PIM-DM密集模式
+
+#+DOWNLOADED: file:/Users/xuali2/Home/pim.pcapng @ 2021-09-20 19:57:41
+[[file:Multicast/2021-09-20_19-57-41_pim.pcapng]]
+
+适用临时、小型的组播网络，强推
+
+- 泛洪flood保证所有可能的接收者会收到流量(周期性，默认180s)
+- 没有组播流量的路由会发prune消息
+- 新主机需要流量时，通过graft恢复
+- 生成SPT树，第一跳周期性(60s)发状态刷新，防止prune结点因为超时恢复组播流量
+
+#+begin_src shell
+//所有参与组播路由器接口，包括和用户的接口
+interface range e0/0-1
+ip pim dense-mode
+
+//和用户的接口开igmp
+interface Ethernet0/0
+ ip igmp version 2
+end
+show ip igmp groups
+
+//主机加入组播组
+interface Ethernet0/0
+ip igmp join-group 225.0.0.1
+end
+
+Host3#ping 225.0.0.1
+Type escape sequence to abort.
+Sending 1, 100-byte ICMP Echos to 225.0.0.1, timeout is 2 seconds:
+
+Reply to request 0 from 100.1.1.8, 5 ms
+Reply to request 0 from 10.1.2.4, 9 ms
+Reply to request 0 from 10.1.2.3, 8 ms
+#+end_src
+
+** PIM-SM稀疏模式
+
+#+DOWNLOADED: file:/Users/xuali2/Home/pim_sm.pcapng @ 2021-09-21 11:28:56
+[[file:Multicast/2021-09-21_11-28-56_pim_sm.pcapng]]
+
+#+DOWNLOADED: file:/Users/xuali2/Home/pm_sm_join.pcapng @ 2021-09-21 11:32:23
+[[file:Multicast/2021-09-21_11-32-23_pm_sm_join.pcapng]]
+
+- RPT
+- 叶路由器下游出现接收者，叶路由器将根据RPF向着RP方向倒着生长一棵RPT，join加入，向着RP的方向hop by hop加入RPT
+- (*, G)可以转发组播
+- 源注册
+  1. 第一跳路由器得到组播源
+  2. 第一跳路由器将组播源封装至单播消息，发送到RP
+     - RP根据组播组地址匹配的组播路由表沿着RPT转发组播流(不做RPT检查)
+     - 上游设备hopbyhop将下游接口加入(S,G)的oif list
+     - SPT完成（源到RP的SPT和叶子到RP的RPT<根为RP>），向第一跳发PIM注册停止，第一跳将停止单播，转为组播流
+     - SPT+RPT转发，上游用SPT，下游用RPT
+  3. 不能保证RP一定位于最佳路径 - RPT到SPT的切换（RP收到注册消息）
+     - 叶路由器收到组播流，即感知到组播源，直接向组播源方向做(S, G) join
+     - 逐跳向上形成(S, G)路由表直至完整的SPT
+
+- 总结
+  1. IGMP形成最后一跳(*, G)
+  2. 叶路由器向RP逐跳形成(*, G)
+  3. 第一跳向RP注册
+  4. RP向源逐跳(S, G) join，源路径树形成
+  5. RP向下转发组播流
+  6. 叶路由器知道组播源，向源端注册(S, G)
+  7. 叶路由器向RP减共享树上的数据流(带RP位)
+
+可以设置永不切换，适用于流量少，且持续时间短的组
+
+
+#+begin_src shell
+//开sm模式
+interface Ethernet0/0
+ ip pim sparse-mode
+end
+
+//配置静态RP
+R1(config)#ip pim rp-address 5.5.5.5
+R1#show ip pim rp
+
+(*, 225.0.0.1), 00:47:24/00:02:31, RP 5.5.5.5, flags: SJC
+  Incoming interface: Ethernet0/0, RPF nbr 10.26.1.6
+  Outgoing interface list:
+    Ethernet0/1, Forward/Sparse, 00:47:24/00:02:31 - 有出接口
+#+end_src
+
+| Command                | Last Hop Router | First Hop Router | Intermediary Hop Router |
+|------------------------+-----------------+------------------+-------------------------|
+| ip pim rp-address      | Y               | Y                | Y                       |
+| ip pim spare-mode      | Y               | Y                | Y                       |
+| ip igmp version        | Y               |                  |                         |
+| ip pim register-source |                 | Y                |                         |
+| ip pim spt-threshold   | Y               |                  |                         |
+
+ip pim register-source //第一跳向RP注册使用的组地址
+ip pim spt-threshold //从RPT到SPT切换，定义一个需要达到的速度
+
 * IPSEC - VPN
+| 名词      | 描述                                                                                                                            |
+|-----------+---------------------------------------------------------------------------------------------------------------------------------|
+| ESP       | 封装安全负载，IP协议号50，加密，完整，认证，防重放                                                                              |
+| SPI       | 安全参数索引，确认单方向IPSEC SA的标识, 32bits                                                                                  |
+| Ipsec seq | 防重发                                                                                                                          |
+| IV        | 初始化向量，随机值，扰乱加密数据                                                                                                |
+| SA        | a relationship between two or more entities that describes how the entities will use security services to communicate securely. |
+| ike SA    | 负责IPSec SA的建立和维护，双向                                                                                                     |
+| ipsec SA  | 负责具体的数据流加密, 单向的一对SA(封装协议)                                                                                         |
+| SPD       | 安全策略数据库，描述什么数据被ipsec sa处理，实现为Acl(结果为bypass, discard ipsec)                                              |
+| SADB      | SA数据库                                                                                                                 |
+
+AH不支持数据加密,ESP普遍使用
+| 隧道模式 | IP数据被封装IPsec内部 |
+| 传输模式 | IP头部不被IPsec封装   |
+
+#+DOWNLOADED: file:/Users/xuali2/Home/Picture 1.png @ 2021-09-07 22:31:56
+[[file:IPSEC_-_VPN/2021-09-07_22-31-56_Picture 1.png]]
+
+| 对称算法   | DES, 3DES, AES, RC4 |
+| 非对称算法 | RSA, DH, ECC        |
+| Hash算法   | MD5, SHA-1          |
+
+HMAC - hash消息认证码，增加一个key做hash
+
+IKEV1二次协同、IKEV2一次
+
+** 过程
+*** ike sa
+1 策略
+- 加密算法：选择DES或3DES
+- hash算法：选择MD5或SHA
+- 认证方法：选择证书认证、预置共享密钥认证或Kerberos v5认证
+- Diffie-Hellman组的选择
+2 DH交换
+密钥交换
+3 认证
+*** ipsec sa
+1. 策略
+使用哪种IPSec协议：AH或ESP
+使用哪种hash算法：MD5或SHA
+是否要求加密，若是，选择加密算法：3DES或DES 在上述三方面达成一致后，将建立起两个SA，分别用于入站和出站通信。
+2. 会话密钥
+可和ike密角相同，也可不同
+3. SA+密钥+SPI完成
+** 部署
+
+#+DOWNLOADED: file:/Users/xuali2/Home/ipsec.pcapng @ 2021-09-09 08:45:16
+[[file:IPSEC_-_VPN/2021-09-09_08-45-16_ipsec.pcapng]]
+
+- 通信设备
+- 加密设备
+#+DOWNLOADED: file:/Users/xuali2/Home/Picture 1.png @ 2021-09-08 20:08:45
+[[file:IPSEC_-_VPN/2021-09-08_20-08-45_Picture 1.png]]
+- 公网设备
+*** 路由
+1. 公网设备到加解密设备的路由
+2. 加解密设备之间的路由，通讯点路由(一般在加解密设备上用默认路由)
+3. 通讯点之间的路由
+*** SPD - ACL
+#+begin_src shell
+R10-CE(config-ext-nacl)#do show run | s acc
+ip access-list extended ipsec
+ permit ip host 10.10.10.10 host 8.8.8.8
+#+end_src
+*** IKE SA
+基于UDP 500, 所有配置的policy在ike协商时都会发出去
+#+begin_src shell
+crypto isakmp policy 10
+ encr 3des
+ hash md5
+ authentication pre-share
+ group 2
+crypto isakmp key xuan address 10.1.10.10
+#+end_src
+
+*** IPSEC SA
+#+begin_src shell
+crypto ipsec transform-set xuan esp-3des esp-sha-hmac
+ mode tunnel
+ip access-list extended ipsec
+ permit ip host 8.8.8.8 host 10.10.10.10
+#+end_src
+
+*** Deploy on port
+#+begin_src shell
+crypto map xuan 10 ipsec-isakmp
+ set peer 10.1.10.10
+ set transform-set xuan
+ match address ipsec
+ crypto map xuan <= interface e0/3
+#+end_src
+
+*** DMVPN
+*PBR->Routing->NAT->Crypto*
+
+- MGRE 多点GRE,可传送组播
+#+begin_src shell
+interface Tunnel0
+ ip address 172.16.1.3 255.255.255.0
+ no ip redirects
+ tunnel source 202.100.1.2
+ tunnel mode gre multipoint
+end
+#+end_src
+- NHRP 下一跳地址解析(下一跳广播)，分支节点动网IP地址
+
+#+DOWNLOADED: file:/Users/xuali2/Home/gre.pcapng @ 2021-09-14 22:33:23
+[[file:IPSEC_-_VPN/2021-09-14_22-33-23_gre.pcapng]]
+
+#+DOWNLOADED: file:/Users/xuali2/Home/nhrp.pcapng @ 2021-09-15 00:01:08
+[[file:IPSEC_-_VPN/2021-09-15_00-01-08_nhrp.pcapng]]
+
+#+begin_src shell
+//HUB
+  interface Tunnel0
+   ip address 172.16.1.1 255.255.255.0
+   ip nhrp authentication xuan
+   ip nhrp map multicast dynamic
+   ip nhrp network-id 1010
+  end
+//SPOKE
+  interface Tunnel0
+   ip address 172.16.1.3 255.255.255.0
+   no ip redirects
+   ip nhrp authentication xuan
+   ip nhrp map 172.16.1.1 61.128.1.1
+   ip nhrp map multicast 61.128.1.1
+   ip nhrp network-id 1010
+   ip nhrp nhs 172.16.1.1
+  end
+#+end_src
+spoke间发ping包，第一个包会到hub触发动态隧道建立(NHRP请求通过HUB，对端SPOKE学到源端SPOKE不通过HUB回NHRP repsonce)，后续spoke间直接通信
+
+- 路由协议 (阶段二)
+OSPF - tunnel启用，配置broadcast&point-to-multipoint模式和优先级保证HUB是DR
+EIGRP - 关闭水平分割,no ip split-horizon eigrp 1(否则SPOKE互相学不到)和下一跳自我no ip next-hop-self eigrp 1(否则路由都会指向总部)
+iBGP - Hub成为RR
+
+- 阶段三
+防止HUB路由太多，汇总HUB路由，重定向NHRP
+
+#+begin_src shell
+  //HUB
+    ip nhrp redirect
+    ip next-hop-self eigrp 1 //指向HUB
+    ip ospf point-to-multipoint //指向自已
+    HUB(config-if)#ip summary-address eigrp 1 2.0.0.0/8 //eigrp
+R1(config-router)#summary-address 172.16.0.0 255.255.252.0 //ospf
+  //SPOKE
+    ip nhrp shortcut
+#+end_src
+
+- IPSec封装，支持RIP、EIGRP、OSPF、BGP
+
+* SD-WAN
+** 编排，管理，控制，数据转发
+
+| Component | Description                        |
+|-----------+------------------------------------|
+| vManage   | 管理平面                           |
+| vSmart    | 控制平面，路由操控                 |
+| vBond     | 授权, 所有控制平面数据平面安全转发 |
+| vEdge     | 数据转发                           |
+
+OMP - vSmart和vedge之间建的连接
+
+vManage、vSmart、vBond 通过数字证书进行签名
+- 管理器在vManage创建控制器白名单
+- 控制器列表分发给所有控制器
+- 设备通过数字签名认证
+
+vEdge
+- 建临时DTLS，在vBond上onboarding，default 12346
+- 和vSmart建DTLS连接，数量和vSmart cpu核确定，core0 - 12346, core1 - 12446 ...，最多8个
+- 和vManage建DTLS连接
+
+连接
+|        | vMange | vSmart | vBond | vEdge                 |
+|--------+--------+--------+-------+-----------------------|
+| vMange | N.A.   |        |       | NetConf/DTLS,下发配置 |
+| vSmart |        | N.A.   | DTLS  | OMP/DTLS，路由/拓扑   |
+| vBond  |        |        | N.A.  | DTLS/Template         |
+| vEdge  |        |        |       | TLOC                  |
+
+** 数据平面
+TLOC 传输定全ID
+VVV 分离不同业务
+
+|            | VPN ID |
+|------------+--------|
+| 传输侧 VVV |      0 |
+| 管理 vvv   |    512 |
+| 服务侧 VVV |   其他 |
+
+传输侧分为两类color: public、private
+
+private 尝式与所有color建立ipsec Tunnel
+public  尝式与public建立ipsec tunnel
+限制操作(可选)  隧道接口上定义仅仅允许与自身color一样的TLOC之间建立tunnel
+
+端到端的分段实现多拓扑结构
+- edge为每一个vvv维护路由表，实现控制平面分离
+- OMP在路由传输的过程中也提供分离，在vsmart上也是分离的
+- 数据传输上使用label分离
+
+** OMP
+- 基于DTLS/TLS
+- 在传输侧vvv建立会话
+- 自动启用，无需配置
+- 使用system-ip建立OMP对等体，一个edge与vmwart只建立一个OMP会话(注意区分和DTLS根据核建多个连接)
+
+Feature:
+- 集成距离矢量路由协议
+- ipsec密钥分配及交换
+- 策略分布
+- C/S架构
+- 分离，前缀、下一跳(TLOC)、服务、三者分离
+
+TLOC 定位到设备端口IP
+支持多地址族
+
+OMP传递三种路由
+- vroute
+  OMP路由，服务侧的子网信息
+- TLOC route
+  fabric接口的详细信息，传输侧的路由，服务侧的下一跳
+- service route
+  AAR,应该感知路由,类似于PBR
+
+选路原则
+- 是否有效
+- 管理距离
+- OMP路由优先级
+- vEdge，TLOC优先级
+- Origin
+- 起源度量
+- vEdge, Route-Id较大
+- vEdge较高私有IP地址， vSmart两个都选
+
+** 模板
+设备模板
+- feature组合
+- CLI template
+
+如果service vvv 使用了子接口，那么要求其特理接口必须在vpn0
+OMP默认情况下会把OSPF内部路由，直连路由、静态路由，通告出去
+
+** 策略
+所有的中心策略都是在vsmart上激活
+默认情况下，一旦设备通过template纳管，就不能自已配置，只能通过vmanage管理
+
+
+*** 两个维度分类
+- 控制策略 e.g.:route-map
+- 数据策略 e.g.:acl, qos
+
+- 中心策略 在同一时间在一台vsmart上只能激活一个策略
+  1. 自定义路由决策
+  2. 操控路由，比如TLOC，流量工程，服务，控制vvv的拓扑
+
+- 本地策略 分发列表等
+  1. 在vedge上也只能应用一种本地策略
+  2. acl,分发列表,qos
+
+** 实验
+1. 定义route-policy
+2. 创建local policy,导入route-policy
+3. 修改device template，添加local policy
+4. 修改feature template，添加route-policy
+
+* SD-Access
+组件
+- DNA Center
+  整个解决方案的SDN控制器
+- ISE
+  提供策略
+- 园区网交换机
+  转发平面
+- 终端
+
+设计、策略、部署、保障
+
+ISE - 策略
+NCP - 自动部署
+NDP - 保障
+
+fabric角色
+- control-plane nodes
+  存储HTDB、map server、map resolver
+  HTDB 主机跟踪数据库，每个主机在哪个交换机，EID(就是32位ip)到fabric edge节点的映射
+- edge
+  主机入网的注册，封装解封装vxlan，接入策略
+- intermediate
+  中间节点，仅需要支持jumbo mtu即可
+- border
+  负责充当fabric丫点与fabric外部网络之间的网关
+  自动双向重发布,和外部建bgp
+  对外，将vxlan的VN(即vrf)映射到外部vrf
+
+LISP - locator/ID separation protocol
+将一台主机的位置和其标识分离开，以实现主机的移动，主机移到fabric中的任意位置，其IP地址不用发生变化
+RLOC和EID的映射
+
+LISP转发
+- border外有数据包到主机
+- ITR(border)发map request到map server
+- map server发到主机的交换机查
+- 主机交换机发map resolve到border
+- border封vxlan到主机
+- 主机回包，目的是外部地址
+- 主机交换机(anycast gateway)
+
+手动纳管
+- 保证网络通，一般用环回口
+- 必须保证VTP透明
+- 配置远程登陆，用户名密码给15级权限，建议SSH
+
+SGT 可扩展组标签
+
+** 实验
+
+*** 设计
+规划算网络结构
+站点结构 位置、站点
+网络设备的凭证、网络共享服务器地址(DHCP、AAA、SNMP、syslog、NTP、DNS)
+DHCP地址池规划 - 在site配个大地址池，在build里去reserveG
+
+border自动部署vrf、bgp、接口、ip地址
+
+*** 策略
+
+创建VN
+
+*** 部署
+设计fabric
+- transit, 创建border, ip based - bgp, 设置as号
+- fabric, 建立branch
+
+回到主页，find new device
+
+provision -> device -> actions -> provison -> assign to site
+分别选中同一型号的设备 -> actions -> provision -> ** 实验
+
+*** 设计
+规划算网络结构
+站点结构 位置、站点
+网络设备的凭证、网络共享服务器地址(DHCP、AAA、SNMP、syslog、NTP、DNS)
+DHCP地址池规划 - 在site配个大地址池，在build里去reserveG
+
+border自动部署vrf、bgp、接口、ip地址
+
+*** 策略
+
+创建VN
+
+*** 部署
+
+**** 设计
+设计fabric
+- transit, 创建border, ip based - bgp, 设置外端as号
+- fabric, 建立branch
+
+**** 查找设备
+回到主页，find new device
+
+**** 纳管设备
+provision -> device -> actions -> provison -> assign to site
+分别选中同一型号的设备 -> actions -> provision device -> deploy -> now 完成onboarding
+
+**** 分配角色
+provision -> fabric 点设备 分配角色
+分配成border时
+- 设置本地as及地址池
+  | default to virtual network | do not import external routes | result                       |
+  |----------------------------+-------------------------------+------------------------------|
+  | No                         | No                            | 双向重发布明细路由           |
+  | Yes                        | No                            | 双向重发布，加默认路由       |
+  | Yes                        | Yes                           | 单向重发布，内部只发默认路由 |
+- 设置external interface及需要通的VN
+- deploy
+- 点开border设备，detail, 点开接口，即可看到每个VN对应vlan本地地址和远端地址
+- 在sdwan里创建vpn模板对应于vn，接口模板和bgp模板(*有点版本sdwan模板as号不能整成变量，要固定*)
+

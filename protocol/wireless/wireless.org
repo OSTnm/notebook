@@ -35,5 +35,168 @@
 - SNR 信噪比
 - dbm  0dbm = 10 log 1mv / 1mv, -30~-40算好信号，-80dbm基本无信号
 
+** Antenna Diversity
+不支持MIMO的设备802.11a/b/g(SISO),收多个天线，取信号最好的
+
+** MIMO - Spatial Multiplexing
+多个TX天线，将信号分为多个空间流传输，提高吞吐量
+
+** MIMO -  Transmit Beamforming
+多个TX天线一起协作使得接收端信号增强，常用在只有一个接收天线同时反射源稳定的时候
+
+** MIMO - MRC
+多个RX天线根据算法将收到的信号取最强信号(per symbol)，同时删掉out of phase(multipath)的信号
+
+** MU-MIMO
+传统的MIMO同一时间只能有一个目标，MU-MIMO可以做到一个时间多个用户(最多3个)
+
+** OFDMA
+In 802.11ac (OFDM), multiple users are separated by space and time.802.11ax has the same space and time separation as 802.11ac, but a third multiuser dimension is added: frequency division. With 802.11ac, the Wi-Fi channel (20, 40, 80, or 160 MHz) was divided into a collection of smaller OFDM subcarriers to mitigate interference.
+
+
+* 拓扑
+1. AP dhcp 获得地址,option 43，一般不在wlc management port在一个网段
+2. AP通过CAPWAP关联WLC
+
+
+** WLC
+local - 中心转发
+WLANs -> All aps -> general flexconnect - 中心转发和本地转发，advanced选项卡激活local switching
+在Wireless用Ap关联动态接口，动态接口网关和Dhcp server网关一样
+
+* 加密
+** 报文
+probe request
+probe response
+authen request (不是真正的认证，类似于请求是否可以认证)
+authen reponse
+assocication request
+assocication response
+psk or 802.1x
+
+** key分发
+- 用户A把public key UserAPublic放到CA, CA用它的private key CAPrivate加密，即CAPrivate(UserAPublic)
+- 用户B拿到CAPrivate(UserAPublic)，用CAPublic解密，即证明这个是合法的CA，同时拿到了用户A的Public key
+
+** EAP认证
+- EAP-TLS
+  所有设备都要装证书，通过证书来验证身份
+- PEAP
+  服务器需要证书，客户端用 用户名和密码
+- EAP-Fast
+  PAC代替TLS,是一个共享证书，和Client名字及Server A-ID有关
+
+** WPA2
+
+加密无线信道
+
+WPA2个人 - wifi密码(PSK)
+WPA2企业 - 802.1x和3A(输用户名和密码)
+
+PTK - 单播流量
+GTK - 组播广播流量
+
+PMK = SSID + PSK + 4096迭代 - 所有用户相同
+PTK = PMK + ANonce + SNonce + MAC1 + MAC2 - 每个用户不同
+
+帧加密 = PTK + Nonce + Plaintext data
+
+* QOS
+** ATF(Cisco Air Time Fairness)
+
+** AVC(Application Visibility and Control)
+DPI深度报文解析->NBAR2应用识别->应用层级别的Qos
+
+* Feature
+** RRM(Radio Resource Management)
+自动调节power保证RF groups内的coverage
+
+** CleanAir
+特殊的芯片,发现interference，调整channel
+
+** band select
+2.4G的probe request不回或delay, 5G的probe回的快，这样client就会认为5G更快而用5G连接
+
+
+
 * Course
 - [[https://cisco.udemy.com/course/certified-wireless-network-administrator-cwna/learn/lecture/9737860#overview][CWNA]]
+
+* 准备
+- client exclusion
+多次认证失败，不再发认证到radius
+- ISE NAC
+ Network access control, 检查客户端安全装备，比如操作系统，杀毒，补丁
+- 802.11r
+ 无线seamless漫游,50ms以内
+- OEAP
+ flexconnect配置,OEAP连家庭路由器，用pnp拿到公司的WLC地址，然后OEAP与公司连CAPWAP
+- CCKM
+ cisco key管理
+- split tunneling
+ 同时访问公司和内网，用acl实现内网subnet不走CAPWAP
+- remote LAN
+ 有线设备和WLC认证，被当作无线设备用
+- vlan-based central switching
+ vlan在AP本地有则local switching,否则central
+- qos
+ Platinum (voice)
+ Gold (video)
+ Silver (best effort)
+ Bronze (background)
+- mls qos trust dscp and mls qos trust cos
+ 根据dscp或者cos做qos
+- autoqos
+ 一些典型的qos配置，要手动下发
+- voice vlan
+ specifically allocated for user's voice data streams. It ensures the quality of voice traffic by improving the transmission priority of it when transmitted with other traffic.
+- up to dscp map
+ dscp和802.11e(WMM) up间映射，保证DSCP至无线的QOS
+- multicast to unicast
+ 正常multicast不会ack,所以丟了也不知道，将multicast to unicast保证reliable
+- multicast AP multicast mode
+ the controller sends multicast packets to a CAPWAP multicast group. This method reduces overhead on the controller processor and shifts the work of packet replication to your network, which is much more efficient than the unicast method.
+- mdns
+ LAN内的组播,ttl为1,不能过路由, 224.0.0.251 - UDP 5353
+- eping and mping
+ Mobility Ping Tests
+ mping udp 16666
+ eping ip 97
+- BYOD single SSID vs dual SSID
+ single - 一个包含provision、onboarding、network access
+ dual - 一个open auth来provision和onboarding，一个network access
+- rogue AP Containment
+ 发de-auth让rogue AP下线，最多4个去踢rogue AP
+- Context Aware service
+ 管ip设备，包括有线无线
+- 802.1x supplicant credentials
+ap本身的接口通过802.1x验证，然后访问网络
+
+
+* 错题
+
+- config network ap-discovery nat-ip-only disable
+- Which two restrictions are in place with regards to configuring mDNS? (Choose two.)
+  *mDNS is not supported on FlexConnect APs with a locally switched WLAN.*
+  *mDNS is not supported over IPv6*
+
+- Which two steps are needed to complete integration of the MSE to Cisco Prime Infrastructure and be able to track the location of clients/rogues on maps?
+  *Add the MSE to Cisco Prime Infrastructure using the Cisco Prime Infrastructure communication credentials configured during set up.*
+  *Apply a valid license for location tracking.*
+
+- What is the default IEEE 802.1x AP authentication configuration on a Cisco Catalyst 9800 Series Wireless Controller?
+  *EAP-FAST with CAPWAP DTLS*
+
+- Which two configurations are applied on the WLC to enable multicast, check multicast stream subscriptions, and stream content only to subscribed clients? (Choose two)
+  *Enable IGMP snooping*
+  Set the IGMP timeout to 180 seconds
+  *Enable broadcast forwarding*
+  Enable 802.3x flow control mode.
+  Set the AP multicast to 238.255.255.255
+
+
+SUMMER2021
+
+Q40解析：7.2及7.3版沒有要求CWA ACL要允許DNS，所以更新後要加上DNS ACL。原答案AD改CD。
+Q47解析：Rogue AP危險分類high severity的有on-network,open,our SSID,strong RSSI,attracks client.原答案ACD改ABD
+
