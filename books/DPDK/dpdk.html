@@ -1,0 +1,1626 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2022-02-06 Sun 23:38 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>DPDK</title>
+<meta name="generator" content="Org mode" />
+<meta name="author" content="xuali2" />
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: auto;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline; margin-top: 14px;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { width: 90%; }
+  /*]]>*/-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://fniessen.github.io/org-html-themes/src/readtheorg_theme/css/htmlize.css"/>
+<link rel="stylesheet" type="text/css" href="https://fniessen.github.io/org-html-themes/src/readtheorg_theme/css/readtheorg.css"/>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="https://fniessen.github.io/org-html-themes/src/lib/js/jquery.stickytableheaders.min.js"></script>
+<script type="text/javascript" src="https://fniessen.github.io/org-html-themes/src/readtheorg_theme/js/readtheorg.js"></script>
+<script type="text/javascript">
+// @license magnet:?xt=urn:btih:e95b018ef3580986a04669f1b5879592219e2a7a&dn=public-domain.txt Public Domain
+<!--/*--><![CDATA[/*><!--*/
+     function CodeHighlightOn(elem, id)
+     {
+       var target = document.getElementById(id);
+       if(null != target) {
+         elem.classList.add("code-highlighted");
+         target.classList.add("code-highlighted");
+       }
+     }
+     function CodeHighlightOff(elem, id)
+     {
+       var target = document.getElementById(id);
+       if(null != target) {
+         elem.classList.remove("code-highlighted");
+         target.classList.remove("code-highlighted");
+       }
+     }
+    /*]]>*///-->
+// @license-end
+</script>
+</head>
+<body>
+<div id="content">
+<h1 class="title">DPDK</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#org97d9370">1. 环境</a>
+<ul>
+<li><a href="#org9d8b812">1.1. DPDK对收发包的改进</a></li>
+<li><a href="#org354e39c">1.2. 基本函数</a></li>
+</ul>
+</li>
+<li><a href="#org3fea9e9">2. Cache和内存</a>
+<ul>
+<li><a href="#org19e2603">2.1. NUMA</a></li>
+<li><a href="#org659c3c5">2.2. DPDK的NUMA机制</a></li>
+<li><a href="#org10ac20d">2.3. Cache</a></li>
+<li><a href="#org5cc8887">2.4. DPDK的cache机制</a></li>
+<li><a href="#org7c5b6e1">2.5. DPDK的大页</a></li>
+<li><a href="#orgf7bfcfb">2.6. DDIO</a></li>
+</ul>
+</li>
+<li><a href="#org2a8d1b9">3. 并行</a>
+<ul>
+<li><a href="#org54d2290">3.1. 超线程</a></li>
+<li><a href="#org7651915">3.2. DPDK的线程独占</a>
+<ul>
+<li><a href="#org69cb700">3.2.1. rte_eal_init里的lcore初始化</a></li>
+</ul>
+</li>
+<li><a href="#org3f6e6c1">3.3. DPDK的指令/数据并发</a></li>
+<li><a href="#org9ff0faf">3.4. DPDK的同步互斥</a>
+<ul>
+<li><a href="#org3258f36">3.4.1. 指令原子操作</a></li>
+<li><a href="#orgaf623c9">3.4.2. Linux原子操作</a></li>
+<li><a href="#org4866845">3.4.3. DPDK应用</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#orgbc281e9">4. 报文转发</a>
+<ul>
+<li><a href="#orga010d49">4.1. 硬件框架</a>
+<ul>
+<li><a href="#org606b571">4.1.1. DPDK的转发模型</a></li>
+<li><a href="#org6126289">4.1.2. 转发算法库</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#orge7c8520">5. PCI-E和I/O</a>
+<ul>
+<li><a href="#org0ef84ab">5.1. PCI-E</a></li>
+<li><a href="#org82d166c">5.2. Mbuf</a></li>
+</ul>
+</li>
+<li><a href="#orgff5cbdf">6. 网卡性能</a>
+<ul>
+<li><a href="#orgf4582ea">6.1. 轮询</a></li>
+<li><a href="#org2538629">6.2. 中断轮询混杂</a></li>
+<li><a href="#orgcd940f1">6.3. burst处理</a></li>
+<li><a href="#org054f785">6.4. 队列长度</a></li>
+</ul>
+</li>
+<li><a href="#org6c88d26">7. 多队列</a>
+<ul>
+<li><a href="#org2538611">7.1. linux kernel</a></li>
+<li><a href="#org23c6f31">7.2. 网卡</a></li>
+<li><a href="#org72c12f8">7.3. HW Offload</a></li>
+</ul>
+</li>
+<li><a href="#org2f8c7a2">8. IO虚拟化</a>
+<ul>
+<li><a href="#orgfeaf103">8.1. SR-IOV</a></li>
+<li><a href="#org98b15ba">8.2. Virtio</a></li>
+</ul>
+</li>
+<li><a href="#org4415296">9. 应用场景</a></li>
+</ul>
+</div>
+</div>
+<p>
+<a href="https://doc.dpdk.org/guides/">https://doc.dpdk.org/guides/</a><br />
+</p>
+
+<p>
+传统上，网卡驱动程序运行在Linux的内核态，以中断方式来唤醒系统处理，这和历史形成有关。早期CPU运行速度远高于外设访问，所以中断处理方式十分有效，但随着芯片技术与高速网络接口技术的一日千里式发展，IO速度大于CPU速度<br />
+</p>
+
+<div id="outline-container-org97d9370" class="outline-2">
+<h2 id="org97d9370"><span class="section-number-2">1</span> 环境</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+转发面硬件类型<br />
+</p>
+<ul class="org-ul">
+<li>ASIC&amp;FPGA<br /></li>
+<li>NP<br /></li>
+<li>多核通用处理器<br /></li>
+</ul>
+
+<p>
+linux内核网络包处理流程<br />
+</p>
+
+<ul class="org-ul">
+<li>数据包到达网卡设备<br /></li>
+<li>网卡设备依据配置进行DMA操作<br /></li>
+<li>网卡发送中断，唤醒处理器<br /></li>
+<li>驱动软件填充读写缓冲区数据结构<br /></li>
+<li>数据报文达到内核协议栈，进行高层处理<br /></li>
+<li>如果最终应用在用户态，数据从内核搬移到用户态<br /></li>
+<li>如果最终应用在内核态，在内核继续进行<br /></li>
+</ul>
+</div>
+
+<div id="outline-container-org9d8b812" class="outline-3">
+<h3 id="org9d8b812"><span class="section-number-3">1.1</span> DPDK对收发包的改进</h3>
+<div class="outline-text-3" id="text-1-1">
+<ul class="org-ul">
+<li>轮询而不是中断<br /></li>
+<li>用户态驱动<br />
+<ul class="org-ul">
+<li>不受限于内核现有的数据格式和行为定义<br /></li>
+<li>规避不必要的内存拷贝又避免了系统调用<br /></li>
+</ul></li>
+<li>CPU affinity，特定任务只在某个核上工作<br /></li>
+<li>申请大页来降低访问开销<br /></li>
+</ul>
+
+
+<div id="orgc2e5efd" class="figure">
+<p><img src="环境/2021-12-27_15-51-16_dpdk_framework.png" alt="2021-12-27_15-51-16_dpdk_framework.png" /><br />
+</p>
+</div>
+
+<p>
+包越小要达到linerate的延迟需要更小<br />
+</p>
+
+
+<div id="org1c285b9" class="figure">
+<p><img src="环境/2021-12-27_17-34-37_frame_speed.png" alt="2021-12-27_17-34-37_frame_speed.png" /><br />
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org354e39c" class="outline-3">
+<h3 id="org354e39c"><span class="section-number-3">1.2</span> 基本函数</h3>
+<div class="outline-text-3" id="text-1-2">
+<p>
+rte = runtime environment<br />
+eal = environment abstraction layer<br />
+</p>
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">函数名</th>
+<th scope="col" class="org-left">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left">rte_eal_init</td>
+<td class="org-left">各种初始化(配置，内存池，队列，告警，中断，PCI，定时器，插件，主线程，轮询，等)</td>
+</tr>
+
+<tr>
+<td class="org-left">rte_eal_remote_launch</td>
+<td class="org-left">在逻辑核上运行回调，类似pthread_create</td>
+</tr>
+
+<tr>
+<td class="org-left">rte_pktmbuf_pool_create</td>
+<td class="org-left">内存池分配</td>
+</tr>
+
+<tr>
+<td class="org-left">rte_eth_dev_configure</td>
+<td class="org-left">网口配置队列</td>
+</tr>
+
+<tr>
+<td class="org-left">rte_eth_rx_queue_setup/rte_eth_tx_queue_setup</td>
+<td class="org-left">配置端口的某个队列</td>
+</tr>
+
+<tr>
+<td class="org-left">rte_eth_dev_start</td>
+<td class="org-left">启动网卡</td>
+</tr>
+
+<tr>
+<td class="org-left">rte_eth_promiscuous_enable</td>
+<td class="org-left">开启混杂模式</td>
+</tr>
+</tbody>
+</table>
+
+
+<p>
+几个简单的sample<br />
+</p>
+<ul class="org-ul">
+<li>examples/helloworld 指定核打印hello world<br /></li>
+<li>examples/skeleton 单核报文收发程序<br /></li>
+<li>examples/performance-thread/l3fwd-thread 简单L3转发<br /></li>
+</ul>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org3fea9e9" class="outline-2">
+<h2 id="org3fea9e9"><span class="section-number-2">2</span> Cache和内存</h2>
+<div class="outline-text-2" id="text-2">
+</div>
+<div id="outline-container-org19e2603" class="outline-3">
+<h3 id="org19e2603"><span class="section-number-3">2.1</span> NUMA</h3>
+<div class="outline-text-3" id="text-2-1">
+<p>
+早期的CPU架构所有的CPU核前端总线连到北桥，北桥连RAM同时下挂南桥连其他外设，瓶颈在北桥<br />
+SMP是相对于NUMA的架构<br />
+</p>
+<ul class="org-ul">
+<li>共享所有硬件资源<br /></li>
+<li>平等处理器核间关系<br /></li>
+<li>内存统一结构寻址<br /></li>
+<li>处理器和内存、处理器间都通过一条总线相连<br /></li>
+</ul>
+
+<p>
+而NUMA如下图删除了北桥，CPU自已直连RAM，所以访问本地内存快，但是访问其他RAM有时会经过多个CPU<br />
+</p>
+
+<div id="org3acfd57" class="figure">
+<p><img src="Cache和内存/2021-12-29_10-05-10_numa.png" alt="2021-12-29_10-05-10_numa.png" /><br />
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org659c3c5" class="outline-3">
+<h3 id="org659c3c5"><span class="section-number-3">2.2</span> DPDK的NUMA机制</h3>
+<div class="outline-text-3" id="text-2-2">
+<ul class="org-ul">
+<li>pre-core memory<br /></li>
+</ul>
+<p>
+每个核都有属于自已的内存，对于经常访问的数据结构，每个核都有自已的备份<br />
+</p>
+<ul class="org-ul">
+<li>本地设备本地管理<br /></li>
+</ul>
+<p>
+处理器用本地内存来处理本地设上产生的数据，如下分配结构体时通过socket_id获得本地内存<br />
+</p>
+<div class="org-src-container">
+<pre class="src src-c">/*allocatememoryforthequeuestructure*/
+q = rte_zmalloc_socket("fm10k", sizeof(*q), RTE_CACHE_LINE_SIZE, socket_id);
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org10ac20d" class="outline-3">
+<h3 id="org10ac20d"><span class="section-number-3">2.3</span> Cache</h3>
+<div class="outline-text-3" id="text-2-3">
+
+<div id="orga0faf7e" class="figure">
+<p><img src="Cache和内存/2021-12-29_10-14-53_cache.png" alt="2021-12-29_10-14-53_cache.png" /><br />
+</p>
+</div>
+
+<p>
+写策略<br />
+</p>
+<ul class="org-ul">
+<li>write-through<br /></li>
+<li>write-back<br /></li>
+<li>write-combining 比较显卡显存，cache line的数据全改写完后才写回内存<br /></li>
+<li>uncacheable 比如PCI设备memory bar不能缓存，要尽快写到设备内部<br /></li>
+</ul>
+
+<p>
+一些CPU架构会提供预取cache指令来加速<br />
+</p>
+
+
+
+<div id="orgce6b407" class="figure">
+<p><img src="Cache和内存/2021-12-29_15-10-20_prefetch.png" alt="2021-12-29_15-10-20_prefetch.png" /><br />
+</p>
+</div>
+
+<p>
+DPDK包处理流程<br />
+</p>
+<ul class="org-ul">
+<li>写接收描述符到内存，填充数据缓冲区指针<br /></li>
+<li>从内存中读取接收描棕符来确认是否网卡将报文填充<br /></li>
+<li>更新描述符信息到控制结构体<br /></li>
+<li>更新接收队列寄存器<br /></li>
+<li>转发确定<br /></li>
+<li>报文信息填入发送队列发送描述符，更新发送队列寄存器<br /></li>
+<li>检查是否被网卡发送<br /></li>
+<li>释放数据缓冲区<br /></li>
+</ul>
+</div>
+</div>
+
+
+<div id="outline-container-org5cc8887" class="outline-3">
+<h3 id="org5cc8887"><span class="section-number-3">2.4</span> DPDK的cache机制</h3>
+<div class="outline-text-3" id="text-2-4">
+<ul class="org-ul">
+<li>定义cache宽的数据结构<br /></li>
+</ul>
+<p>
+<i>** Minimum Cache line size. *</i><br />
+#define RTE_CACHE_LINE_MIN_SIZE 64<br />
+</p>
+
+<p>
+<i>** Force alignment to cache line. *</i><br />
+#define __rte_cache_aligned __rte_aligned(RTE_CACHE_LINE_SIZE)<br />
+</p>
+
+<ul class="org-ul">
+<li>预取指令<br /></li>
+</ul>
+<p>
+rte_prefetch0(p)<br />
+</p>
+
+<ul class="org-ul">
+<li>避免多核访问同一个内存地址或数据结构<br /></li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-c">struct lcore_conf {
+    uint8_t status;
+    uint8_t socketid;
+    uint16_t nb_ports;
+    uint16_t portlist[RTE_MAX_ETHPORTS];
+} __rte_cache_aligned;
+
+struct lcore_conf lcore_conf[RTE_MAX_LCORE];
+</pre>
+</div>
+
+<ul class="org-ul">
+<li>网卡支持多队列时，为每个核准备一个单独的接收/发达队列<br /></li>
+</ul>
+
+<p>
+Note: <span class="underline">多级页表的好处</span><br />
+假设有一个程序，代码段加数据段可以放在两个4KB的页内。如果使用三段的方式，那么需要一个页存放页目录表（里面只有一个目录项有效），一个页存放页表（里面有两个目录项有效），因此需要总共两个页8192个字节就可以了；如果使用两段的方式，那使用bit[31：12]共20位来查页表，根据其范围，那么需要有220个表项，因此需要4MB来建立页表，也就是1024个物理页，而其中只有两个表项是有效的，<br />
+</p>
+</div>
+</div>
+
+
+<div id="outline-container-org7c5b6e1" class="outline-3">
+<h3 id="org7c5b6e1"><span class="section-number-3">2.5</span> DPDK的大页</h3>
+<div class="outline-text-3" id="text-2-5">
+<p>
+当使用大页(2M&amp;4M一页)时，页表项减会变少，从而降低TLB不命中的概率<br />
+</p>
+
+<p>
+使用大页分两步<br />
+</p>
+
+<ul class="org-ul">
+<li>预留内存<br /></li>
+</ul>
+<div class="org-src-container">
+<pre class="src src-shell"># 非NUMA
+echo 1024&gt;/sys/kernel/mm/hugepages/hugepages2048kB/nr_hugepages
+# NUMA
+echo 1024&gt;/sys/devices/system/node/node0/hugepages/hugepages2048kB/nr_hugepages
+echo 1024&gt;/sys/devices/system/node/node1/hugepages/hugepages2048kB/nr_hugepages
+</pre>
+</div>
+
+<ul class="org-ul">
+<li>激活hugetlbfs文件系统<br /></li>
+</ul>
+<div class="org-src-container">
+<pre class="src src-shell">mkdir /mnt/huge
+mount -t hugetlbfs nodev /mnt/huge
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgf7bfcfb" class="outline-3">
+<h3 id="orgf7bfcfb"><span class="section-number-3">2.6</span> DDIO</h3>
+<div class="outline-text-3" id="text-2-6">
+<p>
+传统报文路径:  网卡-&gt;PCI-&gt;内存-&gt;cache-&gt;CPU-&gt;cache-&gt;内存-&gt;PCI-&gt;网卡<br />
+DDIO: 网卡-&gt;LLC Cache-&gt;CPU-&gt;LLC Cache-&gt;网卡<br />
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org2a8d1b9" class="outline-2">
+<h2 id="org2a8d1b9"><span class="section-number-2">3</span> 并行</h2>
+<div class="outline-text-2" id="text-3">
+<p>
+多核的性能随着核数增多，瓶颈在于不得不串行部分的比率<br />
+</p>
+</div>
+
+<div id="outline-container-org54d2290" class="outline-3">
+<h3 id="org54d2290"><span class="section-number-3">3.1</span> 超线程</h3>
+<div class="outline-text-3" id="text-3-1">
+<p>
+与多核架构不同的是，超线程共享了流水线，执行单元和Cache，软件角度看与单线程物理核并没有差异<br />
+</p>
+
+
+<div id="org65bbaa8" class="figure">
+<p><img src="并行/2021-12-30_10-03-33_hyper_threading.png" alt="2021-12-30_10-03-33_hyper_threading.png" /><br />
+</p>
+</div>
+
+
+<ul class="org-ul">
+<li>cpu cores CPU核数<br /></li>
+<li>siblings 超线程个数<br /></li>
+<li>physical id 物理封装CPU号<br /></li>
+<li>processor 逻辑处理器<br /></li>
+</ul>
+<div class="org-src-container">
+<pre class="src src-shell">
+cat /proc/cpuinfo
+processor	: 0
+vendor_id	: GenuineIntel
+cpu family	: 6
+model		: 63
+model name	: Intel(R) Xeon(R) CPU E5-2667 v3 @ 3.20GHz
+stepping	: 2
+microcode	: 0x44
+cpu MHz		: 2564.797
+cache size	: 20480 KB
+physical id	: 0
+siblings	: 16
+core id		: 0
+cpu cores	: 8
+apicid		: 0
+initial apicid	: 0
+fpu		: yes
+fpu_exception	: yes
+cpuid level	: 15
+wp		: yes
+flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc cpuid aperfmperf pni pclmulqdq dtes64 monitor ds_cpl vmx smx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid dca sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm cpuid_fault epb invpcid_single pti intel_ppin ssbd ibrs ibpb stibp tpr_shadow vnmi flexpriority ept vpid ept_ad fsgsbase tsc_adjust bmi1 avx2 smep bmi2 erms invpcid cqm xsaveopt cqm_llc cqm_occup_llc dtherm ida arat pln pts md_clear flush_l1d
+bugs		: cpu_meltdown spectre_v1 spectre_v2 spec_store_bypass l1tf mds swapgs itlb_multihit
+bogomips	: 6384.89
+clflush size	: 64
+cache_alignment	: 64
+address sizes	: 46 bits physical, 48 bits virtual
+power management:
+
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org7651915" class="outline-3">
+<h3 id="org7651915"><span class="section-number-3">3.2</span> DPDK的线程独占</h3>
+<div class="outline-text-3" id="text-3-2">
+<ul class="org-ul">
+<li>设置affinity保证只在某个核上运行<br /></li>
+<li>设置kernel启动参数isolcpus，使得某些核排除在进程调度之外，这些再设置affinity即可保证线程独占<br /></li>
+</ul>
+
+<p>
+通常上说，控制线程绑定在MASTER核，接受用户输入，数据线程分布在不同核上处理数据包<br />
+</p>
+</div>
+
+<div id="outline-container-org69cb700" class="outline-4">
+<h4 id="org69cb700"><span class="section-number-4">3.2.1</span> rte_eal_init里的lcore初始化</h4>
+<div class="outline-text-4" id="text-3-2-1">
+<ul class="org-ul">
+<li>rte_eal_cpu_init中读取sysfs得到当前CPU信息<br /></li>
+<li>eal_parse_args中得到哪些核可用<br /></li>
+<li>为每个worker核创建线程，同时设置affinity<br /></li>
+</ul>
+<div class="org-src-container">
+<pre class="src src-c">RTE_LCORE_FOREACH_WORKER(i) {
+
+    /*
+     * create communication pipes between main thread
+     * and children
+     */
+    if (pipe(lcore_config[i].pipe_main2worker) &lt; 0)
+        rte_panic("Cannot create pipe\n");
+    if (pipe(lcore_config[i].pipe_worker2main) &lt; 0)
+        rte_panic("Cannot create pipe\n");
+
+    lcore_config[i].state = WAIT;
+
+    /* create a thread for each lcore */
+    ret = pthread_create(&amp;lcore_config[i].thread_id, NULL,
+                 eal_thread_loop, NULL);
+    if (ret != 0)
+        rte_panic("Cannot create thread\n");
+
+    /* Set thread_name for aid in debugging. */
+    snprintf(thread_name, sizeof(thread_name),
+        "lcore-worker-%d", i);
+    ret = rte_thread_setname(lcore_config[i].thread_id,
+                    thread_name);
+    if (ret != 0)
+        RTE_LOG(DEBUG, EAL,
+            "Cannot set name for lcore thread\n");
+
+    ret = pthread_setaffinity_np(lcore_config[i].thread_id,
+        sizeof(rte_cpuset_t), &amp;lcore_config[i].cpuset);
+    if (ret != 0)
+        rte_panic("Cannot set affinity\n");
+}
+</pre>
+</div>
+<ul class="org-ul">
+<li>当调用rte_eal_remote_launch时, eal_thread_loop最终会调用int (*f)(void *)<br /></li>
+<li>当不想lcore和cpu 1:1对应时，可以通过&#x2013;lcores='&lt;lcore_set&gt;[@cpu_set],&#x2026;'指定lcore和cpu_set多对多的映射关系<br /></li>
+<li>用cgroup来限制线程对于物理资源的使用，常用于吞吐量比较小的情况<br /></li>
+</ul>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org3f6e6c1" class="outline-3">
+<h3 id="org3f6e6c1"><span class="section-number-3">3.3</span> DPDK的指令/数据并发</h3>
+<div class="outline-text-3" id="text-3-3">
+<ul class="org-ul">
+<li>多利用SIMD指令<br /></li>
+</ul>
+
+<p>
+<a href="并行/2021-12-31_10-12-52_64-ia-32-architectures-optimization-manual.pdf">并行/2021-12-31_10-12-52_64-ia-32-architectures-optimization-manual.pdf</a><br />
+</p>
+
+<div class="org-src-container">
+<pre class="src src-c">/** ICC编译器下*/
+/**
+ * Copy 32 bytes from one location to another,
+ * locations should not overlap.
+ */
+static __rte_always_inline void
+rte_mov32(uint8_t *dst, const uint8_t *src)
+{
+    __m256i ymm0;
+
+    ymm0 = _mm256_loadu_si256((const __m256i *)src);
+    _mm256_storeu_si256((__m256i *)dst, ymm0);
+}
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org9ff0faf" class="outline-3">
+<h3 id="org9ff0faf"><span class="section-number-3">3.4</span> DPDK的同步互斥</h3>
+<div class="outline-text-3" id="text-3-4">
+</div>
+<div id="outline-container-org3258f36" class="outline-4">
+<h4 id="org3258f36"><span class="section-number-4">3.4.1</span> 指令原子操作</h4>
+<div class="outline-text-4" id="text-3-4-1">
+<ul class="org-ul">
+<li>单指令且基本内存操作<br /></li>
+<li>加LOCK指令前缀<br /></li>
+<li>缓存一致协议<br /></li>
+</ul>
+
+<p>
+无锁数据结构的基础XCHG(CMPXCHG)，即CAS(Compare And Set)<br />
+</p>
+
+<p>
+CAS操作需要输入两个数值，一个旧值（期望操作前的值）和一个新值，在操作期间先比较下旧值有没有发生变化，如果没有发生变化，才交换成新值，发生了变化，则不交换。<br />
+例子:<br />
+CMPXCHGr/m，r将累加器AL/AX/EAX/RAX中的值与首操作数（目的操作数）比较，如果相等，第2操作数（源操作数）的值装载到首操作数，zf置1。如果不等，首操作数的值装载到AL/AX/EAX/RAX，并将zf清0。<br />
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgaf623c9" class="outline-4">
+<h4 id="orgaf623c9"><span class="section-number-4">3.4.2</span> Linux原子操作</h4>
+<div class="outline-text-4" id="text-3-4-2">
+<ul class="org-ul">
+<li>atomic_t<br /></li>
+<li>位操作<br /></li>
+<li>读写锁read_lock*,write_lock*<br /></li>
+<li>spinlock自旋锁，单CPU且不可抢占式的内核下为空操作<br /></li>
+</ul>
+<p>
+注: 线程在spinlock前要禁止当前处理器上的中断，防止获取锁的线程和中断形成竞争条件(没有应该无所谓)<br />
+</p>
+<ul class="org-ul">
+<li>kfifo 无锁环形缓冲<br /></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org4866845" class="outline-4">
+<h4 id="org4866845"><span class="section-number-4">3.4.3</span> DPDK应用</h4>
+<div class="outline-text-4" id="text-3-4-3">
+<ul class="org-ul">
+<li>rte_atomic* 原子操作<br /></li>
+<li>rte_rwlock* 读写锁<br /></li>
+<li>rte_spinlock* 自旋锁<br /></li>
+<li>rte_ring 无锁环形缓冲<br /></li>
+</ul>
+<div class="org-src-container">
+<pre class="src src-c">/**
+ * An RTE ring structure.
+ *
+ * The producer and the consumer have a head and a tail index. The particularity
+ * of these index is that they are not between 0 and size(ring). These indexes
+ * are between 0 and 2^32, and we mask their value when we access the ring[]
+ * field. Thanks to this assumption, we can do subtractions between 2 index
+ * values in a modulo-32bit base: that's why the overflow of the indexes is not
+ * a problem.
+ */
+struct rte_ring {
+    char name[RTE_RING_NAMESIZE] __rte_cache_aligned;
+    /**&lt; Name of the ring. */
+    int flags;               /**&lt; Flags supplied at creation. */
+    const struct rte_memzone *memzone;
+            /**&lt; Memzone, if any, containing the rte_ring */
+    uint32_t size;           /**&lt; Size of ring. */
+    uint32_t mask;           /**&lt; Mask (size-1) of ring. */
+    uint32_t capacity;       /**&lt; Usable size of ring */
+
+    char pad0 __rte_cache_aligned; /**&lt; empty cache line */
+
+    /** Ring producer status. */
+    RTE_STD_C11
+    union {
+        struct rte_ring_headtail prod;
+        struct rte_ring_hts_headtail hts_prod;
+        struct rte_ring_rts_headtail rts_prod;
+    }  __rte_cache_aligned;
+
+    char pad1 __rte_cache_aligned; /**&lt; empty cache line */
+
+    /** Ring consumer status. */
+    RTE_STD_C11
+    union {
+        struct rte_ring_headtail cons;
+        struct rte_ring_hts_headtail hts_cons;
+        struct rte_ring_rts_headtail rts_cons;
+    }  __rte_cache_aligned;
+
+    char pad2 __rte_cache_aligned; /**&lt; empty cache line */
+};
+</pre>
+</div>
+<ol class="org-ol">
+<li>单生产者入队<br /></li>
+</ol>
+
+
+<div id="org1d491c2" class="figure">
+<p><img src="并行/2022-01-07_13-29-49_ring_enqueue1.png" alt="2022-01-07_13-29-49_ring_enqueue1.png" /><br />
+</p>
+</div>
+
+
+<div id="orgb4f657e" class="figure">
+<p><img src="并行/2022-01-07_13-29-53_ring_enqueue2.png" alt="2022-01-07_13-29-53_ring_enqueue2.png" /><br />
+</p>
+</div>
+
+
+
+<div id="org3e530f0" class="figure">
+<p><img src="并行/2022-01-07_13-30-04_ring_enqueue3.png" alt="2022-01-07_13-30-04_ring_enqueue3.png" /><br />
+</p>
+</div>
+
+<ol class="org-ol">
+<li>单消费者出队<br /></li>
+</ol>
+
+
+<div id="orgcb2cb67" class="figure">
+<p><img src="并行/2022-01-07_13-37-47_ring_dequeue1.png" alt="2022-01-07_13-37-47_ring_dequeue1.png" /><br />
+</p>
+</div>
+
+
+<div id="org0df1352" class="figure">
+<p><img src="并行/2022-01-07_13-37-56_ring_dequeue2.png" alt="2022-01-07_13-37-56_ring_dequeue2.png" /><br />
+</p>
+</div>
+
+
+<div id="org7891095" class="figure">
+<p><img src="并行/2022-01-07_13-38-04_ring_dequeue3.png" alt="2022-01-07_13-38-04_ring_dequeue3.png" /><br />
+</p>
+</div>
+
+<ol class="org-ol">
+<li>多生产消费者入出队<br /></li>
+</ol>
+
+<p>
+并发时无锁主要依赖CAS操作，即更新新值前可以单指令确保旧值无人修改<br />
+</p>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgbc281e9" class="outline-2">
+<h2 id="orgbc281e9"><span class="section-number-2">4</span> 报文转发</h2>
+<div class="outline-text-2" id="text-4">
+<ul class="org-ul">
+<li>packet input 报文输入<br /></li>
+<li>pre-processing 粗粒度的处理<br /></li>
+<li>input classification 细粒度分流<br /></li>
+<li>ingress queuing 基于描述符的队列FIFO<br /></li>
+<li>delivery/scheduling 队列优先级/CPU状态调度<br /></li>
+<li>accelerator 提供加解密和压缩/解压缩<br /></li>
+<li>engress queueing 出口QOS<br /></li>
+<li>post proecessing 释放软件缓存<br /></li>
+<li>packet output 硬件发送<br /></li>
+</ul>
+
+
+<div id="orgc46df5a" class="figure">
+<p><img src="报文转发/2022-01-07_14-11-50_packet_processing.png" alt="2022-01-07_14-11-50_packet_processing.png" /><br />
+</p>
+</div>
+</div>
+
+<div id="outline-container-orga010d49" class="outline-3">
+<h3 id="orga010d49"><span class="section-number-3">4.1</span> 硬件框架</h3>
+<div class="outline-text-3" id="text-4-1">
+<ul class="org-ul">
+<li>pipeline<br />
+将一个功能（大于模块级的功能）分解成多个独立的阶段，不同阶段间通过队列传递产品。这样，对于一些CPU密集和I/O密集的应用，通过pipeline模型，我们可以把CPU密集的操作放在一个微处理引擎上执行，将I/O密集的操作放在另外一个微处理引擎上执行。通过过滤器可以为不同的操作分配不同的线程，通过连接两者的队列匹配两者的处理速度，从而达到最好的并发效率。<br />
+<b>缺点是</b> 报文处理必须照顺序进行，不可能跳回，即便可以处理速度也会大幅下降<br /></li>
+
+<li>run to completion<br />
+水平扩展使得多核上执行一样逻辑的程序， <b>缺点是</b> 不会对每个逻辑功能做优化<br /></li>
+</ul>
+
+
+<div id="org49963c1" class="figure">
+<p><img src="报文转发/2022-01-07_14-55-58_packet_process.png" alt="2022-01-07_14-55-58_packet_process.png" /><br />
+</p>
+</div>
+</div>
+
+<div id="outline-container-org606b571" class="outline-4">
+<h4 id="org606b571"><span class="section-number-4">4.1.1</span> DPDK的转发模型</h4>
+<div class="outline-text-4" id="text-4-1-1">
+
+<div id="org7adfdb8" class="figure">
+<p><img src="报文转发/2022-01-10_09-51-57_dpdk_model.png" alt="2022-01-10_09-51-57_dpdk_model.png" /><br />
+</p>
+</div>
+
+<p>
+DPDK提供了pipeline框架, 例子在examples/pipeline<br />
+</p>
+</div>
+</div>
+
+<div id="outline-container-org6126289" class="outline-4">
+<h4 id="org6126289"><span class="section-number-4">4.1.2</span> 转发算法库</h4>
+<div class="outline-text-4" id="text-4-1-2">
+<p>
+精确匹配 - hash<br />
+</p>
+<ul class="org-ul">
+<li>冲突链/开放地址解决冲突，DPDK融合了冲突链(最长8个 )和开放地址<br /></li>
+<li>CRC32和Jhash算法<br /></li>
+<li>代码 lib/hash/<br /></li>
+</ul>
+
+<p>
+最长前缀匹配 - LPM<br />
+</p>
+<ul class="org-ul">
+<li>空间换时间<br /></li>
+<li>代码 lib/lpm/<br /></li>
+</ul>
+
+<p>
+ACL<br />
+</p>
+<ul class="org-ul">
+<li>规则结构体<br /></li>
+</ul>
+<div class="org-src-container">
+<pre class="src src-c">/**
+ * ACL Field definition.
+ * Each field in the ACL rule has an associate definition.
+ * It defines the type of field, its size, its offset in the input buffer,
+ * the field index, and the input index.
+ * For performance reasons, the inner loop of the search function is unrolled
+ * to process four input bytes at a time. This requires the input to be grouped
+ * into sets of 4 consecutive bytes. The loop processes the first input byte as
+ * part of the setup and then subsequent bytes must be in groups of 4
+ * consecutive bytes.
+ */
+struct rte_acl_field_def {
+    uint8_t  type;        /**&lt; type - RTE_ACL_FIELD_TYPE_*. */
+    uint8_t	 size;        /**&lt; size of field 1,2,4, or 8. */
+    uint8_t	 field_index; /**&lt; index of field inside the rule. */
+    uint8_t  input_index; /**&lt; 0-N input index. */
+    uint32_t offset;      /**&lt; offset to start of field. */
+};
+</pre>
+</div>
+<ul class="org-ul">
+<li>代码 lib/acl/<br /></li>
+<li>rte_acl_create, rte_acl_add_rules, rte_acl_build, rte_acl_classify<br /></li>
+</ul>
+
+<p>
+报文分发<br />
+</p>
+<ul class="org-ul">
+<li>代码 lib/distributor<br /></li>
+<li>用作将报文分发到不同的worker处理后返回<br /></li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orge7c8520" class="outline-2">
+<h2 id="orge7c8520"><span class="section-number-2">5</span> PCI-E和I/O</h2>
+<div class="outline-text-2" id="text-5">
+</div>
+<div id="outline-container-org0ef84ab" class="outline-3">
+<h3 id="org0ef84ab"><span class="section-number-3">5.1</span> PCI-E</h3>
+<div class="outline-text-3" id="text-5-1">
+<p>
+upstream/inbound - 从endpoint到root complex<br />
+downstream/outbound - 从root complex到endpoint<br />
+</p>
+
+<p>
+常见的网卡ring如下图，接收和传输队列的头尾指针分别由软件和硬件控制，ring里存的是描述符，一般来说描述符内有DMA完成位<br />
+</p>
+
+<div id="org094e6d4" class="figure">
+<p><img src="PCI-E和I/O/2022-01-11_22-14-03_nic_ring.png" alt="2022-01-11_22-14-03_nic_ring.png" /><br />
+</p>
+</div>
+
+<p>
+队列在内存里面，控制DMA通过访问外设寄存器完成<br />
+</p>
+
+<p>
+对PCI-E/IO的优化<br />
+</p>
+<ul class="org-ul">
+<li>发送队列CPU批量分配包内存和对应描述符<br /></li>
+<li>DMA批量回写描述符(RS bit)<br /></li>
+<li>Cache line对齐操作，避免部分写<br /></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org82d166c" class="outline-3">
+<h3 id="org82d166c"><span class="section-number-3">5.2</span> Mbuf</h3>
+<div class="outline-text-3" id="text-5-2">
+<p>
+将网络包信息和帧本身存在固定大小的同一段内存中<br />
+</p>
+
+<ul class="org-ul">
+<li>buf_addr是起始地址<br /></li>
+<li>buf_addr + data_off是帧内容<br /></li>
+<li>pktlen 如果是单帧，和datalen相同，巨帧只能用pktlen<br /></li>
+<li>mbuf存在mempool中，单核缓存一部分数据使得多核CPU访问效率变高<br /></li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-c">/**
+ * The generic rte_mbuf, containing a packet mbuf.
+ */
+struct rte_mbuf {
+    RTE_MARKER cacheline0;
+
+    void *buf_addr;           /**&lt; Virtual address of segment buffer. */
+    /**
+     * Physical address of segment buffer.
+     * Force alignment to 8-bytes, so as to ensure we have the exact
+     * same mbuf cacheline0 layout for 32-bit and 64-bit. This makes
+     * working on vector drivers easier.
+     */
+    rte_iova_t buf_iova __rte_aligned(sizeof(rte_iova_t));
+
+    /* next 8 bytes are initialised on RX descriptor rearm */
+    RTE_MARKER64 rearm_data;
+    uint16_t data_off;
+
+    /**
+     * Reference counter. Its size should at least equal to the size
+     * of port field (16 bits), to support zero-copy broadcast.
+     * It should only be accessed using the following functions:
+     * rte_mbuf_refcnt_update(), rte_mbuf_refcnt_read(), and
+     * rte_mbuf_refcnt_set(). The functionality of these functions (atomic,
+     * or non-atomic) is controlled by the RTE_MBUF_REFCNT_ATOMIC flag.
+     */
+    uint16_t refcnt;
+
+    /**
+     * Number of segments. Only valid for the first segment of an mbuf
+     * chain.
+     */
+    uint16_t nb_segs;
+
+    /** Input port (16 bits to support more than 256 virtual ports).
+     * The event eth Tx adapter uses this field to specify the output port.
+     */
+    uint16_t port;
+
+    uint64_t ol_flags;        /**&lt; Offload features. */
+
+    /* remaining bytes are set on RX when pulling packet from descriptor */
+    RTE_MARKER rx_descriptor_fields1;
+
+    /*
+     * The packet type, which is the combination of outer/inner L2, L3, L4
+     * and tunnel types. The packet_type is about data really present in the
+     * mbuf. Example: if vlan stripping is enabled, a received vlan packet
+     * would have RTE_PTYPE_L2_ETHER and not RTE_PTYPE_L2_VLAN because the
+     * vlan is stripped from the data.
+     */
+    RTE_STD_C11
+    union {
+        uint32_t packet_type; /**&lt; L2/L3/L4 and tunnel information. */
+        __extension__
+        struct {
+            uint8_t l2_type:4;   /**&lt; (Outer) L2 type. */
+            uint8_t l3_type:4;   /**&lt; (Outer) L3 type. */
+            uint8_t l4_type:4;   /**&lt; (Outer) L4 type. */
+            uint8_t tun_type:4;  /**&lt; Tunnel type. */
+            RTE_STD_C11
+            union {
+                uint8_t inner_esp_next_proto;
+                /**&lt; ESP next protocol type, valid if
+                 * RTE_PTYPE_TUNNEL_ESP tunnel type is set
+                 * on both Tx and Rx.
+                 */
+                __extension__
+                struct {
+                    uint8_t inner_l2_type:4;
+                    /**&lt; Inner L2 type. */
+                    uint8_t inner_l3_type:4;
+                    /**&lt; Inner L3 type. */
+                };
+            };
+            uint8_t inner_l4_type:4; /**&lt; Inner L4 type. */
+        };
+    };
+
+    uint32_t pkt_len;         /**&lt; Total pkt len: sum of all segments. */
+    uint16_t data_len;        /**&lt; Amount of data in segment buffer. */
+    /** VLAN TCI (CPU order), valid if RTE_MBUF_F_RX_VLAN is set. */
+    uint16_t vlan_tci;
+
+    RTE_STD_C11
+    union {
+        union {
+            uint32_t rss;     /**&lt; RSS hash result if RSS enabled */
+            struct {
+                union {
+                    struct {
+                        uint16_t hash;
+                        uint16_t id;
+                    };
+                    uint32_t lo;
+                    /**&lt; Second 4 flexible bytes */
+                };
+                uint32_t hi;
+                /**&lt; First 4 flexible bytes or FD ID, dependent
+                 * on RTE_MBUF_F_RX_FDIR_* flag in ol_flags.
+                 */
+            } fdir;	/**&lt; Filter identifier if FDIR enabled */
+            struct rte_mbuf_sched sched;
+            /**&lt; Hierarchical scheduler : 8 bytes */
+            struct {
+                uint32_t reserved1;
+                uint16_t reserved2;
+                uint16_t txq;
+                /**&lt; The event eth Tx adapter uses this field
+                 * to store Tx queue id.
+                 * @see rte_event_eth_tx_adapter_txq_set()
+                 */
+            } txadapter; /**&lt; Eventdev ethdev Tx adapter */
+            /**&lt; User defined tags. See rte_distributor_process() */
+            uint32_t usr;
+        } hash;                   /**&lt; hash information */
+    };
+
+    /** Outer VLAN TCI (CPU order), valid if RTE_MBUF_F_RX_QINQ is set. */
+    uint16_t vlan_tci_outer;
+
+    uint16_t buf_len;         /**&lt; Length of segment buffer. */
+
+    struct rte_mempool *pool; /**&lt; Pool from which mbuf was allocated. */
+
+    /* second cache line - fields only used in slow path or on TX */
+    RTE_MARKER cacheline1 __rte_cache_min_aligned;
+
+    /**
+     * Next segment of scattered packet. Must be NULL in the last segment or
+     * in case of non-segmented packet.
+     */
+    struct rte_mbuf *next;
+
+    /* fields to support TX offloads */
+    RTE_STD_C11
+    union {
+        uint64_t tx_offload;       /**&lt; combined for easy fetch */
+        __extension__
+        struct {
+            uint64_t l2_len:RTE_MBUF_L2_LEN_BITS;
+            /**&lt; L2 (MAC) Header Length for non-tunneling pkt.
+             * Outer_L4_len + ... + Inner_L2_len for tunneling pkt.
+             */
+            uint64_t l3_len:RTE_MBUF_L3_LEN_BITS;
+            /**&lt; L3 (IP) Header Length. */
+            uint64_t l4_len:RTE_MBUF_L4_LEN_BITS;
+            /**&lt; L4 (TCP/UDP) Header Length. */
+            uint64_t tso_segsz:RTE_MBUF_TSO_SEGSZ_BITS;
+            /**&lt; TCP TSO segment size */
+
+            /*
+             * Fields for Tx offloading of tunnels.
+             * These are undefined for packets which don't request
+             * any tunnel offloads (outer IP or UDP checksum,
+             * tunnel TSO).
+             *
+             * PMDs should not use these fields unconditionally
+             * when calculating offsets.
+             *
+             * Applications are expected to set appropriate tunnel
+             * offload flags when they fill in these fields.
+             */
+            uint64_t outer_l3_len:RTE_MBUF_OUTL3_LEN_BITS;
+            /**&lt; Outer L3 (IP) Hdr Length. */
+            uint64_t outer_l2_len:RTE_MBUF_OUTL2_LEN_BITS;
+            /**&lt; Outer L2 (MAC) Hdr Length. */
+
+            /* uint64_t unused:RTE_MBUF_TXOFLD_UNUSED_BITS; */
+        };
+    };
+
+    /** Shared data for external buffer attached to mbuf. See
+     * rte_pktmbuf_attach_extbuf().
+     */
+    struct rte_mbuf_ext_shared_info *shinfo;
+
+    /** Size of the application private data. In case of an indirect
+     * mbuf, it stores the direct mbuf private data size.
+     */
+    uint16_t priv_size;
+
+    /** Timesync flags for use with IEEE1588. */
+    uint16_t timesync;
+
+    uint32_t dynfield1[9]; /**&lt; Reserved for dynamic fields. */
+} __rte_cache_aligned;
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgff5cbdf" class="outline-2">
+<h2 id="orgff5cbdf"><span class="section-number-2">6</span> 网卡性能</h2>
+<div class="outline-text-2" id="text-6">
+</div>
+<div id="outline-container-orgf4582ea" class="outline-3">
+<h3 id="orgf4582ea"><span class="section-number-3">6.1</span> 轮询</h3>
+<div class="outline-text-3" id="text-6-1">
+<p>
+收包队列对应的软件线程poll收包描述包收包成功的标志<br />
+发包队列对应的软件线程设置描述符内的字段，比如EOP和RS，同时轮询RS位确定硬件是否发送完毕<br />
+</p>
+</div>
+</div>
+<div id="outline-container-org2538629" class="outline-3">
+<h3 id="org2538629"><span class="section-number-3">6.2</span> 中断轮询混杂</h3>
+<div class="outline-text-3" id="text-6-2">
+<p>
+可根据一段时间的收包流量切换中断或轮询模式<br />
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgcd940f1" class="outline-3">
+<h3 id="orgcd940f1"><span class="section-number-3">6.3</span> burst处理</h3>
+<div class="outline-text-3" id="text-6-3">
+<p>
+以cache对齐的方式一次处理多个包可以提高效率<br />
+</p>
+<div class="org-src-container">
+<pre class="src src-c">static inline uint16_t
+rte_eth_tx_burst(uint16_t port_id, uint16_t queue_id,
+         struct rte_mbuf **tx_pkts, uint16_t nb_pkts);
+static inline uint16_t
+rte_eth_rx_burst(uint16_t port_id, uint16_t queue_id,
+         struct rte_mbuf **rx_pkts, const uint16_t nb_pkts);
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org054f785" class="outline-3">
+<h3 id="org054f785"><span class="section-number-3">6.4</span> 队列长度</h3>
+<div class="outline-text-3" id="text-6-4">
+<p>
+收包队列<br />
+</p>
+<ul class="org-ul">
+<li>越长，mbuf占用越多，分配和释放要更多的时间片<br /></li>
+<li>越短，mbuf占用越少，但容易挤满队列造成丢包<br /></li>
+<li>默认长度是128<br /></li>
+</ul>
+
+<p>
+发包队列<br />
+</p>
+<ul class="org-ul">
+<li>越长，mbuf占用越多，分配和释放要更多的时间片<br /></li>
+<li>越短，mbuf占用越少，硬件需要等软件填充，降低性能<br /></li>
+<li>默认长度是256<br /></li>
+</ul>
+
+<p>
+rx_free_thresh DPDK在收包到一个threshold才会更新ring尾部寄存器，默认32<br />
+tx_rs_thresh 描述符中可配置硬件是否回写，通过每threshold个包回写一次来提高性能，默认32，这个需要硬件支持<br />
+tx_free_thresh DPDK在只剩threhold可用描述符才释放，默认32<br />
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org6c88d26" class="outline-2">
+<h2 id="org6c88d26"><span class="section-number-2">7</span> 多队列</h2>
+<div class="outline-text-2" id="text-7">
+</div>
+<div id="outline-container-org2538611" class="outline-3">
+<h3 id="org2538611"><span class="section-number-3">7.1</span> linux kernel</h3>
+<div class="outline-text-3" id="text-7-1">
+<ul class="org-ul">
+<li>每个接收队列设定对应的中断号，设定affinity，每个队列绑定到特定的核<br /></li>
+<li>收发队列在同一个中断<br /></li>
+<li>发送队列根据map&lt;硬件队列，CPU&gt;确定发送队列<br /></li>
+<li>rx queue为NAPI机制，中断后变成poll，处理完所有的包再变为中断模式<br /></li>
+<li>tx queue为QDisc机制，发送前Qos<br /></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org23c6f31" class="outline-3">
+<h3 id="org23c6f31"><span class="section-number-3">7.2</span> 网卡</h3>
+<div class="outline-text-3" id="text-7-2">
+<p>
+常见的硬件队列分配<br />
+</p>
+<ul class="org-ul">
+<li>过滤报文<br /></li>
+<li>DMA队列分配<br /></li>
+<li>报文暂存在FIFO<br /></li>
+<li>转移至DMA<br /></li>
+<li>更新描述符<br /></li>
+</ul>
+
+<p>
+硬件队列分配技术<br />
+</p>
+<ul class="org-ul">
+<li>RSS 根据报文关键字hash<br /></li>
+<li>Flow Director 比RSS更为灵活，网卡有一张映射表，不同类型的包有不同的关键字<br /></li>
+<li>Qos 队列从Round-Robin变为加权分配<br /></li>
+</ul>
+
+<p>
+VF&amp;PF支持(Intel CPU为例)<br />
+</p>
+<ul class="org-ul">
+<li>enable iommu on BIOS(Intel VT)<br /></li>
+<li>生成vf<br />
+echo 1 &gt; /sys/bus/pci/devices/0000:02:00.0/sriov_numvfs<br />
+modprobe pcistub<br />
+echo "8086 154c" &gt; /sys/bus/pci/drivers/pcistub/new_id<br />
+echo 0000:02:02.0 &gt;/sys/bus/pci/devices/0000:2:02.0/driver/unbind<br />
+echo 0000:02:02.0 &gt;/sys/bus/pci/drivers/pcistub/bind<br /></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org72c12f8" class="outline-3">
+<h3 id="org72c12f8"><span class="section-number-3">7.3</span> HW Offload</h3>
+<div class="outline-text-3" id="text-7-3">
+<p>
+rte_mbuf-&gt;ol_flags中带有hw offload的信息<br />
+</p>
+
+<p>
+常见的HW offload<br />
+</p>
+<ul class="org-ul">
+<li>vlan收发解析和过滤<br /></li>
+<li>IEEE1588 PTP, rte_eth_timesync_enable<br /></li>
+<li>报文各层的checksum,注意tx方向需要软件填充相关报文信息帮助硬件运算<br /></li>
+<li>VxLAN和NVGRE<br /></li>
+<li>TSO&amp;RSC, TCP tx分片和rx组装<br /></li>
+</ul>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org2f8c7a2" class="outline-2">
+<h2 id="org2f8c7a2"><span class="section-number-2">8</span> IO虚拟化</h2>
+<div class="outline-text-2" id="text-8">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="org-left">全虚拟化</td>
+<td class="org-left">guest不感知虚拟化</td>
+</tr>
+
+<tr>
+<td class="org-left">半虚拟化</td>
+<td class="org-left">通过guest和host的消息交互</td>
+</tr>
+
+<tr>
+<td class="org-left">IO透传</td>
+<td class="org-left">授权guest物理设备权限</td>
+</tr>
+</tbody>
+</table>
+
+<p>
+Intel VT-d 解决IO透传中硬件DMA地址为guest地址，VT-d将其转化为host地址，同时定义了域，guest只能访问域内空间<br />
+</p>
+</div>
+
+<div id="outline-container-orgfeaf103" class="outline-3">
+<h3 id="orgfeaf103"><span class="section-number-3">8.1</span> SR-IOV</h3>
+<div class="outline-text-3" id="text-8-1">
+<p>
+PCI-SIG定义的硬件虚拟化<br />
+</p>
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="org-left">PF</td>
+<td class="org-left">支持SR-IOV扩展的PCI-e，用于配置和管理SR-IOV</td>
+</tr>
+
+<tr>
+<td class="org-left">VF</td>
+<td class="org-left">精简的资源集，可以通过PF创建和销毁</td>
+</tr>
+</tbody>
+</table>
+
+
+<div id="org70f691e" class="figure">
+<p><img src="IO虚拟化/2022-01-24_22-32-04_sr-iov.png" alt="2022-01-24_22-32-04_sr-iov.png" /><br />
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org98b15ba" class="outline-3">
+<h3 id="org98b15ba"><span class="section-number-3">8.2</span> Virtio</h3>
+<div class="outline-text-3" id="text-8-2">
+<p>
+相对于SR-IOV来说是纯软件实现，所以灵活性比SR-IOV高，但性能比SR-IOV低<br />
+</p>
+</div>
+</div>
+</div>
+
+
+
+
+<div id="outline-container-org4415296" class="outline-2">
+<h2 id="org4415296"><span class="section-number-2">9</span> 应用场景</h2>
+<div class="outline-text-2" id="text-9">
+<ul class="org-ul">
+<li><p>
+NFV<br />
+</p>
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">虚拟化接口</th>
+<th scope="col" class="org-left">描述</th>
+<th scope="col" class="org-left">DPDK API</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left">IVSHMEM</td>
+<td class="org-left">基于Qemu，将主机上的一个内存块映射为虚拟机里的一个PCI设备</td>
+<td class="org-left">rte_ivshmem</td>
+</tr>
+
+<tr>
+<td class="org-left">Virtio</td>
+<td class="org-left">纯软件的虚拟化</td>
+<td class="org-left">drivers/net/virtio</td>
+</tr>
+
+<tr>
+<td class="org-left">SR-IOV</td>
+<td class="org-left">实体PCI虚拟化成多个VF</td>
+<td class="org-left">N/A</td>
+</tr>
+</tbody>
+</table></li>
+
+<li><p>
+Open vSwitch<br />
+</p>
+
+<div id="org5518b08" class="figure">
+<p><img src="应用场景/2022-02-06_17-43-30_ovs-dpdk.png" alt="2022-02-06_17-43-30_ovs-dpdk.png" /><br />
+</p>
+</div></li>
+</ul>
+<p>
+带dpdk的ovs收包不再通过openvswitch.ko,而是通过DPDK PMD驱动直接到达用户态ovs-vswitchd里<br />
+</p>
+
+<ul class="org-ul">
+<li>基于DPDK的用户态tcp协议栈<br />
+<ol class="org-ol">
+<li><a href="https://github.com/F-Stack/f-stack">f-stack</a><br /></li>
+<li><a href="https://github.com/mtcp-stack/mtcp">mtcp</a><br /></li>
+<li><a href="https://github.com/pkelsey/libuinet">libuinet</a><br /></li>
+<li><a href="https://github.com/OpenFastPath/ofp">openfastpath</a><br /></li>
+<li><a href="https://github.com/spdk/spdk">spdk</a> 高性能存储方案，里面带的libuns是一个tcp/ip协议栈<br /></li>
+</ol></li>
+</ul>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: xuali2</p>
+<p class="date">Created: 2022-02-06 Sun 23:38</p>
+<p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
+</div>
+</body>
+</html>

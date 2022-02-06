@@ -76,6 +76,8 @@ Nand Flash和Nor Flash结构特性
   为了熟悉elf格式写的小程序.
 * 算法
   + [区块链](./books/白话区块链.pdf)
+* 开源
+  + [DPDK](./books/DPDK/dpdk.org)
 
 ## 协议
 * [IEEE802.3](./protocol/IEEE802.3/ieee_note.pdf)
