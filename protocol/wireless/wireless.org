@@ -200,3 +200,4 @@ SUMMER2021
 Q40解析：7.2及7.3版沒有要求CWA ACL要允許DNS，所以更新後要加上DNS ACL。原答案AD改CD。
 Q47解析：Rogue AP危險分類high severity的有on-network,open,our SSID,strong RSSI,attracks client.原答案ACD改ABD
 
+

@@ -1,0 +1,23 @@
+#+SETUPFILE: ~/.emacs.d/themes/org-html-themes/org/theme-readtheorg.setup
+#+OPTIONS: \n:t
+#+OPTIONS: ^:nil
+#+OPTIONS: tex:t
+#+STARTUP: latexpreview
+#+OPTIONS: tex:dvipng
+#+HTML_MATHJAX: align: left indent: 5em tagside: left font: Neo-Euler
+#+attr_html: :width 300px
+#+attr_latex: :width 300px
+#+ATTR_ORG: :width 300
+
+#+TITLE: 802.3vs802.11
+
+- 有线现今绝大部分都是全双工，无线可以认为是半双工，任一时刻只有一个用户发送或者接收
+- 有线共享介质半双工使用CSMA/CD，因为有线发送时可以同时侦听接收数据，可以检测到冲突
+  无线使用CSMA/CA，因为无线不能同时发送和侦听接收，所以要有机制避免冲突
+- 有线接上网线 类比于 无线认证与关联
+- 有线802.3帧只有一种类型及两个mac地址，无线802.11有四种帧类型，最多使用四个mac地址，除目的和源地址外，通常还有接入点的mac地址
+- 有线的物理限制导致安全天生有一定保证，无线由于是全用户共享所以安全机制很重要
+- 有线设备一般有电源，所以二层帧不存在电源控制(EEE是物理层，而且很多芯片只是协议响应，并不实际生效)，反之无线有电源控制位
+- 有线尽力送达，二层帧会有FCS error，无线也有FCS，但无线单播帧需要确认帧，当接收方由于FCS或其他原因导致没回复确认时，发送方会重发
+- 有线二层帧无切片域，无线有分段flag
+- 有线存在jumbo帧，无线有帧聚合技术，无需jumbo帧

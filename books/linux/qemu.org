@@ -1,0 +1,87 @@
+#+SETUPFILE: ~/.emacs.d/themes/org-html-themes/setup/theme-readtheorg.setup
+#+OPTIONS: \n:t
+#+OPTIONS: ^:nil
+#+OPTIONS: tex:t
+#+STARTUP: latexpreview
+#+OPTIONS: tex:dvipng
+#+HTML_MATHJAX: align: left indent: 5em tagside: left font: Neo-Euler
+#+attr_html: :width 300px
+#+attr_latex: :width 300px
+#+ATTR_ORG: :width 300
+
+#+TITLE: QEMU + KGDB
+
+* kernel
+git: https://github.com/torvalds/linux
+
+#+begin_src shell
+    make i386_defconfig
+    make menuconfig
+    make
+    INSTALL_MOD_PATH=/home/rootfs make modules_install
+#+end_src
+
+- 尽量选择和host版本相差不大的版本，以免出现编译环境和被编译内核环境不兼容的问题
+- 为了调试内核，最好打开下面三个选项
+#+begin_src shell
+ONFIG_DEBUG_INFO=y
+CONFIG_GDB_SCRIPS=y
+CONFIG_DBUG_KERNEL=y
+#+end_src
+- 如要交叉编译，指定对应的编译工具链
+- 模块可安装到rootfs目录中
+- make tools/all，可以编译内核带的用户态工具，附加到rootfs里去
+
+* rootfs
+
+git: https://github.com/mirror/busybox
+
+#+begin_src shell
+    make menuconfig
+    make
+    make install CONFIG_PREFIX=/home/rootfs
+#+end_src
+
+- 最好静态编译，虽然会浪费一点空间，但是避免很多依赖问题
+#+begin_src shell
+CONFIG_STATIC=y
+# CONFIG_FEATURE_LIBBUSYBOX_STATIC is not set
+CONFIG_STATIC_LIBGCC=y
+#+end_src
+- 打包rootfs一般分为两种
+  - ramfs
+    启动时用 -initrd 指定
+#+begin_src shell
+    cd /home/rootfs/
+    find . | cpio -o --format=newc > ../rootfs.img
+#+end_src
+  - disk
+    启动时用 -hda 指定
+#+begin_src shell
+    dd if=/dev/zero of=rootfs.ext3 bs=1M count=320
+    mkfs.ext3 rootfs.ext3
+    mount -o loop rootfs.ext3 /home/tmp
+    cp /home/rootfs/* /home/tmp
+#+end_src
+
+* qemu
+#+begin_src shell
+  qemu-system-i386 -kernel /home/linux-source-5.10/arch/x86/boot/bzImage -hda /home/rootfs.ext3 -netdev user,id=u1 -device e1000,netdev=u1 -append "root=/dev/sda console=ttyS0" -nographic
+#+end_src
+- 选用对应内核平台的qemu
+- -kernel 指定内核bzImage
+- -hda 指定rootfs，如果是ramfs，可以用-initrd /home/rootfs.img
+- -hda 启动但是内核报找不到rootfs时，确认下内核配置支持该文件系统同时不能编译成模块
+- -netdev 指定了一个e1000类型的网卡
+- root=/dev/sda 可以不用指定，内核也会detect
+- console=ttyS0 指定输出，不同架构的cpu类型的tty不一样
+- -nographic 使用text终端
+
+* kgdb
+#+begin_src shell
+    qemu-system-i386 -s -S -kernel /home/linux-source-5.10/arch/x86/boot/bzImage -hda /home/rootfs.ext3 -netdev user,id=u1 -device e1000,netdev=u1 -append "root=/dev/sda console=ttyS0 nokaslr" -nographic
+    gdb -ex 'file vmlinux' -ex 'target remote localhost:1234'
+#+end_src
+- -s -S 启用:1234端口，同时等待gdb连入
+- 连接时注意host gdb是qemu cpu架构要保持一致
+- nokaslr非常重要，否则gdb由于ASLR技术断不住

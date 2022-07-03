@@ -806,3 +806,126 @@ PCI-SIG定义的硬件虚拟化
   3. [[https://github.com/pkelsey/libuinet][libuinet]]
   4. [[https://github.com/OpenFastPath/ofp][openfastpath]]
   5. [[https://github.com/spdk/spdk][spdk]] 高性能存储方案，里面带的libuns是一个tcp/ip协议栈
+
+* 代码解析
+** 启动注册
+像bus和driver代码需要注册在全局时，用constructor在main前运行
+#+begin_src c
+  #define RTE_PRIORITY_LOG 101
+  #define RTE_PRIORITY_BUS 110
+  #define RTE_PRIORITY_CLASS 120
+  #define RTE_PRIORITY_LAST 65535
+
+  #define RTE_PRIO(prio)                          \
+      RTE_PRIORITY_ ## prio
+
+  /**
+   ,* Run function before main() with high priority.
+   ,*
+   ,* @param func
+   ,*   Constructor function.
+   ,* @param prio
+   ,*   Priority number must be above 100.
+   ,*   Lowest number is the first to run.
+   ,*/
+  #ifndef RTE_INIT_PRIO /* Allow to override from EAL */
+  #define RTE_INIT_PRIO(func, prio)                                       \
+      static void __attribute__((constructor(RTE_PRIO(prio)), used)) func(void)
+  #endif
+
+  #define RTE_REGISTER_BUS(nm, bus)               \
+      RTE_INIT_PRIO(businitfn_ ##nm, BUS)         \
+      {                                           \
+          (bus).name = RTE_STR(nm);               \
+          rte_bus_register(&bus);                 \
+      }
+#+end_src
+** PCI
+- rte_bus_scan scan所有的bus上的device，包括pci-e
+- rte_bus_probe 对所有bus上的device适配对应的driver
+- igb_uio不推荐，现在主要用vfio-pci和uio_pci_generic
+#+begin_src c
+	if (!ret) {
+		if (!strcmp(driver, "vfio-pci"))
+			dev->kdrv = RTE_PCI_KDRV_VFIO;
+		else if (!strcmp(driver, "igb_uio"))
+			dev->kdrv = RTE_PCI_KDRV_IGB_UIO;
+		else if (!strcmp(driver, "uio_pci_generic"))
+			dev->kdrv = RTE_PCI_KDRV_UIO_GENERIC;
+		else
+			dev->kdrv = RTE_PCI_KDRV_UNKNOWN;
+	} else {
+#+end_src
+
+** hugepage
+#+begin_src c
+	if (internal_conf->no_hugetlbfs == 0) {
+		/* rte_config isn't initialized yet */
+		ret = internal_conf->process_type == RTE_PROC_PRIMARY ?
+				eal_hugepage_info_init() :
+				eal_hugepage_info_read();
+		if (ret < 0) {
+			rte_eal_init_alert("Cannot get hugepage information.");
+			rte_errno = EACCES;
+			__atomic_store_n(&run_once, 0, __ATOMIC_RELAXED);
+			return -1;
+		}
+	}
+#+end_src
+
+eal_hugepage_info_init
+- hugepage_info_init 初始化
+  检查/sys/kernel/mm/hugepages配置
+  清理mount点里所有的*map*
+  共享hugepage信息到/var/run/dpdk/rte/hugepage_info(默认)
+
+
+
+
+
+
+
+** Q&A
+If secondary process support is required, mount points for hugepages need to be created. On modern Linux distributions, a default mount point for hugepages is provided by the system and is located at /dev/hugepages.
+
+doc: DPDK Documentation
+license: DPDK license information
+lib: Source code of DPDK libraries
+drivers: Source code of DPDK poll-mode drivers
+app: Source code of DPDK applications (automatic tests)
+examples: Source code of DPDK application examples
+config, buildtools: Framework-related scripts and configuration
+usertools: Utility scripts for end-users of DPDK applications
+devtools: Scripts for use by DPDK developers
+kernel: Kernel modules needed for some operating systems
+
+If the devices used for DPDK are bound to a UIO-based kernel module, please make sure that the IOMMU is disabled or is in passthrough mode. One can add intel_iommu=off or amd_iommu=off or intel_iommu=on iommu=pt in GRUB command line on x86_64 systems, or add iommu.passthrough=1 on aarch64 systems.
+
+dmidecode memory
+
+
+
+对于现在的交换机路由器应用，很多都需要上送至用户态
+
+
+dpdk-hugepages.py -s
+Node Pages Size Total
+0    5120  2Mb    10Gb
+1    5120  2Mb    10Gb
+
+Hugepages mounted on /dev/hugepages
+
+root@amd-ETHANOL-X:/home/amd# dpdk-testpmd -h | grep channel
+  -n CHANNELS         Number of memory channels
+
+
+
+| API                                           | Description                                                                         |
+|-----------------------------------------------+-------------------------------------------------------------------------------------|
+| rte_eal_init                                  | init(config，memory, queue, alarm, interrupt, PCI device probe, timer, plugin, etc) |
+| rte_eth_dev_configure                         | device configuration like mtu, tx&rx mode, loopback, etc                            |
+| rte_eth_rx_queue_setup/rte_eth_tx_queue_setup | setup queue                                                                         |
+| rte_eth_dev_start                             | start                                                                               |
+| rte_eal_remote_launch                         | enhanced task_group                                                                 |
+
+

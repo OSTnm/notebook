@@ -20,3 +20,5 @@
 - [[https://blog.csdn.net/universsky2015/article/details/109349094][fork join]]
 - [[https://www.sohu.com/a/168927499_202311][超线程到底有啥用]]
 - [[https://www.runoob.com/mysql/mysql-tutorial.html][MySQL简明教程]]
+- [[https://blog.csdn.net/zhaisharap/article/details/89706592][数字签名vs数字证书]]
+- [[https://www.bilibili.com/video/BV1LF41177d5?spm_id_from=333.999.0.0&vd_source=85f93db511d055fea1171504c90e2f73][什么是RTOS]]

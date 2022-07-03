@@ -48,8 +48,11 @@ Nand Flash和Nor Flash结构特性
 
 ## 软件
 * 操作系统
-  + [linux内核设计与实现](./books/linux内核设计与实现.org)
-  linux内核子系统结构.
+  + [linux](./books/linux)
+    - [linux内核设计与实现](./books/linux/linux内核设计与实现.org)
+    linux内核子系统结构.
+    - [qemu + kgdb](./books/linux/qemu.org)
+    qemu环境
   + [程序员的自我修养](./books/程序员的自我修养.org)
   二进制文件格式和glibc基本库.
   + [计算机组成](https://zh.coursera.org/learn/jisuanji-zucheng#syllabus)
@@ -84,6 +87,8 @@ Nand Flash和Nor Flash结构特性
 IEEE802.3以太网物理层MAC/PCS/PMA/PMD协议.
 * [Wireless](./protocol/wireless)
 IEEE802.11及无线相关协议
+* [IPsec](./protocol/ipsec)
+IPsec协议簇
 * [PCIE](./protocol/pcie)
 一种高速串行计算机扩展总线标准
 * [i2c](./protocol/i2c.pdf)

@@ -1,0 +1,3237 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2022-02-14 Mon 16:00 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>CCIE</title>
+<meta name="generator" content="Org mode" />
+<meta name="author" content="xuali2" />
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: auto;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline; margin-top: 14px;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { width: 90%; }
+  /*]]>*/-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://fniessen.github.io/org-html-themes/src/readtheorg_theme/css/htmlize.css"/>
+<link rel="stylesheet" type="text/css" href="https://fniessen.github.io/org-html-themes/src/readtheorg_theme/css/readtheorg.css"/>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="https://fniessen.github.io/org-html-themes/src/lib/js/jquery.stickytableheaders.min.js"></script>
+<script type="text/javascript" src="https://fniessen.github.io/org-html-themes/src/readtheorg_theme/js/readtheorg.js"></script>
+<script type="text/javascript">
+// @license magnet:?xt=urn:btih:e95b018ef3580986a04669f1b5879592219e2a7a&dn=public-domain.txt Public Domain
+<!--/*--><![CDATA[/*><!--*/
+     function CodeHighlightOn(elem, id)
+     {
+       var target = document.getElementById(id);
+       if(null != target) {
+         elem.classList.add("code-highlighted");
+         target.classList.add("code-highlighted");
+       }
+     }
+     function CodeHighlightOff(elem, id)
+     {
+       var target = document.getElementById(id);
+       if(null != target) {
+         elem.classList.remove("code-highlighted");
+         target.classList.remove("code-highlighted");
+       }
+     }
+    /*]]>*///-->
+// @license-end
+</script>
+</head>
+<body>
+<div id="content">
+<h1 class="title">CCIE</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#orgc4bd78d">1. SDN-Access(first)</a>
+<ul>
+<li><a href="#orgd4accdb">1.1. Design</a></li>
+<li><a href="#orgc7dc8bd">1.2. Policy</a></li>
+<li><a href="#org7b37702">1.3. 需手动配置的设备</a></li>
+<li><a href="#orgee4c2dc">1.4. 发现设备</a></li>
+<li><a href="#org9ed4878">1.5. ISE</a></li>
+<li><a href="#orgdc041f0">1.6. Provision 发现与部署</a>
+<ul>
+<li><a href="#orgae04825">1.6.1. border provision</a></li>
+<li><a href="#org32eb7a0">1.6.2. underlay provision</a></li>
+<li><a href="#org1798088">1.6.3. fabric</a></li>
+<li><a href="#org4b925a3">1.6.4. 镜像管理</a></li>
+</ul>
+</li>
+<li><a href="#org5dd8b63">1.7. Assurance</a></li>
+<li><a href="#org867ede2">1.8. 802.1X</a></li>
+</ul>
+</li>
+<li><a href="#orgc5d1c33">2. BGP</a>
+<ul>
+<li><a href="#org428f867">2.1. 基本概念</a></li>
+<li><a href="#orgfbb1953">2.2. 路由聚合</a></li>
+<li><a href="#org006c75a">2.3. 路由反射</a></li>
+<li><a href="#org4a8264b">2.4. 路由选择</a></li>
+<li><a href="#org4aca77b">2.5. 其他特性</a>
+<ul>
+<li><a href="#org5d15259">2.5.1. 认证</a></li>
+<li><a href="#org9efb646">2.5.2. 默认路由</a></li>
+<li><a href="#org2d0c086">2.5.3. MP-BGP</a></li>
+</ul>
+</li>
+<li><a href="#org9c0db1c">2.6. 其他命令</a></li>
+</ul>
+</li>
+<li><a href="#org0df1778">3. IGP - OSPF</a>
+<ul>
+<li><a href="#orgbbd7307">3.1. LSA</a></li>
+<li><a href="#orgd9f8924">3.2. 路由汇总</a></li>
+<li><a href="#org7b6ddca">3.3. ASBR</a></li>
+<li><a href="#org07ae100">3.4. Stub区域</a></li>
+<li><a href="#orgc817248">3.5. NSSA</a></li>
+<li><a href="#org18229de">3.6. 额外特性</a></li>
+</ul>
+</li>
+<li><a href="#org6c41f78">4. MPLS - VPN</a>
+<ul>
+<li><a href="#org9efaee1">4.1. vrf</a></li>
+<li><a href="#org2596564">4.2. PE和CE间</a></li>
+<li><a href="#org9afb9c9">4.3. MPLS对TTL的处理</a></li>
+<li><a href="#org8f0b543">4.4. CE&lt;-&gt;PE EIGRP</a></li>
+<li><a href="#orgd23fc1a">4.5. CE&lt;-&gt;PE OSPF</a>
+<ul>
+<li><a href="#org45cb798">4.5.1. Shamlink</a></li>
+<li><a href="#org9e39a7d">4.5.2. MCE&amp;Vrf-lite</a></li>
+</ul>
+</li>
+<li><a href="#org68b4037">4.6. CE&lt;-&gt;PE BGP</a></li>
+</ul>
+</li>
+<li><a href="#org549c616">5. Multicast</a>
+<ul>
+<li><a href="#orgc162557">5.1. IGMP</a></li>
+<li><a href="#org71660ed">5.2. PIM-DM密集模式</a></li>
+<li><a href="#org2d6945d">5.3. PIM-SM稀疏模式</a></li>
+</ul>
+</li>
+<li><a href="#org346c56b">6. IPSEC - VPN</a>
+<ul>
+<li><a href="#org45c88e9">6.1. 过程</a>
+<ul>
+<li><a href="#org706a161">6.1.1. ike sa</a></li>
+<li><a href="#orgcfb2d08">6.1.2. ipsec sa</a></li>
+</ul>
+</li>
+<li><a href="#orgd1b4f69">6.2. 部署</a>
+<ul>
+<li><a href="#org10ca02c">6.2.1. 路由</a></li>
+<li><a href="#org5d1eb45">6.2.2. SPD - ACL</a></li>
+<li><a href="#org18a8859">6.2.3. IKE SA</a></li>
+<li><a href="#org0d54620">6.2.4. IPSEC SA</a></li>
+<li><a href="#org5f09a03">6.2.5. Deploy on port</a></li>
+<li><a href="#org7efe343">6.2.6. DMVPN</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#org1226804">7. SD-WAN</a>
+<ul>
+<li><a href="#orgf45836f">7.1. 编排，管理，控制，数据转发</a></li>
+<li><a href="#org3d3911b">7.2. 数据平面</a></li>
+<li><a href="#orgc69c4ee">7.3. OMP</a></li>
+<li><a href="#org6e107df">7.4. 模板</a></li>
+<li><a href="#org78e28db">7.5. 策略</a>
+<ul>
+<li><a href="#org2edb32c">7.5.1. 两个维度分类</a></li>
+</ul>
+</li>
+<li><a href="#org93789e3">7.6. 实验</a></li>
+</ul>
+</li>
+<li><a href="#org3da6007">8. SD-Access</a>
+<ul>
+<li><a href="#orgcb05af8">8.1. 实验</a>
+<ul>
+<li><a href="#org5678129">8.1.1. 设计</a></li>
+<li><a href="#orgf396a10">8.1.2. 策略</a></li>
+<li><a href="#orgf60a94f">8.1.3. 部署</a></li>
+<li><a href="#org93ccb42">8.1.4. 设计</a></li>
+<li><a href="#org71a12ce">8.1.5. 策略</a></li>
+<li><a href="#org9986e68">8.1.6. 部署</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-orgc4bd78d" class="outline-2">
+<h2 id="orgc4bd78d"><span class="section-number-2">1</span> SDN-Access(first)</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+CTS，Cisco Trust SEC<br />
+SGT, Security Group Tag<br />
+</p>
+
+<p>
+ISE - authentication, authorization<br />
+ISE &lt;-&gt; AD<br />
+</p>
+
+<p>
+ISE &lt;-&gt; DNAC, by PxGrid<br />
+</p>
+<ul class="org-ul">
+<li>预共享密钥不能用cisco, admin<br /></li>
+<li>PxGrid自动审核<br /></li>
+<li>DNAC的名字不能有空格<br /></li>
+</ul>
+</div>
+
+<div id="outline-container-orgd4accdb" class="outline-3">
+<h3 id="orgd4accdb"><span class="section-number-3">1.1</span> Design</h3>
+<div class="outline-text-3" id="text-1-1">
+<ul class="org-ul">
+<li>Network hierarchy<br /></li>
+<li>Network settings<br />
+<ul class="org-ul">
+<li>Network, DNS,AAA,NTP,Syslog等服务器<br /></li>
+<li>Device Credentials, CLI, SNMPV2CRead&amp;Write, HTTPs Read&amp;Write<br /></li>
+<li>IP Address Pools<br />
+<ul class="org-ul">
+<li>underlay<br /></li>
+<li>overlay<br /></li>
+<li>在左边站点site处保留地址<br /></li>
+<li>total: underlay, vn1, vn2, l2 handoff, l3 handoff<br /></li>
+<li>选中圆圈保存<br /></li>
+</ul></li>
+</ul></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-orgc7dc8bd" class="outline-3">
+<h3 id="orgc7dc8bd"><span class="section-number-3">1.2</span> Policy</h3>
+<div class="outline-text-3" id="text-1-2">
+<ul class="org-ul">
+<li>Group-base ACL<br />
+<ul class="org-ul">
+<li>Scability group -&gt; ISE-&gt;Work Centers -&gt; TrustSec 定义标签, SGT扩展组标签(数字)<br /></li>
+<li>Group-base ACL policy,托拽source group,destination group<br /></li>
+<li>Virtual Network, overlay,创建并托拽Scability group至VN<br /></li>
+</ul></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org7b37702" class="outline-3">
+<h3 id="org7b37702"><span class="section-number-3">1.3</span> 需手动配置的设备</h3>
+<div class="outline-text-3" id="text-1-3">
+<p>
+Fusion - border和DNAC等之间通信的传统设备<br />
+Border设备 - 半自动，vtp transparent, 路由通告给外部L3, 开启ISIS，配置与DNAC通信的接口地址<br />
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgee4c2dc" class="outline-3">
+<h3 id="orgee4c2dc"><span class="section-number-3">1.4</span> 发现设备</h3>
+<div class="outline-text-3" id="text-1-4">
+<p>
+主页 find new device, 用ip range<br />
+</p>
+</div>
+</div>
+
+<div id="outline-container-org9ed4878" class="outline-3">
+<h3 id="org9ed4878"><span class="section-number-3">1.5</span> ISE</h3>
+<div class="outline-text-3" id="text-1-5">
+<p>
+administration -&gt; idenitfiy management -&gt; 创建login和enable密码，替换管理设备的login local<br />
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgdc041f0" class="outline-3">
+<h3 id="orgdc041f0"><span class="section-number-3">1.6</span> Provision 发现与部署</h3>
+<div class="outline-text-3" id="text-1-6">
+</div>
+<div id="outline-container-orgae04825" class="outline-4">
+<h4 id="orgae04825"><span class="section-number-4">1.6.1</span> border provision</h4>
+<div class="outline-text-4" id="text-1-6-1">
+<ol class="org-ol">
+<li>provision -&gt; devices -&gt; inventory -&gt; action -&gt; assign to site<br /></li>
+<li>provision -&gt; devices -&gt; inventory -&gt; action -&gt; provision -&gt; deploy，结束后ISE在admin-&gt;network resources-&gt;network device里看到此设备,同时在被管理设备(border)看到下发的配置<br /></li>
+</ol>
+</div>
+</div>
+
+<div id="outline-container-org32eb7a0" class="outline-4">
+<h4 id="org32eb7a0"><span class="section-number-4">1.6.2</span> underlay provision</h4>
+<div class="outline-text-4" id="text-1-6-2">
+<p>
+推荐用ISIS<br />
+</p>
+<ol class="org-ol">
+<li>provision -&gt; devices -&gt; inventory -&gt; LAN Automation<br /></li>
+<li>此时EDGE设备，必须处于对话状态，“请问需要初始化配置”<br /></li>
+<li>complete后，edge会enable vlan1 ip address及配ISIS<br /></li>
+<li>点stop, ISIS邻居关系会从vlan1到no switchport变成L3接口， edge进入invertory<br /></li>
+<li>devices -&gt; inventory -&gt; action -&gt; assign -&gt; Provision -&gt; deploy, 结束后ISE在admin-&gt;network resources-&gt;network device里看到此设备,同时在被管理设备(border)看到下发的配置<br /></li>
+</ol>
+</div>
+</div>
+
+<div id="outline-container-org1798088" class="outline-4">
+<h4 id="org1798088"><span class="section-number-4">1.6.3</span> fabric</h4>
+<div class="outline-text-4" id="text-1-6-3">
+</div>
+<ol class="org-ol">
+<li><a id="org55b1efd"></a>fabrics<br />
+<div class="outline-text-5" id="text-1-6-3-1">
+<p>
+创建fabric<br />
+</p>
+</div>
+</li>
+<li><a id="orga30bed3"></a>transits 多个VN之间的通信<br />
+<div class="outline-text-5" id="text-1-6-3-2">
+<ul class="org-ul">
+<li>两个SD-Access Fabric通信用SD-Access类型<br /></li>
+<li>SD-Access和传统IP选IP类型,只有BGP协议可选&lt;&#x2013;只有BGP可承载VRF，选对面的as号<br /></li>
+</ul>
+</div>
+</li>
+<li><a id="org3b69705"></a>将设备分配至fabric<br />
+<div class="outline-text-5" id="text-1-6-3-3">
+<ul class="org-ul">
+<li>edge -&gt; add to fabric<br /></li>
+<li>border,进出fabriic的数据流量的入口和出口-&gt; CP + border<br /></li>
+<li>rest of company, 只在内部使用，内部路由, <b>将内部ip导出</b><br /></li>
+<li>outside world, 外部未知网络的路由, <b>不导入未知路由,所有的edge未知目的都会发至external border</b><br /></li>
+<li><b>anywhere, 既可做内部路由，也可做外部路由</b><br /></li>
+</ul>
+<p>
+选类型，transits类型，VN个数，出口，保存，deploy<br />
+结束生成BGP，对端的GW根据border自动生成的BGP配置configure自已的ip address<br />
+</p>
+</div>
+</li>
+<li><a id="org31059a9"></a>host onboarding<br />
+<div class="outline-text-5" id="text-1-6-3-4">
+<p>
+Provision-&gt;Fabric-&gt;host onboarding<br />
+选择认证模板-&gt;save-&gt;deploy<br />
+VN关连地址池(SG是可选)<br />
+Assign edge port(select port assignment),关连VN和Group，认证类型-&gt;save-&gt;deploy<br />
+</p>
+
+<p>
+<span class="underline">anycast gw</span><br />
+</p>
+<ul class="org-ul">
+<li>edge配置vlan里的ip address<br /></li>
+</ul>
+
+<p>
+overlay分为L2和L3，命令里用service ipv4和service ethernet<br />
+</p>
+
+<p>
+edge用户访问外网,丢给anycast gw,到border再去向外网<br />
+</p>
+
+<p>
+control-plane based on LISP<br />
+data-plane based on VXLAN-&gt;为了支持L2 ARP<br />
+</p>
+
+<p>
+VXLAN里包含了SGT和VNI(lisp instance)<br />
+</p>
+
+<p>
+不同VN间通信用ip transit,如果是l3报文出到对面，再回来，类似单臂路由<br />
+</p>
+</div>
+</li>
+
+<li><a id="orga6b0aa7"></a>Qos<br />
+<div class="outline-text-5" id="text-1-6-3-5">
+<p>
+Policy -&gt; Application<br />
+</p>
+
+<p>
+应用级,cisco validated design-&gt; 业务相关(高优先低延时)、默认、业务无关(低优先高延时)<br />
+</p>
+<ul class="org-ul">
+<li>Application sets 应用集<br /></li>
+<li>Application 详细的每条class<br /></li>
+<li>Queueing Profile 具体的策略<br /></li>
+<li>Application policies Qos部署下发<br /></li>
+</ul>
+</div>
+</li>
+
+<li><a id="orgf2dbef0"></a>扩展结点<br />
+<div class="outline-text-5" id="text-1-6-3-6">
+<p>
+pnp，trunk连接,配edge的接口时指定extended node, 需要在默认的INFRA_VN里分配地址池<br />
+</p>
+</div>
+</li>
+<li><a id="org55912ea"></a>Server结点<br />
+<div class="outline-text-5" id="text-1-6-3-7">
+<p>
+trunk连接<br />
+</p>
+</div>
+</li>
+</ol>
+</div>
+
+<div id="outline-container-org4b925a3" class="outline-4">
+<h4 id="org4b925a3"><span class="section-number-4">1.6.4</span> 镜像管理</h4>
+<div class="outline-text-4" id="text-1-6-4">
+<p>
+DESIGN-&gt;Image Repository<br />
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org5dd8b63" class="outline-3">
+<h3 id="org5dd8b63"><span class="section-number-3">1.7</span> Assurance</h3>
+</div>
+
+<div id="outline-container-org867ede2" class="outline-3">
+<h3 id="org867ede2"><span class="section-number-3">1.8</span> 802.1X</h3>
+<div class="outline-text-3" id="text-1-8">
+<p>
+EAPOL,EAP TLS, EAP fast, PEAP<br />
+MAC认证旁路 - 静态mac认证，用于不支持802.1x的设备<br />
+</p>
+
+<p>
+ISE -&gt; policy -&gt; policy elements -&gt; results -&gt; MS-CHAP2等认证<br />
+ISE -&gt; policy -&gt; policy sets -&gt; authen policy -&gt; 类似ACL的匹配策略<br />
+Provision -&gt; Fabric -&gt; endpoint -&gt; closed authentication<br />
+</p>
+
+<p>
+edge -&gt; show access-session interface * detail验证<br />
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgc5d1c33" class="outline-2">
+<h2 id="orgc5d1c33"><span class="section-number-2">2</span> BGP</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+EBGP AS号码不同<br />
+IBGP AS号码相同,因为实现对AS内部路由传递的操控，内部的设备要外部的路由，内部由BGP协议去承载大量路由<br />
+</p>
+
+<p>
+TCP - 179, TLV类型<br />
+BGP - 单播<br />
+</p>
+
+<p>
+AS by AS<br />
+</p>
+</div>
+
+<div id="outline-container-org428f867" class="outline-3">
+<h3 id="org428f867"><span class="section-number-3">2.1</span> 基本概念</h3>
+<div class="outline-text-3" id="text-2-1">
+<ul class="org-ul">
+<li>邻居关系<br />
+<a href="BGP/2021-08-12_08-08-02_bgp_neighbor.pcapng">BGP/2021-08-12_08-08-02_bgp_neighbor.pcapng</a><br /></li>
+
+<li><p>
+断链重建，ping<br />
+BGP会通告的路由必须是在路由表里存在的路由<br />
+BGP redistribute的route-map不存在则默认permit<br />
+</p>
+<p>
+<a href="BGP/2021-08-12_08-18-19_bgp_neighbor.pcapng">BGP/2021-08-12_08-18-19_bgp_neighbor.pcapng</a><br />
+</p></li>
+
+<li>防环<br />
+同一个AS在一个通告路由中不能超过N(默认是1)次<br /></li>
+
+<li>报文<br />
+<ol class="org-ol">
+<li>open          - 建立邻居关系<br /></li>
+<li>keepalive     - 保活<br /></li>
+<li>update        - 更新路由<br /></li>
+<li>notification<br /></li>
+<li><p>
+routerefresh  - clear ip bgp * soft  in 触发，让对方发送路由信息<br />
+</p>
+<p>
+<a href="BGP/2021-08-12_13-12-09_bgp_route_refresh.pcapng">BGP/2021-08-12_13-12-09_bgp_route_refresh.pcapng</a><br />
+</p></li>
+</ol></li>
+
+<li><p>
+状态机<br />
+</p>
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="org-left">IDLE</td>
+<td class="org-left">空</td>
+</tr>
+
+<tr>
+<td class="org-left">Connect</td>
+<td class="org-left">tcping</td>
+</tr>
+
+<tr>
+<td class="org-left">Active</td>
+<td class="org-left">tcp失败</td>
+</tr>
+
+<tr>
+<td class="org-left">Opensent</td>
+<td class="org-left">发open packet</td>
+</tr>
+
+<tr>
+<td class="org-left">Openconfirm</td>
+<td class="org-left">收open packet  and OK</td>
+</tr>
+
+<tr>
+<td class="org-left">Establish</td>
+<td class="org-left">Done</td>
+</tr>
+</tbody>
+</table></li>
+
+<li><p>
+路由下发<br />
+</p>
+
+<div id="orgaf50731" class="figure">
+<p><img src="BGP/2021-08-12_21-06-22_Picture 1.png" alt="2021-08-12_21-06-22_Picture 1.png" /><br />
+</p>
+</div></li>
+</ul>
+
+
+
+<div id="org19a2bea" class="figure">
+<p><img src="BGP/2021-08-15_09-34-04_1-BGP.png" alt="2021-08-15_09-34-04_1-BGP.png" /><br />
+</p>
+</div>
+
+
+<ul class="org-ul">
+<li>使用Loopback做更新源<br />
+<ol class="org-ol">
+<li>配置静态路由使得loopback可达<br /></li>
+<li>neighbor 6.6.6.6 update-source Loopback 1<br /></li>
+<li>set ttl - neighbor 2.2.2.2 ebgp-multihop 2<br /></li>
+<li>如果不能用3,可用neighbor 6.6.6.6 disable-connected-check，不检查直连发到本机loopback的TTL<br /></li>
+</ol></li>
+
+<li>BGP load balance<br />
+BGP在本路由器可能会将多条同一个目的路由放入全局路由表中，但通告给别人时只给最优的一条路由，同时路由为精准路由<br /></li>
+
+<li>通告<br />
+从EBGP收到的路由更新给EBGP和IBGP邻居<br />
+从IBGP收到的路由不更新给IBGP邻居 -&gt; 防环<br />
+iBGP很多时候使用环回接口作为更新源，所以iBGP邻居需要IGP的支撑<br /></li>
+
+<li>IBGP路由不可达<br />
+EBPG路由在更新给IBGP的时候默认会保持原有的下一跳,下一跳可达是BGP最优路由的基本条件<br />
+R4收到ibgp路由，同时此ibgp路由从EBGP更新而来，则下一跳为EBGP对面as的路由地址<br /></li>
+</ul>
+<div class="org-src-container">
+<pre class="src src-shell">R4#show ip bgp
+BGP table version is 3, local router ID is 44.1.1.1
+Status codes: s suppressed, d damped, h history, * valid, &gt; best, i - internal,
+              r RIB-failure, S Stale, m multipath, b backup-path, f RT-Filter,
+              x best-external, a additional-path, c RIB-compressed,
+Origin codes: i - IGP, e - EGP, ? - incomplete
+RPKI validation codes: V valid, I invalid, N Not found
+
+     Network          Next Hop            Metric LocPrf Weight Path
+ *&gt;i 1.1.1.1/32       11.1.1.1                 0    100      0 i
+ *&gt;  4.4.4.4/32       0.0.0.0                  0         32768 i
+ * i 5.5.5.5/32       10.1.15.5                0    100      0 200 i
+ * i 7.7.7.7/32       10.1.15.5                0    100      0 200 i
+</pre>
+</div>
+<p>
+ASBR对IBGP邻居使用 <b>neighbor 77.1.1.1 next-hop-self</b> 可使得BGP next-hop为ASBR的地址<br />
+</p>
+
+<p>
+7.7.7.7不能ping4.4.4.4，因为R3没有4.4.4.4的路由，IP转发是逐跳查找路由，没有BGP的R3，不知道如果转发4.4.4.4<br />
+BGP路由黑洞(某些设备没有运行BGP，导致该设备无法通过BGP得到路由)<br />
+</p>
+
+<ul class="org-ul">
+<li>路由redistribute<br />
+默认情况只能把EBGP路由引入IGP，不能把IBGP路由引进来，基于防环<br /></li>
+
+<li><b>不再使用</b> 的路由同步 - 从IBGP对等体获得的路由信息不会通告给EBGP邻居，除非该路由也可以从IGP中获得<br />
+命令是no sync<br /></li>
+
+<li>路由通告<br />
+只能通告路由表里存在的路由<br />
+?表示路由从其他路由协议而来(引入)，i表示路由从BGP来<br />
+只通告最优路由给BGP对等体<br />
+iBGP一定依赖IGP<br /></li>
+
+<li>next hop<br />
+IBGP 更新源地址为下一跳<br />
+EBGP 下一跳为EBGP邻居关系地址<br />
+多点接入NH - 类似FA,会优化为同网段的最短路径<br /></li>
+
+<li>对等体组和动态邻居<br />
+简化配置<br /></li>
+</ul>
+<div class="org-src-container">
+<pre class="src src-shell">- peer-group
+  neighbor XL peer-group
+  neighbor XL remote-as 100
+  neighbor XL update-source Loopback0
+  neighbor XL next-hop-self
+  neighbor 11.1.1.1 peer-group XL
+  neighbor 33.1.1.1 peer-group XL
+  neighbor 44.1.1.1 peer-group XL
+- bgp listen range, 如下所有和本路由建邻居关系都会应用peer-group
+  bgp listen range 0.0.0.0/0 peer-group XL
+</pre>
+</div>
+
+<ul class="org-ul">
+<li>连接模式neighbor 22.1.1.1 transport connection-mode<br /></li>
+<li>AS欺骗 neighbor 10.1.15.5 local-as 65535<br /></li>
+<li>移除私有AS<br />
+私有AS 64512-65534<br />
+公有路由不能存在私有AS，所以从内网过来的AS path里包含的私有AS要被移除<br />
+<ol class="org-ol">
+<li>移除 neighbor 10.1.1.1 remove-private-as all -&gt; 通告给公网的路由path中私有AS被移除<br /></li>
+<li>替换 neighbor 10.1.1.1 remove-private-as all replace-as -&gt; 通告给公网的路由path中私有AS被替换为本地AS<br /></li>
+</ol></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-orgfbb1953" class="outline-3">
+<h3 id="orgfbb1953"><span class="section-number-3">2.2</span> 路由聚合</h3>
+<div class="outline-text-3" id="text-2-2">
+<ol class="org-ol">
+<li>自动聚合: ?的BGP路由,结果汇总为主类网络,命令为auto-summary -&gt; <b>几乎没有人用</b><br /></li>
+</ol>
+<div class="org-src-container">
+<pre class="src src-shell">  R1(config-router)#do show ip bgp
+  BGP table version is 33, local router ID is 11.1.1.1
+  Status codes: s suppressed, d damped, h history, * valid, &gt; best, i - internal,
+                r RIB-failure, S Stale, m multipath, b backup-path, f RT-Filter,
+                x best-external, a additional-path, c RIB-compressed,
+  Origin codes: i - IGP, e - EGP, ? - incomplete
+  RPKI validation codes: V valid, I invalid, N Not found
+
+       Network          Next Hop            Metric LocPrf Weight Path
+   *&gt;  1.1.1.1/32       0.0.0.0                  0         32768 i
+   *&gt;  1.1.1.2/32       0.0.0.0                  0         32768 ?
+   *&gt;  1.1.1.3/32       0.0.0.0                  0         32768 ?
+   *&gt;  1.1.1.4/32       0.0.0.0                  0         32768 ?
+   *&gt;i 2.2.2.2/32       22.1.1.1                 0    100      0 i
+   *&gt;i 4.4.4.4/32       44.1.1.1                 0    100      0 i
+   *&gt;  5.5.5.5/32       10.1.15.5                0             0 65535 200 i
+   *&gt;  7.7.7.7/32       10.1.15.5                              0 65535 200 i
+   *&gt;  10.1.12.0/24     0.0.0.0                  0         32768 ?
+   *&gt;  10.1.13.0/24     0.0.0.0                  0         32768 ?
+   *&gt;  10.1.14.0/24     0.0.0.0                  0         32768 ?
+   *&gt;  10.1.15.0/24     0.0.0.0                  0         32768 ?
+   *&gt;  11.1.1.1/32      0.0.0.0                  0         32768 ?
+   *&gt;  77.1.1.1/32      10.1.15.5                              0 65535 200 i
+
+R1(config-router)#auto-summary
+R1(config-router)#do show ip bgp
+BGP table version is 44, local router ID is 11.1.1.1
+Status codes: s suppressed, d damped, h history, * valid, &gt; best, i - internal,
+              r RIB-failure, S Stale, m multipath, b backup-path, f RT-Filter,
+              x best-external, a additional-path, c RIB-compressed,
+Origin codes: i - IGP, e - EGP, ? - incomplete
+RPKI validation codes: V valid, I invalid, N Not found
+
+     Network          Next Hop            Metric LocPrf Weight Path
+ *&gt;  1.0.0.0          0.0.0.0                  0         32768 ?
+ *&gt;  1.1.1.1/32       0.0.0.0                  0         32768 i
+ *&gt;i 2.2.2.2/32       22.1.1.1                 0    100      0 i
+ *&gt;i 4.4.4.4/32       44.1.1.1                 0    100      0 i
+ *&gt;  5.5.5.5/32       10.1.15.5                0             0 65535 200 i
+ *&gt;  7.7.7.7/32       10.1.15.5                              0 65535 200 i
+ *&gt;  10.0.0.0         0.0.0.0                  0         32768 ?
+ *&gt;  11.0.0.0         0.0.0.0                  0         32768 ?
+ *&gt;  77.1.1.1/32      10.1.15.5                              0 65535 200 i
+</pre>
+</div>
+<ol class="org-ol">
+<li>汇总静态路由 ip route 1.1.1.0 255.255.255.252 Null0 -&gt; 此命令同时可做 路由清洗<br /></li>
+<li>汇总BGP本地路由<br />
+aggregate-address 1.1.1.0 255.255.255.252<br />
+aggregate-address 1.1.1.0 255.255.255.252 summary-only //只通告汇总路由<br />
+aggregate-address 1.1.1.0 255.255.255.252 suppress-map xxx //抑制xxx命中的路由<br /></li>
+<li>原子聚合 - 聚合的过程丢失了一些路径信息<br />
+聚合者   - AS number + router-id<br /></li>
+<li>AS-SET<br />
+保留被聚合路由的原有AS<br /></li>
+<li>修改聚合属性<br /></li>
+</ol>
+<div class="org-src-container">
+<pre class="src src-shell">R1(config)#route-map ORIGIN
+R1(config-route-map)#set origin incomplete
+R1(config-route-map)#exit
+R1(config)#router bgp 100
+R1(config-router)#aggregate-address 1.1.1.0 255.255.255.252 summary-only attribute-map ORIGIN
+R1(config-router)#$.1.0 255.255.255.252 summary-only attribute-map ORIGIN
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org006c75a" class="outline-3">
+<h3 id="org006c75a"><span class="section-number-3">2.3</span> 路由反射</h3>
+<div class="outline-text-3" id="text-2-3">
+<p>
+一种更新iBGP路由的机制，对比全连接更简单<br />
+</p>
+
+<ul class="org-ul">
+<li>角色<br /></li>
+</ul>
+<p>
+RR 客户端 非客户端<br />
+</p>
+<ul class="org-ul">
+<li>原则<br /></li>
+<li>非客户机IBGP对等体学到的路由，发布给此RR的所有客户机<br /></li>
+</ul>
+<p>
+2  从客户端学到的路由，发布给RR的所有非客户端和客户端(<b>包含该客户端</b>) &lt;= 我觉得应该是版本实现可能不一样<br />
+</p>
+<ul class="org-ul">
+<li>命令<br /></li>
+</ul>
+<div class="org-src-container">
+<pre class="src src-shell">neighbor 33.1.1.1 route-reflector-client //在配好邻居的基础上，指定任意client即变成RR
+neighbor 44.1.1.1 shutdown //强制关闭邻居
+</pre>
+</div>
+
+<ul class="org-ul">
+<li>cluster<br /></li>
+<li>一个cluster可以包括一个或多少RR<br /></li>
+<li>一个client可以同时属于多少cluster<br /></li>
+<li>Originator_ID用于防环，由RR产生，携带本地AS内部路由发起者的Router ID(注意， Originator_ID和ORIGIN不是一个东西)<br /></li>
+<li>Cluster_List用于RR防环，如果Cluster_List中已经本地Cluster_ID，丢弃该路由，否则将其加入Cluster_List，并反射(客户端也可配cluster，如果一致也会丢弃)<br /></li>
+</ul>
+<p>
+<a href="BGP/2021-08-18_20-58-30_originator_id.pcapng">BGP/2021-08-18_20-58-30_originator_id.pcapng</a><br />
+</p>
+
+<ul class="org-ul">
+<li>联邦(不常用)<br />
+分而治之，缺点是要取消之前的bgp配置，联邦内inherit AS的属性: 下一跳、MED值、本地优先级<br /></li>
+</ul>
+<div class="org-src-container">
+<pre class="src src-shell">bgp confederation identifier 200
+bgp confederation peers 2067
+</pre>
+</div>
+
+<ul class="org-ul">
+<li>团体属性<br />
+应用方式: 更新邻居，收邻居路由，产生路由<br />
+有过滤属性的well-known团体属性<br />
+NO-EXPORT(不更新出eBGP邻居)<br />
+Local-AS/No-export-subconfed(不更新出本地AS或者 <b>子联邦AS</b> )<br />
+No-advertise(不更新)<br /></li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-shell">route-map Comm permit 10
+  set community no-export
+  set community 100:3 //自定义属性
+network 1.1.1.1 mask 255.255.255.255 route-map Comm
+neighbor 33.1.1.1 send-community //默认不发送团体属性
+ip community-list xx //和prefix list或access list类似
+</pre>
+</div>
+
+<p>
+<a href="BGP/2021-08-19_20-12-07_no_export.pcapng">BGP/2021-08-19_20-12-07_no_export.pcapng</a><br />
+</p>
+</div>
+</div>
+
+<div id="outline-container-org4a8264b" class="outline-3">
+<h3 id="org4a8264b"><span class="section-number-3">2.4</span> 路由选择</h3>
+<div class="outline-text-3" id="text-2-4">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="org-left">公认必遵</td>
+<td class="org-left">AS-path, next-hop, origin</td>
+</tr>
+
+<tr>
+<td class="org-left">公认任意</td>
+<td class="org-left">local preference(ibgp)</td>
+</tr>
+
+<tr>
+<td class="org-left">可选过渡</td>
+<td class="org-left">团体属性</td>
+</tr>
+
+<tr>
+<td class="org-left">可选非进渡</td>
+<td class="org-left">起源ID，MED, Cluster</td>
+</tr>
+
+<tr>
+<td class="org-left">其他</td>
+<td class="org-left">weight，不在报文中体现</td>
+</tr>
+</tbody>
+</table>
+
+<p>
+优先级<br />
+</p>
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="org-left">Weight(大优先)</td>
+</tr>
+
+<tr>
+<td class="org-left">Local_Pref(大优先)</td>
+</tr>
+
+<tr>
+<td class="org-left">同一条本地路由 手动聚合-&gt;自动聚合-&gt;network引入-&gt;import-route</td>
+</tr>
+
+<tr>
+<td class="org-left">AS-path 最短</td>
+</tr>
+
+<tr>
+<td class="org-left">Origin IGP -&gt; EGP -&gt; Incomplete</td>
+</tr>
+
+<tr>
+<td class="org-left">来自同一AS的路由，MED最低</td>
+</tr>
+
+<tr>
+<td class="org-left">EBGP-&gt;IBGP-&gt;local cross-&gt;remote cross</td>
+</tr>
+
+<tr>
+<td class="org-left">load balance</td>
+</tr>
+
+<tr>
+<td class="org-left">O 时间更新的EBGP</td>
+</tr>
+
+<tr>
+<td class="org-left">R RID/起源id</td>
+</tr>
+
+<tr>
+<td class="org-left">cluster id</td>
+</tr>
+</tbody>
+</table>
+
+<p>
+前提<br />
+下一跳可达<br />
+</p>
+
+<ol class="org-ol">
+<li>weight 本地，本地路由默认32768，在route-map里配<br /></li>
+<li>local perference, local as内传递, 用于ASBR引导流量到内部设备然后去往其他AS， <b>在route-map里配ebgp邻居的route-map in</b><br /></li>
+<li>本地生成的路由<br /></li>
+<li>as-path<br /></li>
+<li>MED<br />
+a. 缺省为0，如果通告IGP，则继承IGP的cost作为MED<br />
+b. 越小越优先<br />
+c. 相邻两个AS之间传递<br />
+d. 影响从相邻AS到本AS<br />
+e. 只有第一个as号相同时才比MED<br />
+f. 来自IBGP的路由MED只在AS内传，即不是ASBR的路由产生network设定metric只在内部<br />
+g. <b>配置时一般在ASBR上配出方向的route-map</b><br /></li>
+<li>next hop metric 越小越优先<br /></li>
+<li>开启loadbalance,结果看路由表<br /></li>
+</ol>
+<div class="org-src-container">
+<pre class="src src-shell">show ip protocols | s bgp //显示
+R7(config-router)#maximum-paths 6 //最大load balance路径
+</pre>
+</div>
+<ol class="org-ol">
+<li>as过滤<br /></li>
+</ol>
+<div class="org-src-container">
+<pre class="src src-shell">ip as-path access-list 1 //as-path过滤,正则表达式
+neighbor 10.1.15.1 filter-list 1 out //应用filter
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org4aca77b" class="outline-3">
+<h3 id="org4aca77b"><span class="section-number-3">2.5</span> 其他特性</h3>
+<div class="outline-text-3" id="text-2-5">
+</div>
+<div id="outline-container-org5d15259" class="outline-4">
+<h4 id="org5d15259"><span class="section-number-4">2.5.1</span> 认证</h4>
+<div class="outline-text-4" id="text-2-5-1">
+<p>
+tcp报文中<br />
+</p>
+<p>
+<a href="BGP/2021-08-21_20-22-12_md5.pcapng">BGP/2021-08-21_20-22-12_md5.pcapng</a><br />
+</p>
+</div>
+</div>
+
+<div id="outline-container-org9efb646" class="outline-4">
+<h4 id="org9efb646"><span class="section-number-4">2.5.2</span> 默认路由</h4>
+<div class="outline-text-4" id="text-2-5-2">
+<ul class="org-ul">
+<li>network 0.0.0.0<br /></li>
+<li>neighbor 11.1.1.1 default-originate<br /></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org2d0c086" class="outline-4">
+<h4 id="org2d0c086"><span class="section-number-4">2.5.3</span> MP-BGP</h4>
+<div class="outline-text-4" id="text-2-5-3">
+<div class="org-src-container">
+<pre class="src src-shell">  router bgp 100
+   bgp log-neighbor-changes
+   neighbor 10.1.15.5 remote-as 200
+   neighbor 10.1.15.5 local-as 65535
+   neighbor 10.1.15.5 password cisco
+   neighbor 22.1.1.1 remote-as 100
+   neighbor 22.1.1.1 update-source Loopback0
+   neighbor 2015::5 remote-as 200
+   neighbor 33.1.1.1 remote-as 100
+   neighbor 33.1.1.1 update-source Loopback0
+   neighbor 44.1.1.1 remote-as 100
+   neighbor 44.1.1.1 update-source Loopback0
+   !
+   address-family ipv4
+    network 1.1.1.1 mask 255.255.255.255 route-map 1
+    network 44.1.1.1 mask 255.255.255.255
+    neighbor 10.1.15.5 activate
+    neighbor 22.1.1.1 activate
+    neighbor 22.1.1.1 next-hop-self
+    no neighbor 2015::5 activate
+    neighbor 33.1.1.1 activate
+    neighbor 33.1.1.1 send-community
+    neighbor 33.1.1.1 route-reflector-client
+    neighbor 33.1.1.1 next-hop-self
+    neighbor 44.1.1.1 activate
+    neighbor 44.1.1.1 route-reflector-client
+    neighbor 44.1.1.1 next-hop-self
+   exit-address-family
+   !
+   address-family ipv6
+    network 1::/64
+    neighbor 2015::5 activate
+   exit-address-family
+
+R1#show bgp ipv6 unicast  summary
+BGP router identifier 11.1.1.1, local AS number 100
+BGP table version is 2, main routing table version 2
+1 network entries using 164 bytes of memory
+1 path entries using 104 bytes of memory
+1/1 BGP path/bestpath attribute entries using 144 bytes of memory
+2 BGP rrinfo entries using 48 bytes of memory
+2 BGP AS-PATH entries using 48 bytes of memory
+0 BGP route-map cache entries using 0 bytes of memory
+0 BGP filter-list cache entries using 0 bytes of memory
+BGP using 508 total bytes of memory
+BGP activity 180/170 prefixes, 262/248 paths, scan interval 60 secs
+
+Neighbor        V           AS MsgRcvd MsgSent   TblVer  InQ OutQ Up/Down  State/PfxRcd
+2015::5         4          200       4       5        2    0    0 00:00:50        0
+R1#
+R1#show bgp ipv6 unicast
+BGP table version is 2, local router ID is 11.1.1.1
+Status codes: s suppressed, d damped, h history, * valid, &gt; best, i - internal,
+              r RIB-failure, S Stale, m multipath, b backup-path, f RT-Filter,
+              x best-external, a additional-path, c RIB-compressed,
+Origin codes: i - IGP, e - EGP, ? - incomplete
+RPKI validation codes: V valid, I invalid, N Not found
+
+     Network          Next Hop            Metric LocPrf Weight Path
+ *&gt;  1::/64           ::                       0         32768 i
+</pre>
+</div>
+
+<p>
+<a href="BGP/2021-08-21_23-03-39_mpbgp.pcapng">BGP/2021-08-21_23-03-39_mpbgp.pcapng</a><br />
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org9c0db1c" class="outline-3">
+<h3 id="org9c0db1c"><span class="section-number-3">2.6</span> 其他命令</h3>
+<div class="outline-text-3" id="text-2-6">
+<div class="org-src-container">
+<pre class="src src-shello">set weight //set weigth
+set local-preference //set local-preference
+set as-path prepend //route-map里append一个as number
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org0df1778" class="outline-2">
+<h2 id="org0df1778"><span class="section-number-2">3</span> IGP - OSPF</h2>
+<div class="outline-text-2" id="text-3">
+<p>
+<a href="IGP_-_OSPF/2021-09-04_09-20-02_ospf.pcapng">IGP_-_OSPF/2021-09-04_09-20-02_ospf.pcapng</a><br />
+</p>
+
+<ul class="org-ul">
+<li>network wildard指定的是接口地址范围，在里面的interface都被发布出去<br /></li>
+<li>虚连接作用<br />
+在连接虚连接的同一个area0的ABR间建virtual link<br />
+<ol class="org-ol">
+<li>连接不直接area0的area<br /></li>
+<li>连接多个area0<br /></li>
+<li>backup<br /></li>
+</ol></li>
+<li>不同ospf不兼容<br /></li>
+<li>同一个area传递链路信息，不同area传递路由信息<br /></li>
+<li>必须有area0,其他area只和area0通信<br /></li>
+<li>OSPF使能网段时会将接口上匹配该网段的所有网段路由与主机路由都通过LSA发布，但有些时候主机路由或网段路由是不希望被发布的。通过前缀抑制配置，可以减少LSA中携带不需要的前缀，即不发布某些网段路由和主机路由，从而提高网络安全性，加快路由收敛。<br /></li>
+</ul>
+<p>
+当使能前缀抑制时，具体情况如下：<br />
+</p>
+<ul class="org-ul">
+<li>P2P或P2MP类型网络：Type-1 LSA中不发布接口的主地址，即Type-1 LSA中链路类型为3的Stub链路被抑制，不生成接口路由，但其他路由信息可以正常计算，不会影响流量转发。<br /></li>
+<li>广播类型或者NBMA网络：DR发布的Type-2 LSA的掩码字段会填成32位，即不生成网段路由，但其他路由信息可以正常计算，不会影响流量转发。另外，如果没有邻居，发布的Type-1 LSA中也不发布接口的主地址，即Type-1 LSA中链路类型为3的Stub链路被抑制。<br /></li>
+</ul>
+</div>
+
+<div id="outline-container-orgbbd7307" class="outline-3">
+<h3 id="orgbbd7307"><span class="section-number-3">3.1</span> LSA</h3>
+<div class="outline-text-3" id="text-3-1">
+<ul class="org-ul">
+<li>LS type<br /></li>
+</ul>
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-right" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-right">Type</th>
+<th scope="col" class="org-left">Description</th>
+<th scope="col" class="org-left">Link State ID</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-right">1</td>
+<td class="org-left">Router-LSA, 描述路由器端口链路,同一个area通告</td>
+<td class="org-left">生成LSA路由器的Router-ID</td>
+</tr>
+
+<tr>
+<td class="org-right">2</td>
+<td class="org-left">Network-LSA, DR生成该网络上所连接路由的列表, 同一个area通告</td>
+<td class="org-left">DR端口ip</td>
+</tr>
+
+<tr>
+<td class="org-right">3</td>
+<td class="org-left">Network-Summary-LSA, ABR产生，到外部某一网段的路由信息，本area向其他area通告</td>
+<td class="org-left">目的网段地址</td>
+</tr>
+
+<tr>
+<td class="org-right">4</td>
+<td class="org-left">ASBR-Summary-LSA, ABR产生，为5生成，在非ASBR内通告</td>
+<td class="org-left">ASBR的Router-ID</td>
+</tr>
+
+<tr>
+<td class="org-right">5</td>
+<td class="org-left">AS-external-LSA, ASBR产生，外部某一网段的路由信息，在整个AS内通告</td>
+<td class="org-left">目的网段地址</td>
+</tr>
+</tbody>
+</table>
+
+<p>
+1和2计算路由<br />
+</p>
+
+<ul class="org-ul">
+<li>Link State ID<br /></li>
+<li>Advertising Router<br /></li>
+<li>LS sequence number<br />
+标识更新的LSA<br /></li>
+<li>Hello报文校验<br />
+Network mask掩码要一样<br />
+HelloIntervel一致<br />
+Options匹配<br />
+DeadInterval一样<br /></li>
+<li>状态机<br />
+down(attempt)-&gt;init-&gt;two-way-&gt;exstart-&gt;exchange-&gt;loading-&gt;full<br /></li>
+</ul>
+
+<p>
+Router-LSA中重要字段<br />
+</p>
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">Type</th>
+<th scope="col" class="org-left">Link ID</th>
+<th scope="col" class="org-left">Data</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left">PPP</td>
+<td class="org-left">邻居的RouterID</td>
+<td class="org-left">该网段本地接口的IP</td>
+</tr>
+
+<tr>
+<td class="org-left">TransNet</td>
+<td class="org-left">DR的接口IP地址</td>
+<td class="org-left">该网段本地接口的IP</td>
+</tr>
+
+<tr>
+<td class="org-left">StubNet</td>
+<td class="org-left">该Stub网段的IP网络地址</td>
+<td class="org-left">该Stub网段的网络掩码</td>
+</tr>
+
+<tr>
+<td class="org-left">Virtual</td>
+<td class="org-left">虚连邻居的RouterID</td>
+<td class="org-left">去该虚连邻居的本地IP地址</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+
+<div id="outline-container-orgd9f8924" class="outline-3">
+<h3 id="orgd9f8924"><span class="section-number-3">3.2</span> 路由汇总</h3>
+<div class="outline-text-3" id="text-3-2">
+<p>
+当前想汇总area的ABR<br />
+</p>
+
+<ul class="org-ul">
+<li>明细存在，汇总存在<br /></li>
+<li>所有明细消失，汇总才消失<br /></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org7b6ddca" class="outline-3">
+<h3 id="org7b6ddca"><span class="section-number-3">3.3</span> ASBR</h3>
+<div class="outline-text-3" id="text-3-3">
+<p>
+type 1, ospf as计算开销<br />
+type 2, ospf as内不增加开销<br />
+</p>
+
+<p>
+<b>forwarding address防止次优路径</b> - 如果引入外部路由时下一跳为area0内部，则设置forwarding adress直接为下一跳地址<br />
+</p>
+</div>
+</div>
+
+<div id="outline-container-org07ae100" class="outline-3">
+<h3 id="org07ae100"><span class="section-number-3">3.4</span> Stub区域</h3>
+<div class="outline-text-3" id="text-3-4">
+<p>
+不接受4 5类LSA, ABR产生默认路由，为了减少性能差的路由器上的资源占用<br />
+</p>
+
+<ul class="org-ul">
+<li>完全Stub, 不接受3, 4, 5<br /></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-orgc817248" class="outline-3">
+<h3 id="orgc817248"><span class="section-number-3">3.5</span> NSSA</h3>
+<div class="outline-text-3" id="text-3-5">
+<p>
+类型7，适用于不想引入3,4,5但想引入处部路由的场景<br />
+</p>
+
+<p>
+NSSA路由传入正常area时，会将7转5，同时保留7的forwarding addr，用于正常area计算cost<br />
+</p>
+</div>
+</div>
+
+<div id="outline-container-org18229de" class="outline-3">
+<h3 id="org18229de"><span class="section-number-3">3.6</span> 额外特性</h3>
+<div class="outline-text-3" id="text-3-6">
+<ul class="org-ul">
+<li>通告stub路由器，可使更少的流量经过stub路由器<br /></li>
+<li>ASBR通告默认路由，常用于连接互联网的边界设备，配置后ASBR向AS域内通告默认路由(5类)<br /></li>
+</ul>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org6c41f78" class="outline-2">
+<h2 id="org6c41f78"><span class="section-number-2">4</span> MPLS - VPN</h2>
+<div class="outline-text-2" id="text-4">
+<p>
+LDP  - 分发标签(为IGP)<br />
+RSVP - MPLS 流量工程<br />
+MP-BGP - 分发标签(为BGP单播路由)<br />
+</p>
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">控制平面</th>
+<th scope="col" class="org-left">转发平面</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left">路由协议，标签分发协议、RIB, LIB</td>
+<td class="org-left">FIB, LFIB</td>
+</tr>
+</tbody>
+</table>
+
+<ul class="org-ul">
+<li>ldp配置<br /></li>
+</ul>
+<p>
+<a href="MPLS_-_VPN/2021-08-29_16-54-58_ldp.pcapng">MPLS_-_VPN/2021-08-29_16-54-58_ldp.pcapng</a><br />
+</p>
+
+<div class="org-src-container">
+<pre class="src src-shell">ip cef
+(config-if) mpls ip
+</pre>
+</div>
+
+<ul class="org-ul">
+<li>帧格式<br />
+Label(20bits), TC: Traffic Class (QoS and ECN)(3bits),  S: Bottom-of-Stack(1bit),  TTL: Time-to-Liv(8bits)<br /></li>
+</ul>
+
+<p>
+0-15: 特殊标签<br />
+16-1023: 静态LSP和静态CR-LSP<br />
+1024以上: LDP、RSVP-TE、MP-BGP<br />
+</p>
+
+<p>
+<a href="MPLS_-_VPN/2021-08-29_18-27-49_ping_mpls.pcapng">MPLS_-_VPN/2021-08-29_18-27-49_ping_mpls.pcapng</a><br />
+</p>
+
+<ul class="org-ul">
+<li>改变地址<br /></li>
+</ul>
+<p>
+mpls ldp discovery transport-address interface<br />
+</p>
+
+<ul class="org-ul">
+<li>验证<br /></li>
+</ul>
+<p>
+mpls ldp neighbor 1.1.1.1 password xuan<br />
+</p>
+
+<ul class="org-ul">
+<li>show mpls ip binding<br /></li>
+</ul>
+<p>
+in use为ip路由表里生效的路由对应生成的mpls label<br />
+路由的loadbalance会使得mpls的loadbalance<br />
+</p>
+
+<ul class="org-ul">
+<li>php次末跳出(默认开启)<br /></li>
+</ul>
+<p>
+为了不让最后一跳既pop标签又查fib，在倒数第二跳节点将标签pop出，则最后一跳只需查fib<br />
+实现为设备会为自身的直连路由向上游设备分配隐式空标签<br />
+如要改为显式空,mpls ldp explicit-null<br />
+</p>
+
+<ul class="org-ul">
+<li>下一跳非直达路由(?)<br /></li>
+</ul>
+<p>
+<a href="MPLS_-_VPN/2021-08-31_08-51-15_1.1.1.1.pcapng">MPLS_-_VPN/2021-08-31_08-51-15_1.1.1.1.pcapng</a><br />
+</p>
+
+<p>
+BGP doesn't advertise lable for internal routes unless you use BGP -LU family.<br />
+</p>
+
+<p>
+When we use LDP on Cisco IOS, we locally generate a label for each prefix that we can find in the RIB, except for BGP prefixes. This information is then added to the LIB (Label Information Base).<br />
+</p>
+
+
+
+<div id="org662dba7" class="figure">
+<p><img src="MPLS_-_VPN/2021-08-31_18-33-32_xfib-lfib-cisco.png" alt="2021-08-31_18-33-32_xfib-lfib-cisco.png" /><br />
+</p>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-shell">R4#show ip cef 11.1.1.1
+11.1.1.1/32
+  nexthop 10.1.34.3 Ethernet0/2 label 307
+R4#
+R4#show ip cef 1.1.1.1
+1.1.1.1/32
+  nexthop 10.1.34.3 Ethernet0/2 label 307
+R4#
+R4#show ip route
+Codes: L - local, C - connected, S - static, R - RIP, M - mobile, B - BGP
+       D - EIGRP, EX - EIGRP external, O - OSPF, IA - OSPF inter area
+       N1 - OSPF NSSA external type 1, N2 - OSPF NSSA external type 2
+       E1 - OSPF external type 1, E2 - OSPF external type 2
+       i - IS-IS, su - IS-IS summary, L1 - IS-IS level-1, L2 - IS-IS level-2
+       ia - IS-IS inter area, * - candidate default, U - per-user static route
+       o - ODR, P - periodic downloaded static route, H - NHRP, l - LISP
+       a - application route
+       + - replicated route, % - next hop override
+
+Gateway of last resort is not set
+
+      1.0.0.0/32 is subnetted, 1 subnets
+B        1.1.1.1 [200/0] via 11.1.1.1, 00:48:09
+      4.0.0.0/32 is subnetted, 1 subnets
+C        4.4.4.4 is directly connected, Loopback1
+      10.0.0.0/8 is variably subnetted, 9 subnets, 2 masks
+O        10.1.12.0/24 [110/30] via 10.1.34.3, 00:18:05, Ethernet0/2
+O        10.1.13.0/24 [110/20] via 10.1.34.3, 00:18:05, Ethernet0/2
+C        10.1.14.0/24 is directly connected, Serial1/0
+L        10.1.14.4/32 is directly connected, Serial1/0
+O        10.1.23.0/24 [110/20] via 10.1.34.3, 00:18:05, Ethernet0/2
+C        10.1.24.0/24 is directly connected, Serial1/1
+L        10.1.24.4/32 is directly connected, Serial1/1
+C        10.1.34.0/24 is directly connected, Ethernet0/2
+L        10.1.34.4/32 is directly connected, Ethernet0/2
+      11.0.0.0/32 is subnetted, 1 subnets
+O        11.1.1.1 [110/21] via 10.1.34.3, 00:18:05, Ethernet0/2
+      22.0.0.0/32 is subnetted, 1 subnets
+O        22.1.1.1 [110/21] via 10.1.34.3, 00:18:05, Ethernet0/2
+      33.0.0.0/32 is subnetted, 1 subnets
+O        33.1.1.1 [110/11] via 10.1.34.3, 00:18:05, Ethernet0/2
+      44.0.0.0/8 is variably subnetted, 2 subnets, 2 masks
+C        44.1.1.0/24 is directly connected, Loopback0
+L        44.1.1.1/32 is directly connected, Loopback0
+R4#
+R4#show mpls ip bin
+R4#show mpls ip binding
+  1.1.1.1/32
+    out label:    imp-null  lsr: 11.1.1.1:0
+  2.2.2.2/32
+    out label:    imp-null  lsr: 22.1.1.1:0
+  3.3.3.3/32
+    out label:    imp-null  lsr: 33.1.1.1:0
+  4.4.4.4/32
+    in label:     imp-null
+  10.1.12.0/24
+    in label:     400
+    out label:    310       lsr: 33.1.1.1:0       inuse
+    out label:    imp-null  lsr: 11.1.1.1:0
+    out label:    imp-null  lsr: 22.1.1.1:0
+  10.1.13.0/24
+    in label:     401
+    out label:    imp-null  lsr: 33.1.1.1:0       inuse
+    out label:    imp-null  lsr: 11.1.1.1:0
+    out label:    200       lsr: 22.1.1.1:0
+  10.1.14.0/24
+    in label:     imp-null
+    out label:    309       lsr: 33.1.1.1:0
+    out label:    imp-null  lsr: 11.1.1.1:0       inuse
+    out label:    201       lsr: 22.1.1.1:0
+  10.1.15.0/24
+    out label:    imp-null  lsr: 11.1.1.1:0
+  10.1.23.0/24
+    in label:     402
+    out label:    imp-null  lsr: 33.1.1.1:0       inuse
+    out label:    100       lsr: 11.1.1.1:0
+    out label:    imp-null  lsr: 22.1.1.1:0
+  10.1.24.0/24
+    in label:     imp-null
+    out label:    308       lsr: 33.1.1.1:0
+    out label:    104       lsr: 11.1.1.1:0
+    out label:    imp-null  lsr: 22.1.1.1:0       inuse
+  10.1.34.0/24
+    in label:     imp-null
+    out label:    imp-null  lsr: 33.1.1.1:0
+    out label:    102       lsr: 11.1.1.1:0
+    out label:    202       lsr: 22.1.1.1:0
+  11.1.1.1/32
+    in label:     403
+    out label:    307       lsr: 33.1.1.1:0       inuse
+    out label:    imp-null  lsr: 11.1.1.1:0
+    out label:    203       lsr: 22.1.1.1:0
+  22.1.1.1/32
+        in label:     404
+    out label:    306       lsr: 33.1.1.1:0       inuse
+    out label:    105       lsr: 11.1.1.1:0
+    out label:    imp-null  lsr: 22.1.1.1:0
+  33.1.1.1/32
+    in label:     405
+    out label:    imp-null  lsr: 33.1.1.1:0       inuse
+    out label:    103       lsr: 11.1.1.1:0
+    out label:    204       lsr: 22.1.1.1:0
+  44.1.1.0/24
+    in label:     imp-null
+  44.1.1.1/32
+    out label:    311       lsr: 33.1.1.1:0
+    out label:    101       lsr: 11.1.1.1:0
+    out label:    205       lsr: 22.1.1.1:0
+</pre>
+</div>
+</div>
+<div id="outline-container-org9efaee1" class="outline-3">
+<h3 id="org9efaee1"><span class="section-number-3">4.1</span> vrf</h3>
+<div class="outline-text-3" id="text-4-1">
+<p>
+RD值建议全网per客户唯一 -&gt; PE间同步路由以RD为前缀, 和RT一致时方便配置<br />
+</p>
+
+<div class="org-src-container">
+<pre class="src src-shell">  interface Ethernet0/0
+   ip vrf forwarding xuan
+   ip address 10.1.49.4 255.255.255.0
+  !
+
+R4#show ip route vrf xuan
+
+Routing Table: xuan
+Codes: L - local, C - connected, S - static, R - RIP, M - mobile, B - BGP
+       D - EIGRP, EX - EIGRP external, O - OSPF, IA - OSPF inter area
+       N1 - OSPF NSSA external type 1, N2 - OSPF NSSA external type 2
+       E1 - OSPF external type 1, E2 - OSPF external type 2
+       i - IS-IS, su - IS-IS summary, L1 - IS-IS level-1, L2 - IS-IS level-2
+       ia - IS-IS inter area, * - candidate default, U - per-user static route
+       o - ODR, P - periodic downloaded static route, H - NHRP, l - LISP
+       a - application route
+       + - replicated route, % - next hop override
+
+Gateway of last resort is not set
+
+      10.0.0.0/8 is variably subnetted, 2 subnets, 2 masks
+C        10.1.49.0/24 is directly connected, Ethernet0/0
+L        10.1.49.4/32 is directly connected, Ethernet0/0
+</pre>
+</div>
+
+<ul class="org-ul">
+<li>RD 和 BGP<br /></li>
+</ul>
+<p>
+私有路由通告时，RD值区分不同客户的相同私有地址，所有vrf路由进入vpnv4邻居<br />
+如果两个PE配置不同的rd值(RT相同)，那么每个PE会生成同一个路由的两个BGP VPNv4的RD路由<br />
+</p>
+
+<div class="org-src-container">
+<pre class="src src-shell">R4#show ip bgp vpnv4 all
+BGP table version is 12, local router ID is 44.1.1.1
+Status codes: s suppressed, d damped, h history, * valid, &gt; best, i - internal,
+              r RIB-failure, S Stale, m multipath, b backup-path, f RT-Filter,
+              x best-external, a additional-path, c RIB-compressed,
+Origin codes: i - IGP, e - EGP, ? - incomplete
+RPKI validation codes: V valid, I invalid, N Not found
+
+     Network          Next Hop            Metric LocPrf Weight Path
+Route Distinguisher: 1:1 (default for vrf xuan)
+ *&gt;i 10.1.10.0/24     11.1.1.1                 0    100      0 i
+ *&gt;  10.1.49.0/24     0.0.0.0                  0         32768 i
+Route Distinguisher: 100:14
+ *&gt;i 10.1.10.0/24     11.1.1.1                 0    100      0 i
+R4#
+</pre>
+</div>
+
+<p>
+如下抓包，没有配RT时<br />
+</p>
+<p>
+<a href="MPLS_-_VPN/2021-08-31_21-08-47_no_rt.pcapng">MPLS_-_VPN/2021-08-31_21-08-47_no_rt.pcapng</a><br />
+</p>
+
+<ul class="org-ul">
+<li>RT -&gt; BGP扩展团体属性<br /></li>
+</ul>
+<p>
+控制收发VPNv4路由及把VPNv4路由放入vrf路由表<br />
+</p>
+
+<div class="org-src-container">
+<pre class="src src-shell">  address-family vpnv4
+   neighbor 44.1.1.1 activate
+   neighbor 44.1.1.1 send-community extended
+  exit-address-family
+
+R4(config)#do show run | s vrf
+ip vrf xuan
+ rd 100:14
+ route-target export 100:14
+ route-target export 1:1
+ route-target import 100:14
+ ip vrf forwarding xuan
+ address-family ipv4 vrf xuan
+  network 10.1.49.0 mask 255.255.255.0
+</pre>
+</div>
+
+<p>
+<a href="MPLS_-_VPN/2021-08-31_21-17-05_rt_configured.pcapng">MPLS_-_VPN/2021-08-31_21-17-05_rt_configured.pcapng</a><br />
+</p>
+
+<p>
+<b>配了RT值后报文中会多Path Attribute - EXTENDED_COMMUNITIES的属性</b><br />
+</p>
+
+<ul class="org-ul">
+<li>PE间的MP-BGP<br /></li>
+</ul>
+<p>
+全互联或者RR<br />
+</p>
+</div>
+</div>
+
+<div id="outline-container-org2596564" class="outline-3">
+<h3 id="org2596564"><span class="section-number-3">4.2</span> PE和CE间</h3>
+<div class="outline-text-3" id="text-4-2">
+<p>
+CE一般配IGP或者静态路由<br />
+PE将路由导入至BGP vrf，通过bgp vpn4通告给对端PE<br />
+</p>
+
+<p>
+<b>PE的下一跳为BGP更新源，使用ldp分配的外层标签push，发至mpls next-hop</b><br />
+</p>
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">&#xa0;</th>
+<th scope="col" class="org-left">协议</th>
+<th scope="col" class="org-left">分配的对象</th>
+<th scope="col" class="org-left">标签的变化</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left">内层标签</td>
+<td class="org-left">BGP自动分配</td>
+<td class="org-left">VPNv4路由的标签</td>
+<td class="org-left">每个私网(vrf)路由都有自已的标签</td>
+</tr>
+
+<tr>
+<td class="org-left">外层标签</td>
+<td class="org-left">LDP自动分配</td>
+<td class="org-left">到达VPNv4路由的下一跳的标签</td>
+<td class="org-left">多个私网(vrf)相同下一跳，则外层标签相同</td>
+</tr>
+</tbody>
+</table>
+
+<p>
+<a href="MPLS_-_VPN/2021-09-01_23-19-14_ping_mpls_vpn.pcapng">MPLS_-_VPN/2021-09-01_23-19-14_ping_mpls_vpn.pcapng</a><br />
+</p>
+
+<p>
+<a href="MPLS_-_VPN/2021-09-02_08-51-08_ce_trace.pcapng">MPLS_-_VPN/2021-09-02_08-51-08_ce_trace.pcapng</a><br />
+</p>
+
+<p>
+配置CE PE间的IGP，然后在PE端做双向引入<br />
+</p>
+<div class="org-src-container">
+<pre class="src src-shell">R4#show run | s eigrp
+router eigrp 100
+ !
+ address-family ipv4 vrf xuan autonomous-system 90
+  redistribute bgp 100 metric 1000 10 255 1 1500
+  network 10.1.49.4 0.0.0.0
+ exit-address-family
+  redistribute eigrp 90
+R4#show run | s bgp
+  redistribute bgp 100 metric 1000 10 255 1 1500
+router bgp 100
+ bgp log-neighbor-changes
+ network 4.4.4.4 mask 255.255.255.255
+ neighbor 11.1.1.1 remote-as 100
+ neighbor 11.1.1.1 update-source Loopback0
+ !
+ address-family vpnv4
+  neighbor 11.1.1.1 activate
+  neighbor 11.1.1.1 send-community extended
+ exit-address-family
+ !
+ address-family ipv4 vrf xuan
+  network 10.1.49.0 mask 255.255.255.0
+  redistribute eigrp 90
+ exit-address-family
+</pre>
+</div>
+
+<p>
+<b>CISCO、华为的路由器默认情况下均不允许将ibgp路由直接重分布到ospf中，如果确认需要将ibgp路由协议重分发到ospf中，需要增加额外的配置。</b> - 在bgp进程下增加一条命令：bgp redistribute-internal<br />
+</p>
+</div>
+</div>
+
+<div id="outline-container-org9afb9c9" class="outline-3">
+<h3 id="org9afb9c9"><span class="section-number-3">4.3</span> MPLS对TTL的处理</h3>
+<div class="outline-text-3" id="text-4-3">
+<ul class="org-ul">
+<li>Uniform<br /></li>
+</ul>
+<p>
+PE上把IP的TTL和标签的TTL相互拷贝，即IP-&gt;MPLS将TTL copy至MPLS，反之一样<br />
+</p>
+
+<ul class="org-ul">
+<li>Pipe<br /></li>
+</ul>
+<p>
+MPLS作为一个设备处理, IP-&gt;MPLS TTL=-1, 后面MPLS里的IP TTL不变<br />
+</p>
+
+<p>
+防止相互拷贝<br />
+</p>
+<div class="org-src-container">
+<pre class="src src-shell">no mpls ip propagate-ttl forwarded
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org8f0b543" class="outline-3">
+<h3 id="org8f0b543"><span class="section-number-3">4.4</span> CE&lt;-&gt;PE EIGRP</h3>
+<div class="outline-text-3" id="text-4-4">
+<p>
+EIGRP引入BGP有POI,是BGP的一个团体属性,优先于所有常规的BGP选路原则<br />
+</p>
+
+<ul class="org-ul">
+<li>防环 SOO<br />
+双出口环境，SOO在PE的一个口收到后打上SOO，然后不会更新到SOO值相同的另外一个口上<br /></li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-shell">R4#show run | s SOO
+ ip vrf sitemap SOO
+route-map SOO permit 10
+ set extcommunity soo 100:14
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgd23fc1a" class="outline-3">
+<h3 id="orgd23fc1a"><span class="section-number-3">4.5</span> CE&lt;-&gt;PE OSPF</h3>
+<div class="outline-text-3" id="text-4-5">
+<ul class="org-ul">
+<li>PE路由器是一个ABR<br /></li>
+<li>BGP重分布至OSPF，以type3&amp;5<br /></li>
+<li>一个站点的area0到另外一个area0，以OIA形式体现<br /></li>
+<li>BGP扩展属性用于承载&amp;通告OSPF的路由类型，COST拷贝至MED<br /></li>
+<li>domain-id，不同的domain-id导致3类路由变为5类路由，在bgp扩展属性里面<br /></li>
+<li>3类LSA防环, MBGP引入时自动增加DN(down) bit位，其他PE检测到DOWN，拒绝OSPF引入回BGP<br /></li>
+<li>5类LSA防环，MBGP引入外部路由增加tag位65016，其他PE收到tag为65016时拒绝(3489661028)<br /></li>
+<li>MBGP默认不引入ospf外部路由<br /></li>
+</ul>
+</div>
+
+<div id="outline-container-org45cb798" class="outline-4">
+<h4 id="org45cb798"><span class="section-number-4">4.5.1</span> Shamlink</h4>
+<div class="outline-text-4" id="text-4-5-1">
+<p>
+类似于虚链路, 当CE是存在备份链路时，OSPF优先选LSA1 2不走MPLS了<br />
+</p>
+
+<div class="org-src-container">
+<pre class="src src-shell">interface Loopback1
+ ip vrf forwarding xuan
+ ip address 1.1.1.1 255.255.255.255
+area 0 sham-link 1.1.1.1 3.3.3.3
+</pre>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-org9e39a7d" class="outline-4">
+<h4 id="org9e39a7d"><span class="section-number-4">4.5.2</span> MCE&amp;Vrf-lite</h4>
+<div class="outline-text-4" id="text-4-5-2">
+<p>
+多VPN实例的CE，减少用户网络设备的设入<br />
+</p>
+
+<div class="org-src-container">
+<pre class="src src-shell">capability vrf-lite
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org68b4037" class="outline-3">
+<h3 id="org68b4037"><span class="section-number-3">4.6</span> CE&lt;-&gt;PE BGP</h3>
+<div class="outline-text-3" id="text-4-6">
+<p>
+BGP从CE-&gt;PE再回到另外的CE，路由不会被接受(AS一样)<br />
+</p>
+
+<ul class="org-ul">
+<li>主动方案<br /></li>
+</ul>
+<p>
+替换CE的AS number,PE上配<br />
+</p>
+<div class="org-src-container">
+<pre class="src src-shell">//在vrf下
+  neighbor 10.1.10.10 as-override
+</pre>
+</div>
+<ul class="org-ul">
+<li>被动方案<br /></li>
+</ul>
+<p>
+CE上配<br />
+</p>
+<div class="org-src-container">
+<pre class="src src-shell">neighbor 10.1.10.1 allowas-in 2
+</pre>
+</div>
+
+<p>
+防环<br />
+</p>
+<ul class="org-ul">
+<li>和eigrp一样加SOO<br /></li>
+</ul>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org549c616" class="outline-2">
+<h2 id="org549c616"><span class="section-number-2">5</span> Multicast</h2>
+<div class="outline-text-2" id="text-5">
+<p>
+组播IP为1110开头的地址<br />
+</p>
+
+<p>
+IGMP用于主机和路由器<br />
+PIM 用于路由之间<br />
+组播路由器关心流量往哪个接口转发，但不关心存在多少需要流量的主要<br />
+</p>
+
+<p>
+组播分发树<br />
+</p>
+<ul class="org-ul">
+<li>叶路由器 - 最靠近接收者的路由器<br /></li>
+<li>第一跳路由器 - 最靠近组播源的路由器<br /></li>
+<li>组播路由器 - 中间路由器<br /></li>
+</ul>
+
+<p>
+组播流量分类<br />
+</p>
+<ul class="org-ul">
+<li>SSM 特定源组播, 接受特定源IP的组播流量<br /></li>
+<li>ASM 任意源组播, 接收者不挑组播源<br /></li>
+<li>SFM 源过滤组播，即不是所有源，也不是某一个源<br /></li>
+</ul>
+
+<p>
+永久组地址 224.0.0.0 - 224.0.0.255<br />
+</p>
+
+<p>
+224.0.0.1 所有组播节点都侦听<br />
+224.0.0.2 所有组播路由器<br />
+</p>
+
+<p>
+组播IP-&gt;组播MAC  (24bits)01005E + (25bit)0 + (23bit)组播IP后23bit，但是组播IP去(1110)为28位，所以部署组播组时要保证后23bit不一样<br />
+</p>
+
+<p>
+协议<br />
+</p>
+<ul class="org-ul">
+<li>IGMP 主机&lt;-&gt;叶路由器<br /></li>
+<li>PIM  路由器之间<br /></li>
+<li>MBGP<br /></li>
+<li>MSDP 组播源发现，任意播RP及域间组播<br /></li>
+</ul>
+
+<p>
+SPT 源路径路，组播源为root，每一个接收者最短路径结合<br />
+RPT RP与叶路由器间最短路径<br />
+</p>
+
+<p>
+二层交换机接受到组播mac时 - igmp snooping, 检测igmp流量，确定某些接口有组播需求从而转发<br />
+IP组播，从源决定了目标MAC，源MAC在每一跳重写<br />
+</p>
+
+<p>
+组播转发<br />
+收到帧sqgu验后，判断目标MAC地址是否应该由本设备处理，在拆除二层头部，检查三层头部，数据做出转发决策之前，必须要经过RPF检查<br />
+</p>
+
+<p>
+RPF<br />
+路由器收到组播流，确认组播报文从自身接到组播源的接口上收到，才可以进行转发<br />
+RPF规则:<br />
+默认采用优先级/管理距离来进行RPF检查<br />
+可选项，可配置为使用最长匹配，如果相同 组播静态、组播BGP、单播<br />
+</p>
+
+<p>
+上游接口 收到组播流的接口<br />
+下游接口 发组播流的接口<br />
+</p>
+
+<p>
+组播转发表<br />
+</p>
+<ul class="org-ul">
+<li>组播组地址<br /></li>
+<li>出接口列表 OIF list<br /></li>
+<li>入接口 IIF，用作RPF检查<br /></li>
+<li>RPF邻居，上游接口的对端设备<br /></li>
+<li>源IP地址(RPT, RPF检查RP)<br /></li>
+</ul>
+
+<p>
+IGMP<br />
+query  路由发送，查询特定网段上是否存在组播组成员<br />
+report 由主机发送，响应或加入组播组时发送<br />
+</p>
+</div>
+
+<div id="outline-container-orgc162557" class="outline-3">
+<h3 id="orgc162557"><span class="section-number-3">5.1</span> IGMP</h3>
+<div class="outline-text-3" id="text-5-1">
+<p>
+IGMPv1 未定义离组消息，路由器通过周期query确定超时(3查询周期)<br />
+</p>
+<p>
+<a href="Multicast/2021-09-20_11-25-16_igmpv1.pcapng">Multicast/2021-09-20_11-25-16_igmpv1.pcapng</a><br />
+</p>
+
+<div class="org-src-container">
+<pre class="src src-shell">ip multicast-routing
+interface Ethernet0/0
+ ip pim dense-mode
+ ip igmp version 1
+end
+show ip igmp membership
+show ip mroute
+</pre>
+</div>
+
+<p>
+IGMP查询器 - 多个叶路由有选举机制，依靠PIM<br />
+IGMP报告抑制机制 - 多个相同group的主机只用发一份report(其他主机收到会取消发送，但通常来说没什么用，因为延时基本都是同时发送)<br />
+</p>
+
+<p>
+<a href="Multicast/2021-09-20_15-57-25_igmpv2.pcapng">Multicast/2021-09-20_15-57-25_igmpv2.pcapng</a><br />
+</p>
+
+<p>
+IGMPv2<br />
+</p>
+<ul class="org-ul">
+<li>普遍组查询以及特定组查询<br /></li>
+<li>新增离组消息(离组消息触发特定组查询)<br /></li>
+<li>随机定时器<br /></li>
+<li>查询器相对IGMPv1有自已的选举规则，竞争选举<br /></li>
+<li>兼容IGMPv1<br />
+<ol class="org-ol">
+<li>IGMPv2主机-&gt;IGMPv1路由器，则发送IGMPv1 report消息，并有400s的定时器<br /></li>
+<li>IGMPv2路由-&gt;IGMPv1主机，query兼容v1<br /></li>
+<li>IGMPv1、IGMPv2路由共存时，强制都配成v1才可以工作<br /></li>
+</ol></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org71660ed" class="outline-3">
+<h3 id="org71660ed"><span class="section-number-3">5.2</span> PIM-DM密集模式</h3>
+<div class="outline-text-3" id="text-5-2">
+<p>
+<a href="Multicast/2021-09-20_19-57-41_pim.pcapng">Multicast/2021-09-20_19-57-41_pim.pcapng</a><br />
+</p>
+
+<p>
+适用临时、小型的组播网络，强推<br />
+</p>
+
+<ul class="org-ul">
+<li>泛洪flood保证所有可能的接收者会收到流量(周期性，默认180s)<br /></li>
+<li>没有组播流量的路由会发prune消息<br /></li>
+<li>新主机需要流量时，通过graft恢复<br /></li>
+<li>生成SPT树，第一跳周期性(60s)发状态刷新，防止prune结点因为超时恢复组播流量<br /></li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-shell">//所有参与组播路由器接口，包括和用户的接口
+interface range e0/0-1
+ip pim dense-mode
+
+//和用户的接口开igmp
+interface Ethernet0/0
+ ip igmp version 2
+end
+show ip igmp groups
+
+//主机加入组播组
+interface Ethernet0/0
+ip igmp join-group 225.0.0.1
+end
+
+Host3#ping 225.0.0.1
+Type escape sequence to abort.
+Sending 1, 100-byte ICMP Echos to 225.0.0.1, timeout is 2 seconds:
+
+Reply to request 0 from 100.1.1.8, 5 ms
+Reply to request 0 from 10.1.2.4, 9 ms
+Reply to request 0 from 10.1.2.3, 8 ms
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org2d6945d" class="outline-3">
+<h3 id="org2d6945d"><span class="section-number-3">5.3</span> PIM-SM稀疏模式</h3>
+<div class="outline-text-3" id="text-5-3">
+<p>
+<a href="Multicast/2021-09-21_11-28-56_pim_sm.pcapng">Multicast/2021-09-21_11-28-56_pim_sm.pcapng</a><br />
+</p>
+
+<p>
+<a href="Multicast/2021-09-21_11-32-23_pm_sm_join.pcapng">Multicast/2021-09-21_11-32-23_pm_sm_join.pcapng</a><br />
+</p>
+
+<ul class="org-ul">
+<li>RPT<br /></li>
+<li>叶路由器下游出现接收者，叶路由器将根据RPF向着RP方向倒着生长一棵RPT，join加入，向着RP的方向hop by hop加入RPT<br /></li>
+<li>(*, G)可以转发组播<br /></li>
+<li>源注册<br />
+<ol class="org-ol">
+<li>第一跳路由器得到组播源<br /></li>
+<li>第一跳路由器将组播源封装至单播消息，发送到RP<br />
+<ul class="org-ul">
+<li>RP根据组播组地址匹配的组播路由表沿着RPT转发组播流(不做RPT检查)<br /></li>
+<li>上游设备hopbyhop将下游接口加入(S,G)的oif list<br /></li>
+<li>SPT完成（源到RP的SPT和叶子到RP的RPT&lt;根为RP&gt;），向第一跳发PIM注册停止，第一跳将停止单播，转为组播流<br /></li>
+<li>SPT+RPT转发，上游用SPT，下游用RPT<br /></li>
+</ul></li>
+<li>不能保证RP一定位于最佳路径 - RPT到SPT的切换（RP收到注册消息）<br />
+<ul class="org-ul">
+<li>叶路由器收到组播流，即感知到组播源，直接向组播源方向做(S, G) join<br /></li>
+<li>逐跳向上形成(S, G)路由表直至完整的SPT<br /></li>
+</ul></li>
+</ol></li>
+
+<li>总结<br />
+<ol class="org-ol">
+<li>IGMP形成最后一跳(*, G)<br /></li>
+<li>叶路由器向RP逐跳形成(*, G)<br /></li>
+<li>第一跳向RP注册<br /></li>
+<li>RP向源逐跳(S, G) join，源路径树形成<br /></li>
+<li>RP向下转发组播流<br /></li>
+<li>叶路由器知道组播源，向源端注册(S, G)<br /></li>
+<li>叶路由器向RP减共享树上的数据流(带RP位)<br /></li>
+</ol></li>
+</ul>
+
+<p>
+可以设置永不切换，适用于流量少，且持续时间短的组<br />
+</p>
+
+
+<div class="org-src-container">
+<pre class="src src-shell">//开sm模式
+interface Ethernet0/0
+ ip pim sparse-mode
+end
+
+//配置静态RP
+R1(config)#ip pim rp-address 5.5.5.5
+R1#show ip pim rp
+
+(*, 225.0.0.1), 00:47:24/00:02:31, RP 5.5.5.5, flags: SJC
+  Incoming interface: Ethernet0/0, RPF nbr 10.26.1.6
+  Outgoing interface list:
+    Ethernet0/1, Forward/Sparse, 00:47:24/00:02:31 - 有出接口
+</pre>
+</div>
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">Command</th>
+<th scope="col" class="org-left">Last Hop Router</th>
+<th scope="col" class="org-left">First Hop Router</th>
+<th scope="col" class="org-left">Intermediary Hop Router</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left">ip pim rp-address</td>
+<td class="org-left">Y</td>
+<td class="org-left">Y</td>
+<td class="org-left">Y</td>
+</tr>
+
+<tr>
+<td class="org-left">ip pim spare-mode</td>
+<td class="org-left">Y</td>
+<td class="org-left">Y</td>
+<td class="org-left">Y</td>
+</tr>
+
+<tr>
+<td class="org-left">ip igmp version</td>
+<td class="org-left">Y</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">ip pim register-source</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">Y</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">ip pim spt-threshold</td>
+<td class="org-left">Y</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+</tbody>
+</table>
+
+<p>
+ip pim register-source //第一跳向RP注册使用的组地址<br />
+ip pim spt-threshold //从RPT到SPT切换，定义一个需要达到的速度<br />
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org346c56b" class="outline-2">
+<h2 id="org346c56b"><span class="section-number-2">6</span> IPSEC - VPN</h2>
+<div class="outline-text-2" id="text-6">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">名词</th>
+<th scope="col" class="org-left">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left">ESP</td>
+<td class="org-left">封装安全负载，IP协议号50，加密，完整，认证，防重放</td>
+</tr>
+
+<tr>
+<td class="org-left">SPI</td>
+<td class="org-left">安全参数索引，确认单方向IPSEC SA的标识, 32bits</td>
+</tr>
+
+<tr>
+<td class="org-left">Ipsec seq</td>
+<td class="org-left">防重发</td>
+</tr>
+
+<tr>
+<td class="org-left">IV</td>
+<td class="org-left">初始化向量，随机值，扰乱加密数据</td>
+</tr>
+
+<tr>
+<td class="org-left">SA</td>
+<td class="org-left">a relationship between two or more entities that describes how the entities will use security services to communicate securely.</td>
+</tr>
+
+<tr>
+<td class="org-left">ike SA</td>
+<td class="org-left">负责IPSec SA的建立和维护，双向</td>
+</tr>
+
+<tr>
+<td class="org-left">ipsec SA</td>
+<td class="org-left">负责具体的数据流加密, 单向的一对SA(封装协议)</td>
+</tr>
+
+<tr>
+<td class="org-left">SPD</td>
+<td class="org-left">安全策略数据库，描述什么数据被ipsec sa处理，实现为Acl(结果为bypass, discard ipsec)</td>
+</tr>
+
+<tr>
+<td class="org-left">SADB</td>
+<td class="org-left">SA数据库</td>
+</tr>
+</tbody>
+</table>
+
+<p>
+AH不支持数据加密,ESP普遍使用<br />
+</p>
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="org-left">隧道模式</td>
+<td class="org-left">IP数据被封装IPsec内部</td>
+</tr>
+
+<tr>
+<td class="org-left">传输模式</td>
+<td class="org-left">IP头部不被IPsec封装</td>
+</tr>
+</tbody>
+</table>
+
+
+<div id="orgce854e0" class="figure">
+<p><img src="IPSEC_-_VPN/2021-09-07_22-31-56_Picture 1.png" alt="2021-09-07_22-31-56_Picture 1.png" /><br />
+</p>
+</div>
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="org-left">对称算法</td>
+<td class="org-left">DES, 3DES, AES, RC4</td>
+</tr>
+
+<tr>
+<td class="org-left">非对称算法</td>
+<td class="org-left">RSA, DH, ECC</td>
+</tr>
+
+<tr>
+<td class="org-left">Hash算法</td>
+<td class="org-left">MD5, SHA-1</td>
+</tr>
+</tbody>
+</table>
+
+<p>
+HMAC - hash消息认证码，增加一个key做hash<br />
+</p>
+
+<p>
+IKEV1二次协同、IKEV2一次<br />
+</p>
+</div>
+
+<div id="outline-container-org45c88e9" class="outline-3">
+<h3 id="org45c88e9"><span class="section-number-3">6.1</span> 过程</h3>
+<div class="outline-text-3" id="text-6-1">
+</div>
+<div id="outline-container-org706a161" class="outline-4">
+<h4 id="org706a161"><span class="section-number-4">6.1.1</span> ike sa</h4>
+<div class="outline-text-4" id="text-6-1-1">
+<p>
+1 策略<br />
+</p>
+<ul class="org-ul">
+<li>加密算法：选择DES或3DES<br /></li>
+<li>hash算法：选择MD5或SHA<br /></li>
+<li>认证方法：选择证书认证、预置共享密钥认证或Kerberos v5认证<br /></li>
+<li>Diffie-Hellman组的选择<br /></li>
+</ul>
+<p>
+2 DH交换<br />
+密钥交换<br />
+3 认证<br />
+</p>
+</div>
+</div>
+<div id="outline-container-orgcfb2d08" class="outline-4">
+<h4 id="orgcfb2d08"><span class="section-number-4">6.1.2</span> ipsec sa</h4>
+<div class="outline-text-4" id="text-6-1-2">
+<ol class="org-ol">
+<li>策略<br /></li>
+</ol>
+<p>
+使用哪种IPSec协议：AH或ESP<br />
+使用哪种hash算法：MD5或SHA<br />
+是否要求加密，若是，选择加密算法：3DES或DES 在上述三方面达成一致后，将建立起两个SA，分别用于入站和出站通信。<br />
+</p>
+<ol class="org-ol">
+<li>会话密钥<br /></li>
+</ol>
+<p>
+可和ike密角相同，也可不同<br />
+</p>
+<ol class="org-ol">
+<li>SA+密钥+SPI完成<br /></li>
+</ol>
+</div>
+</div>
+</div>
+<div id="outline-container-orgd1b4f69" class="outline-3">
+<h3 id="orgd1b4f69"><span class="section-number-3">6.2</span> 部署</h3>
+<div class="outline-text-3" id="text-6-2">
+<p>
+<a href="IPSEC_-_VPN/2021-09-09_08-45-16_ipsec.pcapng">IPSEC_-_VPN/2021-09-09_08-45-16_ipsec.pcapng</a><br />
+</p>
+
+<ul class="org-ul">
+<li>通信设备<br /></li>
+<li>加密设备<br /></li>
+</ul>
+
+<div id="orgd020f1f" class="figure">
+<p><img src="IPSEC_-_VPN/2021-09-08_20-08-45_Picture 1.png" alt="2021-09-08_20-08-45_Picture 1.png" /><br />
+</p>
+</div>
+<ul class="org-ul">
+<li>公网设备<br /></li>
+</ul>
+</div>
+<div id="outline-container-org10ca02c" class="outline-4">
+<h4 id="org10ca02c"><span class="section-number-4">6.2.1</span> 路由</h4>
+<div class="outline-text-4" id="text-6-2-1">
+<ol class="org-ol">
+<li>公网设备到加解密设备的路由<br /></li>
+<li>加解密设备之间的路由，通讯点路由(一般在加解密设备上用默认路由)<br /></li>
+<li>通讯点之间的路由<br /></li>
+</ol>
+</div>
+</div>
+<div id="outline-container-org5d1eb45" class="outline-4">
+<h4 id="org5d1eb45"><span class="section-number-4">6.2.2</span> SPD - ACL</h4>
+<div class="outline-text-4" id="text-6-2-2">
+<div class="org-src-container">
+<pre class="src src-shell">R10-CE(config-ext-nacl)#do show run | s acc
+ip access-list extended ipsec
+ permit ip host 10.10.10.10 host 8.8.8.8
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org18a8859" class="outline-4">
+<h4 id="org18a8859"><span class="section-number-4">6.2.3</span> IKE SA</h4>
+<div class="outline-text-4" id="text-6-2-3">
+<p>
+基于UDP 500, 所有配置的policy在ike协商时都会发出去<br />
+</p>
+<div class="org-src-container">
+<pre class="src src-shell">crypto isakmp policy 10
+ encr 3des
+ hash md5
+ authentication pre-share
+ group 2
+crypto isakmp key xuan address 10.1.10.10
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org0d54620" class="outline-4">
+<h4 id="org0d54620"><span class="section-number-4">6.2.4</span> IPSEC SA</h4>
+<div class="outline-text-4" id="text-6-2-4">
+<div class="org-src-container">
+<pre class="src src-shell">crypto ipsec transform-set xuan esp-3des esp-sha-hmac
+ mode tunnel
+ip access-list extended ipsec
+ permit ip host 8.8.8.8 host 10.10.10.10
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org5f09a03" class="outline-4">
+<h4 id="org5f09a03"><span class="section-number-4">6.2.5</span> Deploy on port</h4>
+<div class="outline-text-4" id="text-6-2-5">
+<div class="org-src-container">
+<pre class="src src-shell">crypto map xuan 10 ipsec-isakmp
+ set peer 10.1.10.10
+ set transform-set xuan
+ match address ipsec
+ crypto map xuan &lt;= interface e0/3
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org7efe343" class="outline-4">
+<h4 id="org7efe343"><span class="section-number-4">6.2.6</span> DMVPN</h4>
+<div class="outline-text-4" id="text-6-2-6">
+<p>
+<b>PBR-&gt;Routing-&gt;NAT-&gt;Crypto</b><br />
+</p>
+
+<ul class="org-ul">
+<li>MGRE 多点GRE,可传送组播<br /></li>
+</ul>
+<div class="org-src-container">
+<pre class="src src-shell">interface Tunnel0
+ ip address 172.16.1.3 255.255.255.0
+ no ip redirects
+ tunnel source 202.100.1.2
+ tunnel mode gre multipoint
+end
+</pre>
+</div>
+<ul class="org-ul">
+<li>NHRP 下一跳地址解析(下一跳广播)，分支节点动网IP地址<br /></li>
+</ul>
+
+<p>
+<a href="IPSEC_-_VPN/2021-09-14_22-33-23_gre.pcapng">IPSEC_-_VPN/2021-09-14_22-33-23_gre.pcapng</a><br />
+</p>
+
+<p>
+<a href="IPSEC_-_VPN/2021-09-15_00-01-08_nhrp.pcapng">IPSEC_-_VPN/2021-09-15_00-01-08_nhrp.pcapng</a><br />
+</p>
+
+<div class="org-src-container">
+<pre class="src src-shell">//HUB
+  interface Tunnel0
+   ip address 172.16.1.1 255.255.255.0
+   ip nhrp authentication xuan
+   ip nhrp map multicast dynamic
+   ip nhrp network-id 1010
+  end
+//SPOKE
+  interface Tunnel0
+   ip address 172.16.1.3 255.255.255.0
+   no ip redirects
+   ip nhrp authentication xuan
+   ip nhrp map 172.16.1.1 61.128.1.1
+   ip nhrp map multicast 61.128.1.1
+   ip nhrp network-id 1010
+   ip nhrp nhs 172.16.1.1
+  end
+</pre>
+</div>
+<p>
+spoke间发ping包，第一个包会到hub触发动态隧道建立(NHRP请求通过HUB，对端SPOKE学到源端SPOKE不通过HUB回NHRP repsonce)，后续spoke间直接通信<br />
+</p>
+
+<ul class="org-ul">
+<li>路由协议 (阶段二)<br /></li>
+</ul>
+<p>
+OSPF - tunnel启用，配置broadcast&amp;point-to-multipoint模式和优先级保证HUB是DR<br />
+EIGRP - 关闭水平分割,no ip split-horizon eigrp 1(否则SPOKE互相学不到)和下一跳自我no ip next-hop-self eigrp 1(否则路由都会指向总部)<br />
+iBGP - Hub成为RR<br />
+</p>
+
+<ul class="org-ul">
+<li>阶段三<br /></li>
+</ul>
+<p>
+防止HUB路由太多，汇总HUB路由，重定向NHRP<br />
+</p>
+
+<div class="org-src-container">
+<pre class="src src-shell">  //HUB
+    ip nhrp redirect
+    ip next-hop-self eigrp 1 //指向HUB
+    ip ospf point-to-multipoint //指向自已
+    HUB(config-if)#ip summary-address eigrp 1 2.0.0.0/8 //eigrp
+R1(config-router)#summary-address 172.16.0.0 255.255.252.0 //ospf
+  //SPOKE
+    ip nhrp shortcut
+</pre>
+</div>
+
+<ul class="org-ul">
+<li>IPSec封装，支持RIP、EIGRP、OSPF、BGP<br /></li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org1226804" class="outline-2">
+<h2 id="org1226804"><span class="section-number-2">7</span> SD-WAN</h2>
+<div class="outline-text-2" id="text-7">
+</div>
+<div id="outline-container-orgf45836f" class="outline-3">
+<h3 id="orgf45836f"><span class="section-number-3">7.1</span> 编排，管理，控制，数据转发</h3>
+<div class="outline-text-3" id="text-7-1">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">Component</th>
+<th scope="col" class="org-left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left">vManage</td>
+<td class="org-left">管理平面</td>
+</tr>
+
+<tr>
+<td class="org-left">vSmart</td>
+<td class="org-left">控制平面，路由操控</td>
+</tr>
+
+<tr>
+<td class="org-left">vBond</td>
+<td class="org-left">授权, 所有控制平面数据平面安全转发</td>
+</tr>
+
+<tr>
+<td class="org-left">vEdge</td>
+<td class="org-left">数据转发</td>
+</tr>
+</tbody>
+</table>
+
+<p>
+OMP - vSmart和vedge之间建的连接<br />
+</p>
+
+<p>
+vManage、vSmart、vBond 通过数字证书进行签名<br />
+</p>
+<ul class="org-ul">
+<li>管理器在vManage创建控制器白名单<br /></li>
+<li>控制器列表分发给所有控制器<br /></li>
+<li>设备通过数字签名认证<br /></li>
+</ul>
+
+<p>
+vEdge<br />
+</p>
+<ul class="org-ul">
+<li>建临时DTLS，在vBond上onboarding，default 12346<br /></li>
+<li>和vSmart建DTLS连接，数量和vSmart cpu核确定，core0 - 12346, core1 - 12446 &#x2026;，最多8个<br /></li>
+<li>和vManage建DTLS连接<br /></li>
+</ul>
+
+<p>
+连接<br />
+</p>
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">&#xa0;</th>
+<th scope="col" class="org-left">vMange</th>
+<th scope="col" class="org-left">vSmart</th>
+<th scope="col" class="org-left">vBond</th>
+<th scope="col" class="org-left">vEdge</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left">vMange</td>
+<td class="org-left">N.A.</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">NetConf/DTLS,下发配置</td>
+</tr>
+
+<tr>
+<td class="org-left">vSmart</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">N.A.</td>
+<td class="org-left">DTLS</td>
+<td class="org-left">OMP/DTLS，路由/拓扑</td>
+</tr>
+
+<tr>
+<td class="org-left">vBond</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">N.A.</td>
+<td class="org-left">DTLS/Template</td>
+</tr>
+
+<tr>
+<td class="org-left">vEdge</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">TLOC</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+
+<div id="outline-container-org3d3911b" class="outline-3">
+<h3 id="org3d3911b"><span class="section-number-3">7.2</span> 数据平面</h3>
+<div class="outline-text-3" id="text-7-2">
+<p>
+TLOC 传输定全ID<br />
+VVV 分离不同业务<br />
+</p>
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-right" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">&#xa0;</th>
+<th scope="col" class="org-right">VPN ID</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left">传输侧 VVV</td>
+<td class="org-right">0</td>
+</tr>
+
+<tr>
+<td class="org-left">管理 vvv</td>
+<td class="org-right">512</td>
+</tr>
+
+<tr>
+<td class="org-left">服务侧 VVV</td>
+<td class="org-right">其他</td>
+</tr>
+</tbody>
+</table>
+
+<p>
+传输侧分为两类color: public、private<br />
+</p>
+
+<p>
+private 尝式与所有color建立ipsec Tunnel<br />
+public  尝式与public建立ipsec tunnel<br />
+限制操作(可选)  隧道接口上定义仅仅允许与自身color一样的TLOC之间建立tunnel<br />
+</p>
+
+<p>
+端到端的分段实现多拓扑结构<br />
+</p>
+<ul class="org-ul">
+<li>edge为每一个vvv维护路由表，实现控制平面分离<br /></li>
+<li>OMP在路由传输的过程中也提供分离，在vsmart上也是分离的<br /></li>
+<li>数据传输上使用label分离<br /></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-orgc69c4ee" class="outline-3">
+<h3 id="orgc69c4ee"><span class="section-number-3">7.3</span> OMP</h3>
+<div class="outline-text-3" id="text-7-3">
+<ul class="org-ul">
+<li>基于DTLS/TLS<br /></li>
+<li>在传输侧vvv建立会话<br /></li>
+<li>自动启用，无需配置<br /></li>
+<li>使用system-ip建立OMP对等体，一个edge与vmwart只建立一个OMP会话(注意区分和DTLS根据核建多个连接)<br /></li>
+</ul>
+
+<p>
+Feature:<br />
+</p>
+<ul class="org-ul">
+<li>集成距离矢量路由协议<br /></li>
+<li>ipsec密钥分配及交换<br /></li>
+<li>策略分布<br /></li>
+<li>C/S架构<br /></li>
+<li>分离，前缀、下一跳(TLOC)、服务、三者分离<br /></li>
+</ul>
+
+<p>
+TLOC 定位到设备端口IP<br />
+支持多地址族<br />
+</p>
+
+<p>
+OMP传递三种路由<br />
+</p>
+<ul class="org-ul">
+<li>vroute<br />
+OMP路由，服务侧的子网信息<br /></li>
+<li>TLOC route<br />
+fabric接口的详细信息，传输侧的路由，服务侧的下一跳<br /></li>
+<li>service route<br />
+AAR,应该感知路由,类似于PBR<br /></li>
+</ul>
+
+<p>
+选路原则<br />
+</p>
+<ul class="org-ul">
+<li>是否有效<br /></li>
+<li>管理距离<br /></li>
+<li>OMP路由优先级<br /></li>
+<li>vEdge，TLOC优先级<br /></li>
+<li>Origin<br /></li>
+<li>起源度量<br /></li>
+<li>vEdge, Route-Id较大<br /></li>
+<li>vEdge较高私有IP地址， vSmart两个都选<br /></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org6e107df" class="outline-3">
+<h3 id="org6e107df"><span class="section-number-3">7.4</span> 模板</h3>
+<div class="outline-text-3" id="text-7-4">
+<p>
+设备模板<br />
+</p>
+<ul class="org-ul">
+<li>feature组合<br /></li>
+<li>CLI template<br /></li>
+</ul>
+
+<p>
+如果service vvv 使用了子接口，那么要求其特理接口必须在vpn0<br />
+OMP默认情况下会把OSPF内部路由，直连路由、静态路由，通告出去<br />
+</p>
+</div>
+</div>
+
+<div id="outline-container-org78e28db" class="outline-3">
+<h3 id="org78e28db"><span class="section-number-3">7.5</span> 策略</h3>
+<div class="outline-text-3" id="text-7-5">
+<p>
+所有的中心策略都是在vsmart上激活<br />
+默认情况下，一旦设备通过template纳管，就不能自已配置，只能通过vmanage管理<br />
+</p>
+</div>
+
+
+<div id="outline-container-org2edb32c" class="outline-4">
+<h4 id="org2edb32c"><span class="section-number-4">7.5.1</span> 两个维度分类</h4>
+<div class="outline-text-4" id="text-7-5-1">
+<ul class="org-ul">
+<li>控制策略 e.g.:route-map<br /></li>
+<li>数据策略 e.g.:acl, qos<br /></li>
+
+<li>中心策略 在同一时间在一台vsmart上只能激活一个策略<br />
+<ol class="org-ol">
+<li>自定义路由决策<br /></li>
+<li>操控路由，比如TLOC，流量工程，服务，控制vvv的拓扑<br /></li>
+</ol></li>
+
+<li>本地策略 分发列表等<br />
+<ol class="org-ol">
+<li>在vedge上也只能应用一种本地策略<br /></li>
+<li>acl,分发列表,qos<br /></li>
+</ol></li>
+</ul>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org93789e3" class="outline-3">
+<h3 id="org93789e3"><span class="section-number-3">7.6</span> 实验</h3>
+<div class="outline-text-3" id="text-7-6">
+<ol class="org-ol">
+<li>定义route-policy<br /></li>
+<li>创建local policy,导入route-policy<br /></li>
+<li>修改device template，添加local policy<br /></li>
+<li>修改feature template，添加route-policy<br /></li>
+</ol>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org3da6007" class="outline-2">
+<h2 id="org3da6007"><span class="section-number-2">8</span> SD-Access</h2>
+<div class="outline-text-2" id="text-8">
+<p>
+组件<br />
+</p>
+<ul class="org-ul">
+<li>DNA Center<br />
+整个解决方案的SDN控制器<br /></li>
+<li>ISE<br />
+提供策略<br /></li>
+<li>园区网交换机<br />
+转发平面<br /></li>
+<li>终端<br /></li>
+</ul>
+
+<p>
+设计、策略、部署、保障<br />
+</p>
+
+<p>
+ISE - 策略<br />
+NCP - 自动部署<br />
+NDP - 保障<br />
+</p>
+
+<p>
+fabric角色<br />
+</p>
+<ul class="org-ul">
+<li>control-plane nodes<br />
+存储HTDB、map server、map resolver<br />
+HTDB 主机跟踪数据库，每个主机在哪个交换机，EID(就是32位ip)到fabric edge节点的映射<br /></li>
+<li>edge<br />
+主机入网的注册，封装解封装vxlan，接入策略<br /></li>
+<li>intermediate<br />
+中间节点，仅需要支持jumbo mtu即可<br /></li>
+<li>border<br />
+负责充当fabric丫点与fabric外部网络之间的网关<br />
+自动双向重发布,和外部建bgp<br />
+对外，将vxlan的VN(即vrf)映射到外部vrf<br /></li>
+</ul>
+
+<p>
+LISP - locator/ID separation protocol<br />
+将一台主机的位置和其标识分离开，以实现主机的移动，主机移到fabric中的任意位置，其IP地址不用发生变化<br />
+RLOC和EID的映射<br />
+</p>
+
+<p>
+LISP转发<br />
+</p>
+<ul class="org-ul">
+<li>border外有数据包到主机<br /></li>
+<li>ITR(border)发map request到map server<br /></li>
+<li>map server发到主机的交换机查<br /></li>
+<li>主机交换机发map resolve到border<br /></li>
+<li>border封vxlan到主机<br /></li>
+<li>主机回包，目的是外部地址<br /></li>
+<li>主机交换机(anycast gateway)<br /></li>
+</ul>
+
+<p>
+手动纳管<br />
+</p>
+<ul class="org-ul">
+<li>保证网络通，一般用环回口<br /></li>
+<li>必须保证VTP透明<br /></li>
+<li>配置远程登陆，用户名密码给15级权限，建议SSH<br /></li>
+</ul>
+
+<p>
+SGT 可扩展组标签<br />
+</p>
+</div>
+
+<div id="outline-container-orgcb05af8" class="outline-3">
+<h3 id="orgcb05af8"><span class="section-number-3">8.1</span> 实验</h3>
+<div class="outline-text-3" id="text-8-1">
+</div>
+<div id="outline-container-org5678129" class="outline-4">
+<h4 id="org5678129"><span class="section-number-4">8.1.1</span> 设计</h4>
+<div class="outline-text-4" id="text-8-1-1">
+<p>
+规划算网络结构<br />
+站点结构 位置、站点<br />
+网络设备的凭证、网络共享服务器地址(DHCP、AAA、SNMP、syslog、NTP、DNS)<br />
+DHCP地址池规划 - 在site配个大地址池，在build里去reserveG<br />
+</p>
+
+<p>
+border自动部署vrf、bgp、接口、ip地址<br />
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgf396a10" class="outline-4">
+<h4 id="orgf396a10"><span class="section-number-4">8.1.2</span> 策略</h4>
+<div class="outline-text-4" id="text-8-1-2">
+<p>
+创建VN<br />
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgf60a94f" class="outline-4">
+<h4 id="orgf60a94f"><span class="section-number-4">8.1.3</span> 部署</h4>
+<div class="outline-text-4" id="text-8-1-3">
+<p>
+设计fabric<br />
+</p>
+<ul class="org-ul">
+<li>transit, 创建border, ip based - bgp, 设置as号<br /></li>
+<li>fabric, 建立branch<br /></li>
+</ul>
+
+<p>
+回到主页，find new device<br />
+</p>
+
+<p>
+provision -&gt; device -&gt; actions -&gt; provison -&gt; assign to site<br />
+分别选中同一型号的设备 -&gt; actions -&gt; provision -&gt; ** 实验<br />
+</p>
+</div>
+</div>
+
+<div id="outline-container-org93ccb42" class="outline-4">
+<h4 id="org93ccb42"><span class="section-number-4">8.1.4</span> 设计</h4>
+<div class="outline-text-4" id="text-8-1-4">
+<p>
+规划算网络结构<br />
+站点结构 位置、站点<br />
+网络设备的凭证、网络共享服务器地址(DHCP、AAA、SNMP、syslog、NTP、DNS)<br />
+DHCP地址池规划 - 在site配个大地址池，在build里去reserveG<br />
+</p>
+
+<p>
+border自动部署vrf、bgp、接口、ip地址<br />
+</p>
+</div>
+</div>
+
+<div id="outline-container-org71a12ce" class="outline-4">
+<h4 id="org71a12ce"><span class="section-number-4">8.1.5</span> 策略</h4>
+<div class="outline-text-4" id="text-8-1-5">
+<p>
+创建VN<br />
+</p>
+</div>
+</div>
+
+<div id="outline-container-org9986e68" class="outline-4">
+<h4 id="org9986e68"><span class="section-number-4">8.1.6</span> 部署</h4>
+<div class="outline-text-4" id="text-8-1-6">
+</div>
+<ol class="org-ol">
+<li><a id="org243421d"></a>设计<br />
+<div class="outline-text-5" id="text-8-1-6-1">
+<p>
+设计fabric<br />
+</p>
+<ul class="org-ul">
+<li>transit, 创建border, ip based - bgp, 设置外端as号<br /></li>
+<li>fabric, 建立branch<br /></li>
+</ul>
+</div>
+</li>
+
+<li><a id="org9c7af1b"></a>查找设备<br />
+<div class="outline-text-5" id="text-8-1-6-2">
+<p>
+回到主页，find new device<br />
+</p>
+</div>
+</li>
+
+<li><a id="orga25d427"></a>纳管设备<br />
+<div class="outline-text-5" id="text-8-1-6-3">
+<p>
+provision -&gt; device -&gt; actions -&gt; provison -&gt; assign to site<br />
+分别选中同一型号的设备 -&gt; actions -&gt; provision device -&gt; deploy -&gt; now 完成onboarding<br />
+</p>
+</div>
+</li>
+
+<li><a id="orga004895"></a>分配角色<br />
+<div class="outline-text-5" id="text-8-1-6-4">
+<p>
+provision -&gt; fabric 点设备 分配角色<br />
+分配成border时<br />
+</p>
+<ul class="org-ul">
+<li><p>
+设置本地as及地址池<br />
+</p>
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">default to virtual network</th>
+<th scope="col" class="org-left">do not import external routes</th>
+<th scope="col" class="org-left">result</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left">No</td>
+<td class="org-left">No</td>
+<td class="org-left">双向重发布明细路由</td>
+</tr>
+
+<tr>
+<td class="org-left">Yes</td>
+<td class="org-left">No</td>
+<td class="org-left">双向重发布，加默认路由</td>
+</tr>
+
+<tr>
+<td class="org-left">Yes</td>
+<td class="org-left">Yes</td>
+<td class="org-left">单向重发布，内部只发默认路由</td>
+</tr>
+</tbody>
+</table></li>
+<li>设置external interface及需要通的VN<br /></li>
+<li>deploy<br /></li>
+<li>点开border设备，detail, 点开接口，即可看到每个VN对应vlan本地地址和远端地址<br /></li>
+<li>在sdwan里创建vpn模板对应于vn，接口模板和bgp模板(<b>有点版本sdwan模板as号不能整成变量，要固定</b>)<br /></li>
+</ul>
+</div>
+</li>
+</ol>
+</div>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: xuali2</p>
+<p class="date">Created: 2022-02-14 Mon 16:00</p>
+<p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
+</div>
+</body>
+</html>

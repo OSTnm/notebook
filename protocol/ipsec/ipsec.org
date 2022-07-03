@@ -1,0 +1,43 @@
+#+SETUPFILE: ~/.emacs.d/themes/org-html-themes/org/theme-readtheorg.setup
+#+OPTIONS: \n:t
+#+OPTIONS: ^:nil
+#+OPTIONS: tex:t
+#+STARTUP: latexpreview
+#+OPTIONS: tex:dvipng
+#+HTML_MATHJAX: align: left indent: 5em tagside: left font: Neo-Euler
+#+attr_html: :width 300px
+#+attr_latex: :width 300px
+#+ATTR_ORG: :width 300
+
+#+TITLE: IPSEC standards
+
+* 文档索引
+  | RFC     | 描述                |
+  |---------+---------------------|
+  | RFC6071 | IPSEC有关的RFC list |
+
+* 核心
+  | RFC     | 描述                                              |
+  |---------+---------------------------------------------------|
+  | RFC4301 | IPSEC 框架描述，包括SPD,SAD,PAD数据库及包处理流程 |
+  | RFC4302 | AH协议                                            |
+  | RFC4303 | ESP协议                                           |
+  | RFC7296 | IKEv2协议                                         |
+  |         |                                                   |
+
+* 要点
+** 协议版本
+   现有的是IKE V1+IPsec V2和IKEV2+IPsec V3，但IPsec报文中是没有版本号的，除了一些向后兼容的改动外，关于版本一致性要带外配置
+
+** SPD
+   - PFP flag，置位时表示创建SA时用报文里的字段作为selector，置空时表示使用SPD里的字段做selector
+     - 实际用在gateway后的主机通信，如果设成TRUE，主机间的Traffic用独立的SA，一个SPD规则对应多个SA，即child SA，否则多个主机间通信只用一个SA
+
+** AH&ESP
+   - transport模式下，两种模式都不允许直接对ipv4分片进行封装，需要重组后封装再分片，反之tunnel模式无所谓，其原因是transport无法分辨分片是在ipsec前还是后
+   - ESP先加密再做数据完整(生成ICV)
+   - ESN高32bit参与ICV计算，但不发送出去
+   - ESP如果用加密完整一起的算法，ICV变成可选的
+
+** IKEv2
+   - 报文中有版本号，和IKEv1不兼容
