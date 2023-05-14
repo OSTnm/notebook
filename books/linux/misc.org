@@ -1,0 +1,275 @@
+#+SETUPFILE: ~/.emacs.d/themes/org-html-themes/setup/theme-readtheorg.setup
+#+OPTIONS: \n:t
+#+OPTIONS: ^:nil
+#+OPTIONS: tex:t
+#+STARTUP: latexpreview
+#+OPTIONS: tex:dvipng
+#+HTML_MATHJAX: align: left indent: 5em tagside: left font: Neo-Euler
+#+attr_html: :width 300px
+#+attr_latex: :width 300px
+#+ATTR_ORG: :width 300
+
+#+TITLE: MISC
+
+* [[https://0xax.gitbooks.io/linux-insides/content/Booting/][linux inside]]
+** [[https://0xax.gitbooks.io/linux-insides/content/Booting/][booting]]
+main sequence on *x86*
+- power on, eip = 0xfffffff0.
+- bios on ROM mapping to address space - setup initial function, search bootdevice and bootloader.
+- grub - booloader on bootdevice.
+- arch/x86/boot/header.S _start -> arch/x86/boot/main.c 16 bit kernel, address mapping reference to boot.rst.
+  - setup console by io port instrutions.
+  - stack heap init.
+  - detect memory by calling bios interrupt.
+  - keyboard init by calling bios interrupt.
+  - init video by calling bios interrupt.
+  - enable A20 gate, 不使能的话地址位20恒等于0，为了保证向下兼容好的20位程序，但是后面要使用32位地址了，所以要打开
+  - setup idt, gdt
+  - disable interrupt
+  - 进入保护模式 arch/x86/boot/pmjump.S
+- arch/x86/boot/header_32.S or arch/x86/boot/header_64.S depends on 32 or 64 bits kernel,以下为64 bit kernel
+  - 重新设定段寄存器和堆栈，适配于直接用header_32.S和header_64.S的bootloader(直接调用startup_32和startup_64)
+  - (可选)设定load kernel的地址LOAD_PHYSICAL_ADDR
+  - 设定64bit的段寄存器
+  - 建立映射4G的4-level线性页表, 一个页表项2M, 21 bits offset + 9 bits level 2 + 4个entry = 32 bits
+  - lret调用startup_64
+  - startup_64里会把上面的再来一遍
+  - 将整个内核(包括压缩部分和未压缩部分)放到LOAD_PHYSICAL_ADDR起始的内核image大小的buffer底部
+  - arch/x86/boot/compressed/misc.c 解压内核image里的压缩部分，如果没有指定nokaslr，会压缩到随机地址
+  - 解析解压出的内核，是一个elf格式，根据里面的地址分配copy到对应的内存上
+  - 跳转到LOAD_PHYSICAL_ADDR或者随机地址(aslr开的话)，这里的函数是start_kernel
+- 上面跳转到的地址实际为 *arch/x86/kernel/head_32.S的startup_32* 或者 *arch/x86/kernel/head_64.S的startup_64*
+  - 重新设置页表和栈
+  - call i386_start_kernel or x86_64_start_kernel
+- 以64bit kernel为例 arch/x86/kernel/head64.c - x86_64_start_kernel
+  - 清理低位线性页式，只保留高位页表
+  - 建立早期中断
+  - init/main.c start_kernel
+** init
+main sequence on *x86*
+- 从start_kernel开始
+- 设置栈顶magic, 注意thread_union thread_info task_struct的关系随着编译条件变化
+- 关中断
+- 设置cpumask
+- 如果内核不能映射所有的RAM, 初始化high memory
+- 保留内核image .text .bss 段
+- 如果用ramdisk，预留内存
+- 拿到root_device
+- 获取物理内存范围，x86是从BIOS拿到，里面是usable的就是RAM，其他reserved的物理地址空间可以分配给其他外设
+- 解析setup_data，比如arm的DTB
+- 初始化进程1的虚拟地址mm_struct
+- kernel代码数据bss段加到resource管理
+- 解析命令行参数
+- 计算物理地址最大页编号，以此得到high memory的虚拟基址(最大物理页线性映射虚拟地址即为high_memory)
+- 保留brk,bios,低1M地址空间
+- 将所有的reserve都统计到memblock中
+- 重建线性地址映射
+- 设置log buf大小
+- 如果是ramdisk，将其搬运到另外可用的RAM空间
+- 初始化内存管理
+- per-CPU变量初始化，其实是per.cpu段copy多份
+- zone初始化，所以关于内存是从 e820->memblock->zone->slab->mem_cache->kmalloc
+- pid hash表初始化
+- vfs初始化
+- 调度器初始化
+- RCU系统初始化
+- trace系统初始化
+- 中断初始化
+- console初始化
+- 开中断
+- 各个系统要用的内存cache申请
+- proc文件系统初始化
+- cgroups初始化
+- 一个进程init和一个内核线程kthreadd，自已则成为idle内核线程
+** interrupt
+- 2.6内核后linux为了防止中断栈overflow，会per-cpu建一个中断栈专为中断栈使用
+- IST机制是中断描述符的变量，如果置位，CPU产生此类中断后栈指针会切换到IST所存地址
+- 中断table里的DPL位限制此中断的权限，设为3可以让用户态通过int指令访问
+
+*** note
+- 0xfffffff0由EIP里本身的0xfff0加上隐藏地址0xffff0000来的,CS 0xf000 << 4变成0，不影响结果
+- 0x7c00是bios初始化完后从super block读到内存的位置然后jmp到这个地址
+- x86在bios初始化后的内存分布
+#+begin_src shell
+0x00000000 - 0x000003FF - Real Mode Interrupt Vector Table
+0x00000400 - 0x000004FF - BIOS Data Area
+0x00000500 - 0x00007BFF - Unused
+0x00007C00 - 0x00007DFF - Our Bootloader
+0x00007E00 - 0x0009FFFF - Unused
+0x000A0000 - 0x000BFFFF - Video RAM (VRAM) Memory
+0x000B0000 - 0x000B7777 - Monochrome Video Memory
+0x000B8000 - 0x000BFFFF - Color Video Memory
+0x000C0000 - 0x000C7FFF - Video ROM BIOS
+0x000C8000 - 0x000EFFFF - BIOS Shadow Area
+0x000F0000 - 0x000FFFFF - System BIOS
+#+end_src
+- 像ubuntu,debian，x86下顺序为 power on -> bios(bootloader on ROM) -> grub(bootloader on bootdevice) -> 16 bit kernel -> 32 or 64 bit kernel
+- kernel需要bootloader在它的空间内填一些选项
+- 从grub到boot/header.S里的_start,下面这个是相对跳转到offset start_of_setup-1f，即跳到start_of_setup
+#+begin_src asm
+  _start:
+        # Explicitly enter this as bytes, or the assembler
+        # tries to generate a 3-byte jump here, which causes
+        # everything else to push off to the wrong offset.
+        .byte	0xeb		# short (2-byte) jump
+        .byte	start_of_setup-1f
+1:
+#+end_src
+- header.S 从offset 0开始是老的已废弃的bootloader,现在的代码如果不是由grub或其他bootloader跳转到_start而是从offset 0自然开始，会走到报错的流程
+- 16位切到32位后，段寄存器从<<4寻址变成GDT选择index
+#+begin_src shell
+
+ 15             3 2  1     0
+-----------------------------
+|      Index     | TI | RPL |
+-----------------------------
+#+end_src
+
+- x86指令集的串口初始化
+#+begin_src c
+static void early_serial_init(int port, int baud)
+{
+	unsigned char c;
+	unsigned divisor;
+
+	outb(0x3, port + LCR);	/* 8n1 */
+	outb(0, port + IER);	/* no interrupt */
+	outb(0, port + FCR);	/* no fifo */
+	outb(0x3, port + MCR);	/* DTR + RTS */
+
+	divisor	= 115200 / baud;
+	c = inb(port + LCR);
+	outb(c | DLAB, port + LCR);
+	outb(divisor & 0xff, port + DLL);
+	outb((divisor >> 8) & 0xff, port + DLH);
+	outb(c & ~DLAB, port + LCR);
+
+	early_serial_base = port;
+}
+#+end_src
+- idt寄存器声明和gdt寄存器一样，因为结构一样，不过我觉得可以typedef一下
+- protected_mode_jump, dx存的是boot_params, ax存的是boot_params.hdr.code32_start
+#+begin_src shell
+        protected_mode_jump(boot_params.hdr.code32_start,
+        13ae:	66 81 c2 90 37       	add    $0x3790,%dx
+        13b3:	00 00                	add    %al,(%eax)
+        13b5:	66 a1 a4 39 66 e8    	mov    0xe86639a4,%ax
+        13bb:	00 00                	add    %al,(%eax)
+        ...
+    root@debian:/home/linux-source-5.10/arch/x86/boot# readelf -sW setup.elf |grep boot_params
+       145: 00003790  4096 OBJECT  GLOBAL DEFAULT   13 boot_params
+
+    /*
+     ,* void protected_mode_jump(u32 entrypoint, u32 bootparams);
+     ,*/
+    SYM_FUNC_START_NOALIGN(protected_mode_jump)
+        movl	%edx, %esi		# Pointer to boot_params table
+
+        xorl	%ebx, %ebx
+        movw	%cs, %bx
+        shll	$4, %ebx
+        addl	%ebx, 2f //ebx里是cs << 4，然后存到label 2里,其实就是将16位模式下的地址存到label 2里面
+        jmp	1f			# Short jump to serialize on 386/486
+    1:
+
+        movw	$__BOOT_DS, %cx
+        movw	$__BOOT_TSS, %di
+
+        movl	%cr0, %edx
+        orb	$X86_CR0_PE, %dl	# Protected mode
+        movl	%edx, %cr0
+
+        # Transition to 32-bit mode
+        .byte	0x66, 0xea		# ljmpl opcode
+    2:	.long	.Lin_pm32		# offset
+        .word	__BOOT_CS		# segment
+    SYM_FUNC_END(protected_mode_jump)
+
+  SYM_FUNC_START_LOCAL_NOALIGN(.Lin_pm32)
+      # Set up data segments for flat 32-bit mode
+      movl	%ecx, %ds
+      303b:	8e d9                	mov    %ecx,%ds
+      movl	%ecx, %es
+      303d:	8e c1                	mov    %ecx,%es
+      movl	%ecx, %fs
+      303f:	8e e1                	mov    %ecx,%fs
+      movl	%ecx, %gs
+      3041:	8e e9                	mov    %ecx,%gs
+      movl	%ecx, %ss
+      3043:	8e d1                	mov    %ecx,%ss
+      # The 32-bit code sets up its own stack, but this way we do have
+      # a valid stack if some debugging hack wants to use it.
+      addl	%ebx, %esp
+      3045:	01 dc                	add    %ebx,%esp //记得这时esp是32bit模式，需要把之前存的段寄存器加上
+      ...
+#+end_src
+- 编译到compressed vmlinux是0, load到物理内存是0x1000000，所以一开始要算真实load地址
+#+begin_src shell
+  root@debian:/home/linux-source-5.10/arch/x86/boot/compressed# readelf -sW vmlinux | grep startup
+   178: 00000000   154 FUNC    GLOBAL HIDDEN     1 startup_32
+
+  root@debian:/home/linux-source-5.10/arch/x86/boot# readelf -s ../../../vmlinux | grep startup_32
+   97362: c1000080   358 FUNC    GLOBAL DEFAULT    1 startup_32_smp
+  108488: 01000000     0 NOTYPE  GLOBAL DEFAULT  ABS phys_startup_32
+  109027: c1000000   111 NOTYPE  GLOBAL DEFAULT    1 startup_32
+
+	leal	(BP_scratch+4)(%esi), %esp ; esi是boot_params,(BP_scratch+4)是里面的scratch字段后面的地址
+	call	1f  ;先减esp，再存，所以上面esp要先指向scratch字段后面
+1:	popl	%ebp
+	subl	$ rva(1b), %ebp ;; 物理地址的label 1地址减于二进制里的label 1偏移，为startup_32的物理地址
+#+end_src
+- x64用4级页表，只用48位(bits 0-47)， 4个9位加最后12的offset，一个page还是4K
+- cr3存页表入口地址，cr0标志位使能paging
+- *在startup_32里在cr4里使能了PAE，此时页表项bit7置1说明是2M页表项*
+- 如果LOAD地址是默认的0x100000同时没开ASLR，解压内核会覆盖之前的内核代码
+- 在根目录下的vmlinux是解压后的没strip掉rel.*段的内核image，在arch/x86/boot/compress下的vmlinux是压缩后的内核image
+  以下为32位内核解压后的内核映射，虚拟地址为0xc1000000,默认不开ASLR的物理地址为0x1000000，第一个函数为arch/x86/kernel/head_32.S下的startup_32
+#+begin_src shell
+  root@debian:/home/linux-source-5.10# readelf -SW vmlinux
+  There are 66 section headers, starting at offset 0x19a67990:
+
+  Section Headers:
+    [Nr] Name              Type            Addr     Off    Size   ES Flg Lk Inf Al
+    [ 0]                   NULL            00000000 000000 000000 00      0   0  0
+    [ 1] .text             PROGBITS        c1000000 001000 acf735 00  AX  0   0 4096
+
+root@debian:/home/linux-source-5.10# readelf -sW vmlinux  | grep c1000000
+     1: c1000000     0 SECTION LOCAL  DEFAULT    1
+ 89871: c1000000     0 NOTYPE  GLOBAL DEFAULT    1 _text
+109027: c1000000   111 NOTYPE  GLOBAL DEFAULT    1 startup_32
+109520: c1000000     0 NOTYPE  GLOBAL DEFAULT    1 _stext
+
+#+end_src
+- *Interrupt and trap gates contain a far pointer to the entry point of the interrupt handler. Only one difference between these types is how CPU handles IF flag. If interrupt handler was accessed through interrupt gate, CPU clear the IF flag to prevent other interrupts while current interrupt handler executes. After that current interrupt handler executes, CPU sets the IF flag again with iret instruction.*
+- thread_union thread_info task_struct 三个结构的关系随着编译选项不一有变化，下面列出其中一种
+  thread_info和task_struct中分别有字段指向对方，thread_union包括栈和thread_info, thread_info在栈顶(低地址处)
+- /proc/ioport /proc/iomem在 kernel/resource.c中，定义外设io和memory资源
+- 进程1的各项资源比如mm(定义在mm/init-mm.c)，都是静态变量
+- task_struct->mm是进程地址空间 active_mm是内核线程用的地址空间指针
+- 1 << CONFIG_LOG_BUF_SHIFT定义了log buffer的大小
+- 调度器基本单位没用task_struct，而是sched_entity
+- 中断可分为硬件&外部中断和软件产生的中断，后者可分为三种，faults表示指令异常产生的中断(除0,页异常), traps表示指令主动陷入的中断，被aborts中断的程序不会被恢复
+- 2.6内核后linux可使用额外的中断栈(包括硬中断和软中断)，考虑的是栈空间不够的问题
+- 
+
+* Q&A
+** rip + _bss - 8 是 _bss - 8在内存里的绝对地址？而不是 rbp + _bss - 8?
+#+begin_src asm
+/*
+ * Copy the compressed kernel to the end of our buffer
+ * where decompression in place becomes safe.
+ */
+	pushq	%rsi
+	leaq	(_bss-8)(%rip), %rsi
+	leaq	rva(_bss-8)(%rbx), %rdi
+	movl	$(_bss - startup_32), %ecx
+	shrl	$3, %ecx
+	std
+	rep	movsq
+	cld
+	popq	%rsi
+#+end_src
+** x86_64_start_kernel里reset_early_page_tables删掉页表为什么不影响后续代码？此时已经是paging enable
+   有可能是有两份页表指向同一个地址？一个线性相等，一个在高位用PAGE_OFFSET?
+
+* https://linux-kernel-labs.github.io/refs/heads/master/

@@ -1140,7 +1140,9 @@ request_irq(unsigned int irq, irq_handler_t handler, unsigned long flags,
 extern void free_irq(unsigned int, void *);
 #+end_src
 
-*linux的中断处理程序无须重入，当一个中断执行时，相应的中断号会在所有处理器上被屏蔽，同一个中断处理程充绝不会同时被调用以处理嵌套中断*
+*linux-的中断处理程序无须重入*
+当一个中断执行时， +相应的中断号会在所有处理器上被屏蔽，同一个中断处理程充绝不会同时被调用以处理嵌套中断+ -> CPU在执行中断程序时硬件会关掉所有中断，最新的kernel在中断处理程序时不会开中断，所以执行中断的时候不会被其他中断程序打断
+
 
 共享中断要求
 1. IRQF_SHARED
@@ -1150,7 +1152,7 @@ extern void free_irq(unsigned int, void *);
 中断上下文和进程无关，所以不可以睡眠，同时有严格的时间限制
 
 中断流程
-硬件产生一个中断 -> 中断控制器 -> 处理器 -> 处理器中断内核 -> do_IRQ() -> handle_IRQ_event() 可能在此开启其他中断 -> 运行挂接的所有中断处理程序 -> 关中断 -> ret_from_intr()
+硬件产生一个中断 -> 中断控制器 -> 处理器 -> 处理器中断内核 -> do_IRQ() -> handle_IRQ_event()  +可能在此开启其他中断+ -> 运行挂接的所有中断处理程序 -> 关中断 -> ret_from_intr()
 
 #+begin_src c
 /*

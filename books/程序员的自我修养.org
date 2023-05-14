@@ -1775,8 +1775,8 @@ int foo(int a)
 - ebp索引变量
 #+begin_src asm
   00000000 <foo>:
-     0:	55                   	push   %ebp ; 将ebp入栈, esp = esp - 2, [esp] = %ebp
-     1:	89 e5                	mov    %esp,%ebp ; epb = esp, *epb = *esp = old ebp
+     0:	55                   	push   %ebp ; 将ebp入栈, esp = esp - 4, [esp] = %ebp
+     1:	89 e5                	mov    %esp,%ebp ; ebp = esp, *ebp = *esp = old ebp
      3:	83 ec 10             	sub    $0x10,%esp ; 开栈
      6:	8b 45 08             	mov    0x8(%ebp),%eax ; 取实参a 0(%ebp) = old ebp 4(%ebp) = old pc
      9:	83 e8 01             	sub    $0x1,%eax      ; 自增
@@ -2296,7 +2296,7 @@ MiniCRT,略
 	/usr/lib/crti.o /usr/lib/crtn.o 为 init和finit的前半和后半
 	X86 assembly Enter == push ebp, mov ebp, esp
 			     Leave == mov esp, ebp pop ebp
-push的意思是先把参数压到堆栈里面然后esp再减四，pop指令是先加四再弹出esp里面的内容
+    push的意思是esp减四再把参数压到堆栈里面然后，pop指令是弹出esp里面的内容再加四
 
 	crti.o crtn.o 中的.init和.finit提供在main()之前和之后代码，而crtbeginT.o和crtend.o实现c++的全局和析构
 	TLS: 隐式 __thread __declspec(thread) 显式 pthread_key_create()

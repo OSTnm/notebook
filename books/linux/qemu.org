@@ -24,7 +24,7 @@ git: https://github.com/torvalds/linux
 - 尽量选择和host版本相差不大的版本，以免出现编译环境和被编译内核环境不兼容的问题
 - 为了调试内核，最好打开下面三个选项
 #+begin_src shell
-ONFIG_DEBUG_INFO=y
+CONFIG_DEBUG_INFO=y
 CONFIG_GDB_SCRIPS=y
 CONFIG_DBUG_KERNEL=y
 #+end_src
@@ -40,6 +40,20 @@ git: https://github.com/mirror/busybox
     make menuconfig
     make
     make install CONFIG_PREFIX=/home/rootfs
+    cd /home/rootfs/
+    mkdir dev etc proc bin sbin sys tmp
+    mkdir etc/init.d
+    cd etc/init.d/
+    touch rcS
+#+end_src
+
+rcS里面:
+
+#+begin_src shell
+#!/bin/sh
+mount -t proc none /proc
+mount -t sysfs none /sys
+/sbin/mdev -s
 #+end_src
 
 - 最好静态编译，虽然会浪费一点空间，但是避免很多依赖问题
@@ -85,3 +99,6 @@ CONFIG_STATIC_LIBGCC=y
 - -s -S 启用:1234端口，同时等待gdb连入
 - 连接时注意host gdb是qemu cpu架构要保持一致
 - nokaslr非常重要，否则gdb由于ASLR技术断不住
+
+
+

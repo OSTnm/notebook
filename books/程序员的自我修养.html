@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2021-08-10 Tue 10:14 -->
+<!-- 2022-07-24 Sun 20:26 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>程序员的自我修养 - 基于X86的linux</title>
@@ -223,56 +223,56 @@
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#orge00e41f">1. 第一章 温故而知新</a></li>
-<li><a href="#org1443c31">2. 第二章 静态链接</a></li>
-<li><a href="#orgf56ac78">3. 第三章 目标文件</a>
+<li><a href="#orgc8416f8">1. 第一章 温故而知新</a></li>
+<li><a href="#orgafcd9cf">2. 第二章 静态链接</a></li>
+<li><a href="#org3d42cbb">3. 第三章 目标文件</a>
 <ul>
-<li><a href="#orga379c43">3.1. ELF文件结构</a></li>
+<li><a href="#org54e4905">3.1. ELF文件结构</a></li>
 </ul>
 </li>
-<li><a href="#org264abf4">4. 第四章 静态链接</a>
+<li><a href="#orgd959739">4. 第四章 静态链接</a>
 <ul>
-<li><a href="#org5424232">4.1. 重定位</a></li>
-<li><a href="#org6c4b2f4">4.2. 重定位表</a></li>
-<li><a href="#org3c8adde">4.3. 链接控制脚本</a></li>
+<li><a href="#org1bc113a">4.1. 重定位</a></li>
+<li><a href="#orgfb0ce90">4.2. 重定位表</a></li>
+<li><a href="#org0762829">4.3. 链接控制脚本</a></li>
 </ul>
 </li>
-<li><a href="#org760718a">5. 第五章 WindowPE/COFF</a></li>
-<li><a href="#orga7f532d">6. 第六章 可执行方主席件的装载与进程</a>
+<li><a href="#orgf602d61">5. 第五章 WindowPE/COFF</a></li>
+<li><a href="#orgd1c4ed7">6. 第六章 可执行方主席件的装载与进程</a>
 <ul>
-<li><a href="#org75f489e">6.1. 进程虚存空间分布</a></li>
+<li><a href="#org3790eca">6.1. 进程虚存空间分布</a></li>
 </ul>
 </li>
-<li><a href="#org14dfac8">7. 第七章 动态链接</a>
+<li><a href="#org7c4806d">7. 第七章 动态链接</a>
 <ul>
-<li><a href="#org3059fa4">7.1. 地址无关代码(fPIC)</a></li>
-<li><a href="#orgba3be4f">7.2. 延迟绑定(Procedure Linkage Table)</a></li>
-<li><a href="#org323dd28">7.3. 动态链接器</a></li>
+<li><a href="#org5880d38">7.1. 地址无关代码(fPIC)</a></li>
+<li><a href="#orga3023da">7.2. 延迟绑定(Procedure Linkage Table)</a></li>
+<li><a href="#orga0ce35e">7.3. 动态链接器</a></li>
 </ul>
 </li>
-<li><a href="#orga81cf7d">8. 第八章 共享库的组织</a></li>
-<li><a href="#orgb2e0370">9. 第九章 Windows下的动态链接</a></li>
-<li><a href="#orgad96141">10. 第十章 内存</a>
+<li><a href="#org31902a7">8. 第八章 共享库的组织</a></li>
+<li><a href="#orgef51fef">9. 第九章 Windows下的动态链接</a></li>
+<li><a href="#org8f95473">10. 第十章 内存</a>
 <ul>
-<li><a href="#org7fe485c">10.1. 栈</a></li>
-<li><a href="#org9a1fd78">10.2. 堆与内存管理</a></li>
+<li><a href="#org1e516ee">10.1. 栈</a></li>
+<li><a href="#orgc6f9836">10.2. 堆与内存管理</a></li>
 </ul>
 </li>
-<li><a href="#org5a6ca1e">11. 第十一章 运行库</a>
+<li><a href="#org623271f">11. 第十一章 运行库</a>
 <ul>
-<li><a href="#org45ee7e2">11.1. glibc启动文件</a></li>
-<li><a href="#org25fc5fd">11.2. IO缓冲</a></li>
+<li><a href="#org35c4287">11.1. glibc启动文件</a></li>
+<li><a href="#org3cab7bc">11.2. IO缓冲</a></li>
 </ul>
 </li>
-<li><a href="#orgfdddc96">12. 第十二章 系统调用与API</a></li>
-<li><a href="#org5d2d687">13. 第十三章 运行库实现</a></li>
-<li><a href="#org3238c60">14. Summary</a></li>
+<li><a href="#org23b2f75">12. 第十二章 系统调用与API</a></li>
+<li><a href="#org1968874">13. 第十三章 运行库实现</a></li>
+<li><a href="#org3e4eb56">14. Summary</a></li>
 </ul>
 </div>
 </div>
 
-<div id="outline-container-orge00e41f" class="outline-2">
-<h2 id="orge00e41f"><span class="section-number-2">1</span> 第一章 温故而知新</h2>
+<div id="outline-container-orgc8416f8" class="outline-2">
+<h2 id="orgc8416f8"><span class="section-number-2">1</span> 第一章 温故而知新</h2>
 <div class="outline-text-2" id="text-1">
 <p>
 PC机:<br />
@@ -443,8 +443,8 @@ T* GetInst() {
 </div>
 </div>
 
-<div id="outline-container-org1443c31" class="outline-2">
-<h2 id="org1443c31"><span class="section-number-2">2</span> 第二章 静态链接</h2>
+<div id="outline-container-orgafcd9cf" class="outline-2">
+<h2 id="orgafcd9cf"><span class="section-number-2">2</span> 第二章 静态链接</h2>
 <div class="outline-text-2" id="text-2">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
@@ -503,8 +503,8 @@ T* GetInst() {
 </div>
 </div>
 
-<div id="outline-container-orgf56ac78" class="outline-2">
-<h2 id="orgf56ac78"><span class="section-number-2">3</span> 第三章 目标文件</h2>
+<div id="outline-container-org3d42cbb" class="outline-2">
+<h2 id="org3d42cbb"><span class="section-number-2">3</span> 第三章 目标文件</h2>
 <div class="outline-text-2" id="text-3">
 <p>
 设计.text和.data的原因:<br />
@@ -848,8 +848,8 @@ __attribute__((section("name"))) 修饰可以指定段<br />
 </p>
 </div>
 
-<div id="outline-container-orga379c43" class="outline-3">
-<h3 id="orga379c43"><span class="section-number-3">3.1</span> ELF文件结构</h3>
+<div id="outline-container-org54e4905" class="outline-3">
+<h3 id="org54e4905"><span class="section-number-3">3.1</span> ELF文件结构</h3>
 <div class="outline-text-3" id="text-3-1">
 <ul class="org-ul">
 <li>段表、字符串表等控制信息段都在文件后面<br /></li>
@@ -1007,8 +1007,8 @@ void *memset(void *, int, size_t);
 </div>
 </div>
 
-<div id="outline-container-org264abf4" class="outline-2">
-<h2 id="org264abf4"><span class="section-number-2">4</span> 第四章 静态链接</h2>
+<div id="outline-container-orgd959739" class="outline-2">
+<h2 id="orgd959739"><span class="section-number-2">4</span> 第四章 静态链接</h2>
 <div class="outline-text-2" id="text-4">
 <div class="org-src-container">
 <pre class="src src-C">/* gcc -m32 -c a.c b.c -Wno-implicit-function-declaration */
@@ -1169,8 +1169,8 @@ Idx Name          Size      VMA       LMA       File off  Algn
 </div>
 </div>
 
-<div id="outline-container-org5424232" class="outline-3">
-<h3 id="org5424232"><span class="section-number-3">4.1</span> 重定位</h3>
+<div id="outline-container-org1bc113a" class="outline-3">
+<h3 id="org1bc113a"><span class="section-number-3">4.1</span> 重定位</h3>
 <div class="outline-text-3" id="text-4-1">
 <div class="org-src-container">
 <pre class="src src-bash">objdump -d a.o
@@ -1250,8 +1250,8 @@ Disassembly of section .text:
 </div>
 </div>
 
-<div id="outline-container-org6c4b2f4" class="outline-3">
-<h3 id="org6c4b2f4"><span class="section-number-3">4.2</span> 重定位表</h3>
+<div id="outline-container-orgfb0ce90" class="outline-3">
+<h3 id="orgfb0ce90"><span class="section-number-3">4.2</span> 重定位表</h3>
 <div class="outline-text-3" id="text-4-2">
 <ul class="org-ul">
 <li>".rel." 开头是重定位表<br /></li>
@@ -1348,8 +1348,8 @@ gcc &#x2013;verbose 打印详细信息<br />
 </div>
 </div>
 
-<div id="outline-container-org3c8adde" class="outline-3">
-<h3 id="org3c8adde"><span class="section-number-3">4.3</span> 链接控制脚本</h3>
+<div id="outline-container-org0762829" class="outline-3">
+<h3 id="org0762829"><span class="section-number-3">4.3</span> 链接控制脚本</h3>
 <div class="outline-text-3" id="text-4-3">
 <p>
 使用命令控制链接过程<br />
@@ -1674,8 +1674,8 @@ int main(int argc, char *argv[])
 </div>
 </div>
 
-<div id="outline-container-org760718a" class="outline-2">
-<h2 id="org760718a"><span class="section-number-2">5</span> 第五章 WindowPE/COFF</h2>
+<div id="outline-container-orgf602d61" class="outline-2">
+<h2 id="orgf602d61"><span class="section-number-2">5</span> 第五章 WindowPE/COFF</h2>
 <div class="outline-text-2" id="text-5">
 <p>
 略<br />
@@ -1683,8 +1683,8 @@ int main(int argc, char *argv[])
 </div>
 </div>
 
-<div id="outline-container-orga7f532d" class="outline-2">
-<h2 id="orga7f532d"><span class="section-number-2">6</span> 第六章 可执行方主席件的装载与进程</h2>
+<div id="outline-container-orgd1c4ed7" class="outline-2">
+<h2 id="orgd1c4ed7"><span class="section-number-2">6</span> 第六章 可执行方主席件的装载与进程</h2>
 <div class="outline-text-2" id="text-6">
 <p>
 默认32位CPU linux进程虚拟地址空间<br />
@@ -1751,8 +1751,8 @@ exec时，建立虚拟内存和文件的映射，这样产生缺页时，如果�
 </ul>
 </div>
 
-<div id="outline-container-org75f489e" class="outline-3">
-<h3 id="org75f489e"><span class="section-number-3">6.1</span> 进程虚存空间分布</h3>
+<div id="outline-container-org3790eca" class="outline-3">
+<h3 id="org3790eca"><span class="section-number-3">6.1</span> 进程虚存空间分布</h3>
 <div class="outline-text-3" id="text-6-1">
 <p>
 操作系统装载时只关心页的权限，所以不同段同一个权限可在同一个段，即由Section统一成Segment，操作系统以Segment为单位进行装载<br />
@@ -2091,8 +2091,8 @@ ffd33000-ffd54000 rw-p 00000000 00:00 0                                  [stack]
 </div>
 </div>
 
-<div id="outline-container-org14dfac8" class="outline-2">
-<h2 id="org14dfac8"><span class="section-number-2">7</span> 第七章 动态链接</h2>
+<div id="outline-container-org7c4806d" class="outline-2">
+<h2 id="org7c4806d"><span class="section-number-2">7</span> 第七章 动态链接</h2>
 <div class="outline-text-2" id="text-7">
 <p>
 区别于静态链接，将链接这个过程推迟到装载时<br />
@@ -2187,8 +2187,8 @@ Program Headers:
 </p>
 </div>
 
-<div id="outline-container-org3059fa4" class="outline-3">
-<h3 id="org3059fa4"><span class="section-number-3">7.1</span> 地址无关代码(fPIC)</h3>
+<div id="outline-container-org5880d38" class="outline-3">
+<h3 id="org5880d38"><span class="section-number-3">7.1</span> 地址无关代码(fPIC)</h3>
 <div class="outline-text-3" id="text-7-1">
 <div class="org-src-container">
 <pre class="src src-c">/* gcc -fPIC -shared -o lib.so -m32 lib.c -Wno-implicit-function-declaration */
@@ -2327,8 +2327,8 @@ Relocation section '.rel.dyn' at offset 0x2f8 contains 9 entries:
 </div>
 </div>
 
-<div id="outline-container-orgba3be4f" class="outline-3">
-<h3 id="orgba3be4f"><span class="section-number-3">7.2</span> 延迟绑定(Procedure Linkage Table)</h3>
+<div id="outline-container-orga3023da" class="outline-3">
+<h3 id="orga3023da"><span class="section-number-3">7.2</span> 延迟绑定(Procedure Linkage Table)</h3>
 <div class="outline-text-3" id="text-7-2">
 <p>
 lazy binding 是指 <b>函数第一次被用到时才进行绑定</b><br />
@@ -2468,8 +2468,8 @@ End of assembler dump.
 </div>
 </div>
 
-<div id="outline-container-org323dd28" class="outline-3">
-<h3 id="org323dd28"><span class="section-number-3">7.3</span> 动态链接器</h3>
+<div id="outline-container-orga0ce35e" class="outline-3">
+<h3 id="orga0ce35e"><span class="section-number-3">7.3</span> 动态链接器</h3>
 <div class="outline-text-3" id="text-7-3">
 <p>
 .interp段存放动态链接器的路径<br />
@@ -2720,8 +2720,8 @@ int main(int argc, char *argv[])
 </div>
 </div>
 
-<div id="outline-container-orga81cf7d" class="outline-2">
-<h2 id="orga81cf7d"><span class="section-number-2">8</span> 第八章 共享库的组织</h2>
+<div id="outline-container-org31902a7" class="outline-2">
+<h2 id="org31902a7"><span class="section-number-2">8</span> 第八章 共享库的组织</h2>
 <div class="outline-text-2" id="text-8">
 <p>
 so兼容性以ABI为准<br />
@@ -2834,8 +2834,8 @@ Dynamic section at offset 0xf50 contains 17 entries:
 </div>
 </div>
 
-<div id="outline-container-orgb2e0370" class="outline-2">
-<h2 id="orgb2e0370"><span class="section-number-2">9</span> 第九章 Windows下的动态链接</h2>
+<div id="outline-container-orgef51fef" class="outline-2">
+<h2 id="orgef51fef"><span class="section-number-2">9</span> 第九章 Windows下的动态链接</h2>
 <div class="outline-text-2" id="text-9">
 <p>
 略<br />
@@ -2843,15 +2843,15 @@ Dynamic section at offset 0xf50 contains 17 entries:
 </div>
 </div>
 
-<div id="outline-container-orgad96141" class="outline-2">
-<h2 id="orgad96141"><span class="section-number-2">10</span> 第十章 内存</h2>
+<div id="outline-container-org8f95473" class="outline-2">
+<h2 id="org8f95473"><span class="section-number-2">10</span> 第十章 内存</h2>
 <div class="outline-text-2" id="text-10">
 <p>
 <b>以下都基于x86 CPU</b><br />
 </p>
 </div>
-<div id="outline-container-org7fe485c" class="outline-3">
-<h3 id="org7fe485c"><span class="section-number-3">10.1</span> 栈</h3>
+<div id="outline-container-org1e516ee" class="outline-3">
+<h3 id="org1e516ee"><span class="section-number-3">10.1</span> 栈</h3>
 <div class="outline-text-3" id="text-10-1">
 <ul class="org-ul">
 <li>函数的返回地址和参数(现在很多体系结构，如powerpc, mips64, x64都是寄存器直接传参，参数多了才放入栈)<br /></li>
@@ -2874,8 +2874,8 @@ Dynamic section at offset 0xf50 contains 17 entries:
 </ul>
 <div class="org-src-container">
 <pre class="src src-asm">00000000 &lt;foo&gt;:
-   0:	55                   	push   %ebp ; 将ebp入栈, esp = esp - 2, [esp] = %ebp
-   1:	89 e5                	mov    %esp,%ebp ; epb = esp, *epb = *esp = old ebp
+   0:	55                   	push   %ebp ; 将ebp入栈, esp = esp - 4, [esp] = %ebp
+   1:	89 e5                	mov    %esp,%ebp ; ebp = esp, *ebp = *esp = old ebp
    3:	83 ec 10             	sub    $0x10,%esp ; 开栈
    6:	8b 45 08             	mov    0x8(%ebp),%eax ; 取实参a 0(%ebp) = old ebp 4(%ebp) = old pc
    9:	83 e8 01             	sub    $0x1,%eax      ; 自增
@@ -3029,8 +3029,8 @@ struct big foo(void)
 </div>
 </div>
 
-<div id="outline-container-org9a1fd78" class="outline-3">
-<h3 id="org9a1fd78"><span class="section-number-3">10.2</span> 堆与内存管理</h3>
+<div id="outline-container-orgc6f9836" class="outline-3">
+<h3 id="orgc6f9836"><span class="section-number-3">10.2</span> 堆与内存管理</h3>
 <div class="outline-text-3" id="text-10-2">
 <p>
 通用做法是向系统申请页为单位的大块内存，然后在用户态设计数据结构管理及响应业务申请内存<br />
@@ -3064,8 +3064,8 @@ struct big foo(void)
 </div>
 </div>
 
-<div id="outline-container-org5a6ca1e" class="outline-2">
-<h2 id="org5a6ca1e"><span class="section-number-2">11</span> 第十一章 运行库</h2>
+<div id="outline-container-org623271f" class="outline-2">
+<h2 id="org623271f"><span class="section-number-2">11</span> 第十一章 运行库</h2>
 <div class="outline-text-2" id="text-11">
 <p>
 glibc <b>git://sourceware.org/git/glibc.git</b><br />
@@ -3189,8 +3189,8 @@ fd -&gt; 内核文件表 -&gt; 内核对象<br />
 C标准库ANSI C，最新的好像是C11<br />
 </p>
 </div>
-<div id="outline-container-org45ee7e2" class="outline-3">
-<h3 id="org45ee7e2"><span class="section-number-3">11.1</span> glibc启动文件</h3>
+<div id="outline-container-org35c4287" class="outline-3">
+<h3 id="org35c4287"><span class="section-number-3">11.1</span> glibc启动文件</h3>
 <div class="outline-text-3" id="text-11-1">
 <div class="org-src-container">
 <pre class="src src-bash"> /usr/lib/gcc/x86_64-linux-gnu/6/collect2 -plugin /usr/lib/gcc/x86_64-linux-gnu/6/liblto_plugin.so -plugin-opt=/usr/lib/gcc/x86_64-linux-gnu/6/lto-wrapper -plugin-opt=-fresolution=/tmp/cchtzGwz.res -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_eh -plugin-opt=-pass-through=-lc --sysroot=/ --build-id -m elf_i386 --hash-style=gnu -static /usr/lib/gcc/x86_64-linux-gnu/6/../../../../lib32/crt1.o /usr/lib/gcc/x86_64-linux-gnu/6/../../../../lib32/crti.o /usr/lib/gcc/x86_64-linux-gnu/6/32/crtbeginT.o -L/usr/lib/gcc/x86_64-linux-gnu/6/32 -L/usr/lib/gcc/x86_64-linux-gnu/6/../../../../lib32 -L/lib/../lib32 -L/usr/lib/../lib32 -L/usr/lib/gcc/x86_64-linux-gnu/6 -L/usr/lib/gcc/x86_64-linux-gnu/6/../../.. /tmp/ccA5Dm0B.o --start-group -lgcc -lgcc_eh -lc --end-group /usr/lib/gcc/x86_64-linux-gnu/6/32/crtend.o /usr/lib/gcc/x86_64-linux-gnu/6/../../../../lib32/crtn.o
@@ -3336,8 +3336,8 @@ glibc在处理C++全局构造和析构时, __libc_start_main -&gt; __libc_csu_in
 </div>
 </div>
 
-<div id="outline-container-org25fc5fd" class="outline-3">
-<h3 id="org25fc5fd"><span class="section-number-3">11.2</span> IO缓冲</h3>
+<div id="outline-container-org3cab7bc" class="outline-3">
+<h3 id="org3cab7bc"><span class="section-number-3">11.2</span> IO缓冲</h3>
 <div class="outline-text-3" id="text-11-2">
 <p>
 glibc的文件读写默认有缓冲模式,可以通过setbuf配置某文件的缓冲<br />
@@ -3386,8 +3386,8 @@ glibc的文件读写默认有缓冲模式,可以通过setbuf配置某文件的�
 </div>
 </div>
 
-<div id="outline-container-orgfdddc96" class="outline-2">
-<h2 id="orgfdddc96"><span class="section-number-2">12</span> 第十二章 系统调用与API</h2>
+<div id="outline-container-org23b2f75" class="outline-2">
+<h2 id="org23b2f75"><span class="section-number-2">12</span> 第十二章 系统调用与API</h2>
 <div class="outline-text-2" id="text-12">
 <p>
 linux使用0x80为系统调用的入口,各个通用寄存器用于传递参数<br />
@@ -3474,8 +3474,8 @@ f77d1000-f77d3000 r-xp 00000000 00:00 0                                  [vdso]
 </div>
 </div>
 
-<div id="outline-container-org5d2d687" class="outline-2">
-<h2 id="org5d2d687"><span class="section-number-2">13</span> 第十三章 运行库实现</h2>
+<div id="outline-container-org1968874" class="outline-2">
+<h2 id="org1968874"><span class="section-number-2">13</span> 第十三章 运行库实现</h2>
 <div class="outline-text-2" id="text-13">
 <p>
 MiniCRT,略<br />
@@ -3483,8 +3483,8 @@ MiniCRT,略<br />
 </div>
 </div>
 
-<div id="outline-container-org3238c60" class="outline-2">
-<h2 id="org3238c60"><span class="section-number-2">14</span> Summary</h2>
+<div id="outline-container-org3e4eb56" class="outline-2">
+<h2 id="org3e4eb56"><span class="section-number-2">14</span> Summary</h2>
 <div class="outline-text-2" id="text-14">
 <ol class="org-ol">
 <li>温故而知新<br />
@@ -3615,15 +3615,14 @@ cdecl C默认ABI，函数调用方出栈<br />
 stdcal fastcall pascal 函数本身出栈<br />
 mmap时，会在内存+交换空间中预留地址，所以不能超过其总和<br /></li>
 
-<li>运行库<br />
+<li><p>
+运行库<br />
 glibc启动文件<br />
 crtl.o 入口函数 _start<br />
 /usr/lib/crti.o /usr/lib/crtn.o 为 init和finit的前半和后半<br />
 X86 assembly Enter <code>= push ebp, mov ebp, esp
-			     Leave =</code> mov esp, ebp pop ebp<br /></li>
-</ol>
-<p>
-push的意思是先把参数压到堆栈里面然后esp再减四，pop指令是先加四再弹出esp里面的内容<br />
+			     Leave =</code> mov esp, ebp pop ebp<br />
+push的意思是esp减四再把参数压到堆栈里面然后，pop指令是弹出esp里面的内容再加四<br />
 </p>
 
 <p>
@@ -3632,9 +3631,8 @@ TLS: 隐式 __thread __declspec(thread) 显式 pthread_key_create()<br />
 c++每个文件会生成ctor段，每个存有该文件全局构造的指针<br />
 atexit策略： 先注册后调用<br />
 collect2是ld的一个包装<br />
-</p>
+</p></li>
 
-<ol class="org-ol">
 <li>系统调用和API<br />
 linux 0x80     win 0x2e<br />
 内核栈切换由硬件完成<br />
@@ -3651,7 +3649,7 @@ kernel -&gt; read elf32 file -&gt; if ld exist -&gt; load ld and make ld load el
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: xuali2</p>
-<p class="date">Created: 2021-08-10 Tue 10:14</p>
+<p class="date">Created: 2022-07-24 Sun 20:26</p>
 <p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>

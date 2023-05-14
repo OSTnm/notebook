@@ -81,6 +81,7 @@ Nand Flash和Nor Flash结构特性
   + [区块链](./books/白话区块链.pdf)
 * 开源
   + [DPDK](./books/DPDK/dpdk.org)
+    + [DPDK prog guide](./books/DPDK/dpdk_prog_guide-17.11.pdf)
 
 ## 协议
 * [IEEE802.3](./protocol/IEEE802.3/ieee_note.pdf)
