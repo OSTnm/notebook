@@ -45,6 +45,7 @@ Nand Flash和Nor Flash结构特性
 有关serdes结构的综述.
 * [信号完整性](./books/serdes/si.org)
 关注PCB走线对高速信号的影响.
+* [serdes deep dive](./books/serdes/serdes-deepdive.pdf)
 
 ## 软件
 * 操作系统
